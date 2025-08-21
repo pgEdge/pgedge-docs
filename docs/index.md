@@ -5,7 +5,7 @@ hide:
   - toc
 ---
 
-# Welcome to pgEdge Documentation - Hi Susan!
+# Welcome to pgEdge Documentation
 
 pgEdge Distributed Postgres brings advanced distributed multi-master database capabilities to the network edge, enabling low-latency and high availability for modern workloads.
 
