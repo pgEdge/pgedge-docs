@@ -1,0 +1,66 @@
+site_name: pgEdge Documentation
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+plugins:
+  - search
+  - multirepo:
+      cleanup: true
+      keep_docs_dir: false
+
+theme: 
+  name: material
+  custom_dir: overrides
+
+  logo_dark_mode: 'img/logo-dark.png'
+  logo_light_mode: 'img/logo-light.png'
+
+  features:
+    - navigation.tabs
+    - navigation.path
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: light-mode 
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+extra:
+  generator: false
+
+copyright: Copyright &copy; 2023 - 2025 pgEdge, Inc
+repo_url: https://github.com/pgEdge
+
+nav:
+  - Welcome: index.md
+
+  - pgEdge Enterprise Postgres:
+    - VM Edition: enterprise/index.md
+    - Enterprise Linux 9 & 10: 
+      - Introduction: enterprise/el/index.md
+      - Getting Started: enterprise/el/using.md
+      - Components: enterprise/el/components.md
+      - Offline Repos: enterprise/el/offline.md
+
+  - pgEdge Distributed Postgres:
+    - Cloud Edition: cloud/index.md
+    - VM Edition: platform/index.md
+
+  - Spock Extension:
+    - Introduction: spock_ext/index.md
+
+
+  
