@@ -10,6 +10,10 @@ infrastructure for generating the docs website. It is based on
 [multirepo plugin](https://github.com/jdoiro3/mkdocs-multirepo-plugin) which
 allows docs from other repositories to be merged into the site.
 
+## Build Status
+
+[![Build Docs](https://github.com/pgEdge/pgedge-docs/actions/workflows/build-docs.yml/badge.svg)](https://github.com/pgEdge/pgedge-docs/actions/workflows/build-docs.yml)
+
 ## Setup
 
 1) Create a Python virtual environment:
