@@ -1,0 +1,41 @@
+name: Build Docs
+
+# Note: we use a custom port (and installation directory on Windows) for
+# PostgreSQL as the runners may already have a version installed.
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  workflow_dispatch:
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create virtual environment
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          
+      - name: Build the docs
+        run: |
+          source venv/bin/activate
+          mkdocs build -v
+          
+      - name: Upload static docs site
+        uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: pgedge-docs-site
+          path: site
