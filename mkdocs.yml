@@ -68,7 +68,7 @@ nav:
     - Cloud Edition: cloud/index.md
     - VM Edition: platform/index.md
 
-  - Spock Extension v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
+  - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
 
 
   

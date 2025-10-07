@@ -19,4 +19,4 @@ Choose a section to explore:
 
 ## Components
 
-* [Spock](spock_ext/index.md)
+* [Spock v5](spock-extension-v5/)
