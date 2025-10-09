@@ -1,6 +1,6 @@
 # Getting Started
 
-pgEdge Distributed PostgreSQL (Cloud Edition) is a managed multi-master active-active replication service for PostgreSQL servers, capable of provisioning and managing clusters on:
+pgEdge Distributed Postgres (Cloud Edition) is a managed multi-master active-active replication service for Postgres servers, capable of provisioning and managing clusters on:
 
 * AWS
 * Azure

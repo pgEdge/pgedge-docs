@@ -1,4 +1,11 @@
-# Managing a Cloud Database
+# Creating and Managing pgEdge Distributed Postgres Cloud Databases
+
+For details, visit:
+
+* [Creating a Database](create_db.md)
+* [Managing a Database](manage_db.md)
+
+## Managing a Cloud Database
 
 To review a list of databases, select the `Databases` node of the tree control in the left-pane of the Cloud console.
 
