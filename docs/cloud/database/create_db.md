@@ -25,11 +25,9 @@ Specify the version of Postgres that you would like to install in the `PostgreSQ
 
 **Implementing a Backup Strategy**
 
-import { Callout } from 'nextra/components'
- 
-<Callout type="info">
-  Developer Edition databases use pg_dump as their backup provider.
-</Callout>
+!!! note
+
+    Developer Edition databases use pg_dump as their backup provider.
 
 The `Backup Configuration` pane allows you to customize the configuration you wish to use for your Enterprise Edition database backups.
 
@@ -41,9 +39,9 @@ If applicable, use fields in this section to customize the backup strategy:
 
 * If your database resides on a Developer Edition cluster, [pg_dump](../backup/backup_providers.mdx#using-pg_dump-for-backups) is the backup tool used. Note that if your backup strategy uses pg_dump, you cannot customize the backup schedule and storage details, but backups can be downloaded for use on other systems.
 
-<Callout type="warning">
-  You cannot modify a backup configuration or your selected database backup provider after database deployment.
-</Callout>
+!!! note
+
+    You cannot modify a backup configuration or your selected database backup provider after database deployment.
 
 **Additional Database Installation Options**
 
