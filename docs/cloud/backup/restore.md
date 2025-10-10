@@ -25,8 +25,7 @@ Use fields on the `Restore Database` dialog to describe how you would like to re
 
 When you've made your selections, type the database name in the confirmation field and click `Restore Database` to start the restoration process.  When the restore completes, replication sets will be created, and replication will be restarted if automatic DDL replication is enabled.  If automatic DDL replication is disabled, you will be required to [use the `Start Replication` button](https://docs.pgedge.com/cloud/database/manage_db#the-start-replication-pane) to initiate replication of restored tables.
 
-import { Callout } from 'nextra/components'
- 
-<Callout type="info" emoji="ℹ️">
-You can also use the Cloud API to restore from backup; for details, visit [here](https://docs.pgedge.com/cloud/settings#the-api-clients-tab).
-</Callout>
+!!! hint
+
+    You can also use the Cloud API to restore from backup; for details, visit [here](https://docs.pgedge.com/cloud/settings#the-api-clients-tab).
+

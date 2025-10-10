@@ -5,11 +5,11 @@
 
 * [Multi-AZ Node Placement](../cloud/cluster/create_cluster.md) allows you to deploy multiple nodes within a single region across different Availability Zones (AZs), improving fault tolerance and supporting high-availability topologies. Nodes can be individually assigned to any supported AZ during cluster setup.
 
-* [Spock 5.0](../spock_ext/index.mdx) is now the default version of Spock used by Cloud. Spock 5.0 is our next-generation logical replication engine, bringing improved performance, expanded automatic conflict resolution, and more accurate lag tracking.
+* Spock 5.0 is now the default version of Spock used by Cloud. Spock 5.0 is our next-generation logical replication engine, bringing improved performance, expanded automatic conflict resolution, and more accurate lag tracking.
 
 * External VPC association support; Cloud now supports associating external VPCs with your pgEdge Cloud clusters, allowing applications in those VPCs to securely connect and benefit from the built-in DNS resolution and failover capabilities of the platform.
 
-* Improved [Cluster Overview](../cloud/cluster/manage_cluster.md) page has been enhanced to display the currently configured firewall rules and any associated VPCs, making network configuration and debugging easier and more transparent.
+* An improved [Cluster Overview](../cloud/cluster/manage_cluster.md) page has been enhanced to display the currently configured firewall rules and any associated VPCs, making network configuration and debugging easier and more transparent.
 
 ## 06/24/2025
 

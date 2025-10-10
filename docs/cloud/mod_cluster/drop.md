@@ -52,6 +52,8 @@ The `Delete Cluster` popup prompts you to confirm that you wish to delete the cl
 
 ![Confirm deleting a cluster](../images/confirm_delete_cluster.png)
 
-**Note:** If your cluster has databases, you must [delete the databases](https://docs.pgedge.com/cloud/mod_cluster/drop#deleting-a-database) before deleting the cluster. A popup alerts you if you attempt to delete a cluster that still hosts databases.
+!!! Note
+
+    If your cluster has databases, you must [delete the databases](https://docs.pgedge.com/cloud/mod_cluster/drop#deleting-a-database) before deleting the cluster. A popup alerts you if you attempt to delete a cluster that still hosts databases.
 
 ![Cluster has databases](../images/cluster_has_databases.png)

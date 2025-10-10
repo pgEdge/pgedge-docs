@@ -1,6 +1,6 @@
 # Reviewing Database Metrics 
 
-Highlight a database name in the tree control to access the link to the `Metrics` dialog; the dialog allows you to review statistical information gathered from that specific database.  
+Highlight a database name in the tree control to access the link to the `Metrics` dialog; the dialog allows you to review statistical information gathered from that specific database.
 
 ![The Metrics dialog](../images/metrics.png)
 
@@ -17,7 +17,7 @@ Select a tab to display information for `All nodes`, or a specific individual no
 | Replication Output | The tuples used by outgoing replication processes |
 | Memory Percentage | The percent of memory resources used by the database|
 | Network Transmit | The number of tuples transmitted from the database |
-| Network Receive | The number of tuples received by the database | 
+| Network Receive | The number of tuples received by the database |
 | Database Size | The size of the database (in MB) at a given point in time |
 | Database Table Count | The number of tables that are defined in the database |
 | Replication Slots Count | The number of replication slots in use by the database |

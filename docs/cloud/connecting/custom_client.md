@@ -1,6 +1,6 @@
 # Connecting a Custom Client Application
 
-The `Code Snippets` pane displays three code snippets ([TypeScript](#connecting-with-typescript), [Python](#connecting-with-python), and [Go](#connecting-with-go)) that set the environment variables for your cluster and create a cursor that lists the nodes in your cluster. 
+The `Code Snippets` pane displays three code snippets ([TypeScript](#connecting-with-typescript), [Python](#connecting-with-python), and [Go](#connecting-with-go)) that set the environment variables for your cluster and create a cursor that lists the nodes in your cluster.
 
 ![Code Snippets](../images/code_snippets.png)
 
@@ -8,7 +8,7 @@ You can consider the snippets a starting point for the application developers on
 
 ## Connecting with Python
 
-The code snippet on the `Python` tab provides parameters and cursor information you can use to negotiate a connection with a Python client. The following code sample demonstrates using that information. 
+The code snippet on the `Python` tab provides parameters and cursor information you can use to negotiate a connection with a Python client. The following code sample demonstrates using that information.
 
 After taking care of prerequisites, the sample uses the connection properties in the code snippet to set environment variables and establish a connection with the database:
 
@@ -183,7 +183,7 @@ main().catch(console.error);
 
 ## Connecting with Go
 
-The code snippet on the `Go` tab provides parameters you can use to negotiate a connection with a Go client. The following code sample demonstrates using that information to connect to and query the database. 
+The code snippet on the `Go` tab provides parameters you can use to negotiate a connection with a Go client. The following code sample demonstrates using that information to connect to and query the database.
 
 After importing prerequisites, the sample uses the connection properties in the code snippet to set environment variables and establish a connection with the database:
 

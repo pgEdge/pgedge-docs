@@ -1,6 +1,8 @@
 # Creating a Cluster
 
-**Note:** To create a cluster with pgEdge Distributed Postgres (Cloud Edition), you must have a [pgEdge Enterprise Edition account](https://www.pgedge.com/products/pgedge-cloud) and a [linked Cloud provider account](../prerequisites/cloud_accounts.mdx).
+!!! info
+
+    To create a cluster with pgEdge Distributed Postgres (Cloud Edition), you must have a [pgEdge Enterprise Edition account](https://www.pgedge.com/products/pgedge-cloud) and a [linked Cloud provider account](../prerequisites/cloud_accounts.mdx).
 
 To create a cluster, select the `+ New Cluster` button in the left navigation pane. Then:
 
@@ -12,7 +14,7 @@ To create a cluster, select the `+ New Cluster` button in the left navigation pa
 
 ![Select a cloud account](../images/cloud_account.png)
 
-* Select up to 5 availability zones in any regions to which you have access. To use the map for location selection, use the `Show map` toggle to enable the map. 
+* Select up to 5 availability zones in any regions to which you have access. To use the map for location selection, use the `Show map` toggle to enable the map.
 
 Once selected, the region name is added to the list of selected `Regions`. Use the `+/-` control or the drop-down list to the right of the `Region` name to select from the supported Availability Zones for node deployment. One node will be deployed in each zone listed; you can use the `X` in the zone icon to remove a zone from the deployment list.
 
@@ -37,7 +39,7 @@ Next, specify the vendor-specific deployment details for your cluster.
 
 * Use the `Volume Size (GB)` field to specify the size of the data volume for each node of your cluster. Volume size must be between 8 GB and 10 TB.
 
-* Use the `SSH Key` drop-down to select a key pair from the list of your [imported key pairs](../prerequisites/ssh_key.md). A key pair is required to SSH to a cluster; without a key, you can connect to databases you provision on the cluster, but will not be able to connect with the host via SSH. 
+* Use the `SSH Key` drop-down to select a key pair from the list of your [imported key pairs](../prerequisites/ssh_key.md). A key pair is required to SSH to a cluster; without a key, you can connect to databases you provision on the cluster, but will not be able to connect with the host via SSH.
 
 Select the [backup stores](https://docs.pgedge.com/cloud/backup/backup_store) that will be available to use for database backups and log file backups for the new cluster.
 
@@ -45,9 +47,9 @@ Select the [backup stores](https://docs.pgedge.com/cloud/backup/backup_store) th
 
 As you select backup stores, remember that selecting backup stores near your cluster nodes will reduce network latency during the backup process. Use the drop-down field or select locations on the map to include a specific store.
 
-You can define a VPC association to configure VPC peering and (if needed) private zone routing between any defined VPCs and the pgEdge cluster network. Peering allows an application to connect seamlessly to any of the nodes across regions, allowing you to fully leverage latency routing and dns failover. This is currently only available for AWS. 
+You can define a VPC association to configure VPC peering and (if needed) private zone routing between any defined VPCs and the pgEdge cluster network. Peering allows an application to connect seamlessly to any of the nodes across regions, allowing you to fully leverage latency routing and dns failover. This is currently only available for AWS.
 
-Use the `VPC Associations` dialog to specify the identities of any defined VPCs that should have access to your cluster.  
+Use the `VPC Associations` fields to add any defined VPCs that should have access to your cluster.
 
 ![Define a VPC Association](../images/vpc_association.png)
 
@@ -68,17 +70,17 @@ Use the `Firewall Rules` field to open ports on each node of your cluster for co
     * Choose `My IP:x.x.x.x` to open a port for the detected IP address from which you are connected.
     * Choose `All IPV4` to allow connections to the selected port from any source. This setting is not recommended for connections to the database server.
 
-After selecting a protocol type and an address, choose the `+ Add Rule` button to add the list of firewall rules. To remove a rule from the list, select the `X` in the upper-right corner of the rule box. 
+After selecting a protocol type and an address, choose the `+ Add Rule` button to add the list of firewall rules. To remove a rule from the list, select the `X` in the upper-right corner of the rule box.
 
 ![Defined firewall rules](../images/defined_firewall_rules.png)
 
 To create the cluster without firewall rules, check the box to the left of `Deploy cluster without firewall rules`. Note that if you do not open ports for connection, client software will be unable to connect to the OS or databases that reside on the cluster.
 
-In the `Options` section you'll find the option to create the cluster as a `single-database cluster`. 
+In the `Options` section you'll find the option to create the cluster as a `single-database cluster`.
 
 ![Select Additional Options](../images/select_additional_options.png)
 
-Single database clusters are beneficial because: 
+Single database clusters are beneficial because:
 
 * they allow connections to the database with an IP address (rather than by domain name).
 * they allow connections to the database via DNS names and records that you create outside of the pgEdge console.

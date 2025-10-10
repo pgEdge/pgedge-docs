@@ -10,7 +10,7 @@ Before creating your first cluster, you need to link your Cloud provider account
 * Azure
 * Google
 
-To [link a cloud account](../prerequisites/cloud_accounts.mdx), select the `Cloud Accounts` menu option in the left navigation pane. 
+To [link a cloud account](../prerequisites/cloud_accounts/index.md), select the `Cloud Accounts` menu option in the left navigation pane. 
 
 ## pgEdge Resources
 

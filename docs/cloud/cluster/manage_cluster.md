@@ -14,7 +14,7 @@ If you've recently created or modified the cluster, the header displays a banner
 
 Also in the cluster header, a set of informational panes tell you the state of the cluster at a glance:
 
-* the total node count 
+* the total node count
 * the number of healthy nodes
 * the number of unhealthy nodes
 * the number of unresponsive nodes
@@ -26,7 +26,7 @@ Also in the cluster header, a set of informational panes tell you the state of t
 
 The tabbed browser on the `Cluster` tab provides quick access to information about the state of your cluster:
 
-* Select the [`Overview`](#accessing-cluster-details) tab to view information about the cluster, and the databases currently deployed on the cluster. Detailed information about the cluster's nodes is displayed below. Click on an icon in the `Database` pane to navigate to detailed information about the selected database. 
+* Select the [`Overview`](#accessing-cluster-details) tab to view information about the cluster, and the databases currently deployed on the cluster. Detailed information about the cluster's nodes is displayed below. Click on an icon in the `Database` pane to navigate to detailed information about the selected database.
 * Select the [`Metrics`](#reviewing-cluster-metrics) tab to view details about cluster resource use.
 * Select the [`Logs`](#reviewing-cluster-log-files) tab to review cluster log files.
 
@@ -34,7 +34,7 @@ The tabbed browser on the `Cluster` tab provides quick access to information abo
 
 Select the `Overview` tab to review information about the cluster. Panes on the `Overview` tab contain links to cluster artifacts:
 
-  * Select a database name in the `Databases` pane to navigate to the information page for that database. 
+  * Select a database name in the `Databases` pane to navigate to the information page for that database.
   * Select a backup store name in the `Backup Store` pane to navigate to the information page for the store.
 
 ![The cluster overview](../images/cluster_overview_details.png)
@@ -56,13 +56,13 @@ When the `Overview` tab is selected, a map displays the locations of the cluster
 
 **Review Firewall Configuration**
 
-The `Overview` tab also displays the currently defined [Firewall Rules](./firewall.mdx).
+The `Overview` tab also displays the currently defined [Firewall Rules](firewall.md).
 
 ![The cluster console Map tab](../images/overview_firewall_rule.png)
 
 **VPC Associations**
 
-The Overview tab also displays the current [VPC Associations](./vpc_assoc.mdx):
+The Overview tab also displays the current [VPC Associations](vpc_assoc.md):
 
 ![The cluster console Map tab](../images/overview_vpc_assoc.png)
 
@@ -78,9 +78,9 @@ Select from tabs across the top to review a graph containing:
 * Metrics for `All nodes` in your cluster.
 * Metrics for a specific node in your cluster.
 
-Use the drop-down at the top of the `Metrics` pane allows you to specify the length of time displayed by each graph. 
+Use the drop-down at the top of the `Metrics` pane allows you to specify the length of time displayed by each graph.
 
-Select a point on a graph to display information about the graphed event that occurred on your cluster: 
+Select a point on a graph to display information about the graphed event that occurred on your cluster:
 
 ![A point-in-time selected in the cluster metrics graph](../images/cluster_metrics_PIT.png)
 

@@ -2,7 +2,6 @@
 
 You can use options on the `Actions` drop-down menu (located in the upper-right corner of the Cloud console) to add a database to a node or a node to a cluster. The menu options are context-sensitive, applying to the object currently selected in the navigation panel. To access menu options, select the name of the cluster or database you'd like to modify in the navigation panel, and then open the `Actions` menu.
 
-
 ## Adding a Node to a Cluster
 
 To add a node to an existing cluster, select the cluster name in the navigation panel, open the `Actions` menu, and select `Add Nodes`.
@@ -17,8 +16,9 @@ When the `Add Node` dialog opens as shown below, provide details the new node(s)
 
 Select the `Add Nodes` button to deploy your new nodes and add them to your cluster. The cluster will be placed in modification status until the addition is complete; when the update finished, you will be able to access the new node using the SSH configuration defined during the initial cluster creation.
 
-**Note:** Existing databases are not added to a new node automatically; for details about adding a database to a node, see [Adding a Database to a Node](#adding-a-database-to-a-node).
+!!! tip
 
+    Existing databases are not added to a new node automatically.
 
 ## Adding a Database to a Cluster Node
 
@@ -51,8 +51,8 @@ The steps you use to restore data to your new database/node combination will dep
 
 If you are using the graphical `Restore Database` interface to restore your database, the existing nodes will restart during the setup process for the new node in order to re-establish replication. This will cause a brief downtime on these nodes.
 
-* If your nodes are not running with AutoDDL enabled, you can restore the data manually with an external tool [like pg_dump](https://www.postgresql.org/docs/16/app-pgdump.html). Then, you'll need to use the Cloud [Start Replication](https://docs.pgedge.com/cloud/database/manage_db#the-start-replication-pane) button to align the new node with the existing database nodes.
+* If your nodes are not running with AutoDDL enabled, you can restore the data manually with an external tool [like pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html). Then, you'll need to use the Cloud [Start Replication](https://docs.pgedge.com/cloud/database/manage_db#the-start-replication-pane) button to align the new node with the existing database nodes.
 
-**Note:** If you are using pgBackRest to restore data from another node in your Backup Stores, pgBackRest will re-establish Spock replication sets using the restored data, automatically re-establishing replication as it was at the time of the backup.
+!!! note
 
-
+    If you are using pgBackRest to restore data from another node in your Backup Stores, pgBackRest will re-establish Spock replication sets using the restored data, automatically re-establishing replication as it was at the time of the backup.

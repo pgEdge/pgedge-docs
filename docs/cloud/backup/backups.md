@@ -2,7 +2,7 @@
 
 You can use the Cloud `Backups` dialog to take, restore, and manage backups of your Cloud database.  To open the `Backups` dialog, highlight a database name, and then select the `Backups` node from the navigation tree in the left-side panel.
 
-By default, Cloud databases are automatically backed up once every 24 hours. 
+By default, Cloud databases are automatically backed up once every 24 hours.
 
 ![The Backups dialog](../images/backup_configs.png)
 

@@ -12,18 +12,17 @@ Use fields on the `Profile` tab to modify the names associated with your account
 * Provide your first name in the `First name` field.
 * Provide your last name in the `Last name` field.
 
-import { Callout } from 'nextra/components'
- 
-<Callout type="info" emoji="ℹ️">
-Note that the email associated with the account cannot be modified.
-</Callout>
+!!! note
+
+    The email associated with the account cannot be modified.
+
 
 When you've finished, select `Save` to update your account with the name changes; use the `Reset` icon to return the fields to their previous values.
 
 
 ## The API Clients Tab
 
-Select the `API Clients` tab to view, manage, or create an API client. 
+Select the `API Clients` tab to view, manage, or create an API client.
 
 ![The API Clients tab](./images/api_clients_tab.png)
 
@@ -36,11 +35,11 @@ Then, to create the API client, click the `Create` button.
 
 ![Register an API Client](./images/API_client.png)
 
-When you create an API client, you will be provided an `Auth ID` and `Auth Secret` that you can use when connecting to Cloud with the API, and the new client will be added to the `API Clients` list. 
+When you create an API client, you will be provided an `Auth ID` and `Auth Secret` that you can use when connecting to Cloud with the API, and the new client will be added to the `API Clients` list.
  
-<Callout type="warning">
-  Be sure to copy your `Auth Secret` when it is displayed on the `Client created` popup and store it in a safe place; the `Auth Secret` cannot be retrieved once the popup is closed.
-</Callout>
+!!! warning
+
+    Be sure to copy your `Auth Secret` when it is displayed on the `Client created` popup and store it in a safe place; the `Auth Secret` cannot be retrieved once the popup is closed.
 
 ![API Client created](./images/API_client_created.png)
 

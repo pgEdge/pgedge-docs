@@ -28,7 +28,7 @@ theme:
     - navigation.prune
     - navigation.top
     - toc.follow
-
+    - content.code.copy
 
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -71,11 +71,13 @@ nav:
       - Developer Edition: cloud/getting_started/de_getting_started.md
     - Prerequisites: 
       - Adding an SSH Key: cloud/prerequisites/ssh_key.md
-      - Linking your Cloud Provider Account: 
-        - Linking an AWS Account: cloud/prerequisites/cloud_accounts/link_to_AWS.md
-        - Linking an Azure Account: cloud/prerequisites/cloud_accounts/link_to_Azure.md
+      - Linking and Managing your Cloud Provider Accounts:
+        - Managing Cloud Provider Accounts: cloud/prerequisites/cloud_accounts/index.md
+        - Linking an AWS Account: cloud/prerequisites/cloud_accounts/link_to_aws.md
+        - Linking an Azure Account: cloud/prerequisites/cloud_accounts/link_to_azure.md
         - Linking a Google Account: cloud/prerequisites/cloud_accounts/link_to_google.md
-    - Cluster Management: 
+    - Cluster Management:
+      - Reviewing your Cloud Clusters: cloud/cluster/index.md
       - Creating a Cluster: cloud/cluster/create_cluster.md
       - Managing a Cluster: cloud/cluster/manage_cluster.md
       - Defining a Cluster's Backup Store: cloud/cluster/backup_store.md

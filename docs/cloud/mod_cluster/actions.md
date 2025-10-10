@@ -8,12 +8,12 @@ For example, when opened from a cluster node the `Actions` menu might show:
 
 Select from the options listed to:
 
-* [Add a node](../mod_cluster/add.md) to the cluster.
-* [Remove a node](../mod_cluster/drop#dropping-a-node-from-a-cluster) from the cluster.
-* Update [Backup Stores](../cluster/backup_store.mdx).
-* Update [Firewall Rules](../cluster/firewall.mdx).
-* Manage [VPC Associations](../cluster/vpc_assoc.mdx)
-* [Delete a cluster](https://docs.pgedge.com/cloud/mod_cluster/drop#deleting-a-cluster).
+* [Add a node](add.md) to the cluster.
+* [Remove a node](drop.md#dropping-a-node-from-a-cluster) from the cluster.
+* Update [Backup Stores](../cluster/backup_store.md).
+* Update [Firewall Rules](../cluster/firewall.md).
+* Manage [VPC Associations](../cluster/vpc_assoc.md).
+* [Delete a cluster](drop.md#deleting-a-cluster).
 
 When opened from a database menu, the `Actions` menu may include:
 
@@ -21,9 +21,9 @@ When opened from a database menu, the `Actions` menu may include:
 
 Select from the options listed to:
 
-* [Backup the Database](../backup/backups#taking-a-backup).
-* [Restore the Database](../backup/backups#restoring-a-backup) from backup.
-* [Add the database](../mod_cluster/add#adding-a-database-to-a-cluster-node) to another node.
-* [Remove the database](../mod_cluster/drop#removing-a-database-from-a-node) from a node.
-* [Edit the Display Name](../mod_cluster/modify#changing-the-display-name-of-a-database) of the database.
-* [Delete the database](../mod_cluster/drop#deleting-a-database).
+* [Backup the Database](../backup/backups.md#taking-a-backup).
+* [Restore the Database](../backup/backups.md#restoring-a-backup) from backup.
+* [Add the database](add.md#adding-a-database-to-a-cluster-node) to another node.
+* [Remove the database](drop.md#removing-a-database-from-a-node) from a node.
+* [Edit the Display Name](modify.md#changing-the-display-name-of-a-database) of the database.
+* [Delete the database](drop.md#deleting-a-database).

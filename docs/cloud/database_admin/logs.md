@@ -8,7 +8,7 @@ Use tabs across the top of the `Logs` pane to select the node for which you wish
 
 * Select `PostgreSQL logs` to view the logs from the PostgreSQL database on the selected node.
 * Select `Tricorder logs` to view Tricorder logs. Tricorder is a companion service that collects metrics and provides HTTP connectivity via the pREST API.
-* Select `ACE logs` to view the ACE logs. [ACE](../../platform/ace.mdx) is the pgEdge Active Consistency Engine.  ACE logs are only available for customers that enable ACE monitoring.
+* Select `ACE logs` to view the ACE logs. ACE is the pgEdge Active Consistency Engine.  ACE logs are only available for customers that enable ACE monitoring.
 
 Use the `Auto refresh`/`Manual refresh` drop-down to specify if the log entries should update automatically (`Auto refresh`), or to pause updating (`Manual refresh`) for easier viewing.  To manually refresh the log table's content, select the refresh button to the right of the drop-down.
 

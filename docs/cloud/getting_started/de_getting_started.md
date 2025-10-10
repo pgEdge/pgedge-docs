@@ -18,7 +18,7 @@ Then, select the `Create Database` button to initialize the database.
 
 ![Initializing a new database](../images/init_db.png)
 
-When the database is ready, the Cloud Console displays the database name in the navigation tree. Select the database name to start [using your database](../database/manage_db.md).
+When the database is ready, the Cloud Console displays the database name in the navigation tree. Click on the database name to start [using your database](../database/manage_db.md).
 
 
 ## Resources

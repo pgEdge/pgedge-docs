@@ -2,8 +2,8 @@
 
 This section identifies strategies you can use in your applications to connect to pgEdge Distributed Postgres (Cloud Edition) to improve the availability of your application in the following situations:
 
-- Planned maintenance occuring on your Cloud clusters / databases
-- Unexpected downtime for a database due to Cloud provider outages or temporary network issues
+- Planned maintenance occuring on your Cloud clusters / databases.
+- Unexpected downtime for a database due to Cloud provider outages or temporary network issues.
 
 ## Leveraging DNS Failover
 
@@ -11,8 +11,8 @@ Cloud provides the ability to connect to databases using latency-based routing, 
 
 For the following configurations, latency-based routing also factors in the availability of your database:
 
-- Private DNS in Enterprise Edition AWS Clusters where the database has the "Cloudwatch Metrics" option enabled
-- Public DNS in Developer Edition
+- Private DNS in Enterprise Edition AWS Clusters where the database has the "Cloudwatch Metrics" option enabled.
+- Public DNS in Developer Edition.
 
 In the event that health checks determine that a database node is unavailable, latency-based routing will automatically route your application to the next nearest node that is available.
 

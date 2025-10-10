@@ -24,13 +24,13 @@ The database header tells you:
 
 ## The Get Started Pane
 
-If you did not install the sample database (creating tables), the console displays the `Get Started` pane at the top. The pane displays a `PSQL` connection string that you can use to connect to the database as the `admin` user (a database superuser). 
+If you did not install the sample database (creating tables), the console displays the `Get Started` pane at the top. The pane displays a `PSQL` connection string that you can use to connect to the database as the `admin` user (a database superuser).
 
 ![Get Started](../images/connect_wo_sample.png)
 
-For detailed information about: 
+For detailed information about:
 
-* installing the psql client and connecting to the database, see [Connecting](../connecting.mdx). 
+* installing the psql client and connecting to the database, see [Connecting](../connecting.mdx).
 * moving a database object into your database, see [Migrating to pgEdge Distributed Cloud](../migration.mdx).
 * Postgres SQL commands, see the [Postgres documentation](https://www.postgresql.org/docs/16/sql-commands.html).
 
@@ -121,7 +121,7 @@ The `All nodes` tab shows bar graphs that compare resource usage for all three n
 
 ![Node Metrics](../images/node_metrics.png)
 
-Select the tab for a named node to see activity and resource use for each individual node of your cluster. 
+Select the tab for a named node to see activity and resource use for each individual node of your cluster.
 
 Detailed usage is color coded; select a tab to display details about resource usage on a specific node. For detailed metrics for a specific point in time, hover over a graph.
 
@@ -129,9 +129,9 @@ Detailed usage is color coded; select a tab to display details about resource us
 
 | Command  | Description
 |----------|-------------
-| `CPU` | The `CPU` graph displays information about the CPU usage for the server. 
-| `Memory` | The `Memory` graph displays information about memory usage (in MB) for the cluster or by the node. 
-| `Replication Output` | The `Replication Output` graph displays the replication traffic for the database in tuples. 
+| `CPU` | The `CPU` graph displays information about the CPU usage for the server.
+| `Memory` | The `Memory` graph displays information about memory usage (in MB) for the cluster or by the node.
+| `Replication Output` | The `Replication Output` graph displays the replication traffic for the database in tuples.
 
 
 ## Reviewing the Database Logs
@@ -146,7 +146,7 @@ Use tabs across the top of the panel to select the node for which you wish to vi
 
 * Select `PostgreSQL logs` to view the logs from the Postgres database on the selected node.
 * Select `Tricorder logs` to view Tricorder logs. Tricorder is a companion service from pgEdge that enables metrics collection, performs health checks, and supports scheduled backups for the database. It also performs operational actions on the database as part of workflows.
-* Select `ACE logs` to view the [ACE](../../platform/ace.mdx) logs. ACE logs are only available for customers that enable ACE monitoring. 
+* Select `ACE logs` to view the [ACE](../../platform/ace.mdx) logs. ACE logs are only available for customers that enable ACE monitoring.
 
 You can sort or search the log files using options in the top bar of the log table:
 

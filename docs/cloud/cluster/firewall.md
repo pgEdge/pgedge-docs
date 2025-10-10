@@ -23,16 +23,6 @@ To add or modify a firewall rule:
 
 When you're finished, select `Update Firewall Rules` to modify your cluster's firewall. While the firewall is being modified, a blue dot to the left of the cluster name indicates that the changes are being applied. During this time, your cluster remains available for connections, but you must wait to make further modifications to the cluster definition.
 
-import { Callout } from 'nextra/components'
- 
-<Callout type="info" emoji="ℹ️">
- When specifying a CIDR block, append the number of bits in the netmask after the address block; for example, the address `10.1.2.0/24` specifies that anyone connecting from an IP address that starts with the prefix `10.1.2` can connect.
-</Callout>
- 
+!!! info
 
-
-
-
-
-
-
+    When specifying a CIDR block, append the number of bits in the netmask after the address block; for example, the address `10.1.2.0/24` specifies that anyone connecting from an IP address that starts with the prefix `10.1.2` can connect.

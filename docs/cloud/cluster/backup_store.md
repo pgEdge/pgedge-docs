@@ -1,16 +1,14 @@
 # Defining a Backup Store
 
-import { Callout } from 'nextra/components'
- 
-<Callout type="info">
-  Backup stores are available only on Enterprise Edition and are used only for pgBackRest backups.
-</Callout>
+!!! info
+
+    Backup stores are available only on Enterprise Edition and are used only for pgBackRest backups.
 
 Use options accessed via the `Backup Stores` link in the navigation pane to define storage on your cloud provider. Then, when you deploy a cluster, you can select a backup store to attach to the Cloud cluster for use when backing up cluster nodes or log files.
 
 ![Backup Stores dialog](../images/backup_stores_dialog.png)
 
-A Cloud provider backup store acts as a connection between your Cloud cluster and your provider's object store. The provider account that is used for your backup store must be the same account used when deploying the cluster. You can attach more than one backup store to a single cluster, and each backup store can be used for multiple Cloud nodes and/or databases. 
+A Cloud provider backup store acts as a connection between your Cloud cluster and your provider's object store. The provider account that is used for your backup store must be the same account used when deploying the cluster. You can attach more than one backup store to a single cluster, and each backup store can be used for multiple Cloud nodes and/or databases.
 
 When you create the backup store, two storage buckets are deployed in the store; one bucket is used for backups, and one is used to store provider access logs for the primary bucket.
 
@@ -19,7 +17,7 @@ To reduce network latency, you should backup each node to a backup store located
 
 ## Creating a Backup Store
 
-The `Backup Stores` dialog displays the backup storage defined on your Cloud provider; select the `Create Backup Store` icon (located in the upper-right corner of the dialog) to provide details and define a backup store. 
+The `Backup Stores` dialog displays the backup storage defined on your Cloud provider; select the `Create Backup Store` icon (located in the upper-right corner of the dialog) to provide details and define a backup store.
 
 ![Create a Backup Store](../images/backup_store_create.png)
 
@@ -47,7 +45,7 @@ The `Update Cluster Backup Stores` dialog opens as shown below:
 When the dialog opens, click in the `Backup Stores` field or select from the icons on the map to choose the backup stores you wish to make available to your cluster.  When you've identified the clusters backup stores, select the `Update Backup Stores` button to update the cluster. 
 
 
-## The Backup Stores dialog
+## The Backup Stores Dialog
 
 After you define a backup store, the new store will be added to the Backup Stores dialog; select the `Show more details` icon to expand the information dialog to view details about the store:
 

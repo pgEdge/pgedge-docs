@@ -6,36 +6,21 @@ To enable this feature, move the `Enable REST API` toggle switch to `On` when yo
 
 ## Why HTTPS?
 
-Postgres is a fantastic database choice for almost any application, including
-many where there are limitations or restrictions on the compute and networking
-resources available. The HTTPS API supports querying from clients where raw TCP
-connections are not possible or where a PostgreSQL client library is unavailable.
-Most notably, some edge compute and serverless platforms are in this situation today.
+Postgres is a fantastic database choice for almost any application, including many where there are limitations or restrictions on the compute and networking resources available. The HTTPS API supports querying from clients where raw TCP connections are not possible or where a PostgreSQL client library is unavailable (most notably, some edge compute and serverless platforms are in this situation).
 
 ## Authentication (AuthN) and Authorization (AuthZ)
 
-Connecting and querying over HTTPS builds on the same `authn` and `authz` mechanisms
-as standard PostgreSQL connections. This means that the same database roles and
-passwords are used when querying over HTTPS.
+Connecting and querying over HTTPS builds on the same `authn` and `authz` mechanisms as standard PostgreSQL connections. This means that the same database roles and passwords are used when querying over HTTPS.
 
-Currently, the HTTPS API only allows querying using the built-in `app` user.
-We recommend using the built-in `admin` user, or a separate administrative user
-that you create, to run migrations over a standard PostgreSQL TCP connection.
-Then, with the database schema in place, use the `app` user to query over HTTPS.
-As a result, all queries will be subject to the permissions assigned to the
-`app` user, which you can customize as needed.
+Currently, the HTTPS API only allows querying using the built-in `app` user. We recommend using the built-in `admin` user, or a separate administrative user that you create, to run migrations over a standard PostgreSQL TCP connection. Then, with the database schema in place, use the `app` user to query over HTTPS. As a result, all queries will be subject to the permissions assigned to the `app` user, which you can customize as needed.
 
-Credentials may currently be passed via standard basic authentication headers.
-Support for additional authentication methods such as JWTs is planned. See
-below for specific authentication examples.
+You can pass credentials via standard basic authentication headers. Support for additional authentication methods such as JWTs is planned. See below for specific authentication examples.
 
 ## Database URLs
 
-Each Cloud database has a unique URL that is used when connecting from any
-client, whether it be over a standard PostgreSQL connection or over HTTPS. Copy
-the URL from the database details page in the pgEdge UI to use with your client.
+Each Cloud database has a unique URL that is used when connecting from any client, whether it be over a standard PostgreSQL connection or over HTTPS. You can copy the URL from the Database Details page in the pgEdge Cloud to use with your client.
 
-For example, connect to a database with a URL of `random-name.a1.pgedge.io` as follows.
+For example, to connect to a database with a URL of `random-name.a1.pgedge.io`:
 
 Using PSQL:
 
@@ -61,8 +46,7 @@ The HTTPS API supports the following endpoints:
 - `PATCH /:database/:schema/:table?{field}={value}`: Update matching row(s) in a table.
 - `DELETE /:database/:schema/:table?{field}={value}`: Delete matching row(s) from a table.
 
-For example, to query a `public.users` table in the `defaultdb` database, the
-request would look like this:
+For example, to query a `public.users` table in the `defaultdb` database, the request would look like this:
 
 ```bash
 GET https://random-name.a1.pgedge.io/defaultdb/public/users
@@ -70,7 +54,7 @@ GET https://random-name.a1.pgedge.io/defaultdb/public/users
 
 ## Query Parameters
 
-Query parameters may be used to filter, paginate, and sort results.
+You can use query parameters to filter, paginate, and sort results.
 
 | Query String                | Description                                                 |
 | --------------------------- | ----------------------------------------------------------- |
@@ -84,12 +68,11 @@ Query parameters may be used to filter, paginate, and sort results.
 | `_order={field1},{field2}`  | Order by a field. Prefix the field with `-` for DESC order. |
 | `_groupby={field}`          | Group by a field.                                           |
 
-For more information about supported query parameters, see the
-[pREST documentation](https://docs.prestd.com/api-reference/parameters).
+For more information about supported query parameters, see the [pREST documentation](https://docs.prestd.com/api-reference/parameters).
 
 ## SQL Functions
 
-Functions may be used to aggregate and group results.
+You can use functions to aggregate and group results.
 
 | Name       | Use in Request   |
 | ---------- | ---------------- |
@@ -102,7 +85,7 @@ Functions may be used to aggregate and group results.
 
 ## Operators
 
-Operators may be used to customize result filtering.
+You can use operators to customize result filtering.
 
 | Name             | Description                                                            |
 | ---------------- | ---------------------------------------------------------------------- |
@@ -131,8 +114,7 @@ Operators may be used to customize result filtering.
 
 ## Example Requests
 
-In these examples, assume the Northwind Traders dataset is loaded onto a
-database `defaultdb` with the URL:
+These examples assume the Northwind Traders dataset is loaded onto a database `defaultdb` with the URL:
 
 ```bash
 https://random-name.a1.pgedge.io
@@ -140,14 +122,14 @@ https://random-name.a1.pgedge.io
 
 ### Query a Table
 
-Query the first three rows from the `categories` table:
+Use the following command to query the first three rows of the `categories` table:
 
-```bash copy
+```bash
 curl -u app:MYSECRETPASSWORD \
     "https://random-name.a1.pgedge.io/defaultdb/public/categories?_page=1&_page_size=3"
 ```
 
-```json copy
+```json
 [
   {
     "picture": "\\x",
@@ -172,14 +154,14 @@ curl -u app:MYSECRETPASSWORD \
 
 ### Count Rows
 
-Count the number of rows in the `categories` table:
+Use the following commands to count the number of rows in the `categories` table:
 
-```bash copy
+```bash
 curl -u app:MYSECRETPASSWORD \
     "https://random-name.a1.pgedge.io/defaultdb/public/categories?_count=category_id&_count_first=true"
 ```
 
-```json copy
+```json
 {
   "count": 8
 }
@@ -187,16 +169,16 @@ curl -u app:MYSECRETPASSWORD \
 
 ### Insert a Row
 
-Insert a new row into the `categories` table:
+Use the following commands to insert a new row into the `categories` table:
 
-```bash copy
+```bash
 curl -u app:MYSECRETPASSWORD \
     -X POST \
     "https://random-name.a1.pgedge.io/defaultdb/public/categories" \
     -d '{"category_id": 9, "category_name": "New Category"}'
 ```
 
-```json copy
+```json
 {
   "category_id": 9,
   "category_name": "New Category",
@@ -207,16 +189,16 @@ curl -u app:MYSECRETPASSWORD \
 
 ### Update a Row
 
-Update the row with `category_id` equal to 1:
+Use the following command to update the row with `category_id` equal to 1:
 
-```bash copy
+```bash
 curl -u app:MYSECRETPASSWORD \
     -X PATCH \
     "https://random-name.a1.pgedge.io/defaultdb/public/categories?category_id=1" \
     -d '{"category_name": "New Beverages"}'
 ```
 
-```json copy
+```json
 {
   "rows_affected": 1
 }
@@ -224,15 +206,15 @@ curl -u app:MYSECRETPASSWORD \
 
 ### Delete a Row
 
-Delete the row with `category_id` equal to 1:
+Use the following commands to delete the row with `category_id` equal to 1:
 
-```bash copy
+```bash
 curl -u app:MYSECRETPASSWORD \
     -X DELETE \
     "https://random-name.a1.pgedge.io/defaultdb/public/categories?category_id=1"
 ```
 
-```json copy
+```json
 {
   "rows_affected": 1
 }
@@ -240,14 +222,14 @@ curl -u app:MYSECRETPASSWORD \
 
 ### Group By
 
-This query counts the number of `products` in each category:
+The following query counts the number of `products` in each category:
 
-```bash copy
+```bash
 curl -u app:MYSECRETPASSWORD \
     "https://random-name.a1.pgedge.io/defaultdb/public/products?_select=category_id&_count=product_id&_groupby=category_id"
 ```
 
-```json copy
+```json
 [
   {
     "category_id": 1,
@@ -286,16 +268,16 @@ curl -u app:MYSECRETPASSWORD \
 
 ### Show Columns
 
-Show the columns in the `categories` table:
+Use the following commands to display the columns in the `categories` table:
 
-```bash copy
+```bash
 curl -u app:MYSECRETPASSWORD \
     "https://random-name.a1.pgedge.io/show/defaultdb/public/categories"
 ```
 
 Output:
 
-```json copy
+```json
 [
   {
     "position": 1,

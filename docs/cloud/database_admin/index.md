@@ -1,8 +1,3 @@
-export default {
-  table_mgmt: "Creating and Managing Tables",
-  integrations: "Using Integrations",
-  metrics: "Reviewing Database Metrics",
-  logs: "Viewing Log Files",
-  backup_details: "Reviewing Backup Details",
-  extensions:"Using PostgreSQL Extensions"
-};
+# pgEdge Distributed Postgres Cloud Edition 
+
+pgEdge Distributed Postgres (Cloud Edition) hosts full-featured Postgres databases with all of the tooling and functionality documented in the Postgres documentation. In this section, we'll discuss issues of interest to database administrators.

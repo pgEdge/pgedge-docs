@@ -1,15 +1,18 @@
-# Cluster Management
+# Reviewing your Cloud Clusters
 
 !!! info
 
-    pgEdge Distributed Postgres Cloud clusters are available only on Enterprise Edition.
+    Clusters are available only on pgEdge Distributed Edition (Cloud Edition) Enterprise Edition accounts.
 
-pgEdge Distributed Postgres Cloud Edition provides convenient dialogs that help you manage your cluster:
+To review a list of the currently defined Postgres clusters, expand the `Clusters` node of the tree control in the console navigation pane.
 
-* [Creating a Cluster](create_cluster.md)
-* [Reviewing your Clusters](clusters.md)
-* [Managing a Cluster](manage_cluster.md)
-* [Defining a Cluster's Backup Store](backup_store.md)
-* [Managing Firewall Rules](firewall.md)
-* [Managing VPC Associations](vpc_assoc.md)
+![Displaying the currently defined clusters](../images/clusters.png)
 
+The dot to the left of a cluster name in the tree control indicates the cluster status:
+
+* A green dot indicates that the cluster deployment has completed.
+* A blue dot indicates that the cluster is in the process of deploying.
+* A grey dot indicates that cluster deletion is pending.
+* A red dot indicates that cluster creation failed.
+
+The `Clusters` page displays a pane for each cluster that lists the nodes in the cluster and the regions in which each node is deployed. Select a cluster name in the tree control or select the navigation icon in a pane to navigate to a page with cluster information.

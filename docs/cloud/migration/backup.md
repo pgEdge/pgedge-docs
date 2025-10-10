@@ -1,6 +1,6 @@
 # Using pg_dump for Backups
 
-[pg_dump](https://www.postgresql.org/docs/16/app-pgdump.html) is a Postgres tool that can create a script or archive of the settings and commands required to recreate data, a database, or database objects on another PostgreSQL server. You can use pg_dump to move objects into a Cloud database, or from a Cloud database to another server. pg_dump can also be used as a backup tool.
+[pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html) is a Postgres tool that can create a script or archive of the settings and commands required to recreate data, a database, or database objects on another PostgreSQL server. You can use pg_dump to move objects into a Cloud database, or from a Cloud database to another server. pg_dump can also be used as a backup tool.
 
 When using pg_dump with Cloud, you should specify one or more schema names or unique object names in the pg_dump command. The owner of the objects must exist in the database to execute commands to recreate the objects, and must have privileges in the schema in which the objects are being created. You should not backup or attempt to recreate objects in the `spock` schema.
 
@@ -14,7 +14,7 @@ When prompted, provide the database password. For example, the following command
 
 `./pg_dump -Fp -h usefully-excited-foxhound-iad.a1.pgedge.io -U admin -d inventory > /Users/susan/Desktop/inventory_backup`
 
-Creates a plain-text file that recreates the `inventory` database; the database resides on a Cloud host with the domain of `usefully-excited-foxhound-iad.pgedge.io`. The commands are written to a plain text file named `inventory_backup`.   For a complete list of pg_dump command line options, see the [documentation at the PostgreSQL website](https://www.postgresql.org/docs/16/app-pgdump.html).
+Creates a plain-text file that recreates the `inventory` database; the database resides on a Cloud host with the domain of `usefully-excited-foxhound-iad.pgedge.io`. The commands are written to a plain text file named `inventory_backup`.   For a complete list of pg_dump command line options, see the [documentation at the PostgreSQL website](https://www.postgresql.org/docs/current/app-pgdump.html).
 
 ## Using pgAdmin for Backups
 
@@ -32,7 +32,7 @@ When the `Backup` dialog opens:
 
 ![pgAdmin Backup General tab](../images/pgadmin_backup_general.png)
 
-When the backup completes, you can open the file and review the statements, modify SQL commands, or use the file to recreate objects. For example, the following plain-text dump file of the `fruit` table makes it easy to see how the table is created and populated, how ownership is conveyed, and how key definition is determined. 
+When the backup completes, you can open the file and review the statements, modify SQL commands, or use the file to recreate objects. For example, the following plain-text dump file of the `fruit` table makes it easy to see how the table is created and populated, how ownership is conveyed, and how key definition is determined.
 
 Note that at the start of the script, any parameters that are not set to default PostgreSQL values are reset to the values in the dump file when the script is replayed. This can potentially modify the behavior of the database into which the script is played back:
 
@@ -40,8 +40,8 @@ Note that at the start of the script, any parameters that are not set to default
 --
 -- PostgreSQL database dump
 --
--- Dumped from database version 16.1
--- Dumped by pg_dump version 16.1
+-- Dumped from database version 17.1
+-- Dumped by pg_dump version 17.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;

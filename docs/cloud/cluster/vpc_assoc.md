@@ -1,10 +1,8 @@
 # Adding or Modifying VPC Associations
 
-import { Callout } from 'nextra/components'
- 
-<Callout type="info">
-VPC Associations are currently supported only for AWS clusters.
-</Callout>
+!!! info
+
+    VPC Associations are currently supported only for AWS clusters.
 
 When you create a Cloud cluster, you can provide the identity of a VPC association to configure VPC peering and (if needed) private zone routing between any defined VPCs and the pgEdge cluster network. Peering allows an application to connect seamlessly to any of the nodes across regions, allowing you to fully leverage latency routing and dns failover. 
 
@@ -23,12 +21,3 @@ To add or modify a VPC association:
 * Use the `VPC ID` field in the right column to add or remove VPC IDs from the list. 
 
 When you're finished, select `Update VPC Associations` to modify the VPCs available.
-
-
-
-
-
-
-
-
-

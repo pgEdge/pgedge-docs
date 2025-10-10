@@ -3,7 +3,7 @@
 The following steps provide a simple way to move an existing PostgreSQL database object to a pgEdge Distributed PostgreSQL (Cloud Edition) database:
 
 1. Create the target database in Cloud.
-2. Ensure that the object owner exists in the target database. If necessary, connect to the Cloud database with psql or pgAdmin and [create the owner](https://www.postgresql.org/docs/16/sql-createrole.html) of the object. The following simple syntax creates a PostgreSQL role with login privileges:
+2. Ensure that the object owner exists in the target database. If necessary, connect to the Cloud database with psql or pgAdmin and [create the owner](https://www.postgresql.org/docs/current/sql-createrole.html) of the object. The following simple syntax creates a PostgreSQL role with login privileges:
 
     `CREATE ROLE role_name LOGIN PASSWORD 'safe_password'`
 
@@ -19,5 +19,5 @@ The following steps provide a simple way to move an existing PostgreSQL database
 
 For more details, see:
 
-* [Taking a Backup](/cloud/migration/backup.md)
-* [Restoring a Backup](/cloud/migration/restore.md)
+* [Taking a Backup](./backup.md)
+* [Restoring a Backup](./restore.md)
