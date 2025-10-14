@@ -1,6 +1,6 @@
 # Creating and Managing Tables
 
-To create a table, connect to the database with [psql](/cloud/connecting/psql.md) or [pgAdmin](/cloud/connecting/pgadmin.md), and use [SQL commands](https://www.postgresql.org/docs/16/sql-commands.html) or pgAdmin's graphical interface to define tables, add data, and create and manage users.
+To create a table, connect to the database with [psql](../connecting/psql.md) or [pgAdmin](../connecting/pgadmin.md), and use [SQL commands](https://www.postgresql.org/docs/16/sql-commands.html) or pgAdmin's graphical interface to define tables, add data, and create and manage users.
 
 Note that to replicate, a table must have a primary key; `UNLOGGED` and `TEMPORARY` tables are not replicated.
 

@@ -35,9 +35,9 @@ The `Backup Configuration` pane allows you to customize the configuration you wi
 
 If applicable, use fields in this section to customize the backup strategy:
 
-* If your database resides on an Enterprise Edition cluster, [pgBackRest](../backup/backup_providers.mdx#using-pgbackrest-for-backups) is the tool used for backups. You can [customize the backup schedule and storage](../backup/backup_providers.mdx#customizing-backup-details-for-pgbackrest), but backups cannot be downloaded. The default configuration defines a schedule that includes a daily full backup, with hourly incremental backups, but you use the `Add Configuration` button to [modify the schedule](../backup/backup_providers.mdx#customizing-backup-details-for-pgbackrest).
+* If your database resides on an Enterprise Edition cluster, [pgBackRest](../backup/backup_providers.md#using-pgbackrest-for-backups) is the tool used for backups. You can [customize the backup schedule and storage](../backup/backup_providers.md#customizing-backup-details-for-pgbackrest), but backups cannot be downloaded. The default configuration defines a schedule that includes a daily full backup, with hourly incremental backups, but you use the `Add Configuration` button to [modify the schedule](../backup/backup_providers.md#customizing-backup-details-for-pgbackrest).
 
-* If your database resides on a Developer Edition cluster, [pg_dump](../backup/backup_providers.mdx#using-pg_dump-for-backups) is the backup tool used. Note that if your backup strategy uses pg_dump, you cannot customize the backup schedule and storage details, but backups can be downloaded for use on other systems.
+* If your database resides on a Developer Edition cluster, [pg_dump](../backup/backup_providers.md#using-pg_dump-for-backups) is the backup tool used. Note that if your backup strategy uses pg_dump, you cannot customize the backup schedule and storage details, but backups can be downloaded for use on other systems.
 
 !!! note
 
