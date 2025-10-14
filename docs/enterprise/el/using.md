@@ -16,11 +16,9 @@ Before configuring local access to the pgEdge repository (`pgedge`), you should 
 
 `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm` 
 
-import {Callout} from 'nextra/components'
+!!! note
 
-<Callout type="info">
-Depending on your system platform or configuration, you may need to use a different installation command for CRB and epel-release; the commands that follow are just examples.
-</Callout>
+    Depending on your system platform or configuration, you may need to use a different installation command for CRB and epel-release; the commands that follow are just examples.
 
 Enable the CRB (CodeReady Builder) repository for use with DNF with the command:
 
