@@ -4,7 +4,7 @@ Components distributed via the `pgedge` repository follow standard configuration
 
 ## Using Spock with pgEdge Enterprise Postgres
 
-To configure a two-node replication cluster after installing the Spock extension with pgEdge Enterprise Postgres, follow the detailed instructions [here](../../spock_ext/two_node_cluster.md).
+To configure a two-node replication cluster after installing the Spock extension with pgEdge Enterprise Postgres, follow the detailed instructions [here](https://github.com/pgEdge/spock/blob/main/docs/two_node_cluster.md).
 
 ## Using pgBackRest with pgEdge Enterprise Postgres
 
