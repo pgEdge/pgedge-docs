@@ -4,14 +4,14 @@ The CLI is the command line interface that you can use to simplify component ins
 
 | Module | Description |
 |--------|-------------|
-| [ace](../platform/pgedge_commands/ace.md) | Use `ACE` to compare the data on different nodes to confirm data consistency. |
-| [cluster](../platform/pgedge_commands/cluster.md) | Calls to the `cluster` module install and configure your replication scenario. | 
-| [db](../platform/pgedge_commands/db.md) | Use calls to the `db` module to configure and control your PostgreSQL databases. |
-| [localhost](../platform/pgedge_commands/localhost.md) | Use commands in the `localhost` module to manage clusters on your local host. |
-| [service](../platform/pgedge_commands/service.md) | Calls to the `service` module control the state of services. |
-| [setup](../platform/pgedge_commands/setup.md) | Setup a pgEdge node with configuration for user, database, port, version, spock, snowflake. |
-| [spock](../platform/pgedge_commands/spock.md) | Use calls to `spock` to manage your replication cluster. |
-| [um](../platform/pgedge_commands/um.md) | Use calls to `update manager` to list, install, and update components. |
+| [ace](ace.md) | Use `ACE` to compare the data on different nodes to confirm data consistency. |
+| [cluster](cluster.md) | Calls to the `cluster` module install and configure your replication scenario. | 
+| [db](db.md) | Use calls to the `db` module to configure and control your PostgreSQL databases. |
+| [localhost](localhost.md) | Use commands in the `localhost` module to manage clusters on your local host. |
+| [service](service.md) | Calls to the `service` module control the state of services. |
+| [setup](setup.md) | Setup a pgEdge node with configuration for user, database, port, version, spock, snowflake. |
+| [spock](spock.md) | Use calls to `spock` to manage your replication cluster. |
+| [um](um.md) | Use calls to `update manager` to list, install, and update components. |
 
 
 ## CLI Command Synopsis
