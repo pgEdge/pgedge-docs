@@ -20,7 +20,7 @@ The database header tells you:
 * How long the database has been running.
 * The cluster on which the database is deployed.
 * The Postgres database version.
-* The version of the [Spock extension](../../spock_ext.mdx) in use by the database.
+* The version of the Spock extension in use by the database.
 
 ## The Get Started Pane
 
@@ -30,8 +30,8 @@ If you did not install the sample database (creating tables), the console displa
 
 For detailed information about:
 
-* installing the psql client and connecting to the database, see [Connecting](../connecting.mdx).
-* moving a database object into your database, see [Migrating to pgEdge Distributed Cloud](../migration.mdx).
+* installing the psql client and connecting to the database, see [Connecting](../connecting/index.md).
+* moving a database object into your database, see [Migrating to pgEdge Distributed Cloud](../migration/index.md).
 * Postgres SQL commands, see the [Postgres documentation](https://www.postgresql.org/docs/16/sql-commands.html).
 
 ## The Start Replication Pane
@@ -75,7 +75,7 @@ The `Connect to your database` pane displays connection information for the node
 
 ![Users Pane](../images/connect_to_your_database.png)
 
-For detailed information about using the connection information to connect to your database, see [Connecting](../connecting.mdx).
+For detailed information about using the connection information to connect to your database, see [Connecting](../connecting.md).
 
 ## Password Management
 
@@ -146,7 +146,7 @@ Use tabs across the top of the panel to select the node for which you wish to vi
 
 * Select `PostgreSQL logs` to view the logs from the Postgres database on the selected node.
 * Select `Tricorder logs` to view Tricorder logs. Tricorder is a companion service from pgEdge that enables metrics collection, performs health checks, and supports scheduled backups for the database. It also performs operational actions on the database as part of workflows.
-* Select `ACE logs` to view the [ACE](../../platform/ace.mdx) logs. ACE logs are only available for customers that enable ACE monitoring.
+* Select `ACE logs` to view the ACE extension logs. ACE logs are only available for customers that enable ACE monitoring.
 
 You can sort or search the log files using options in the top bar of the log table:
 
