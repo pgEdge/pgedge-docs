@@ -29,7 +29,7 @@ Paste the command into your command line client and press `Return`.
 
 Then, move into the `pgedge` directory, and perform the following steps.
 
-1. [Create a cluster_name.json](../installing_pgedge/json.mdx#creating-a-cluster-configuration-file) file with the command:
+1. [Create a cluster_name.json](../installing_pgedge/json.md#creating-a-cluster-configuration-file) file with the command:
 
     `./pgedge cluster json-create demo 3 lcdb admin password --port=6432`
   
@@ -39,13 +39,13 @@ Then, move into the `pgedge` directory, and perform the following steps.
 
     Note that the cluster definition wizard will prompt you for configuration details for pgBackRest; if you provide those details in the configuration file, pgBackRest will be configured and deployed with your cluster.
 
-2. [Validate the cluster_name.json](../installing_pgedge/json.mdx#validating-a-cluster-configuration-file) file with the command:
+2. [Validate the cluster_name.json](../installing_pgedge/json.md#validating-a-cluster-configuration-file) file with the command:
    
     `./pgedge cluster json-validate demo`
 
   Note that while the `cluster json-validate` command verifies that the json form of the file is correct, it does not verify connection properties.
 
-3. [Deploy the cluster](../installing_pgedge/json.mdx#using-the-cluster-module-to-deploy-a-cluster) with the command:
+3. [Deploy the cluster](../installing_pgedge/json.md#using-the-cluster-module-to-deploy-a-cluster) with the command:
    
     `./pgedge cluster init demo`
 

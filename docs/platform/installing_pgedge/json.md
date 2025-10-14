@@ -1,6 +1,6 @@
 # Creating and Modifying a Cluster Configuration File
 
-You can use the CLI's `cluster` module to create a cluster configuration file that deploys and configures a pgEdge Distributed Postgres cluster, optionally running pgBackRest. The configuration file (`pgedge/cluster/cluster_name/cluster_name.json`) contains detailed information about your cluster; that information is used by [CLI management commands](../pgedge_commands.mdx) like `cluster add-node`, `cluster remove-node`, and the ACE extension. 
+You can use the CLI's `cluster` module to create a cluster configuration file that deploys and configures a pgEdge Distributed Postgres cluster, optionally running pgBackRest. The configuration file (`pgedge/cluster/cluster_name/cluster_name.json`) contains detailed information about your cluster; that information is used by [CLI management commands](../pgedge_commands/index.md) like `cluster add-node`, `cluster remove-node`, and the ACE extension. 
 
 **Overview - deploying a cluster with a cluster configuration file**
 
@@ -14,9 +14,9 @@ If you are happy with your cluster configuration, reusing the configuration file
 
 !!! info
 
-    Before creating a cluster configuration file and deploying as described in the sections that follow, you first need to satisfy the prerequisites and [install the CLI](../installing_pgedge.mdx).
+    Before creating a cluster configuration file and deploying as described in the sections that follow, you first need to satisfy the prerequisites and [install the CLI](../installing_pgedge/manual.md).
 
-To review a tutorial with detailed configuration and deployment steps, visit [here](../installing_pgedge/cluster_deploy.mdx).
+To review a tutorial with detailed configuration and deployment steps, visit [here](../installing_pgedge/manual.md).
 
 ## Creating a Cluster Configuration File
 
@@ -43,7 +43,7 @@ Optionally, include:
 
 If you do not include the `--force` option, when you press return, the command initiates a script that prompts you for detailed information about each node your cluster. 
 
-After providing the versions or accepting defaults for the Postgres and Spock versions, you will be asked if you would like to enable [pgBackRest](../managing/pgbackrest.mdx) on each node of the cluster; if you answer `Y(es)`, you are prompted for pgBackRest installation details. pgBackRest will be installed and configured on each node when you initiate the cluster deployment:
+After providing the versions or accepting defaults for the Postgres and Spock versions, you will be asked if you would like to enable [pgBackRest](../managing/pgbackrest.md) on each node of the cluster; if you answer `Y(es)`, you are prompted for pgBackRest installation details. pgBackRest will be installed and configured on each node when you initiate the cluster deployment:
 
 ```sh
 
@@ -273,7 +273,7 @@ For example, the following command validates the .json file that creates a clust
 
 ### Using the cluster Module to Deploy a Cluster 
 
-The `cluster` module streamlines cluster creation by using information provided in a configuration file to describe the cluster details and connection attributes in an easy-to-create/easy-to-edit file.  After [creating the configuration file](#creating-a-cluster-configuration-file), you can invoke the [`pgedge cluster init`](../../pgedge_commands/doc/cluster-init.md) command to deploy the defined cluster.  The cluster deployment syntax is:
+The `cluster` module streamlines cluster creation by using information provided in a configuration file to describe the cluster details and connection attributes in an easy-to-create/easy-to-edit file.  After [creating the configuration file](#creating-a-cluster-configuration-file), you can invoke the [`pgedge cluster init`](../pgedge_commands/doc/cluster-init.md) command to deploy the defined cluster.  The cluster deployment syntax is:
 
 ```sql
     ./pgedge cluster init cluster_name
@@ -286,7 +286,7 @@ As the CLI executes this command, it creates each node with:
 * the Spock and Snowflake extensions (installed and configured for your cluster) 
 * the `default` replication set
 * subscriptions between nodes that enable active-active replication  
-* Optionally, [pgBackRest](../../managing/pgbackrest.mdx)
+* Optionally, [pgBackRest](../managing/pgbackrest.md)
 
 **Example** 
 

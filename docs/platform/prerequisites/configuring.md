@@ -8,17 +8,17 @@ All tables must include a primary key; this allows the Spock extension to replic
 
 **Use Snowflake Sequences for Robust Sequence Support** 
 
-If you use a Postgres [sequence](https://www.postgresql.org/docs/17/sql-createsequence.html) as part of your primary key, you should [convert your sequences to Snowflake sequences](../snowflake.mdx). 
+If you use a Postgres [sequence](https://www.postgresql.org/docs/17/sql-createsequence.html) as part of your primary key, you should convert your sequences to Snowflake sequences. 
 
 Snowflake sequences are composed of multiple data types that ensure a unique transaction sequence when processing your data in multiple regions. This helps Spock accurately preserve the order in which globally distributed transactions are performed, and alleviates concerns that network lag could disrupt sequences in distributed transactions.
 
 **Start with Identical Schema Objects on Each Node** 
 
-Before enabling [Automatic DDL replication](https://docs.pgedge.com/platform/advanced/autoddl), you must ensure that all schema objects exist on each node of the cluster before starting replication. If you start replication between schemas that don't match, pgEdge will return an error (object not found).
+Before enabling Automatic DDL replication, you must ensure that all schema objects exist on each node of the cluster before starting replication. If you start replication between schemas that don't match, pgEdge will return an error (object not found).
 
 !!! info
 
-    Functions, triggers, views, and other non-data schema objects must be maintained in tandem on each node if used by any process involved with replication; where possible, [enabling automatic DDL replication](../autoddl.mdx) can help you maintain identical schemas across your nodes.
+    Functions, triggers, views, and other non-data schema objects must be maintained in tandem on each node if used by any process involved with replication; enabling automatic DDL replication can help you maintain identical schemas across your nodes.
 
 If an object is not involved in replication or actively used by another replicated process, it can reside in the schema, but will be ignored.
 
@@ -30,8 +30,6 @@ PostgreSQL triggers will fire only from the node on which they were invoked. If 
 CREATE TRIGGER ins_trig AFTER INSERT ON my_table FOR EACH ROW EXECUTE PROCEDURE ins_history();
 ALTER TABLE trans_history ENABLE ALWAYS TRIGGER ins_trig;
 ```
-
-After creating or adjusting your schema, you can [upgrade to use pgEdge Distributed Postgres (VM Edition)](../installing_pgedge.mdx).
 
 **Use Conflict-Free Delta-Apply Columns**
 

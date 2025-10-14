@@ -14,8 +14,8 @@
 
   - pgEdge Platform now supports Spock version 5.0; this is the default version.  
 
-    - For details of Spock 5 improvements and new features, see the [Spock 5 release notes](../spock_ext/spock_release_notes.mdx).
-    - For detailed information about upgrading to Spock 5, see [the documentation](../platform/installing_pgedge/upgrade_spock.mdx).
+    - For details of Spock 5 improvements and new features, see the [Spock 5 release notes]().
+    - For detailed information about upgrading to Spock 5, see [the documentation](../platform/installing_pgedge/upgrade_spock.md).
 
   - PostgreSQL 17 is now the default major version.
   - The CLI now supports the latest PostgreSQL minor versions: 17.6, 16.10 and 15.14
@@ -52,8 +52,8 @@
 
   - pgEdge Platform now supports Spock version 5.0; this is the default version.  
 
-    - For details of Spock 5 improvements and new features, see the [Spock 5 release notes](../spock_ext/spock_release_notes.mdx).
-    - For detailed information about upgrading to Spock 5, see [the documentation](../platform/installing_pgedge/upgrade_spock.mdx).
+    - For details of Spock 5 improvements and new features, see the [Spock 5 release notes](https://github.com/pgEdge/spock/blob/main/docs/spock_release_notes.md).
+    - For detailed information about upgrading to Spock 5, see [the documentation](../platform/installing_pgedge/upgrade_spock.md).
 
   - PostgreSQL 17 is now the default major version.
   - The CLI now supports the latest PostgreSQL minor versions: 17.6, 16.10 and 15.14
@@ -78,14 +78,14 @@
 
 ## v25.1.0 on 2025-07-09
 
-  - You can now use the `pg_data` flag with the [setup](./pgedge_commands/setup.md) command and in your [cluster.json](./installing_pgedge/json.mdx) file to specify a non-default location for your Postgres `data` directory.
+  - You can now use the `pg_data` flag with the [setup](../platform/pgedge_commands/) command and in your [cluster.json](../platform/installing_pgedge/json.md) file to specify a non-default location for your Postgres `data` directory.
 
-  - ACE functionality now includes experimental support for [Merkle trees](../platform/ace/merkle.mdx). This feature significantly enhances the performance of ACE on large tables.
+  - ACE functionality now includes experimental support for Merkle trees. This feature significantly enhances the performance of ACE on large tables.
 
 ## v25.0.0 on 2025-06-04
  CLI
 
-  - Introduction of the [json-create command](./installing_pgedge/cluster_deploy/json.mdx) to simplify configuring a standard cluster with Spock, ACE, and pgBackRest deployed and replicating. This command invokes [a script](./installing_pgedge/cluster_deploy/json#creating-a-cluster-configuration-file) that prompts you for input about your cluster.
+  - Introduction of the [json-create command](../platform/installing_pgedge/json.md) to simplify configuring a standard cluster with Spock, ACE, and pgBackRest deployed and replicating. This command invokes [a script](../platform/installing_pgedge/json.md#creating-a-cluster-configuration-file) that prompts you for input about your cluster.
  
   - Enhanced behavior of the cluster module's add-node command. If the source node is configured to use pgBackRest, add-node will use the configured repository from the source node for the target node.  pgBackRest configuration options specified in the target node JSON file are configured on the target node after the add-node process completes.  If a valid backup exists in the source node’s configured pgBackRest repository, the backup will be used for the add-node operation rather than creating a new backup. 
  

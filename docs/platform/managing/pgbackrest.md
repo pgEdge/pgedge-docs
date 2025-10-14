@@ -1,6 +1,6 @@
 # Using pgBackRest for Backup and Restore
 
-pgBackRest is a reliable, easy-to-use backup and restore solution that can seamlessly scale up to the largest databases and workloads by using algorithms that are optimized for database-specific requirements. pgEdge Distributed Postgres (VM Edition) installers can configure pgBackRest [when you initialize a cluster](../installing_pgedge/cluster_deploy.mdx), or you can install pgBackRest as a [supported component](../managing/supported_extensions.mdx) in an existing cluster.
+pgBackRest is a reliable, easy-to-use backup and restore solution that can seamlessly scale up to the largest databases and workloads by using algorithms that are optimized for database-specific requirements. pgEdge Distributed Postgres (VM Edition) installers can configure pgBackRest [when you initialize a cluster](../installing_pgedge/cluster_deploy.md), or you can install pgBackRest as a [supported component](../managing/supported_extensions.md) in an existing cluster.
 
 !!! info
 
@@ -35,9 +35,9 @@ Adding a cipher pass to your environment will also allow you to use pgBackRest m
 
 ### Configuring pgBackRest when you Deploy a Cluster
 
-The CLI `cluster` module makes it easy to [define](../installing_pgedge/json.mdx) and [deploy](../installing_pgedge/json##using-the-cluster-module-to-deploy-a-cluster) a cluster that contains an initialized Postgres server, a running Spock installation, and a configured pgBackRest deployment.
+The CLI `cluster` module makes it easy to [define](../installing_pgedge/json.md) and [deploy](../installing_pgedge/json##using-the-cluster-module-to-deploy-a-cluster) a cluster that contains an initialized Postgres server, a running Spock installation, and a configured pgBackRest deployment.
 
-After meeting the [prerequisites](../prerequisites.mdx), navigate into the installation directory, and enter:
+After meeting the [prerequisites](../prerequisites/index.md), navigate into the installation directory, and enter:
 
 ```
 ./pgedge cluster json-create cluster_name node_count db_name db_superuser password --port=port_number --pg_ver=pg_version
@@ -47,7 +47,7 @@ This command will invoke the file creation wizard which will in turn, prompt you
 
 !!! help
 
-    For detailed information about creating and using the `cluster_name.json` file and command options, visit [here](../installing_pgedge/json.mdx).  You can also access online help by entering `pgedge cluster json-create --help` from the command line when in the installation directory.
+    For detailed information about creating and using the `cluster_name.json` file and command options, visit [here](../installing_pgedge/json.md).  You can also access online help by entering `pgedge cluster json-create --help` from the command line when in the installation directory.
 
 Then, you can use the `cluster init` command to deploy the defined cluster: 
 
@@ -59,13 +59,13 @@ The command deploys the cluster with a running Postgres instance, installed and 
 
 !!! help
 
-    For detailed information about creating and using the `cluster init` command, visit [here](../installing_pgedge/cluster.mdx).  You can also access online help by entering `pgedge cluster init --help` from the command line when in the installation directory.
+    For detailed information about creating and using the `cluster init` command, visit [here](../installing_pgedge/cluster_deploy.md).  You can also access online help by entering `pgedge cluster init --help` from the command line when in the installation directory.
 
 ### Configuring pgBackRest on an Existing Cluster
 
 !!! info
 
-If you have an existing pgEdge Distributed Postgres cluster, and wish to use pgBackRest as a backup solution, you can use the CLI to [install pgBackRest](./supported_extensions.mdx); when the installation completes, follow the configuration instructions at the [pgBackRest site](https://pgbackrest.org/user-guide.html) to configure your system.
+If you have an existing pgEdge Distributed Postgres cluster, and wish to use pgBackRest as a backup solution, you can use the CLI to [install pgBackRest](./supported_extensions.md); when the installation completes, follow the configuration instructions at the [pgBackRest site](https://pgbackrest.org/user-guide.html) to configure your system.
 
 If you have manually deployed pgBackRest on an existing cluster, you are not required to modify the configuration file to include pgBackRest configuration information. The cluster configuration file is required for other cluster management activities, and keeping the information together and up to date may be useful if you plan to:
 
@@ -83,7 +83,7 @@ If you are manually adding pgBackRest deployment details to the `cluster.json` f
 - **backrest.archive_mode**: The mode for archiving WAL (Write-Ahead Logging) files (`on` / `off`). If set to `on`, archiving will be configured.
 - **backrest.repo1_type**: The type of repository storage. The CLI currently supports `s3` and `posix`.
 
-For detailed information about the `cluster.json` file, visit [here](../installing_pgedge/json.mdx).
+For detailed information about the `cluster.json` file, visit [here](../installing_pgedge/json.md).
 
 ### Scheduling pgBackRest Backups
 
@@ -113,7 +113,7 @@ pgBackRest provides mechanisms for restoring a Postgres database to a specific b
 
 Every database should have a different (pre-planned) disaster recovery scenario, dependent on many factors. When moving to a cluster that uses pgBackRest, you may want to adjust your approach, customizing the pgBackRest configuration accordingly, as you test and verify your disaster recovery plan.
 
-Restoring a cluster should be considered a last resort. If nodes are still available, but have become out of sync due to inconsistent updates, consider using the [Active Consistency Engine (ACE)](../ace.mdx) to resolve discrepancies between nodes. 
+Restoring a cluster should be considered a last resort. If nodes are still available, but have become out of sync due to inconsistent updates, consider using the Active Consistency Engine (ACE) to resolve discrepancies between nodes. 
 
 The following steps outline using pgBackRest to restore a specific node:
 

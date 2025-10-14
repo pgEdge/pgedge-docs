@@ -117,5 +117,5 @@ If an upgrade fails, you cannot roll back the upgrade, but you can restore to yo
 
 At this point, you can resume use of your cluster with the previous Spock version.  Be sure you resume your backup strategy until you have corrected any issues and can re-attempt the upgrade.
 
-If you're a pgBackRest user, you'll find detailed information about [using pgBackRest](../managing/pgbackrest.mdx) and [restoring from pgBackRest here](../managing/pgbackrest.mdx#restoring-with-pgbackrest).
+If you're a pgBackRest user, you'll find detailed information about [using pgBackRest](../managing/pgbackrest.md) and [restoring from pgBackRest here](../managing/pgbackrest.md#restoring-with-pgbackrest).
 

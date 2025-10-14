@@ -102,7 +102,7 @@ The following table describes tables that reside in the `spock` schema that you 
 | `tables` | This table contains information about the tables in your database.|
 | `pii` | This is an optional table in which you can define columns that contain personally identifiable information (pii). You can add information such as the schema, table, and column names and then use this table to createcolumn filters when adding tables to replication sets. |
 | `queue` | Internal use - for tracking sync progress and DDL replication. |
-| `sequence_state` | Tracks sequence states used by Spock; [Snowflake](../snowflake.mdx) sequences are preferred method of sequence management. |
+| `sequence_state` | Tracks sequence states used by Spock; Snowflake sequences are preferred method of sequence management. |
 | `subscription` | This table contains information about your cluster subscriptions.|
 | `resolutions` | This table contains one row per resolution made on this node.|
 

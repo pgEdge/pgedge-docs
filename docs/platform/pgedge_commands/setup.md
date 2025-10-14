@@ -1,6 +1,6 @@
 # SETUP
 
-You can [use the setup command](../installing_pgedge/manual.mdx) to deploy a pgEdge Distributed Postgres cluster.
+You can [use the setup command](../installing_pgedge/manual.md) to deploy a pgEdge Distributed Postgres cluster.
 
 SYNOPSIS
     ./pgedge setup <flags>

@@ -4,7 +4,7 @@ The CLI's `setup` command used in this deployment method is designed to create c
 
 !!! info
     
-    If you are deploying a multi-master cluster with nodes that reside on the same host (for exploration and experimentation), we recommend using the [cluster module for deployment](../installing_pgedge.mdx). The cluster module also has the added benefit of performing an automated deployment and configuration of [pgBackRest](../managing/pgbackrest.mdx) on your new cluster.
+    If you are deploying a multi-master cluster with nodes that reside on the same host (for exploration and experimentation), we recommend using the [cluster module for deployment](../installing_pgedge/cluster_deploy.md). The cluster module also has the added benefit of performing an automated deployment and configuration of [pgBackRest](../managing/pgbackrest.md) on your new cluster.
 
 Before starting this tutorial, you should prepare two (or more) Linux servers running EL9 or Ubuntu 22.04 *on separate hosts*.  On each machine:
 
@@ -19,7 +19,7 @@ Then, install the CLI on each node with the command:
 
 Paste the command into your command line client and press `Return`.
 
-After [installing the CLI](../installing_pgedge.mdx), you can use the CLI's [`setup` command](../pgedge_commands/setup.md) to create a cluster. The `setup` command supports clauses that specify details such as:
+After [installing the CLI](../installing_pgedge/manual.md), you can use the CLI's [`setup` command](../pgedge_commands/setup.md) to create a cluster. The `setup` command supports clauses that specify details such as:
 
  * the name of the user that will own the database (`-U` or `--User=user_name`); required
  * the password for the user (`-P` or `--passwd=password`); required
@@ -32,10 +32,10 @@ After [installing the CLI](../installing_pgedge.mdx), you can use the CLI's [`se
  
  The `setup` command installs:
 
-* the [pgEdge Distributed Postgres (VM Edition)](../pgedge_commands.mdx) Command Line Interface. 
+* the [pgEdge Distributed Postgres (VM Edition)](../pgedge_commands/index.md) Command Line Interface. 
 * pgEdge Distributed Postgres.
 * [Spock](https://github.com/pgedge/spock), an extension that provides logical, asynchronous, multi-master replication.
-* [Snowflake](../advanced/snowflake.md), an extension that provides robust sequences for distributed clusters.
+* [Snowflake](https://github.com/pgEdge/snowflake), an extension that provides robust sequences for distributed clusters.
 * other extensions that support database management on a distributed cluster.
 
 On each server that will host a cluster node, move into the `pgedge` directory, and invoke the [`setup`](../pgedge_commands/setup.md) command: 
@@ -76,7 +76,7 @@ To create node `n2`:
 
 !!! hint
 
-    If you use the following node naming convention: n1, n2, n3, etc., the [`postgresql.conf` file](../managing/GUC_values.md) will be automatically updated to enable Snowflake sequences on your cluster.
+    If you use the following node naming convention: n1, n2, n3, etc., the [`postgresql.conf` file](../managing/guc_values.md) will be automatically updated to enable Snowflake sequences on your cluster.
 
 ## Creating Subscriptions
 

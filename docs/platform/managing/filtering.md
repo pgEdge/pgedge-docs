@@ -113,7 +113,7 @@ In our example, we're going to create a table that contains customer information
 
 *Note:* Our example assumes you do not have automatic DDL replication enabled. The initial DDL setup steps in this example must be performed on each node of the cluster.
 
-After [installing Postgres and creating a basic cluster](../installing_pgedge.mdx), move into the installation directory, source your environment variables, and connect to the database with PSQL:
+After [installing Postgres and creating a basic cluster](../installing_pgedge/manual.md), move into the installation directory, source your environment variables, and connect to the database with PSQL:
 
 ```sql
 $ source cluster/demo/n1/pgedge/pg16/pg16.env
@@ -303,7 +303,7 @@ When you add a table to a replication set, you can specify the columns that you 
 
 We're going to use a two-node cluster for our example; on the cluster, we're going to create a table (`public.employee`) that holds employee information.  All of the information is available to all employees *except* the `emp_govt_id` data and the `emp_birth_date` data which we'll restrict to distribution on node `n1`.  Employees viewing the information from node n2 will not see a value in those fields, but all other fields will be visible.
 
-To perform the steps in our example, [create a two-node cluster](../installing_pgedge.mdx) with automatic DDL updates disabled.  First, connect to the database on node `n1` with psql and create a table with the following command:
+To perform the steps in our example, [create a two-node cluster](../installing_pgedge/manual.md) with automatic DDL updates disabled.  First, connect to the database on node `n1` with psql and create a table with the following command:
 
 ```sql
 CREATE TABLE public.employee (
