@@ -28,7 +28,7 @@ theme:
     - navigation.prune
     - navigation.top
     - toc.follow
-
+    - content.code.copy
 
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -66,16 +66,56 @@ nav:
 
   - pgEdge Distributed Postgres Cloud:
     - Cloud Edition: cloud/index.md
-    - Getting Started: cloud/getting_started.md
-    - Prerequisites: prerequisites/index.md
-    - Cluster Management: cloud/cluster/index.md
-    - Database Management: cloud/database/index.md
-    - Modifying a Database or a Cluster: cloud/mod_cluster/index.md
-    - Database Administration: cloud/database_admin/index.md
-    - Connecting to a Database: cloud/connecting/index.md
-    - Managing Database Backups: cloud/backup/index.md
+    - Getting Started: 
+      - Enterprise Edition: cloud/getting_started/ee_getting_started.md
+      - Developer Edition: cloud/getting_started/de_getting_started.md
+    - Prerequisites: 
+      - Adding an SSH Key: cloud/prerequisites/ssh_key.md
+      - Linking and Managing your Cloud Provider Accounts:
+        - Managing Cloud Provider Accounts: cloud/prerequisites/cloud_accounts/index.md
+        - Linking an AWS Account: cloud/prerequisites/cloud_accounts/link_to_aws.md
+        - Linking an Azure Account: cloud/prerequisites/cloud_accounts/link_to_azure.md
+        - Linking a Google Account: cloud/prerequisites/cloud_accounts/link_to_google.md
+    - Cluster Management:
+      - Reviewing your Cloud Clusters: cloud/cluster/index.md
+      - Creating a Cluster: cloud/cluster/create_cluster.md
+      - Managing a Cluster: cloud/cluster/manage_cluster.md
+      - Defining a Cluster's Backup Store: cloud/cluster/backup_store.md
+      - Managing Firewall Rules: cloud/cluster/firewall.md
+      - Managing VPC Associations: cloud/cluster/vpc_assoc.md
+    - Database Management:
+      - Reviewing your Databases: cloud/database/index.md
+      - Creating a Database: cloud/database/create_db.md
+      - Managing a Database: cloud/database/manage_db.md
+    - Modifying a Database or a Cluster: 
+      - Using the Actions Menu: cloud/mod_cluster/actions.md
+      - Adding a Database or Cluster Node: cloud/mod_cluster/add.md
+      - Dropping a Database, Node, or Cluster: cloud/mod_cluster/drop.md
+      - Modifying a Database, Node, or Cluster: cloud/mod_cluster/modify.md
+    - Database Administration: 
+      - Creating and Managing Tables: cloud/database_admin/table_mgmt.md
+      - Using Integrations: cloud/database_admin/integrations.md
+      - Reviewing Database Metrics: cloud/database_admin/metrics.md
+      - Viewing Log Files: cloud/database_admin/logs.md
+      - Reviewing Backup Details: cloud/database_admin/backup_details.md
+      - Using Postgres Extensions: cloud/database_admin/extensions.md
+    - Connecting to a Database: 
+      - Connecting to your Database or Cluster: cloud/connecting/index.md
+      - Connecting with SSH: cloud/connecting/ssh.md
+      - Connecting with psql: cloud/connecting/psql.md
+      - Connecting with pgAdmin: cloud/connecting/pgadmin.md
+      - Connecting a Custom Client: cloud/connecting/custom_client.md
+      - Connecting over HTTPS: cloud/connecting/https.md
+      - Best Practices for Managing Connections: cloud/connecting/best_practices.md
+    - Managing Database Backups:
+      - Reviewing Backup Details: cloud/backup/backups.md
+      - Backing up your Database: cloud/backup/backup_providers.md
+      - Restoring from Backup: cloud/backup/restore.md
     - Reviewing Console Tasks: cloud/tasks.md
-    - Migrating to pgEdge Distributed Postgres (Cloud Edition): cloud/migration/index.md
+    - Migrating to pgEdge Distributed Postgres (Cloud Edition):
+      - Overview - Using a Backup to Migrate into a Distributed Database: cloud/migration/index.md
+      - Taking a Backup: cloud/migration/backup.md
+      - Restoring from Backup:  cloud/migration/restore.md
     - Settings: cloud/settings.md
     - Team Resources: cloud/teams.md
     - Troubleshooting: cloud/troubleshooting.md
