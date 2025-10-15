@@ -73,9 +73,9 @@ nav:
       - Adding an SSH Key: cloud/prerequisites/ssh_key.md
       - Linking and Managing your Cloud Provider Accounts:
         - Managing Cloud Provider Accounts: cloud/prerequisites/cloud_accounts/index.md
-        - Linking an AWS Account: cloud/prerequisites/cloud_accounts/link_to_aws.md
-        - Linking an Azure Account: cloud/prerequisites/cloud_accounts/link_to_azure.md
-        - Linking a Google Account: cloud/prerequisites/cloud_accounts/link_to_google.md
+        - Linking an AWS Account: cloud/prerequisites/cloud_accounts/link_to_AWS.md
+        - Linking an Azure Account: cloud/prerequisites/cloud_accounts/link_to_Azure.md
+        - Linking a Google Account: cloud/prerequisites/cloud_accounts/link_to_Google.md
     - Cluster Management:
       - Reviewing your Cloud Clusters: cloud/cluster/index.md
       - Creating a Cluster: cloud/cluster/create_cluster.md
