@@ -78,7 +78,7 @@
 
 ## v25.1.0 on 2025-07-09
 
-  - You can now use the `pg_data` flag with the [setup](../platform/pgedge_commands/) command and in your [cluster.json](../platform/installing_pgedge/json.md) file to specify a non-default location for your Postgres `data` directory.
+  - You can now use the `pg_data` flag with the [setup](../platform/pgedge_commands/setup.md) command and in your [cluster.json](../platform/installing_pgedge/json.md) file to specify a non-default location for your Postgres `data` directory.
 
   - ACE functionality now includes experimental support for Merkle trees. This feature significantly enhances the performance of ACE on large tables.
 

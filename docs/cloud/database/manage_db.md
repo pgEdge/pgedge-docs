@@ -75,7 +75,7 @@ The `Connect to your database` pane displays connection information for the node
 
 ![Users Pane](../images/connect_to_your_database.png)
 
-For detailed information about using the connection information to connect to your database, see [Connecting](../connecting.md).
+For detailed information about using the connection information to connect to your database, see [Connecting](../connecting/index.md).
 
 ## Password Management
 

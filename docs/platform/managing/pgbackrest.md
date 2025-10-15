@@ -35,7 +35,7 @@ Adding a cipher pass to your environment will also allow you to use pgBackRest m
 
 ### Configuring pgBackRest when you Deploy a Cluster
 
-The CLI `cluster` module makes it easy to [define](../installing_pgedge/json.md) and [deploy](../installing_pgedge/json##using-the-cluster-module-to-deploy-a-cluster) a cluster that contains an initialized Postgres server, a running Spock installation, and a configured pgBackRest deployment.
+The CLI `cluster` module makes it easy to [define](../installing_pgedge/json.md) and [deploy](../installing_pgedge/json.md#using-the-cluster-module-to-deploy-a-cluster) a cluster that contains an initialized Postgres server, a running Spock installation, and a configured pgBackRest deployment.
 
 After meeting the [prerequisites](../prerequisites/index.md), navigate into the installation directory, and enter:
 

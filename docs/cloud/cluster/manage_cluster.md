@@ -26,7 +26,7 @@ Also in the cluster header, a set of informational panes tell you the state of t
 
 The tabbed browser on the `Cluster` tab provides quick access to information about the state of your cluster:
 
-* Select the [`Overview`](#accessing-cluster-details) tab to view information about the cluster, and the databases currently deployed on the cluster. Detailed information about the cluster's nodes is displayed below. Click on an icon in the `Database` pane to navigate to detailed information about the selected database.
+* Select the [`Overview`](#the-overview-tab) tab to view information about the cluster, and the databases currently deployed on the cluster. Detailed information about the cluster's nodes is displayed below. Click on an icon in the `Database` pane to navigate to detailed information about the selected database.
 * Select the [`Metrics`](#reviewing-cluster-metrics) tab to view details about cluster resource use.
 * Select the [`Logs`](#reviewing-cluster-log-files) tab to review cluster log files.
 

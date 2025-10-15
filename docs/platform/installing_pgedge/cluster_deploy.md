@@ -15,8 +15,8 @@ You can use these commands on either remote hosts or a single local host.  When 
 This tutorial creates a three node cluster; before starting this tutorial, you should prepare three EL9 or Ubuntu 22.04 Linux server(s) by:
 
 * [Setting SELinux to `permissive` or `disabled` mode on each host](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux), followed by a system reboot.
-* Configuring [passwordless sudo access](../prerequisites#configuring-passwordless-sudo) for a non-root OS user on each host.
-* Configuring [passwordless ssh](../prerequisites#configuring-passwordless-ssh) access for the same non-root OS user on each host.
+* Configuring [passwordless sudo access](../prerequisites/index.md#configuring-passwordless-sudo) for a non-root OS user on each host.
+* Configuring [passwordless ssh](../prerequisites/index.md#configuring-passwordless-ssh) access for the same non-root OS user on each host.
 * Opening any firewalls that could obstruct access between your nodes.
 
 Then, install the CLI on each host used in the cluster with the command:

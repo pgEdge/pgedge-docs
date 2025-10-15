@@ -16,7 +16,7 @@ To make node addition quick and safe, we recommend:
 
 Before invoking the `cluster add-node` command, you'll need to perform the following prerequisite steps on the host of the new node:
 
-1. Configure [passwordless ssh](../prerequisites#configuring-passwordless-ssh) and [passwordless sudo](../prerequisites#configuring-passwordless-sudo).
+1. Configure [passwordless ssh](../prerequisites/index.md#configuring-passwordless-ssh) and [passwordless sudo](../prerequisites/index.md#configuring-passwordless-sudo).
 2. Ensure the host where you plan to utilize the cluster module has the necessary permissions and SSH keys to access the cluster's source and target nodes.
 3. Create the [target node configuration JSON](#creating-a-configuration-file-on-the-target-node) file (`target_node.json`) in the `pgedge` directory. If you are installing on localhost, this will be the `pgedge` directory that resides above your cluster.
 4. Review your cluster's [pgBackRest installation](#configuring-pgbackrest) and make any modifications required for the add-node process.
@@ -99,11 +99,11 @@ Before adding a new node to a cluster, you must create a .json file that defines
 
 !!! info
 
-    If you include [pgBackRest configuration settings](../managing/pgbackrest#configuration-options-for-pgbackrest) in the target node's JSON file, the pgBackRest configuration will be applied automatically when the add-node operation is completed.
+    If you include [pgBackRest configuration settings](../managing/pgbackrest.md#configuring-pgbackrest-when-you-deploy-a-cluster) in the target node's JSON file, the pgBackRest configuration will be applied automatically when the add-node operation is completed.
 
 ## Deploying the New Node
 
-Once your target node JSON configuration is setup, to add the target node to the cluster, navigate into the cluster's `pgedge` directory and invoke the [`cluster add-node` command](../pgedge_commands/doc/cluster-add-node):
+Once your target node JSON configuration is setup, to add the target node to the cluster, navigate into the cluster's `pgedge` directory and invoke the [`cluster add-node` command](../pgedge_commands/doc/cluster-add-node.md):
 
 `./pgedge cluster add-node CLUSTER_NAME SOURCE_NODE TARGET_NODE optional_flags` 
 

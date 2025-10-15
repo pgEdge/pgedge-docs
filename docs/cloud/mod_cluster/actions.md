@@ -21,8 +21,8 @@ When opened from a database menu, the `Actions` menu may include:
 
 Select from the options listed to:
 
-* [Backup the Database](../backup/backups.md#taking-a-backup).
-* [Restore the Database](../backup/backups.md#restoring-a-backup) from backup.
+* [Backup the Database](../backup/backups.md).
+* [Restore the Database](../backup/restore.md) from backup.
 * [Add the database](add.md#adding-a-database-to-a-cluster-node) to another node.
 * [Remove the database](drop.md#removing-a-database-from-a-node) from a node.
 * [Edit the Display Name](modify.md#changing-the-display-name-of-a-database) of the database.

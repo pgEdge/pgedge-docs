@@ -9,8 +9,8 @@ The CLI's `setup` command used in this deployment method is designed to create c
 Before starting this tutorial, you should prepare two (or more) Linux servers running EL9 or Ubuntu 22.04 *on separate hosts*.  On each machine:
 
 * [Set SELinux to `permissive` or `disabled` mode on each host](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/changing-selinux-states-and-modes_using-selinux), followed by a system reboot.
-* Configure [passwordless sudo access](../prerequisites#configuring-passwordless-sudo) for a non-root OS user on each host.
-* Configure [passwordless ssh](../prerequisites#configuring-passwordless-ssh) access for the same non-root OS user on each host.
+* Configure [passwordless sudo access](../prerequisites/index.md#configuring-passwordless-sudo) for a non-root OS user on each host.
+* Configure [passwordless ssh](../prerequisites/index.md#configuring-passwordless-ssh) access for the same non-root OS user on each host.
 * Open any firewalls that could obstruct access between your servers.
 
 Then, install the CLI on each node with the command:
