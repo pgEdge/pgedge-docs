@@ -81,7 +81,9 @@ The [Spock](https://docs.pgedge.com/spock_ext) extension provides multi-master (
 
 The [ACE](https://docs.pgedge.com/ace) extension provides the Active Consistency Engine for a SPOCK cluster.
 
-The [Snowflake](https://docs.pgedge.com/snowflake) extension provides unique sequences designed for Active-active replication.
+The [Snowflake](https://docs.pgedge.com/snowflake) extension provides unique sequences designed for active-active replication.
+
+The [lolor](https://docs.pgedge.com/snowflake) extension provides large object support that works seamlessly with Spock active-active replication.
 
 [Citus](https://docs.citusdata.com/en/stable/get_started/what_is_citus.html) provides an open source extension that supports Postgres features including distributed tables.
 
