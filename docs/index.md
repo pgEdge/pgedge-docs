@@ -13,9 +13,9 @@ Choose a section to explore:
 
 ## Products
 
-* [pgEdge Enterprise Postgres (VM Edition)](enterprise/index.md)
-* [pgEdge Distributed Postgres (Cloud Edition)](cloud/index.md)
-* [pgEdge Distributed Postgres (VM Edition)](platform/index.md)
+* [pgEdge Enterprise Postgres](enterprise/index.md)
+* [pgEdge Distributed Postgres](platform/index.md)
+* [pgEdge Cloud](cloud/index.md)
 
 ## Components
 

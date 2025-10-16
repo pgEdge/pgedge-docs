@@ -64,7 +64,47 @@ nav:
       - Components: enterprise/el/components.md
       - Offline Repos: enterprise/el/offline.md
 
-  - pgEdge Distributed Postgres Cloud:
+  - pgEdge Distributed Postgres:
+    - CLI Overview: platform/index.md
+    - Prerequisites - Preparing your System:
+      - Supported Operating Systems: platform/prerequisites/platforms.md
+      - Preparing your System for the CLI: platform/prerequisites/index.md
+      - pgEdge Architecture Models: platform/prerequisites/architecture.md
+      - Planning for Active-Active Replication: platform/prerequisites/configuring.md
+    - Installing pgEdge Distributed Postgres VM Edition:
+      - Overview: platform/installing_pgedge/index.md
+      - Tutorial - Manually Deploying a Cluster: platform/installing_pgedge/manual.md
+      - Tutorial - Deploying a Cluster with a Configuration Files: platform/installing_pgedge/cluster_deploy.md
+      - Creating, Managing, and Deploying with a Configuration Files: platform/installing_pgedge/json.md
+      - Upgrading your CLI Installation: platform/installing_pgedge/upgrade_cli.md
+      - Upgrading your Spock Installation: platform/installing_pgedge/upgrade_spock.md
+      - Creating an Offline Repository for pgEdge Distributed Postgres: platform/installing_pgedge/offline_repo.md
+    - Adding or Removing Cluster Nodes:
+      - Using Spock to Synchronize a New Node: platform/modify/spock_sync.md
+      - Adding a Node to your Cluster with the CLI: platform/modify/add_node.md
+      - Removing a Node from your Cluster: platform/modify/remove_node.md
+    - Managing a Cluster:
+      - Setting Parameter Values: platform/managing/guc_values.md
+      - Using Automatic DDL Replication: platform/managing/autoddl.md
+      - Managing Replication Exceptions: platform/managing/exception.md
+      - Managing Supported Extensions: platform/managing/supported_extensions.md
+      - Configuring Backups with pgBackRest: platform/managing/pgbackrest.md
+      - Creating Custom Filters: platform/managing/filtering.md
+    - Monitoring Cluster Information: platform/monitoring/find_info.md
+    - CLI Reference:
+      - Using the CLI: platform/pgedge_commands/index.md
+      - ACE Commands: platform/pgedge_commands/ace.md
+      - DB Commands: platform/pgedge_commands/db.md
+      - CLUSTER Commands: platform/pgedge_commands/cluster.md
+      - LOCALHOST Commands: platform/pgedge_commands/localhost.md
+      - SERVICE Commands: platform/pgedge_commands/service.md
+      - The SETUP Command: platform/pgedge_commands/setup.md
+      - SPOCK Commands: platform/pgedge_commands/spock.md
+      - UPDATE MANAGER Commands: platform/pgedge_commands/um.md
+    - pgEdge Distributed Postgres VM Edition Release Notes: platform/pgedge_rel_notes.md
+    - Troubleshooting: platform/troubleshooting.md
+    
+  - pgEdge Cloud:
     - Cloud Edition: cloud/index.md
     - Getting Started: 
       - Enterprise Edition: cloud/getting_started/ee_getting_started.md
@@ -121,45 +161,6 @@ nav:
     - Troubleshooting: cloud/troubleshooting.md
     - pgEdge Distributed Postgres (Cloud Edition) Release Notes: cloud/cl_release_notes.md  
 
-  - pgEdge Distributed Postgres VM Edition (CLI):
-    - CLI Overview: platform/index.md
-    - Prerequisites - Preparing your System:
-      - Supported Operating Systems: platform/prerequisites/platforms.md
-      - Preparing your System for the CLI: platform/prerequisites/index.md
-      - pgEdge Architecture Models: platform/prerequisites/architecture.md
-      - Planning for Active-Active Replication: platform/prerequisites/configuring.md
-    - Installing pgEdge Distributed Postgres VM Edition:
-      - Overview: platform/installing_pgedge/index.md
-      - Tutorial - Manually Deploying a Cluster: platform/installing_pgedge/manual.md
-      - Tutorial - Deploying a Cluster with a Configuration Files: platform/installing_pgedge/cluster_deploy.md
-      - Creating, Managing, and Deploying with a Configuration Files: platform/installing_pgedge/json.md
-      - Upgrading your CLI Installation: platform/installing_pgedge/upgrade_cli.md
-      - Upgrading your Spock Installation: platform/installing_pgedge/upgrade_spock.md
-      - Creating an Offline Repository for pgEdge Distributed Postgres: platform/installing_pgedge/offline_repo.md
-    - Adding or Removing Cluster Nodes:
-      - Using Spock to Synchronize a New Node: platform/modify/spock_sync.md
-      - Adding a Node to your Cluster with the CLI: platform/modify/add_node.md
-      - Removing a Node from your Cluster: platform/modify/remove_node.md
-    - Managing a Cluster:
-      - Setting Parameter Values: platform/managing/guc_values.md
-      - Using Automatic DDL Replication: platform/managing/autoddl.md
-      - Managing Replication Exceptions: platform/managing/exception.md
-      - Managing Supported Extensions: platform/managing/supported_extensions.md
-      - Configuring Backups with pgBackRest: platform/managing/pgbackrest.md
-      - Creating Custom Filters: platform/managing/filtering.md
-    - Monitoring Cluster Information: platform/monitoring/find_info.md
-    - CLI Reference:
-      - Using the CLI: platform/pgedge_commands/index.md
-      - ACE Commands: platform/pgedge_commands/ace.md
-      - DB Commands: platform/pgedge_commands/db.md
-      - CLUSTER Commands: platform/pgedge_commands/cluster.md
-      - LOCALHOST Commands: platform/pgedge_commands/localhost.md
-      - SERVICE Commands: platform/pgedge_commands/service.md
-      - The SETUP Command: platform/pgedge_commands/setup.md
-      - SPOCK Commands: platform/pgedge_commands/spock.md
-      - UPDATE MANAGER Commands: platform/pgedge_commands/um.md
-    - pgEdge Distributed Postgres VM Edition Release Notes: platform/pgedge_rel_notes.md
-    - Troubleshooting: platform/troubleshooting.md
   # - ACE: '!import https://github.com/pgEdge/ace.git?branch=main'
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
   - pgEdge Helm: '!import https://github.com/pgEdge/pgedge-helm.git?branch=feat/PLAT-293/docs-site&config=mkdocs.yaml'
