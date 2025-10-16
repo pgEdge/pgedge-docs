@@ -103,7 +103,7 @@ nav:
       - UPDATE MANAGER Commands: platform/pgedge_commands/um.md
     - pgEdge Distributed Postgres VM Edition Release Notes: platform/pgedge_rel_notes.md
     - Troubleshooting: platform/troubleshooting.md
-    
+
   - pgEdge Cloud:
     - Cloud Edition: cloud/index.md
     - Getting Started: 
@@ -161,9 +161,11 @@ nav:
     - Troubleshooting: cloud/troubleshooting.md
     - pgEdge Distributed Postgres (Cloud Edition) Release Notes: cloud/cl_release_notes.md  
 
+  - pgEdge Containers: '!import https://github.com/pgEdge/pgedge-helm.git?branch=feat/PLAT-293/docs-site&config=mkdocs.yaml'
+  
   # - ACE: '!import https://github.com/pgEdge/ace.git?branch=main'
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
-  - pgEdge Helm: '!import https://github.com/pgEdge/pgedge-helm.git?branch=feat/PLAT-293/docs-site&config=mkdocs.yaml'
+
 
 
   

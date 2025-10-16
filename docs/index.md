@@ -13,12 +13,13 @@ Choose a section to explore:
 
 ## Products
 
-* [pgEdge Enterprise Postgres](enterprise/index.md)
-* [pgEdge Distributed Postgres](platform/index.md)
-* [pgEdge Cloud](cloud/index.md)
+* [pgEdge Enterprise Postgres](enterprise/index.md): An enterprise ready PostgreSQL distribution for VMs and bare metal.
+* [pgEdge Distributed Postgres](platform/index.md): Multi-master PostgreSQL for VMs and bare metal.
+* [pgEdge Cloud](cloud/index.md): Deploy single PostgreSQL nodes or pgEdge clusters in the Cloud.
+* [pgEdge Containers](pgedge-containers/index.md): Deploy single PostgreSQL nodes or pgEdge clusters on Kubernetes.
 
 ## Components
 
 <!--- * [ACE (Active Consistency Engine)](ace/) -->
 * [Spock v5](spock-v5/index.md)
-* [pgEdge Helm](pgedge-helm/index.md): Deploy single PostgreSQL nodes or pgEdge clusters on Kubernetes.
+
