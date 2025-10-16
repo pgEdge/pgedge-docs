@@ -1,4 +1,4 @@
-# pgEdge Enterprise Postgres: VM Edition
+# pgEdge Enterprise Postgres (VM Edition)
 
 pgEdge Enterprise Postgres: VM Edition makes packages available via the `pgedge` repository to provide a simplified way to manage the following components: 
 
