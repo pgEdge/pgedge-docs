@@ -160,7 +160,7 @@ nav:
       - UPDATE MANAGER Commands: platform/pgedge_commands/um.md
     - pgEdge Distributed Postgres VM Edition Release Notes: platform/pgedge_rel_notes.md
     - Troubleshooting: platform/troubleshooting.md
-  - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=main'
+  - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
   - ACE: '!import https://github.com/pgEdge/spock.git?branch=main'
 
 
