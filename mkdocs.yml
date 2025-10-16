@@ -162,7 +162,7 @@ nav:
     - Troubleshooting: platform/troubleshooting.md
   # - ACE: '!import https://github.com/pgEdge/ace.git?branch=main'
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
-
+  - pgEdge Helm: '!import https://github.com/pgEdge/pgedge-helm.git?branch=feat/PLAT-293/docs-site&config=mkdocs.yaml'
 
 
   

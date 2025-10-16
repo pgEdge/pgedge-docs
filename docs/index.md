@@ -21,3 +21,4 @@ Choose a section to explore:
 
 <!--- * [ACE (Active Consistency Engine)](ace/) -->
 * [Spock v5](spock-v5/index.md)
+* [pgEdge Helm](pgedge-helm/index.md): Deploy single PostgreSQL nodes or pgEdge clusters on Kubernetes.
