@@ -1,6 +1,6 @@
 # pgEdge Distributed PostgreSQL: Cloud Edition
 
-pgEdge Distributed PostgreSQL: Cloud Edition (Cloud) is fully-distributed PostgreSQL, deployable across multiple cloud regions or data centers.
+pgEdge Cloud offers single node or fully-distributed PostgreSQL, deployable across multiple cloud regions or data centers.
 
 ## Fully distributed PostgreSQL made easy
 
