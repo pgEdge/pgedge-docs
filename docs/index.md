@@ -19,4 +19,5 @@ Choose a section to explore:
 
 ## Components
 
-* [Spock v5](spock-extension-v5/)
+<!--- * [ACE (Active Consistency Engine)](ace/) -->
+* [Spock v5](spock-v5/index.md)
