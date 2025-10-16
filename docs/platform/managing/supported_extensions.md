@@ -79,7 +79,9 @@ Please note that the components available for installation via the UM module wil
 
 The [Spock](https://docs.pgedge.com/spock_ext) extension provides multi-master (multi-active) replication for Postgres. We leveraged both the pgLogical & BDR2 Open Source projects as a solid foundation to build upon for this enterprise-class extension.
 
-The [ACE](https://docs.pgedge.com/platform/advanced/ace) extension provides the Active Consistency Engine for a SPOCK cluster.
+The [ACE](https://docs.pgedge.com/ace) extension provides the Active Consistency Engine for a SPOCK cluster.
+
+The [Snowflake](https://docs.pgedge.com/snowflake) extension provides unique sequences designed for Active-active replication.
 
 [Citus](https://docs.citusdata.com/en/stable/get_started/what_is_citus.html) provides an open source extension that supports Postgres features including distributed tables.
 
