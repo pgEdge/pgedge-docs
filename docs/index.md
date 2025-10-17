@@ -21,5 +21,7 @@ Choose a section to explore:
 ## Components
 
 <!--- * [ACE (Active Consistency Engine)](ace/) -->
-* [Spock v5](spock-v5/index.md)
+* [lolor](lolor/index.md): Large object replication extension for PostgreSQL.
+* [Snowflake](snowflake/index.md): Cluster-wide unique (Snowflake) sequence extension for PostgreSQL.
+* [Spock v5](spock-v5/index.md): Multi-master replication for PostgreSQL.
 
