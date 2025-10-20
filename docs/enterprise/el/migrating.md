@@ -2,11 +2,9 @@
 
 The steps required to make the move from community Postgres to pgEdge Postgres will vary based on your current installation, the current version, and installation details. 
 
-import {Callout} from 'nextra/components'
+!!! info
 
-<Callout>
-Before starting a migration or upgrade, ensure that you have a recent backup in case you need to revert to your previous version.
-</Callout>
+    Before starting a migration or upgrade, ensure that you have a recent backup in case you need to revert to your previous version.
 
 The following sections provide sample commands; please note that commands may vary depending on your system and configuration.
 
@@ -19,7 +17,7 @@ If your current Postgres version is the same as your target Postgres version, yo
 
   `sudo dnf config-manager --disable pgdg*`
 
-2. [Enable the `pgedge` repository](../el/configuring.mdx) with the commands:
+2. [Enable the `pgedge` repository](../el/configure-repo.md) with the commands:
 
   `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
   
@@ -50,7 +48,7 @@ If your installed version of Postgres is the same major version but an older min
 
   `sudo dnf config-manager --disable pgdg*`
 
-2. [Enable the `pgedge` repository](../el/configuring.mdx) with the commands:
+2. [Enable the `pgedge` repository](../el/configure-repo.md) with the commands:
 
   `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
 
