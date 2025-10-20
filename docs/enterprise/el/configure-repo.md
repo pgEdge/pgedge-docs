@@ -1,12 +1,5 @@
 # Configuring the Repository
 
-pgEdge Enterprise Postgres (and supporting component) packages for versions 9 and 10 are supported on: 
-
-* Red Hat Enterprise Linux
-* Oracle Enterprise Linux
-* Alma Linux
-* Rocky Linux
-
 Using packages from the `pgedge` repository is an easy way to manage Postgres and supporting components.
 
 **Meeting Platform-Specific Prerequisites**

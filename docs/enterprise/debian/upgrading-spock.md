@@ -2,19 +2,13 @@
 
 Spock 5.0.4 is supported on PG versions 16, 17, and 18, running on:
 
-* Ubuntu
+Ubuntu
 
-  * Ubuntu 22.04 LTS (AMD & ARM)
+  * Ubuntu 22.04 LTS and 24.04 LTS (AMD & ARM)
 
-  * Ubuntu 24.04 LTS (AMD & ARM)
+Debian
 
-* Debian
-
-  * Debian 11 (AMD & ARM)
-
-  * Debian 12 (AMD & ARM)
-
-  * Debian 13 (AMD & ARM)
+  * Debian 11, 12, and 13 (AMD & ARM)
 
 Before performing an upgrade to a newer version of Spock, ensure you have a current backup of your system.
 

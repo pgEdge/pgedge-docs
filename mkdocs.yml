@@ -59,7 +59,7 @@ nav:
   - pgEdge Enterprise Postgres:
     - VM Edition: enterprise/index.md
     - Enterprise Linux 9 & 10: 
-      - Introduction: enterprise/el/index.md
+      - Enterprise Linux Version Support: enterprise/el/index.md
       - Getting Started - Configuring the Repository: enterprise/el/configure-repo.md
       - Installing Postgres: enterprise/el/installing.md
       - Installing Supporting Components: enterprise/el/components.md
@@ -67,7 +67,7 @@ nav:
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
     - Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS: 
-      - Introduction: enterprise/debian/index.md
+      - Debian & Ubuntu Version Support: enterprise/debian/index.md
       - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
       - Installing Postgres: enterprise/debian/installing.md
       - Installing Supporting Components: enterprise/debian/components.md
