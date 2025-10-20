@@ -16,16 +16,20 @@ Package names and links to the component documentation are noted in the table be
 | pgBouncer | pgedge-pgbouncer | [Configuration and Usage](#using-pgbouncer-with-pgedge-enterprise-postgres) |
 | pgvector | pgedge-pgvector_XX | [Configuration and Usage](https://github.com/pgvector/pgvector) |
 
-!!! note
 
-    After using the `pgedge` repository to install a component, use the Postgres [CREATE EXTENSION](https://www.postgresql.org/docs/current/sql-createextension.html) command to create the extension in your database.
+import {Callout} from 'nextra/components'
 
+<Callout>
+After using the `pgedge` repository to install a component, use the Postgres [CREATE EXTENSION](https://www.postgresql.org/docs/current/sql-createextension.html) command to create the extension in your database.
+</Callout>
 
 ## Using pgBouncer with pgEdge Enterprise Postgres
 
 PgBouncer is a lightweight connection pooler designed to work with Postgres. After configuring the `pgedge` repo, you can install PgBouncer with the command:
 
-`sudo dnf install pgedge-pgbouncer` 
+`sudo apt-get update`
+
+`sudo apt-get install -y pgedge-pgbouncer` 
 
 After installing pgBouncer, copy the sample `userlist.txt` to the PgBouncer configuration directory:
 
@@ -41,9 +45,9 @@ Next, make sure the file has the correct permissions; use the command:
 
 Before using pgBouncer, you'll need to share system configuration details in the `/etc/pgbouncer/pgbouncer.ini` file; modify the file to match your system. Provide database connection info, listener port, and other options as needed.
 
-Next, ensure that your Postgres server is up and running on the target port and start the PgBouncer service with the command:
+Next, ensure that your Postgres server is up and running on the target port and start and enable the PgBouncer service with the command:
 
-`sudo systemctl start pgbouncer` 
+`sudo systemctl start pgbouncer && sudo systemctl enable pgbouncer` 
 
 You can use the following command to check the status of the pgBouncer service:
 

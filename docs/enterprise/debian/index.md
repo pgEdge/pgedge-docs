@@ -1,9 +1,9 @@
 # pgEdge Enterprise Postgres (VM Edition)
 
-pgEdge makes packages available via the `pgedge` repository to provide a simplified way to install and manage Postgres and the following components: 
+pgEdge makes Debian packages available via the `pgedge` repository to provide a simplified way to install and manage Postgres and the following components: 
 
 * Postgres Versions 16, 17, and 18
-* Spock Version 5.0
+* Spock Version 5.0 and up
 * Lolor (large object support)
 * Snowflake (sequence support)
 * pgAdmin (graphical client)
@@ -33,5 +33,3 @@ For more information about support for pgEdge Distributed Postgres (VM Edition),
 !!! info
 
     Please note: the platform-specific commands shared in this section work on the majority of the corresponding systems, but may not work on *all* systems.  You may need to find a system-specific command to accomplish the task performed by the commands we've shared.
-
-
