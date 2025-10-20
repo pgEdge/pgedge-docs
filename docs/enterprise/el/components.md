@@ -6,12 +6,12 @@ Package names and links to the component documentation are noted in the table be
 
 | Component | Package Name | Details and Links |
 |-----------|--------------|-------------------|
-| Spock     | pgedge-spock50_XX | [Configuration and Usage](../../spock_ext/two_node_cluster.mdx) |
-| Snowflake | pgedge-snowflake_XX | [Configuration and Usage](https://github.com/pgEdge/snowflake) |
-| Lolor     | pgedge-lolor_XX | [Configuration and Usage](https://github.com/pgEdge/lolor) |
+| Spock     | pgedge-spock50_XX | [Configuration and Usage](https://github.com/pgEdge/spock/blob/main/README.md) |
+| Snowflake | pgedge-snowflake_XX | [Configuration and Usage](https://github.com/pgEdge/snowflake/blob/main/README.md) |
+| Lolor     | pgedge-lolor_XX | [Configuration and Usage](https://github.com/pgEdge/lolor/blob/main/README.md) |
 | pgAdmin | pgedge-pgadmin4; pgedge-pgadmin4-desktop; pgedge-pgadmin4-server; pgedge-pgadmin4-web | [Configuration and Usage](https://www.pgadmin.org/docs/) |
 | pgaudit | pgedge-pgaudit_XX | [Configuration and Usage](https://github.com/pgaudit/pgaudit/blob/main/README.md) |
-| pgBackRest | pgedge-pgbackrest | [Configuration and Usage](../../platform/managing/pgbackrest.mdx) |
+| pgBackRest | pgedge-pgbackrest | [Configuration and Usage](https://docs.pgedge.com/platform/managing/pgbackrest) |
 | PostGIS | pgedge-postgis35_XX | [Configuration and Usage](https://postgis.net/documentation/) |
 | pgBouncer | pgedge-pgbouncer | [Configuration and Usage](#using-pgbouncer-with-pgedge-enterprise-postgres) |
 | pgvector | pgedge-pgvector_XX | [Configuration and Usage](https://github.com/pgvector/pgvector) |

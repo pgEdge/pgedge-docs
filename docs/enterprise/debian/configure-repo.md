@@ -2,13 +2,13 @@
 
 pgEdge Enterprise Postgres (and supporting component) packages for Debian and Ubuntu are supported on: 
 
-* Ubuntu
+Ubuntu
 
   * Ubuntu 22.04 LTS (AMD & ARM)
 
   * Ubuntu 24.04 LTS (AMD & ARM)
 
-* Debian
+Debian
 
   * Debian 11 (AMD & ARM)
 
@@ -37,4 +37,4 @@ After meeting the prerequisites for your system, create the repository with the 
 
 `sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb || true` 
 
-After creating the repository, you're ready to [use the repository](installing.mdx) to install Postgres and supporting components.
+After creating the repository, you're ready to use the repository to [install Postgres](./installing.md) and [supporting components](./components.md).
