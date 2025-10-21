@@ -2,8 +2,6 @@
 
 pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-master database capabilities to the network edge, enabling low-latency and high availability for modern workloads.
 
-Choose a section to explore:
-
 ## Products
 
 * [pgEdge Enterprise Postgres](enterprise/index.md): An enterprise ready Postgres distribution for VMs and bare metal.
