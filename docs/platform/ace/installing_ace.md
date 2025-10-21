@@ -8,7 +8,7 @@ ACE is a supporting component for pgEdge Distributed Postgres. You can install A
 
 2. Create a directory named `cluster` in the `pgedge` directory created by the installer.
 
-3. [Create and update a .json file](../installing_pgedge/json.mdx) that describes the cluster you will be managing with ACE, and place the file in `cluster/cluster_name/cluster_name.json` on the ACE host.  For example, if your cluster name is `us_eu_backend`, the cluster definition file for this should be placed in `/pgedge/cluster/us_eu_backend/us_eu_backend.json`.  The .json file must: 
+3. [Create and update a .json file](../installing_pgedge/json.md) that describes the cluster you will be managing with ACE, and place the file in `cluster/cluster_name/cluster_name.json` on the ACE host.  For example, if your cluster name is `us_eu_backend`, the cluster definition file for this should be placed in `/pgedge/cluster/us_eu_backend/us_eu_backend.json`.  The .json file must: 
 
     * Contain connection information for each node in the cluster.
     * Identify the user that will be invoking ACE commands in the `db_user` property; this user must also be the table owner.
@@ -20,15 +20,14 @@ After ensuring that the .json file describes your cluster connections and identi
 You can provide your preferences for ACE configuration options in the `ace_config.py` file (by default, created in `$PGEDGE_HOME/hub/scripts/`).  You can use the configuration to specify:
 
 * [ACE operational preferences](#specifying-ace-operational-preferences).
-* [Job and Schedule](../ace/schedule_ace.mdx) information for ACE jobs.
+* [Job and Schedule](./schedule_ace.md) information for ACE jobs.
 * ACE Auto Repair options
 * SSL certificate details for API users.
 
-import {Callout} from 'nextra/components'
+!!! hint
 
-<Callout>
-  If you're already running the ACE process, and need to modify the `ace_config.py` file, use `Ctrl+C` to stop the process before making changes.
-</Callout>
+    If you're already running the ACE process, and need to modify the `ace_config.py` file, use `Ctrl+C` to stop the process before making changes.
+
 
 ### Specifying ACE Operational Preferences
 

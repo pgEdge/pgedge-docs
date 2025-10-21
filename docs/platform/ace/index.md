@@ -23,7 +23,7 @@ How fast it can execute a `table-diff` command depends on the:
 * distribution of differences: Any differences in blocks of data identified by ACE require ACE to pull all those records together to generate a report. So, the smaller the data transfer between the database nodes and ACE, the faster it will run. If diffs are spread across numerous data blocks throughout the key space, it will take longer for ACE to be able to pull all the records. If you expect to see differences in certain blocks, using a table-filter and adjusting the block size can greatly speed up the process.
 * network latency between the ACE node and your database nodes: The closer the ACE node is to the database nodes, the faster it can run.
 
-ACE uses the [cluster definition JSON file](../installing_pgedge/json.mdx) to connect to nodes and execute SQL statements. It might even be desirable to set up a connection pooler like pgBouncer or pgCat separately and point to that in the cluster JSON file for faster runtime performance.
+ACE uses the [cluster definition JSON file](../installing_pgedge/json.md) to connect to nodes and execute SQL statements. It might even be desirable to set up a connection pooler like pgBouncer or pgCat separately and point to that in the cluster JSON file for faster runtime performance.
 
 ### Improving ACE Performance when Invoking Diff Functions
 

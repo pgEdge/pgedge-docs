@@ -1,5 +1,4 @@
-
-## ACE API Endpoints
+# ACE API Endpoints
 
 ACE includes API endpoints for some of its most frequently used functions.
 
@@ -47,12 +46,9 @@ CA_CERT_FILE = ""
 
 After creating the certificates and providing information in the configuration files, you're ready to use the ACE API.
 
-import {Callout} from 'nextra/components'
+!!! note
 
-<Callout>
-  If you're already running the ACE process, and need to modify the `ace_config.py` file, use `Ctrl+C` to stop the process before making changes.
-</Callout>
-
+    If you're already running the ACE process, and need to modify the `ace_config.py` file, use `Ctrl+C` to stop the process before making changes.
 
 ### The table-diff API
 

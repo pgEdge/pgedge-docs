@@ -1,10 +1,8 @@
 # Enhancing ACE Performance with Merkle Trees
 
-import {Callout} from 'nextra/components'
+!!! info
 
-<Callout type="info">
-ACE Merkle trees are added as an experimental optimisation with release of the pgEdge Distributed Postgres (CLI 25.2); we encourage caution before using this feature in a production environment.
-</Callout>
+    ACE Merkle trees are added as an experimental optimisation with release of the pgEdge Distributed Postgres (CLI 25.2); we encourage caution before using this feature in a production environment.
 
 ACE adds functionality that uses [Merkle trees](https://en.wikipedia.org/wiki/Merkle_tree) to make table comparisons significantly faster. In most cases, performing a normal mode table-diff, when run with tuned parameters, can produce diff reports in anywhere from a few seconds to a few minutes depending on the size of the table, network latency, disc I/O latency, and similar factors. The Merkle tree feature in ACE is intended for tables where performing a diff without a Merkle tree might take hours to complete.
 
@@ -25,9 +23,9 @@ The second command creates pre-computed hash objects and triggers on the candida
 
 This command creates a table in which to store the Merkle tree of the candidate table, and adds triggers to track modifications to it.
 
-<Callout type="info">
-Building the pre-computed hash table (the Merkle tree table) is a one-time operation. Once built, ACE tracks changes on the table and automatically updates the tree when you perform a table-diff.
-</Callout>
+!!! info
+
+    Building the pre-computed hash table (the Merkle tree table) is a one-time operation. Once built, ACE tracks changes on the table and automatically updates the tree when you perform a table-diff.
 
 It is also worth noting here that because the Merkle tree feature in ACE is built to handle very large tables, it uses probabilistic sampling and estimates to compute things such as the number of rows, primary key ranges, etc.  For these estimates to work correctly, the table should be `ANALYZED` beforehand. You can pass in `--analyse=true` during the Merkle tree build to let ACE analyse the table, but we recommend that an `ANALYZE table` is performed manually on the table before invoking `mtree build` with ACE simply because it might take a while for the analysis to complete. However, if you are not actively using the table, then `ANALYZE` may not be necessary.
 
