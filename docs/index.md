@@ -12,7 +12,7 @@ pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-
 ## Components
 
 * [ACE (Active Consistency Engine)](ace/index.md): Data integrity for replicating clusters.
-* [lolor](lolor/index.md): Large object replication extension for Postgres.
+* [lolor](lolor/index.md): A large object replication extension for Postgres.
 * [Snowflake](snowflake/index.md): Cluster-wide unique (Snowflake) sequence extension for Postgres.
 * [Spock v5](spock-v5/index.md): Multi-master replication for Postgres.
 
