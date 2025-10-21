@@ -13,7 +13,7 @@ Choose a section to explore:
 
 ## Components
 
-<!--- * [ACE (Active Consistency Engine)](ace/) -->
+* [ACE (Active Consistency Engine)](ace/index.md): Data integrity for replicating clusters.
 * [lolor](lolor/index.md): Large object replication extension for PostgreSQL.
 * [Snowflake](snowflake/index.md): Cluster-wide unique (Snowflake) sequence extension for PostgreSQL.
 * [Spock v5](spock-v5/index.md): Multi-master replication for PostgreSQL.
