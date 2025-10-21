@@ -181,7 +181,7 @@ nav:
 
   - pgEdge Containers: '!import https://github.com/pgEdge/pgedge-helm.git?branch=feat/cnpg'
   
-  # - ACE: '!import https://github.com/pgEdge/ace.git?branch=main'
+  - ACE: '!import https://github.com/pgEdge/ace.git?branch=ace_go_docs'
   - lolor: '!import https://github.com/pgEdge/lolor.git?branch=main'
   - Snowflake: '!import https://github.com/pgEdge/snowflake.git?branch=main'
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
