@@ -102,6 +102,13 @@ nav:
       - Configuring Backups with pgBackRest: platform/managing/pgbackrest.md
       - Creating Custom Filters: platform/managing/filtering.md
     - Monitoring Cluster Information: platform/monitoring/find_info.md
+    - ACE (the Active Consistency Engine):
+      - Managing Data Consistency with ACE: platform/ace/index.md
+      - Installing ACE: platform/ace/installing_ace.md
+      - Enhancing ACE Performance with Merkle Trees: platform/ace/merkle.md
+      - Using ACE Functions: platform/ace/ace_functions.md
+      - ACE API Endpoints: platform/ace/ace_api.md
+      - Scheduling ACE Operations and Repairs: platform/ace/schedule_ace.md
     - CLI Reference:
       - Using the CLI: platform/pgedge_commands/index.md
       - ACE Commands: platform/pgedge_commands/ace.md
