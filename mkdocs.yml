@@ -59,10 +59,21 @@ nav:
   - pgEdge Enterprise Postgres:
     - VM Edition: enterprise/index.md
     - Enterprise Linux 9 & 10: 
-      - Introduction: enterprise/el/index.md
-      - Getting Started: enterprise/el/using.md
-      - Components: enterprise/el/components.md
-      - Offline Repos: enterprise/el/offline.md
+      - Enterprise Linux Version Support: enterprise/el/index.md
+      - Getting Started - Configuring the Repository: enterprise/el/configure-repo.md
+      - Installing Postgres: enterprise/el/installing.md
+      - Installing Supporting Components: enterprise/el/components.md
+      - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
+      - Upgrading Spock: enterprise/el/upgrading-spock.md
+      - Creating an Offline Repo: enterprise/el/offline.md
+    - Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS: 
+      - Debian & Ubuntu Version Support: enterprise/debian/index.md
+      - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
+      - Installing Postgres: enterprise/debian/installing.md
+      - Installing Supporting Components: enterprise/debian/components.md
+      - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
+      - Upgrading Spock: enterprise/debian/upgrading-spock.md
+      - Creating an Offline Repo: enterprise/debian/offline.md
 
   - pgEdge Distributed Postgres:
     - CLI Overview: platform/index.md
@@ -91,6 +102,13 @@ nav:
       - Configuring Backups with pgBackRest: platform/managing/pgbackrest.md
       - Creating Custom Filters: platform/managing/filtering.md
     - Monitoring Cluster Information: platform/monitoring/find_info.md
+    - ACE (the Active Consistency Engine):
+      - Managing Data Consistency with ACE: platform/ace/index.md
+      - Installing ACE: platform/ace/installing_ace.md
+      - Enhancing ACE Performance with Merkle Trees: platform/ace/merkle.md
+      - Using ACE Functions: platform/ace/ace_functions.md
+      - ACE API Endpoints: platform/ace/ace_api.md
+      - Scheduling ACE Operations and Repairs: platform/ace/schedule_ace.md
     - CLI Reference:
       - Using the CLI: platform/pgedge_commands/index.md
       - ACE Commands: platform/pgedge_commands/ace.md
