@@ -30,8 +30,8 @@ If your organization needs professional grade support, pgEdge offers support and
 For more information about support for pgEdge Distributed Postgres (VM Edition), [reach out to pgEdge](https://www.pgedge.com/contact).
 
 
-!!! info
+!!! note
 
-    Please note: the platform-specific commands shared in this section work on the majority of the corresponding systems, but may not work on *all* systems.  You may need to find a system-specific command to accomplish the task performed by the commands we've shared.
+   The platform-specific commands shared in this section work on the majority of the corresponding systems, but may not work on *all* systems.  You may need to find a system-specific command to accomplish the task performed by the commands we've shared.
 
 
