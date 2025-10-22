@@ -2,12 +2,12 @@
 
 ## v25.3.0 on 2025-10-22
 
-  - Added support for Spock 5.0.4.
-  - Added support for lolor 1.2.1.
+  - Added support for Spock 5.0.4; for release details, see the [release notes](https://github.com/pgEdge/spock/blob/main/docs/spock_release_notes.md).
+  - Added support for [lolor 1.2.1](https://github.com/pgEdge/lolor/blob/main/README.md).
   
   ACE:
 
-  - Fixed bug in scheduler for CLI.
+  - Fixed bug in scheduler for [ACE for the CLI](https://docs.pgedge.com/platform/ace).
 
 ## v25.2.1 on 2025-08-28
 
