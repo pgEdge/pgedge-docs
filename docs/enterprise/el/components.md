@@ -1,14 +1,25 @@
 # Configuring Supporting Components
 
-Components distributed via the `pgedge` repository follow standard configuration and usage for the individual components with the exceptions noted below.
+Many of the supporting components distributed via the `pgedge` repository follow standard configuration and usage as documented by their open-source projects.  
 
-## Using Spock with pgEdge Enterprise Postgres
+Package names and links to the component documentation are noted in the table below. `_XX` after the package name indicates the package version is required; substitute your version into the package name (i.e. pgedge-spock50_16 or pgedge-spock50_17) when installing the package to ensure you've installed the version that matches your copy of Postgres.
 
-To configure a two-node replication cluster after installing the Spock extension with pgEdge Enterprise Postgres, follow the detailed instructions [here](https://github.com/pgEdge/spock/blob/main/docs/two_node_cluster.md).
+| Component | Package Name | Details and Links |
+|-----------|--------------|-------------------|
+| Spock     | pgedge-spock50_XX | [Configuration and Usage](https://github.com/pgEdge/spock/blob/main/README.md) |
+| Snowflake | pgedge-snowflake_XX | [Configuration and Usage](https://github.com/pgEdge/snowflake/blob/main/README.md) |
+| Lolor     | pgedge-lolor_XX | [Configuration and Usage](https://github.com/pgEdge/lolor/blob/main/README.md) |
+| pgAdmin | pgedge-pgadmin4; pgedge-pgadmin4-desktop; pgedge-pgadmin4-server; pgedge-pgadmin4-web | [Configuration and Usage](https://www.pgadmin.org/docs/) |
+| pgaudit | pgedge-pgaudit_XX | [Configuration and Usage](https://github.com/pgaudit/pgaudit/blob/main/README.md) |
+| pgBackRest | pgedge-pgbackrest | [Configuration and Usage](https://docs.pgedge.com/platform/managing/pgbackrest) |
+| PostGIS | pgedge-postgis35_XX | [Configuration and Usage](https://postgis.net/documentation/) |
+| pgBouncer | pgedge-pgbouncer | [Configuration and Usage](#using-pgbouncer-with-pgedge-enterprise-postgres) |
+| pgvector | pgedge-pgvector_XX | [Configuration and Usage](https://github.com/pgvector/pgvector) |
 
-## Using pgBackRest with pgEdge Enterprise Postgres
+!!! note
 
-Detailed configuration and usage information for pgBackRest is available [here](../../platform/managing/pgbackrest.md).
+    After using the `pgedge` repository to install a component, use the Postgres [CREATE EXTENSION](https://www.postgresql.org/docs/current/sql-createextension.html) command to create the extension in your database.
+
 
 ## Using pgBouncer with pgEdge Enterprise Postgres
 
