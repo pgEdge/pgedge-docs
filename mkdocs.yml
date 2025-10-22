@@ -66,14 +66,14 @@ nav:
       - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
-    - Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS: 
-      - Debian & Ubuntu Version Support: enterprise/debian/index.md
-      - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
-      - Installing Postgres: enterprise/debian/installing.md
-      - Installing Supporting Components: enterprise/debian/components.md
-      - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
-      - Upgrading Spock: enterprise/debian/upgrading-spock.md
-      - Creating an Offline Repo: enterprise/debian/offline.md
+    #- Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS: 
+    #  - Debian & Ubuntu Version Support: enterprise/debian/index.md
+    #  - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
+    #  - Installing Postgres: enterprise/debian/installing.md
+    #  - Installing Supporting Components: enterprise/debian/components.md
+    #  - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
+    #  - Upgrading Spock: enterprise/debian/upgrading-spock.md
+    #  - Creating an Offline Repo: enterprise/debian/offline.md
 
   - pgEdge Distributed Postgres:
     - CLI Overview: platform/index.md
