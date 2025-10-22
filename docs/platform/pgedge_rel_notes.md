@@ -1,8 +1,17 @@
 # pgEdge Distributed Postgres (VM Edition) Release Notes
 
+## v25.3.0 on 2025-10-22
+
+  - Added support for Spock 5.0.4.
+  - Added support for lolor 1.2.1.
+  
+  ACE:
+
+  - Fixed bug in scheduler for CLI.
+
 ## v25.2.1 on 2025-08-28
 
-  - Added support for spock 5.0.1:
+  - Added support for Spock 5.0.1:
 
     - Fixes a bug where updating a row that was inserted in the same transaction may use an incorrect timestamp for the inserted row and treat it as being newer than the update, resulting in the update not getting applied on other nodes.
 
