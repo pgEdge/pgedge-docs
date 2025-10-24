@@ -2,6 +2,10 @@
 
 After installing the `pgedge` repository, you're ready to create Postgres databases and install supporting components. If needed, modify the sample commands that follow to use your preferred package manager.
 
+!!! info
+
+    Installing Debian packages with pgEdge Enterprise Postgres (e.g., pgedge-postgresql-18 or related components) will remove any previously installed community Postgres packages (versions 12–18).  This is expected behavior (Debian packages are intended to replace an existing installation).  If you wish to keep your existing Postgres installation, install pgEdge Enterprise Postgres in a separate environment (such as a container or virtual machine).
+
 To review a list of packages available from the `pgedge` repository, use the command:
 
   ```bash
