@@ -37,13 +37,13 @@ For example, if you are using the `n1` node as the ACE management node of a thre
 
 As a workaround, you can build the Merkle trees in parallel; when you invoke the `mtree build` command, include the `--write-ranges=true` clause as shown below:
 
-`./pgedge ace mtree build cluster_name schema_name.table_name --max-cpu-ration=1 --write-ranges=true`
+`./pgedge ace mtree build cluster_name schema_name.table_name --max-cpu-ratio=1 --write-ranges=true`
 
 ![Building the Merkle trees in parallel](../../platform/images/merkle_one.png)
 
 This command outputs the computed ranges to a file, and then begins the hash computations.  While that command is running, you can `scp` the `ranges` file to the remaining nodes.  Then, on the other nodes, use the same `mtree build` command, but this time, specify the file name with the `--ranges-file=/path/to/ranges-file.txt` option as shown below:
 
-`./pgedge ace mtree build cluster_name schema_name.table_name --max-cpu-ration=1 --recreate-objects=true --nodes=node_name --ranges-file=/path/to/ranges-file.txt`
+`./pgedge ace mtree build cluster_name schema_name.table_name --max-cpu-ratio=1 --recreate-objects=true --nodes=node_name --ranges-file=/path/to/ranges-file.txt`
 
 ![Building the Merkle trees in parallel](../../platform/images/merkle_two.png)
 
