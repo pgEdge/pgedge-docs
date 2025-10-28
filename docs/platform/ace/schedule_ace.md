@@ -124,13 +124,15 @@ The scheduler starts automatically when ACE is started.
 
 **Best Practices**
 
-1. **Resource Management**: 
-   - Stagger schedules to avoid overlapping resource-intensive jobs
-   - Set appropriate `max_cpu_ratio`, `block_rows`, and `batch_size` values based on the
+1. **Resource Management**:
+
+    - Stagger schedules to avoid overlapping resource-intensive jobs
+    - Set appropriate `max_cpu_ratio`, `block_rows`, and `batch_size` values based on the
      table size and expected load
+
 2. **Frequency Selection**:
-   - Use `crontab_schedule` for specific times
-   - Use `run_frequency` for regular intervals
+    - Use `crontab_schedule` for specific times
+    - Use `run_frequency` for regular intervals
 
 
 ## Scheduling Auto-Repair Jobs (Beta)
@@ -183,7 +185,6 @@ The auto-repair daemon starts automatically when ACE is started.
 ```bash
 ./pgedge ace start
 ```
-
 
 **Common Use Cases**
 
