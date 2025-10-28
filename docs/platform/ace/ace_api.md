@@ -86,6 +86,7 @@ Initiates a table diff operation.
     - `quiet` (optional): Suppress output (default: false)
 
 **Example Request:**
+
 ```bash
 curl -X POST "http://localhost:5000/ace/table-diff" \
   -H "Content-Type: application/json" \
@@ -132,19 +133,20 @@ Initiates a table repair operation.
 ```
 
 **Parameters:**
-- `cluster_name` (required): Name of the cluster
-- `diff_file` (required): Path to the diff file
-- `source_of_truth` (required): Source node for repairs
-- `table_name` (required): Fully qualified table name
-- `dbname` (optional): Database name
-- `dry_run` (optional): Simulate repairs (default: false)
-- `quiet` (optional): Suppress output (default: false)
-- `generate_report` (optional): Create detailed report (default: false)
-- `upsert_only` (optional): Skip deletions (default: false)
-- `insert_only` (optional): Repair INSERT statements only (default: false)
-- `bidirectional` (optional): Insert missing rows in a bidirectional manner (default: false)
-- `fix_nulls` (optional): Fix NULL values by comparing across nodes (default: false)
-- `fire_triggers` (optional): fire triggers when ACE performs a repair; note that `ENABLE ALWAYS` triggers will always fire. (default: false)
+    
+    - `cluster_name` (required): Name of the cluster
+    - `diff_file` (required): Path to the diff file
+    - `source_of_truth` (required): Source node for repairs
+    - `table_name` (required): Fully qualified table name
+    - `dbname` (optional): Database name
+    - `dry_run` (optional): Simulate repairs (default: false)
+    - `quiet` (optional): Suppress output (default: false)
+    - `generate_report` (optional): Create detailed report (default: false)
+    - `upsert_only` (optional): Skip deletions (default: false)
+    - `insert_only` (optional): Repair INSERT statements only (default: false)
+    - `bidirectional` (optional): Insert missing rows in a bidirectional manner (default: false)
+    - `fix_nulls` (optional): Fix NULL values by comparing across nodes (default: false)
+    - `fire_triggers` (optional): fire triggers when ACE performs a repair; note that `ENABLE ALWAYS` triggers will always fire. (default: false)
 
 
 **Example Request:**
@@ -188,12 +190,13 @@ Reruns a previous table diff operation.
 ```
 
 **Parameters:**
-- `cluster_name` (required): Name of the cluster
-- `diff_file` (required): Path to the previous diff file
-- `table_name` (required): Fully qualified table name
-- `dbname` (optional): Database name
-- `quiet` (optional): Suppress output (default: false)
-- `behavior` (optional): Processing behavior ["multiprocessing", "hostdb"]
+
+    - `cluster_name` (required): Name of the cluster
+    - `diff_file` (required): Path to the previous diff file
+    - `table_name` (required): Fully qualified table name
+    - `dbname` (optional): Database name
+    - `quiet` (optional): Suppress output (default: false)
+    - `behavior` (optional): Processing behavior ["multiprocessing", "hostdb"]
 
 **Example Request:**
 ```bash
@@ -278,17 +281,18 @@ Updates the status of a Spock exception.
 ```
 
 **Parameters:**
-- `cluster_name` (required): Name of the cluster
-- `node_name` (required): The name of the node
-- `dbname` (optional): The name of the database
-- `exception_details` (required)
-    - `remote_origin` (optional): The OID of the origin 
-    - `remote_commit_ts` (optional): The timestamp of the exception
-    - `remote_xid` (optional): The XID of the transaction
-    - `command_counter` (optional): The number of commands executed
-    - `status` (optional): The current state of the exception
-    - `resolution_details` (optional):
-        - `details`: Include details about the exception
+
+    - `cluster_name` (required): Name of the cluster
+    - `node_name` (required): The name of the node
+    - `dbname` (optional): The name of the database
+    - `exception_details` (required)
+        - `remote_origin` (optional): The OID of the origin 
+        - `remote_commit_ts` (optional): The timestamp of the exception
+        - `remote_xid` (optional): The XID of the transaction
+        - `command_counter` (optional): The number of commands executed
+        - `status` (optional): The current state of the exception
+        - `resolution_details` (optional):
+            - `details`: Include details about the exception
 
 **Example Request:**
 ```bash
@@ -326,11 +330,12 @@ ACE API endpoints return error responses in the following format:
 ```
 
 Common HTTP status codes:
-- 200: Success
-- 400: Bad Request (missing or invalid parameters)
-- 401: Unauthorized (missing or invalid client certificate)
-- 415: Unsupported Media Type (request body is not JSON)
-- 500: Internal Server Error
+
+    - 200: Success
+    - 400: Bad Request (missing or invalid parameters)
+    - 401: Unauthorized (missing or invalid client certificate)
+    - 415: Unsupported Media Type (request body is not JSON)
+    - 500: Internal Server Error
 
 
 
