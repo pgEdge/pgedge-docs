@@ -15,29 +15,29 @@ If your current Postgres version is the same as your target Postgres version, yo
 
 1. Disable the `pgdg` repository.  You can use the command:
 
-  `sudo dnf config-manager --disable pgdg*`
+    `sudo dnf config-manager --disable pgdg*`
 
 2. [Enable the `pgedge` repository](../el/configure-repo.md) with the commands:
 
-  `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
+    `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
   
-  `sudo dnf config-manager --set-enabled crb`
+    `sudo dnf config-manager --set-enabled crb`
   
-  `sudo dnf install epel-release`
+    `sudo dnf install epel-release`
 
 3. Upgrade to the latest version of Postgres with the command:
 
-  `sudo dnf upgrade postgresql18*`
+    `sudo dnf upgrade postgresql18*`
 
 4. When the upgrade completes, restart the server with the command:
 
-  `systemctl restart postgresql-18.service`
+    `systemctl restart postgresql-18.service`
 
 5. Then, adjust your PATH to point to the new version of Postgres; for example:
 
-  `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
+    `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
   
-  `source ~/.bashrc`
+    `source ~/.bashrc`
 
 
 ## Performing a Minor Version Upgrade to pgEdge Enterprise Postgres
