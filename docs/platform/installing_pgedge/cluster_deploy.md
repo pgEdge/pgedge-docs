@@ -33,23 +33,23 @@ Then, move into the `pgedge` directory, and perform the following steps.
 
     `./pgedge cluster json-create demo 3 lcdb admin password --port=6432`
   
-  The command opens a wizard that prompts you for information about your configuration and installation preferences; when the wizard completes, it creates your cluster configuration file in `pgedge/cluster/cluster_name/cluster_name.json`.
+    The command opens a wizard that prompts you for information about your configuration and installation preferences; when the wizard completes, it creates your cluster configuration file in `pgedge/cluster/cluster_name/cluster_name.json`.
 
-!!! info
+    !!! info
 
-    Note that the cluster definition wizard will prompt you for configuration details for pgBackRest; if you provide those details in the configuration file, pgBackRest will be configured and deployed with your cluster.
+        Note that the cluster definition wizard will prompt you for configuration details for pgBackRest; if you provide those details in the configuration file, pgBackRest will be configured and deployed with your cluster.
 
 2. [Validate the cluster_name.json](../installing_pgedge/json.md#validating-a-cluster-configuration-file) file with the command:
    
     `./pgedge cluster json-validate demo`
 
-  Note that while the `cluster json-validate` command verifies that the json form of the file is correct, it does not verify connection properties.
+    Note that while the `cluster json-validate` command verifies that the json form of the file is correct, it does not verify connection properties.
 
 3. [Deploy the cluster](../installing_pgedge/json.md#using-the-cluster-module-to-deploy-a-cluster) with the command:
    
     `./pgedge cluster init demo`
 
-  As the cluster deploys, the installer echoes the progress onscreen; when the installation completes, you can perform the following steps to exercise your new cluster.
+    As the cluster deploys, the installer echoes the progress onscreen; when the installation completes, you can perform the following steps to exercise your new cluster.
 
 ### Adding Tables to the `default` Replication Set
 
