@@ -178,9 +178,9 @@ The following steps outline using pgBackRest to restore a specific node:
 
         There is currently a known issue with the pgBackRest configuration file in clusters deployed automatically with the `cluster` module.  If you encounter the following error:
 
-    ERROR: [072]: restore command must be run on the Postgres host
+        `ERROR: [072]: restore command must be run on the Postgres host`
 
-    Modify the configuration file, commenting out the line that sets the host address and retry your restore.
+        Modify the configuration file, commenting out the line that sets the host address and retry your restore.
 
 6. Then, start the service on the node you are restoring:
 
@@ -196,20 +196,20 @@ The following steps outline using pgBackRest to restore a specific node:
 
         You may want to save the existing repository (rather than overwriting it with new backups) in case you need to perform another restore during your recovery process.
 
-1. To re-enable archiving, connect to your node and unset the `restore_command` that was created by pgBackRest:
+7. To re-enable archiving, connect to your node and unset the `restore_command` that was created by pgBackRest:
 
     ```sql
     ALTER SYSTEM SET restore_command TO '';
     ALTER SYSTEM SET archive_mode = 'on';
     ```
 
-2.  Restart the CLI to apply the changes:
+8.  Restart the CLI to apply the changes:
 
     ```sh
     ./pgedge restart
     ```
 
-3.  Confirm the [`archive_command`](https://www.postgresql.org/docs/17/continuous-archiving.html#BACKUP-ARCHIVING-WAL) reflects the changes; you can inspect the `archive_command` value with psql:
+9.  Confirm the [`archive_command`](https://www.postgresql.org/docs/17/continuous-archiving.html#BACKUP-ARCHIVING-WAL) reflects the changes; you can inspect the `archive_command` value with psql:
 
     ```psql
     SHOW archive_command;
