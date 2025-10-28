@@ -86,8 +86,8 @@ Each schedule in `schedule_config` supports:
     - `30s`: Every 30 seconds
     - `5m`: Every 5 minutes
     - `1h`: Every hour
-    - `enabled`: Whether the schedule is active (default: False)
-    - `rerun_after`: Time to wait before rerunning if differences found
+    - `enabled`: Whether the schedule is active (default: `False`).
+    - `rerun_after`: Time to wait before rerunning if differences found.
 
 **For Example**
 
