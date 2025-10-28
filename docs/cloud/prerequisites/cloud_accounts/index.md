@@ -26,10 +26,10 @@ Use the menu icon (...) in the upper-right corner of an account pane to access t
 
 Before deleting an account link, ensure that any resources deployed with Cloud have been backed up to your satisfaction and destroyed. Then, to delete the link to a cloud vendor account, select the menu icon (...) in the top-right corner of the pane of a linked account.
 
-![Deleting an account link](../../images/unlink_account.png)
-
 When the menu opens, select `Unlink Account`.
 
-![Deleting an account link](../../images/unlink_confirm.png)
+![Deleting an account link](../../images/unlink_account.png)
 
 To confirm that you wish to unlink the account, enter the account name in the `Unlink Cloud Account` popup, and press the `Unlink Account` button.
+
+![Deleting an account link](../../images/unlink_confirm.png)
