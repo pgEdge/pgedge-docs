@@ -73,16 +73,17 @@ Initiates a table diff operation.
 ```
 
 **Parameters:**
-- `cluster_name` (required): Name of the cluster
-- `table_name` (required): Fully qualified table name (schema.table)
-- `dbname` (optional): Database name
-- `block_rows` (optional): Number of rows per block (default: 10000)
-- `max_cpu_ratio` (optional): Maximum CPU usage ratio (default: 0.8)
-- `output` (optional): Output format ["json", "csv", "html"] (default: "json")
-- `nodes` (optional): Nodes to include ("all" or comma-separated list)
-- `batch_size` (optional): Batch size for processing (default: 50)
-- `table_filter` (optional): SQL WHERE clause to filter rows for comparison
-- `quiet` (optional): Suppress output (default: false)
+
+    - `cluster_name` (required): Name of the cluster
+    - `table_name` (required): Fully qualified table name (schema.table)
+    - `dbname` (optional): Database name
+    - `block_rows` (optional): Number of rows per block (default: 10000)
+    - `max_cpu_ratio` (optional): Maximum CPU usage ratio (default: 0.8)
+    - `output` (optional): Output format ["json", "csv", "html"] (default: "json")
+    - `nodes` (optional): Nodes to include ("all" or comma-separated list)
+    - `batch_size` (optional): Batch size for processing (default: 50)
+    - `table_filter` (optional): SQL WHERE clause to filter rows for comparison
+    - `quiet` (optional): Suppress output (default: false)
 
 **Example Request:**
 ```bash
