@@ -163,22 +163,25 @@ auto_repair_config = {
 
 You can specify the time intervals for execution in either cron format or in a simple frequency format.  Both `poll_interval` and `status_update_interval` accept time strings in the following formats:
 
-**Cron Format**: `* * * * *` (minute hour day_of_month month day_of_week); for example:
-  - `0 0 * * *`: Daily at midnight
-  - `0 */4 * * *`: Every 4 hours
-  - `0 0 * * 0`: Weekly on Sunday
+**Cron Format**:  `* * * * *` (minute hour day_of_month month day_of_week); for example:
+
+    - `0 0 * * *`: Daily at midnight
+    - `0 */4 * * *`: Every 4 hours
+    - `0 0 * * 0`: Weekly on Sunday
 
 **Run Frequency Format**: `<number><unit>`; for example:
-  - Units: "s" (seconds), "m" (minutes), "h" (hours)
-  - Minimum: 5 minutes
-  - Examples:
-    - "30s": Every 30 seconds
-    - "5m": Every 5 minutes
-    - "1h": Every hour
+
+    - Units: "s" (seconds), "m" (minutes), "h" (hours)
+    - Minimum: 5 minutes
+    - Examples:
+        - "30s": Every 30 seconds
+        - "5m": Every 5 minutes
+        - "1h": Every hour
 
 Note: The minimum frequency allowed is 5 minutes. However, you can modify that time by editing the `MIN_RUN_FREQUENCY` variable in `ace_config.py`.
 
-**Controlling the auto-repair Daemon**
+
+### Controlling the auto-repair Daemon
 
 The auto-repair daemon starts automatically when ACE is started.
 
