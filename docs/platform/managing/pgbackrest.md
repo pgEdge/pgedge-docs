@@ -137,7 +137,7 @@ The following steps outline using pgBackRest to restore a specific node:
     pgbackrest info --config=path_to_configuration_file/configuration_file.yaml
     ```
  
-For example, for a node named `n1` in a cluster named `demo`, the configuration file is stored in `/home/ec2-user/demo/n1/pgedge/backrest/demo_stanza_n1.yaml`. The complete `pgbackrest info` command and result is:
+    For example, for a node named `n1` in a cluster named `demo`, the configuration file is stored in `/home/ec2-user/demo/n1/pgedge/backrest/demo_stanza_n1.yaml`. The complete `pgbackrest info` command and result is:
 
     ```sh
     pgbackrest info --config=/home/ec2-user/demo/n1/pgedge/backrest/demo_stanza_n1.yaml
@@ -174,9 +174,9 @@ For example, for a node named `n1` in a cluster named `demo`, the configuration 
     INFO: restore command end: completed successfully (469ms)
     ```
 
-!!! warning
+    !!! warning
 
-    There is currently a known issue with the pgBackRest configuration file in clusters deployed automatically with the `cluster` module.  If you encounter the following error:
+        There is currently a known issue with the pgBackRest configuration file in clusters deployed automatically with the `cluster` module.  If you encounter the following error:
 
     ERROR: [072]: restore command must be run on the Postgres host
 
@@ -188,13 +188,13 @@ For example, for a node named `n1` in a cluster named `demo`, the configuration 
     ./pgedge start
     ```
 
-   After restarting the service, we recommend monitoring the Postgres log to ensure that the database recovers to the desired state. If the recovery is not successful, you may need to adjust the restore options and run the restore again. You may also see errors as Spock tries to connect to other nodes based on the configured subscriptions - this is expected at this point.
+    After restarting the service, we recommend monitoring the Postgres log to ensure that the database recovers to the desired state. If the recovery is not successful, you may need to adjust the restore options and run the restore again. You may also see errors as Spock tries to connect to other nodes based on the configured subscriptions - this is expected at this point.
 
-   In many cases, you will be able to re-use the existing pgBackRest stanza and repository path from the same node, but you may be required to establish a new backup repository.  To establish a new repository path, update the pgBackRest configuration file, setting a new `repo1-path`, and adjusting other values as-needed.
+    In many cases, you will be able to re-use the existing pgBackRest stanza and repository path from the same node, but you may be required to establish a new backup repository.  To establish a new repository path, update the pgBackRest configuration file, setting a new `repo1-path`, and adjusting other values as-needed.
 
-!!! info
+    !!! info
 
-    You may want to save the existing repository (rather than overwriting it with new backups) in case you need to perform another restore during your recovery process.
+        You may want to save the existing repository (rather than overwriting it with new backups) in case you need to perform another restore during your recovery process.
 
 1. To re-enable archiving, connect to your node and unset the `restore_command` that was created by pgBackRest:
 
