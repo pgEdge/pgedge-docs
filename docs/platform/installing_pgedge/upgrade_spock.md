@@ -59,7 +59,7 @@ After confirming that each node is `ACTIVE` and has minimal replication lag, you
 
     `./pgedge um install spock50`
 
-  The CLI installs the upgrade and restarts the database server. When the installation has completed, you can confirm the installed version with the CLI command: 
+     CLI installs the upgrade and restarts the database server. When the installation has completed, you can confirm the installed version with the CLI command: 
 
     `./pgedge um list`
 
@@ -67,13 +67,13 @@ After confirming that each node is `ACTIVE` and has minimal replication lag, you
 
     `./pgedge um remove spock40`
 
-   When the upgrade completes, you can confirm the replication health of your cluster with the commands:
+    When the upgrade completes, you can confirm the replication health of your cluster with the commands:
       
     `./pgedge spock node-list database_name`
   
     `./pgedge spock sub-show-status subscription_name database_name`
 
-   You can also check for replication lag with the command:
+    You can also check for replication lag with the command:
 
     `psql -d <db> -c "SELECT * FROM spock.lag_tracker;"` 
 
