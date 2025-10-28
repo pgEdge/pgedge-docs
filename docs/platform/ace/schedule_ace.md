@@ -75,22 +75,19 @@ Then, use the property:value pairs in the `schedule_config` section to define th
 Each schedule in `schedule_config` supports:
 
 - `job_name` (required): Name of the job to schedule (must match a job name)
-- `crontab_schedule`: Cron-style schedule expression
-  - **Cron Format**: `* * * * *` (minute hour day_of_month month day_of_week)
-  - Examples:
+- `crontab_schedule`: Cron-style schedule expression in Cron Format (Where `* * * * *` represents the minute, hour, day_of_month, month, and day_of_week).  For example:
+
     - `0 0 * * *`: Daily at midnight
     - `0 */4 * * *`: Every 4 hours
     - `0 0 * * 0`: Weekly on Sunday
-- `run_frequency`: Alternative to crontab, using time units (e.g., "30s", "5m", "1h")
-  - **Run Frequency Format**: `<number><unit>`
-  - Units: "s" (seconds), "m" (minutes), "h" (hours)
-  - Minimum: 5 minutes
-  - Examples:
-    - "30s": Every 30 seconds
-    - "5m": Every 5 minutes
-    - "1h": Every hour
-- `enabled`: Whether the schedule is active (default: False)
-- `rerun_after`: Time to wait before rerunning if differences found
+
+- `run_frequency`: An alternative to crontab that uses time units (e.g., `30s`, `5m`, `1h` to represent the `<count><unit>`).  Unit may be: `s` (seconds), `m` (minutes), `h` (hours); the minimum `run_frequency` is `5m`.  For example:
+
+    - `30s`: Every 30 seconds
+    - `5m`: Every 5 minutes
+    - `1h`: Every hour
+    - `enabled`: Whether the schedule is active (default: False)
+    - `rerun_after`: Time to wait before rerunning if differences found
 
 **For Example**
 
