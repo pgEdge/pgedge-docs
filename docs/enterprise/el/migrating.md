@@ -103,7 +103,7 @@ To perform a migration from an older major version of community Postgres to a mo
     --check
     ```
 
-  Note that you can invoke the command with the `--check` option to perform a test upgrade before invoking the command without `--check` to perform the actual upgrade.
+    Note that you can invoke the command with the `--check` option to perform a test upgrade before invoking the command without `--check` to perform the actual upgrade.
 
 5. When the upgrade completes, restart the server with the command:
 
