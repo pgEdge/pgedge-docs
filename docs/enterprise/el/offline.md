@@ -12,31 +12,31 @@ You must ensure the system with internet access and the offline target server th
 
 1. Create a temporary repository on the online machine with the command:
 
-`dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
+    `dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
 
 2. Install prerequisite software on the both the host with access and the repository host.  
 
-For **Rocky or Alma Linux 9x or 10x (x86_64)**, use the commands:
+    For **Rocky or Alma Linux 9x or 10x (x86_64)**, use the commands:
 
-`sudo dnf install -y epel-release`
+    `sudo dnf install -y epel-release`
 
-`sudo dnf config-manager --set-enabled crb` 
+    `sudo dnf config-manager --set-enabled crb` 
 
-For **RHEL 9x (x86_64)**:
+    For **RHEL 9x (x86_64)**:
 
-`sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm`
+    `sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm`
 
-`sudo subscription-manager repos --enable codeready-builder-for-rhel-9-x86_64-rpms`
+    `sudo subscription-manager repos --enable codeready-builder-for-rhel-9-x86_64-rpms`
 
-For **RHEL 10 x86_64**:
+    For **RHEL 10 x86_64**:
 
-`sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm`
+    `sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm`
 
-`sudo subscription-manager repos --enable codeready-builder-for-rhel-10-x86_64-rpms`
+    `sudo subscription-manager repos --enable codeready-builder-for-rhel-10-x86_64-rpms`
 
 3. Download the content of the `pgedge` repository:
 
-`sudo dnf -y install --downloadonly --downloaddir=<target_directory>/pgedge-enterprise-all_17 pgedge-*` 
+    `sudo dnf -y install --downloadonly --downloaddir=<target_directory>/pgedge-enterprise-all_17 pgedge-*` 
 
 4. After creating the model of the repository on the temporary host, you can transfer the entire repo to the offline repository host.
 

@@ -14,29 +14,29 @@ If your current Postgres version is the same as your target Postgres version, yo
 
 1. Disable the `pgdg` repository.  You can use the command:
 
-  `sudo dnf config-manager --disable pgdg*`
+    `sudo dnf config-manager --disable pgdg*`
 
 2. [Enable the `pgedge` repository](../debian/configure-repo.md) with the commands:
 
-  `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
+    `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
   
-  `sudo dnf config-manager --set-enabled crb`
+    `sudo dnf config-manager --set-enabled crb`
   
-  `sudo dnf install epel-release`
+    `sudo dnf install epel-release`
 
 3. Upgrade to the latest version of Postgres with the command:
 
-  `sudo dnf upgrade postgresql18*`
+    `sudo dnf upgrade postgresql18*`
 
 4. When the upgrade completes, restart the server with the command:
 
-  `systemctl restart postgresql-18.service`
+    `systemctl restart postgresql-18.service`
 
 5. Then, adjust your PATH to point to the new version of Postgres; for example:
 
-  `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
+    `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
   
-  `source ~/.bashrc`
+    `source ~/.bashrc`
 
 
 ## Performing a Minor Version Upgrade to pgEdge Enterprise Postgres
@@ -45,25 +45,25 @@ If your installed version of Postgres is the same major version but an older min
 
 1. Disable the `pgdg` repository.  You can use the command:
 
-  `sudo dnf config-manager --disable pgdg*`
+    `sudo dnf config-manager --disable pgdg*`
 
 2. [Enable the `pgedge` repository](../debian/configure-repo.md) with the commands:
 
-  `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
+    `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
 
 3. Upgrade to the latest minor version of Postgres with the command:
 
-  `sudo dnf upgrade postgresql18*`
+    `sudo dnf upgrade postgresql18*`
 
 4. When the upgrade completes, restart the server with the command:
 
-  `systemctl restart postgresql-18.service`
+    `systemctl restart postgresql-18.service`
 
 5. Then, adjust your PATH to point to the new version of Postgres; for example:
 
-  `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
+    `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
 
-  `source ~/.bashrc`
+    `source ~/.bashrc`
 
 
 ## Performing a Major Version Upgrade to pgEdge Enterprise Postgres
@@ -72,50 +72,50 @@ To perform a migration from an older major version of community Postgres to a mo
 
 1. Disable the `pgdg` repository.  You can use the command:
 
-  `sudo sh -c 'ls /etc/apt/sources.list.d/pgdg*.list >/dev/null 2>&1 && mv /etc/apt/sources.list.d/pgdg*.list /etc/apt/sources.list.d/pgdg.list.disabled || true'`
+    `sudo sh -c 'ls /etc/apt/sources.list.d/pgdg*.list >/dev/null 2>&1 && mv /etc/apt/sources.list.d/pgdg*.list /etc/apt/sources.list.d/pgdg.list.disabled || true'`
    
-  `sudo apt-get update `
+    `sudo apt-get update `
 
 2. [Enable the `pgedge` repository](../debian/configure-repo.md) with the commands:
 
-  `curl -fsSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb`
+    `curl -fsSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb`
 
-  `sudo apt-get install -y /tmp/pgedge-release.deb`
+    `sudo apt-get install -y /tmp/pgedge-release.deb`
 
-  `rm -f /tmp/pgedge-release.deb`
+    `rm -f /tmp/pgedge-release.deb`
 
-  `sudo apt-get update`
+    `sudo apt-get update`
 
 3. Install the newer version of Postgres, create a cluster, and start the postmaster:
 
-  `sudo apt-get install -y pgedge-enterprise-postgres-18`
+    `sudo apt-get install -y pgedge-enterprise-postgres-18`
 
-  `sudo pg_createcluster 18 main -- --locale=C.UTF-8 --encoding=UTF8`
+    `sudo pg_createcluster 18 main -- --locale=C.UTF-8 --encoding=UTF8`
 
-  `sudo pg_ctlcluster 18 main start`
+    `sudo pg_ctlcluster 18 main start`
 
 4. Invoke the new version of the [pg_upgrade](https://www.postgresql.org/docs/17/pgupgrade.html) utility (the version located in the newly created `/usr/pgsql-17/bin` directory) to migrate your Postgres installation. For example, the following command converts a version 16 installation to a version 17 installation:
 
-  ```bash
-  /usr/lib/postgresql/18/bin/pg_upgrade \
-  --old-datadir=/var/lib/postgresql/17/main \
-  --new-datadir=/var/lib/postgresql/18/main \
-  --old-bindir=/usr/lib/postgresql/17/bin \
-  --new-bindir=/usr/lib/postgresql/18/bin \
-  --username=postgres \
-  --check
-  ```
+    ```bash
+    /usr/lib/postgresql/18/bin/pg_upgrade \
+    --old-datadir=/var/lib/postgresql/17/main \
+    --new-datadir=/var/lib/postgresql/18/main \
+    --old-bindir=/usr/lib/postgresql/17/bin \
+    --new-bindir=/usr/lib/postgresql/18/bin \
+    --username=postgres \
+    --check
+    ```
 
-  Note that you can invoke the command with the `--check` option to perform a test upgrade before invoking the command without `--check` to perform the actual upgrade.
+    Note that you can invoke the command with the `--check` option to perform a test upgrade before invoking the command without `--check` to perform the actual upgrade.
 
 5. When the upgrade completes, restart the server with the command:
 
-  `sudo systemctl restart postgresql@18-main`
+    `sudo systemctl restart postgresql@18-main`
 
 6. Then, adjust your PATH to point to the new version of Postgres; for example:
 
-  `echo 'export PATH=/usr/lib/postgresql/18/bin:$PATH' >> ~/.bashrc`
+    `echo 'export PATH=/usr/lib/postgresql/18/bin:$PATH' >> ~/.bashrc`
 
-  `. ~/.bashrc`
+    `. ~/.bashrc`
 
 
