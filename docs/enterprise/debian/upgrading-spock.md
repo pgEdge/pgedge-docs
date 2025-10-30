@@ -24,7 +24,7 @@ Before performing an upgrade to a newer version of Spock, ensure you have a curr
 
 2. Stop the Postgres Server:
 
-    `sudo systemctl stop postgresql-<xx>`
+    `sudo pg_ctlcluster <xx> main stop`
 
     or
 
@@ -42,7 +42,7 @@ Before performing an upgrade to a newer version of Spock, ensure you have a curr
 
 4. Start the Postgres server:
 
-    `pg_ctl -D /path/to/data start`
+    `sudo pg_ctlcluster <xx> main start`
 
     or:
 

@@ -9,12 +9,12 @@ After installing the `pgedge` repository, you're ready to create Postgres databa
 To review a list of packages available from the `pgedge` repository, use the command:
 
   ```bash
-  grep -h '^Package: ' /var/lib/apt/lists/*pgedge*Packages | awk '{print $2}' | sort -u
+  apt list | grep pgedge-*
   ```
 
-To see a list of components installed by a specific package, use the command:
+To see a list of components installed by a specific package or version, use the command:
 
-  `apt-get -s install package_name | awk '/^(The following (NEW|additional) packages will be installed:)/{p=1;next} p && NF==0{exit} p' | tr ', ' '\n' | sed '/^$/d' | sort -u`
+  `apt-cache depends pgedge-enterprise-postgres-18`
 
 To install a package, you can use conventional syntax and options:
 
