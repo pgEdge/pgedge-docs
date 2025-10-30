@@ -2,16 +2,16 @@
 
 Many of the supporting components distributed via the `pgedge` repository follow standard configuration and usage as documented by their open-source projects.  
 
-Package names and links to the component documentation are noted in the table below. `_XX` after the package name indicates the package version is required; substitute your version into the package name (i.e. pgedge-spock50_16 or pgedge-spock50_17) when installing the package to ensure you've installed the version that matches your copy of Postgres.
+Package names and links to the component documentation are noted in the table below. `XX` in the package name indicates the package version; substitute your preferred version into the package name (i.e. pgedge-postgresql-18-snowflake) when installing the package to ensure you've installed the version that matches your copy of Postgres.
 
 | Component | Package Name | Details and Links |
 |-----------|--------------|-------------------|
-| Spock     | pgedge-postgresql-<xx>-spock50 | [Configuration and Usage](https://github.com/pgEdge/spock/blob/main/README.md) |
-| Snowflake | pgedge-postgresql-<xx>-snowflake | [Configuration and Usage](https://github.com/pgEdge/snowflake/blob/main/README.md) |
-| Lolor     | pgedge-postgresql-<xx>-lolor | [Configuration and Usage](https://github.com/pgEdge/lolor/blob/main/README.md) |
-| PostGIS | pgedge-postgresql-<xx>-postgis-3 | [Configuration and Usage](https://postgis.net/documentation/) |
-| pgvector | pgedge-postgresql-<xx>-pgvector | [Configuration and Usage](https://github.com/pgvector/pgvector) |
-| pgaudit | pgedge-postgresql-<xx>-pgaudit | [Configuration and Usage](https://github.com/pgaudit/pgaudit/blob/main/README.md) |
+| Spock     | pgedge-postgresql-XX-spock50 | [Configuration and Usage](https://github.com/pgEdge/spock/blob/main/README.md) |
+| Snowflake | pgedge-postgresql-XX-snowflake | [Configuration and Usage](https://github.com/pgEdge/snowflake/blob/main/README.md) |
+| Lolor     | pgedge-postgresql-XX-lolor | [Configuration and Usage](https://github.com/pgEdge/lolor/blob/main/README.md) |
+| PostGIS | pgedge-postgresql-XX-postgis-3 | [Configuration and Usage](https://postgis.net/documentation/) |
+| pgvector | pgedge-postgresql-XX-pgvector | [Configuration and Usage](https://github.com/pgvector/pgvector) |
+| pgaudit | pgedge-postgresql-XX-pgaudit | [Configuration and Usage](https://github.com/pgaudit/pgaudit/blob/main/README.md) |
 | pgAdmin | pgedge-pgadmin4; pgedge-pgadmin4-desktop; pgedge-pgadmin4-server; pgedge-pgadmin4-web | [Configuration and Usage](https://www.pgadmin.org/docs/) |
 | pgBackRest | pgedge-pgbackrest | [Configuration and Usage](https://docs.pgedge.com/platform/managing/pgbackrest) |
 | pgBouncer | pgedge-pgbouncer | [Configuration and Usage](#using-pgbouncer-with-pgedge-enterprise-postgres) |
