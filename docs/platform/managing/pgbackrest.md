@@ -15,7 +15,7 @@ The command-line interface (CLI) supports deploying a new cluster with pgBackRes
 * **An AWS S3 Bucket.**  If you're using an AWS S3 bucket for your backups, add the following lines to the `~/.bashrc` file on each node of the cluster to allow the node to access your bucket:
 
 ```sh
-export PGBACKREST_REPO1_S3_KEY=AILMYYUHQWPMOTUJVLPPE
+export PGBACKREST_REPO1_S3_KEY=AILMYYLUHQWPMOTUJVLPPE
 export PGBACKREST_REPO1_S3_BUCKET=bucket-8765t3xpmf
 export PGBACKREST_REPO1_S3_KEY_SECRET=G9tloTwj2+y4TVKLPO3qMjeK3G9a7GkR4mo
 export PGBACKREST_REPO1_S3_ENDPOINT=s3.amazonaws.com
