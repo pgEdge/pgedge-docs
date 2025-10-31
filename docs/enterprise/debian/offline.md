@@ -26,10 +26,15 @@ Then, install prerequisite software and add the pgEdge APT repository:
 
 ```bash
 apt-get update && apt-get install -y curl gnupg2 lsb-release
+curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb || true
+apt-get update
+```
+
+Then, download the repository contents:
+
+```bash
 sudo apt-get install --download-only -y pgedge-enterprise-postgres-18
 sudo cp /var/cache/apt/archives/*.deb ~/pg18-offline/
-curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb || true 
-apt-get update
 ```
 
 After creating the model of the repository on the temporary host, you can transfer the entire repo to the offline repository host.  For example:
