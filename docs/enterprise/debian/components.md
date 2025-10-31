@@ -13,7 +13,7 @@ Package names and links to the component documentation are noted in the table be
 | pgvector | pgedge-postgresql-XX-pgvector | [Configuration and Usage](https://github.com/pgvector/pgvector) |
 | pgaudit | pgedge-postgresql-XX-pgaudit | [Configuration and Usage](https://github.com/pgaudit/pgaudit/blob/main/README.md) |
 | pgAdmin | pgedge-pgadmin4; pgedge-pgadmin4-desktop; pgedge-pgadmin4-server; pgedge-pgadmin4-web | [Configuration and Usage](https://www.pgadmin.org/docs/) |
-| pgBackRest | pgedge-pgbackrest | [Configuration and Usage](https://docs.pgedge.com/platform/managing/pgbackrest) |
+| pgBackRest | pgedge-pgbackrest | [Configuration and Usage](https://pgbackrest.org/user-guide-index.html) |
 | pgBouncer | pgedge-pgbouncer | [Configuration and Usage](#using-pgbouncer-with-pgedge-enterprise-postgres) |
 
 !!! note

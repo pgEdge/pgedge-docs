@@ -11,7 +11,7 @@ Package names and links to the component documentation are noted in the table be
 | Lolor     | pgedge-lolor_XX | [Configuration and Usage](https://github.com/pgEdge/lolor/blob/main/README.md) |
 | pgAdmin | pgedge-pgadmin4; pgedge-pgadmin4-desktop; pgedge-pgadmin4-server; pgedge-pgadmin4-web | [Configuration and Usage](https://www.pgadmin.org/docs/) |
 | pgaudit | pgedge-pgaudit_XX | [Configuration and Usage](https://github.com/pgaudit/pgaudit/blob/main/README.md) |
-| pgBackRest | pgedge-pgbackrest | [Configuration and Usage](https://docs.pgedge.com/platform/managing/pgbackrest) |
+| pgBackRest | pgedge-pgbackrest | [Configuration and Usage](https://pgbackrest.org/user-guide-index.html) |
 | PostGIS | pgedge-postgis35_XX | [Configuration and Usage](https://postgis.net/documentation/) |
 | pgBouncer | pgedge-pgbouncer | [Configuration and Usage](#using-pgbouncer-with-pgedge-enterprise-postgres) |
 | pgvector | pgedge-pgvector_XX | [Configuration and Usage](https://github.com/pgvector/pgvector) |
