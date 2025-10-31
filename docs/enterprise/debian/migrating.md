@@ -12,7 +12,7 @@ The following sections provide sample commands; please note that commands may va
 
 If your current Postgres version is the same as your target Postgres version, you can simply switch repositories and perform an upgrade; the `data` directories are compatible:
 
-1. Install and [configure the `pgedge` repository](/configure-repo.md).
+1. Install and [configure the `pgedge` repository](configure-repo.md).
 
 2. Stop any already running Postgres cluster with the command:
 
@@ -47,7 +47,7 @@ To perform a migration from an older major version of community Postgres to a mo
 
 The example that follows will walk you through an upgrade from community Postgres version 17 to pgEdge Enterprise Postgres version 18; the following is a high-level overview of the steps required:
 
-1. Install and [configure the pgedge repository](/configure-repo.md).
+1. Install and [configure the pgedge repository](configure-repo.md).
 
 2. Next, install the `pgedge-enterprise-postgres-18` packages; use the following command:
 
