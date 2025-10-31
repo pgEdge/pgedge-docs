@@ -18,7 +18,7 @@ To install a package, you can use conventional syntax and options:
 
   `sudo dnf install package_name`
 
-For example, to install only those packages required to set up a Postgres 17 database, use the command:
+For example, to install only those packages required to set up a Postgres 18 database, use the command:
 
   `sudo dnf install pgedge-enterprise-postgres_18`
 

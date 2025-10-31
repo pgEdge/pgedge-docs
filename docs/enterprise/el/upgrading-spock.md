@@ -31,9 +31,9 @@ After stopping automatic DDL replication on all of the nodes in your cluster, up
 
     `sudo dnf upgrade pgedge-spock50_<xx>`
 
-    For example, to upgrade to the latest version supported on Postgres 17, use the command:
+    For example, to upgrade to the latest version supported on Postgres 18, use the command:
 
-    `sudo dnf upgrade pgedge-spock50_17`
+    `sudo dnf upgrade pgedge-spock50_18`
 
 4. Start the Postgres server:
 
@@ -41,7 +41,7 @@ After stopping automatic DDL replication on all of the nodes in your cluster, up
 
     or:
 
-    `systemctl start postgresql-17`
+    `systemctl start postgresql-18`
 
 5. Connect with psql and upgrade the version of the Spock Extension registered with Postgres:
 
