@@ -111,7 +111,7 @@ nav:
       - Scheduling ACE Operations and Repairs: platform/ace/schedule_ace.md
     - CLI Command Reference:
       - Using the CLI: platform/pgedge_commands/index.md
-      - ACE Commands: 
+      - ace Commands: 
         - ACE commands: platform/pgedge_commands/ace/index.md
         - ace-mtree: platform/pgedge_commands/doc/ace-mtree.md
         - ace-repset-diff: platform/pgedge_commands/doc/ace-repset-diff.md
@@ -162,10 +162,10 @@ nav:
         - service-start: platform/pgedge_commands/doc/service-start.md
         - service-status: platform/pgedge_commands/doc/service-status.md
         - service-stop: platform/pgedge_commands/doc/service-stop.md
-      - The SETUP Command: 
-        - setup Command: platform/pgedge_commands/setup/index.md
+      - The setup Command: 
+        - The setup Command: platform/pgedge_commands/setup/index.md
         - setup: platform/pgedge_commands/doc/setup.md
-      - SPOCK Commands: 
+      - spock Commands: 
         - spock Commands: platform/pgedge_commands/spock/index.md
         - spock-health-check: platform/pgedge_commands/doc/spock-health-check.md
         - spock-metrics-check: platform/pgedge_commands/doc/spock-metrics-check.md
@@ -198,7 +198,7 @@ nav:
         - spock-sub-show-table: platform/pgedge_commands/doc/spock-sub-show-table.md
         - spock-sub-wait-for-sync: platform/pgedge_commands/doc/spock-sub-wait-for-sync.md
         - spock-table-wait-for-sync: platform/pgedge_commands/doc/spock-table-wait-for-sync.md
-      - UPDATE MANAGER Commands: 
+      - update manager Commands: 
         - um Commands: platform/pgedge_commands/um/index.md
         - um-clean.md: platform/pgedge_commands/doc/um-clean.md
         - um-download.md: platform/pgedge_commands/doc/um-download.md
