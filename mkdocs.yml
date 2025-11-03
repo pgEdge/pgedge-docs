@@ -109,16 +109,105 @@ nav:
       - Using ACE Functions: platform/ace/ace_functions.md
       - ACE API Endpoints: platform/ace/ace_api.md
       - Scheduling ACE Operations and Repairs: platform/ace/schedule_ace.md
-    - CLI Reference:
+    - CLI Command Reference:
       - Using the CLI: platform/pgedge_commands/index.md
-      - ACE Commands: platform/pgedge_commands/ace.md
-      - DB Commands: platform/pgedge_commands/db.md
-      - CLUSTER Commands: platform/pgedge_commands/cluster.md
-      - LOCALHOST Commands: platform/pgedge_commands/localhost.md
-      - SERVICE Commands: platform/pgedge_commands/service.md
-      - The SETUP Command: platform/pgedge_commands/setup.md
-      - SPOCK Commands: platform/pgedge_commands/spock.md
-      - UPDATE MANAGER Commands: platform/pgedge_commands/um.md
+      - ace Commands: 
+        - ACE commands: platform/pgedge_commands/ace/index.md
+        - ace-mtree: platform/pgedge_commands/doc/ace-mtree.md
+        - ace-repset-diff: platform/pgedge_commands/doc/ace-repset-diff.md
+        - ace-schema-diff: platform/pgedge_commands/doc/ace-schema-diff.md
+        - ace-spock-diff: platform/pgedge_commands/doc/ace-spock-diff.md
+        - ace-spock-exception-update: platform/pgedge_commands/doc/ace-spock-exception-update.md
+        - ace-start: platform/pgedge_commands/doc/ace-start.md
+        - ace-table-diff: platform/pgedge_commands/doc/ace-table-diff.md
+        - ace-table-repair: platform/pgedge_commands/doc/ace-table-repair.md
+        - ace-table-rerun: platform/pgedge_commands/doc/ace-table-rerun.md
+      - db Commands: 
+        - db Commands: platform/pgedge_commands/db/index.md
+        - db-create: platform/pgedge_commands/doc/db-create.md
+        - db-guc-set: platform/pgedge_commands/doc/db-guc-set.md
+        - db-guc-show: platform/pgedge_commands/doc/db-guc-show.md
+        - db-set-readonly: platform/pgedge_commands/doc/db-set-readonly.md
+        - db-test-io: platform/pgedge_commands/doc/db-test-io.md
+      - cluster Commands:
+        - cluster Commands: platform/pgedge_commands/cluster/index.md
+        - cluster-add-db: platform/pgedge_commands/doc/cluster-add-db.md
+        - cluster-add-node: platform/pgedge_commands/doc/cluster-add-node.md
+        - cluster-app-concurrent-index: platform/pgedge_commands/doc/cluster-app-concurrent-index.md
+        - cluster-app-install: platform/pgedge_commands/doc/cluster-app-install.md
+        - cluster-app-remove: platform/pgedge_commands/doc/cluster-app-remove.md
+        - cluster-command: platform/pgedge_commands/doc/cluster-command.md
+        - cluster-init: platform/pgedge_commands/doc/cluster-init.md
+        - cluster-json-create: platform/pgedge_commands/doc/cluster-json-create.md
+        - cluster-json-template: platform/pgedge_commands/doc/cluster-json-template.md
+        - cluster-json-validate: platform/pgedge_commands/doc/cluster-json-validate.md
+        - cluster-list-nodes: platform/pgedge_commands/doc/cluster-list-nodes.md
+        - cluster-remove-node: platform/pgedge_commands/doc/cluster-remove-node.md
+        - cluster-remove: platform/pgedge_commands/doc/cluster-remove.md
+        - cluster-replication-begin: platform/pgedge_commands/doc/cluster-replication-begin.md
+        - cluster-replication-check: platform/pgedge_commands/doc/cluster-replication-check.md
+        - cluster-ssh: platform/pgedge_commands/doc/cluster-ssh.md
+      - localhost Commands: 
+        - localhost Commands: platform/pgedge_commands/localhost/index.md
+        - localhost-cluster-create: platform/pgedge_commands/doc/localhost-cluster-create.md
+        - localhost-cluster-deploy: platform/pgedge_commands/doc/localhost-cluster-destroy.md
+      - service Commands: 
+        - service Commands: platform/pgedge_commands/service/index.md
+        - service-config: platform/pgedge_commands/doc/service-config.md
+        - service-disable: platform/pgedge_commands/doc/service-disable.md
+        - service-enable: platform/pgedge_commands/doc/service-enable.md
+        - service-init: platform/pgedge_commands/doc/service-init.md
+        - service-reload: platform/pgedge_commands/doc/service-reload.md
+        - service-restart: platform/pgedge_commands/doc/service-restart.md
+        - service-start: platform/pgedge_commands/doc/service-start.md
+        - service-status: platform/pgedge_commands/doc/service-status.md
+        - service-stop: platform/pgedge_commands/doc/service-stop.md
+      - The setup Command: 
+        - The setup Command: platform/pgedge_commands/setup/index.md
+        - setup: platform/pgedge_commands/doc/setup.md
+      - spock Commands: 
+        - spock Commands: platform/pgedge_commands/spock/index.md
+        - spock-health-check: platform/pgedge_commands/doc/spock-health-check.md
+        - spock-metrics-check: platform/pgedge_commands/doc/spock-metrics-check.md
+        - spock-node-add-interface: platform/pgedge_commands/doc/spock-node-add-interface.md
+        - spock-node-alter-location: platform/pgedge_commands/doc/spock-node-alter-location.md
+        - spock-node-create: platform/pgedge_commands/doc/spock-node-create.md
+        - spock-node-drop-interface: platform/pgedge_commands/doc/spock-node-drop-interface.md
+        - spock-node-drop: platform/pgedge_commands/doc/spock-node-drop.md
+        - spock-node-list: platform/pgedge_commands/doc/spock-node-list.md
+        - spock-replicate-ddl: platform/pgedge_commands/doc/spock-replicate-ddl.md
+        - spock-repset-add-partition: platform/pgedge_commands/doc/spock-repset-add-partition.md
+        - spock-repset-add-table: platform/pgedge_commands/doc/spock-repset-add-table.md
+        - spock-repset-alter: platform/pgedge_commands/doc/spock-repset-alter.md
+        - spock-repset-create: platform/pgedge_commands/doc/spock-repset-create.md
+        - spock-repset-drop: platform/pgedge_commands/doc/spock-repset-drop.md
+        - spock-repset-list-tables: platform/pgedge_commands/doc/spock-repset-list-tables.md
+        - spock-repset-remove-partition: platform/pgedge_commands/doc/spock-repset-remove-partition.md
+        - spock-repset-remove-table: platform/pgedge_commands/doc/spock-repset-remove-table.md
+        - spock-sequence-convert: platform/pgedge_commands/doc/spock-sequence-convert.md
+        - spock-set-readonly: platform/pgedge_commands/doc/spock-set-readonly.md
+        - spock-sub-add-repset: platform/pgedge_commands/doc/spock-sub-add-repset.md
+        - spock-sub-alter-interface: platform/pgedge_commands/doc/spock-sub-alter-interface.md
+        - spock-sub-create: platform/pgedge_commands/doc/spock-sub-create.md
+        - spock-sub-disable: platform/pgedge_commands/doc/spock-sub-disable.md
+        - spock-sub-drop: platform/pgedge_commands/doc/spock-sub-drop.md
+        - spock-sub-enable: platform/pgedge_commands/doc/spock-sub-enable.md
+        - spock-sub-remove-repset: platform/pgedge_commands/doc/spock-sub-remove-repset.md
+        - spock-sub-resync-table: platform/pgedge_commands/doc/spock-sub-resync-table.md
+        - spock-sub-show-status: platform/pgedge_commands/doc/spock-sub-show-status.md
+        - spock-sub-show-table: platform/pgedge_commands/doc/spock-sub-show-table.md
+        - spock-sub-wait-for-sync: platform/pgedge_commands/doc/spock-sub-wait-for-sync.md
+        - spock-table-wait-for-sync: platform/pgedge_commands/doc/spock-table-wait-for-sync.md
+      - update manager Commands: 
+        - um Commands: platform/pgedge_commands/um/index.md
+        - um-clean.md: platform/pgedge_commands/doc/um-clean.md
+        - um-download.md: platform/pgedge_commands/doc/um-download.md
+        - um-install.md: platform/pgedge_commands/doc/um-install.md
+        - um-list.md: platform/pgedge_commands/doc/um-list.md
+        - um-remove.md: platform/pgedge_commands/doc/um-remove.md
+        - um-update.md: platform/pgedge_commands/doc/um-update.md
+        - um-upgrade.md: platform/pgedge_commands/doc/um-upgrade.md
+        - um-verify-metadata.md: platform/pgedge_commands/doc/um-verify-metadata.md
     - pgEdge Distributed Postgres VM Edition Release Notes: platform/pgedge_rel_notes.md
     - Troubleshooting: platform/troubleshooting.md
 
