@@ -1,4 +1,4 @@
-# ACE Commands
+# ace Commands
 
 Commands in the `ace` module include:
 

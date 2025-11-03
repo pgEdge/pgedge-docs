@@ -1,4 +1,4 @@
-# CLUSTER Commands
+# cluster Commands
 
 Commands in the `cluster` module include:
 
