@@ -4,14 +4,14 @@ The CLI is the command line interface that you can use to simplify component ins
 
 | Module | Description |
 |--------|-------------|
-| [ace](ace.md) | Use `ACE` to compare the data on different nodes to confirm data consistency. |
-| [cluster](cluster.md) | Calls to the `cluster` module install and configure your replication scenario. | 
-| [db](db.md) | Use calls to the `db` module to configure and control your PostgreSQL databases. |
-| [localhost](localhost.md) | Use commands in the `localhost` module to manage clusters on your local host. |
-| [service](service.md) | Calls to the `service` module control the state of services. |
-| [setup](setup.md) | Setup a pgEdge node with configuration for user, database, port, version, spock, snowflake. |
-| [spock](spock.md) | Use calls to `spock` to manage your replication cluster. |
-| [um](um.md) | Use calls to `update manager` to list, install, and update components. |
+| [ace](ace/index.md) | Use `ACE` to compare the data on different nodes to confirm data consistency. |
+| [cluster](cluster/index.md) | Calls to the `cluster` module install and configure your replication scenario. | 
+| [db](db/index.md) | Use calls to the `db` module to configure and control your PostgreSQL databases. |
+| [localhost](localhost/index.md) | Use commands in the `localhost` module to manage clusters on your local host. |
+| [service](service/index.md) | Calls to the `service` module control the state of services. |
+| [setup](setup/index.md) | Setup a pgEdge node with configuration for user, database, port, version, spock, snowflake. |
+| [spock](spock/index.md) | Use calls to `spock` to manage your replication cluster. |
+| [um](um/index.md) | Use calls to `update manager` to list, install, and update components. |
 
 
 ## CLI Command Synopsis
