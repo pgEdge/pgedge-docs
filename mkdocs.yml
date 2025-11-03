@@ -113,7 +113,6 @@ nav:
       - Using the CLI: platform/pgedge_commands/index.md
       - ACE Commands: 
         - ACE commands: platform/pgedge_commands/ace/index.md
-        - Help Text: platform/pgedge_commands/doc/ace.md
         - ace-mtree: platform/pgedge_commands/doc/ace-mtree.md
         - ace-repset-diff: platform/pgedge_commands/doc/ace-repset-diff.md
         - ace-schema-diff: platform/pgedge_commands/doc/ace-schema-diff.md
@@ -125,7 +124,6 @@ nav:
         - ace-table-rerun: platform/pgedge_commands/doc/ace-table-rerun.md
       - db Commands: 
         - db Commands: platform/pgedge_commands/db/index.md
-        - Help Text: platform/pgedge_commands/doc/db.md
         - db-create: platform/pgedge_commands/doc/db-create.md
         - db-guc-set: platform/pgedge_commands/doc/db-guc-set.md
         - db-guc-show: platform/pgedge_commands/doc/db-guc-show.md
@@ -133,7 +131,6 @@ nav:
         - db-test-io: platform/pgedge_commands/doc/db-test-io.md
       - cluster Commands:
         - cluster Commands: platform/pgedge_commands/cluster/index.md
-        - Help Text: platform/pgedge_commands/doc/cluster.md
         - cluster-add-db: platform/pgedge_commands/doc/cluster-add-db.md
         - cluster-add-node: platform/pgedge_commands/doc/cluster-add-node.md
         - cluster-app-concurrent-index: platform/pgedge_commands/doc/cluster-app-concurrent-index.md
@@ -152,12 +149,10 @@ nav:
         - cluster-ssh: platform/pgedge_commands/doc/cluster-ssh.md
       - localhost Commands: 
         - localhost Commands: platform/pgedge_commands/localhost/index.md
-        - Help Text: platform/pgedge_commands/doc/localhost.md
         - localhost-cluster-create: platform/pgedge_commands/doc/localhost-cluster-create.md
         - localhost-cluster-deploy: platform/pgedge_commands/doc/localhost-cluster-destroy.md
       - service Commands: 
         - service Commands: platform/pgedge_commands/service/index.md
-        - Help Text: platform/pgedge_commands/doc/service.md
         - service-config: platform/pgedge_commands/doc/service-config.md
         - service-disable: platform/pgedge_commands/doc/service-disable.md
         - service-enable: platform/pgedge_commands/doc/service-enable.md
@@ -172,7 +167,6 @@ nav:
         - setup: platform/pgedge_commands/doc/setup.md
       - SPOCK Commands: 
         - spock Commands: platform/pgedge_commands/spock/index.md
-        - Help Text: platform/pgedge_commands/doc/spock.md
         - spock-health-check: platform/pgedge_commands/doc/spock-health-check.md
         - spock-metrics-check: platform/pgedge_commands/doc/spock-metrics-check.md
         - spock-node-add-interface: platform/pgedge_commands/doc/spock-node-add-interface.md
@@ -206,7 +200,6 @@ nav:
         - spock-table-wait-for-sync: platform/pgedge_commands/doc/spock-table-wait-for-sync.md
       - UPDATE MANAGER Commands: 
         - um Commands: platform/pgedge_commands/um/index.md
-        - Help Text: platform/pgedge_commands/um.md
         - um-clean.md: platform/pgedge_commands/doc/um-clean.md
         - um-download.md: platform/pgedge_commands/doc/um-download.md
         - um-install.md: platform/pgedge_commands/doc/um-install.md
