@@ -15,7 +15,7 @@ If your current Postgres version is the same as your target Postgres version, yo
 
 1. Disable the `pgdg` repository.  You can use the command:
 
-     `sudo dnf config-manager --disable pgdg*`
+    `sudo dnf config-manager --disable pgdg*`
 
 2. [Enable the `pgedge` repository](../el/configure-repo.md) with the commands:
 

@@ -73,63 +73,63 @@ CREATE EXTENSION
 
 Please note that the components available for installation via the UM module will vary with each Postgres version. The following list is intended only to provide quick links to more information about each component.
 
-[Postgres](https://www.postgresql.org/) is a powerful, open source object-relational database system with over 35 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+* [Postgres](https://www.postgresql.org/) is a powerful, open source object-relational database system with over 35 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
 
-[CLI](https://docs.pgedge.com/platform/pgedge_commands) is the command line interface for pgEdge Distributed Postgres: VM Edition.
+* [CLI](https://docs.pgedge.com/platform/pgedge_commands) is the command line interface for pgEdge Distributed Postgres: VM Edition.
 
-The [Spock](https://docs.pgedge.com/spock_ext) extension provides multi-master (multi-active) replication for Postgres. We leveraged both the pgLogical & BDR2 Open Source projects as a solid foundation to build upon for this enterprise-class extension.
+* The [Spock](https://docs.pgedge.com/spock_ext) extension provides multi-master (multi-active) replication for Postgres. We leveraged both the pgLogical & BDR2 Open Source projects as a solid foundation to build upon for this enterprise-class extension.
 
-The [ACE](https://docs.pgedge.com/ace) extension provides the Active Consistency Engine for a SPOCK cluster.
+* The [ACE](https://docs.pgedge.com/ace) extension provides the Active Consistency Engine for a SPOCK cluster.
 
-The [Snowflake](https://docs.pgedge.com/snowflake) extension provides unique sequences designed for active-active replication.
+* The [Snowflake](https://docs.pgedge.com/snowflake) extension provides unique sequences designed for active-active replication.
 
-The [lolor](https://docs.pgedge.com/snowflake) extension provides large object support that works seamlessly with Spock active-active replication.
+* The [lolor](https://docs.pgedge.com/snowflake) extension provides large object support that works seamlessly with Spock active-active replication.
 
-[Citus](https://docs.citusdata.com/en/stable/get_started/what_is_citus.html) provides an open source extension that supports Postgres features including distributed tables.
+* [Citus](https://docs.citusdata.com/en/stable/get_started/what_is_citus.html) provides an open source extension that supports Postgres features including distributed tables.
 
-[etcd](https://etcd.io/) is a strongly consistent, distributed key-value store that provides a reliable way to store data that needs to be accessed by a distributed system or cluster of machines.
+* [etcd](https://etcd.io/) is a strongly consistent, distributed key-value store that provides a reliable way to store data that needs to be accessed by a distributed system or cluster of machines.
 
-[HAProxy](https://www.haproxy.org) is a free, very fast and reliable reverse-proxy offering high availability, load balancing, and proxying for TCP and HTTP-based applications. It is particularly suited for very high traffic web sites and powers a significant portion of the world's most visited ones.
+* [HAProxy](https://www.haproxy.org) is a free, very fast and reliable reverse-proxy offering high availability, load balancing, and proxying for TCP and HTTP-based applications. It is particularly suited for very high traffic web sites and powers a significant portion of the world's most visited ones.
 
-[Patroni](https://github.com/pgedge/patroni) is a template for high availability (HA) Postgres solutions using Python. 
+* [Patroni](https://github.com/pgedge/patroni) is a template for high availability (HA) Postgres solutions using Python. 
 
-[pgBackRest](https://pgbackrest.org/) is a reliable, easy-to-use backup and restore solution that can seamlessly scale up to the largest databases and workloads by utilizing algorithms that are optimized for database-specific requirements.
+* [pgBackRest](https://pgbackrest.org/) is a reliable, easy-to-use backup and restore solution that can seamlessly scale up to the largest databases and workloads by utilizing algorithms that are optimized for database-specific requirements.
 
-[pgCat2](https://github.com/pgEdge/pgcat) is a Postgres pooler and proxy (like PgBouncer) with support for sharding, load balancing, failover and mirroring.
+* [pgCat2](https://github.com/pgEdge/pgcat) is a Postgres pooler and proxy (like PgBouncer) with support for sharding, load balancing, failover and mirroring.
 
-[pg_curl](https://github.com/RekGRpth/pg_curl) allows most curl actions, including data transfer with URL syntax via HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT, LDAP, LDAPS, FILE, IMAP, SMTP, POP3, RTSP and RTMP.
+* [pg_curl](https://github.com/RekGRpth/pg_curl) allows most curl actions, including data transfer with URL syntax via HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT, LDAP, LDAPS, FILE, IMAP, SMTP, POP3, RTSP and RTMP.
 
-[PostgREST](https://www.pgedge.com/blog/pgedge-distributed-postgresql-and-postgrest) is a standalone web server that allows you to access your pgEdge Postgres database cluster with RESTful API calls. It is very simple to use because the API is built on the existing structure and inherits permissions you've already defined in your Postgres database. You use a simple configuration file to specify the schema objects that will be exposed through the API. While the server monitors the default listener port, for libpq-styled calls to the server, the PostgREST server monitors port 3000 for API-styled calls.
+* [PostgREST](https://www.pgedge.com/blog/pgedge-distributed-postgresql-and-postgrest) is a standalone web server that allows you to access your pgEdge Postgres database cluster with RESTful API calls. It is very simple to use because the API is built on the existing structure and inherits permissions you've already defined in your Postgres database. You use a simple configuration file to specify the schema objects that will be exposed through the API. While the server monitors the default listener port, for libpq-styled calls to the server, the PostgREST server monitors port 3000 for API-styled calls.
 
-[pgAdmin](https://www.pgadmin.org/) is an open-source graphical administration and development client for Postgres that works on Linux, Unix, macOS, and Windows.
+* [pgAdmin](https://www.pgadmin.org/) is an open-source graphical administration and development client for Postgres that works on Linux, Unix, macOS, and Windows.
 
-[HypoPG](https://hypopg.readthedocs.io/en/latest/) is a Postgres extension that adds support for Hypothetical Indexes. 
+* [HypoPG](https://hypopg.readthedocs.io/en/latest/) is a Postgres extension that adds support for Hypothetical Indexes. 
 
-[oracle_fdw](https://github.com/laurenz/oracle_fdw) is a Postgres extension that provides a Foreign Data Wrapper for easy and efficient access to Oracle databases, including pushdown of WHERE conditions and required columns as well as comprehensive EXPLAIN support.
+* [oracle_fdw](https://github.com/laurenz/oracle_fdw) is a Postgres extension that provides a Foreign Data Wrapper for easy and efficient access to Oracle databases, including pushdown of WHERE conditions and required columns as well as comprehensive EXPLAIN support.
 
-[orafce](https://github.com/orafce/orafce#orafce---oracles-compatibility-functions-and-packages) supports functions and operators that emulate a subset of functions and packages from the Oracle RDBMS.
+* [orafce](https://github.com/orafce/orafce#orafce---oracles-compatibility-functions-and-packages) supports functions and operators that emulate a subset of functions and packages from the Oracle RDBMS.
 
-[pgAudit](https://github.com/pgaudit/pgaudit) provides detailed session and/or object audit logging via the standard Postgres logging facility.
+* [pgAudit](https://github.com/pgaudit/pgaudit) provides detailed session and/or object audit logging via the standard Postgres logging facility.
 
-[pg_cat](https://github.com/postgresml/pgcat) is a Postgres pooler and proxy with support for sharding, load balancing, failover and mirroring.
+* [pg_cat](https://github.com/postgresml/pgcat) is a Postgres pooler and proxy with support for sharding, load balancing, failover and mirroring.
 
-[pg_cron]() is a simple cron-based job scheduler for Postgres (10 or higher) that runs inside the database as an extension.
+* [pg_cron]() is a simple cron-based job scheduler for Postgres (10 or higher) that runs inside the database as an extension.
 
-[pg_hint_plan](https://github.com/ossc-db/pg_hint_plan) makes it possible to tweak Postgres execution plans using so-called "hints" in SQL comments, like /*+ SeqScan(a) */.
+* [pg_hint_plan](https://github.com/ossc-db/pg_hint_plan) makes it possible to tweak Postgres execution plans using so-called "hints" in SQL comments, like /*+ SeqScan(a) */.
 
-[pg_partman](https://github.com/pgpartman/pg_partman#pg-partition-manager) is an extension to create and manage both time-based and serial-based table partition sets.
+* [pg_partman](https://github.com/pgpartman/pg_partman#pg-partition-manager) is an extension to create and manage both time-based and serial-based table partition sets.
 
-[pg_repack](https://github.com/reorg/pg_repack) is a Postgres extension which lets you remove bloat from tables and indexes, and optionally restore the physical order of clustered indexes. 
+* [pg_repack](https://github.com/reorg/pg_repack) is a Postgres extension which lets you remove bloat from tables and indexes, and optionally restore the physical order of clustered indexes. 
 
-[pgvector](https://github.com/pgvector/pgvector) enables you to store vector embeddings and perform vector similarity search in Postgres. It is particularly useful for applications involving natural language processing, such as those built on top of OpenAI's GPT models.
+* [pgvector](https://github.com/pgvector/pgvector) enables you to store vector embeddings and perform vector similarity search in Postgres. It is particularly useful for applications involving natural language processing, such as those built on top of OpenAI's GPT models.
 
-The [PL/Debugger](https://github.com/EnterpriseDB/pldebugger) module is a set of shared libraries which implement an API for debugging pl/pgsql functions on Postgres 8.4 and above.
+* The [PL/Debugger](https://github.com/EnterpriseDB/pldebugger) module is a set of shared libraries which implement an API for debugging pl/pgsql functions on Postgres 8.4 and above.
 
-[plprofiler](https://github.com/bigsql/plprofiler#plprofiler) is an extension for Postgres that creates performance profiles of PL/pgSQL functions and stored procedures. 
+* [plprofiler](https://github.com/bigsql/plprofiler#plprofiler) is an extension for Postgres that creates performance profiles of PL/pgSQL functions and stored procedures. 
 
-[PLV8](https://github.com/plv8/plv8) is a shared library that provides a Postgres procedural language powered by V8 Javascript Engine. With this program you can write functions in Javascript that are callable from SQL.
+* [PLV8](https://github.com/plv8/plv8) is a shared library that provides a Postgres procedural language powered by V8 Javascript Engine. With this program you can write functions in Javascript that are callable from SQL.
 
-[PostGIS](https://postgis.net/documentation/) extends the capabilities of the Postgres relational database by adding support for storing, indexing, and querying geographic data.
+* [PostGIS](https://postgis.net/documentation/) extends the capabilities of the Postgres relational database by adding support for storing, indexing, and querying geographic data.
 
-[TimescaleDB](https://github.com/timescale/timescaledb) is an open-source database designed to make SQL scalable for time-series data. It is engineered from Postgres and packaged as an extension, providing automatic partitioning across time and space (partitioning key), as well as full SQL support.
+* [TimescaleDB](https://github.com/timescale/timescaledb) is an open-source database designed to make SQL scalable for time-series data. It is engineered from Postgres and packaged as an extension, providing automatic partitioning across time and space (partitioning key), as well as full SQL support.
 

@@ -42,7 +42,7 @@ You must ensure the system with internet access and the offline target server th
 
 **Using the Repository**
 
-Then, to use your local repository, include the `localinstall` clause when you invoke `dnf` to install packages.  For example, to install all of the pgEdge Enterprise Postgres packages:
+To use your local repository, include the `localinstall` clause when you invoke `dnf` to install packages.  For example, to install all of the pgEdge Enterprise Postgres packages:
 
 `sudo dnf localinstall pgedge-enterprise-all_18*` 
 

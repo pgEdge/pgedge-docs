@@ -2,11 +2,7 @@
 
 After installing the `pgedge` repository, you're ready to create Postgres databases and install supporting components. If needed, modify the sample commands that follow to use your preferred package manager.
 
-!!! info
-
-    Installing packages with pgEdge Enterprise Postgres (e.g., pgedge-postgresql-18 or related components) will remove previously installed community Postgres packages. If you wish to keep your existing Postgres installation, install pgEdge Enterprise Postgres in a separate environment (such as a container or virtual machine).
-
-To review a list of packages available from the `pgedge` repository, use the command:
+Then, to review a list of packages available from the `pgedge` repository, use the command:
 
   `dnf repoquery --available --repo=pgedge`
 
@@ -18,7 +14,7 @@ To install a package, you can use conventional syntax and options:
 
   `sudo dnf install package_name`
 
-For example, to install only those packages required to set up a Postgres 18 database, use the command:
+For example, to install only those packages required to set up a Postgres 17 database, use the command:
 
   `sudo dnf install pgedge-enterprise-postgres_18`
 

@@ -75,22 +75,19 @@ Then, use the property:value pairs in the `schedule_config` section to define th
 Each schedule in `schedule_config` supports:
 
 - `job_name` (required): Name of the job to schedule (must match a job name)
-- `crontab_schedule`: Cron-style schedule expression
-  - **Cron Format**: `* * * * *` (minute hour day_of_month month day_of_week)
-  - Examples:
+- `crontab_schedule`: Cron-style schedule expression in Cron Format (Where `* * * * *` represents the minute, hour, day_of_month, month, and day_of_week).  For example:
+
     - `0 0 * * *`: Daily at midnight
     - `0 */4 * * *`: Every 4 hours
     - `0 0 * * 0`: Weekly on Sunday
-- `run_frequency`: Alternative to crontab, using time units (e.g., "30s", "5m", "1h")
-  - **Run Frequency Format**: `<number><unit>`
-  - Units: "s" (seconds), "m" (minutes), "h" (hours)
-  - Minimum: 5 minutes
-  - Examples:
-    - "30s": Every 30 seconds
-    - "5m": Every 5 minutes
-    - "1h": Every hour
-- `enabled`: Whether the schedule is active (default: False)
-- `rerun_after`: Time to wait before rerunning if differences found
+
+- `run_frequency`: An alternative to crontab that uses time units (e.g., `30s`, `5m`, `1h` to represent the `<count><unit>`).  Unit may be: `s` (seconds), `m` (minutes), `h` (hours); the minimum `run_frequency` is `5m`.  For example:
+
+    - `30s`: Every 30 seconds
+    - `5m`: Every 5 minutes
+    - `1h`: Every hour
+    - `enabled`: Whether the schedule is active (default: `False`).
+    - `rerun_after`: Time to wait before rerunning if differences found.
 
 **For Example**
 
@@ -124,13 +121,15 @@ The scheduler starts automatically when ACE is started.
 
 **Best Practices**
 
-1. **Resource Management**: 
-   - Stagger schedules to avoid overlapping resource-intensive jobs
-   - Set appropriate `max_cpu_ratio`, `block_rows`, and `batch_size` values based on the
+1. **Resource Management**:
+
+    - Stagger schedules to avoid overlapping resource-intensive jobs
+    - Set appropriate `max_cpu_ratio`, `block_rows`, and `batch_size` values based on the
      table size and expected load
+
 2. **Frequency Selection**:
-   - Use `crontab_schedule` for specific times
-   - Use `run_frequency` for regular intervals
+    - Use `crontab_schedule` for specific times
+    - Use `run_frequency` for regular intervals
 
 
 ## Scheduling Auto-Repair Jobs (Beta)
@@ -161,29 +160,31 @@ auto_repair_config = {
 
 You can specify the time intervals for execution in either cron format or in a simple frequency format.  Both `poll_interval` and `status_update_interval` accept time strings in the following formats:
 
-**Cron Format**: `* * * * *` (minute hour day_of_month month day_of_week); for example:
-  - `0 0 * * *`: Daily at midnight
-  - `0 */4 * * *`: Every 4 hours
-  - `0 0 * * 0`: Weekly on Sunday
+**Cron Format**:  `* * * * *` (minute hour day_of_month month day_of_week); for example:
+
+    - `0 0 * * *`: Daily at midnight
+    - `0 */4 * * *`: Every 4 hours
+    - `0 0 * * 0`: Weekly on Sunday
 
 **Run Frequency Format**: `<number><unit>`; for example:
-  - Units: "s" (seconds), "m" (minutes), "h" (hours)
-  - Minimum: 5 minutes
-  - Examples:
-    - "30s": Every 30 seconds
-    - "5m": Every 5 minutes
-    - "1h": Every hour
+
+    - Units: "s" (seconds), "m" (minutes), "h" (hours)
+    - Minimum: 5 minutes
+    - Examples:
+        - "30s": Every 30 seconds
+        - "5m": Every 5 minutes
+        - "1h": Every hour
 
 Note: The minimum frequency allowed is 5 minutes. However, you can modify that time by editing the `MIN_RUN_FREQUENCY` variable in `ace_config.py`.
 
-**Controlling the auto-repair Daemon**
+
+### Controlling the auto-repair Daemon
 
 The auto-repair daemon starts automatically when ACE is started.
 
 ```bash
 ./pgedge ace start
 ```
-
 
 **Common Use Cases**
 

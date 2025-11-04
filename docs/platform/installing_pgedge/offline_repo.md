@@ -2,13 +2,13 @@
 
 pgEdge provides a package you can use to create an offline repository if your installation resides in an airgapped environment. The package bundles the supported software required to create a repository into a single .tgz file, enabling seamless setup of pgEdge Distributed Postgres and the command line interface without direct internet access by the eventual host of the repository. This section outlines the steps required to use the package to set up and manage an offline repository. The high-level process includes:
 
-**Downloading the pgEdge Package:** Obtain the package from an internet-connected machine and transfer it to the airgapped environment, and configure a local web server to host the repository.
+[**Downloading the pgEdge Package:**](#downloading-the-pgedge-package) Obtain the package from an internet-connected machine and transfer it to the airgapped environment, and configure a local web server to host the repository.
 
-**Upgrading the Offline Repository:** Check for newer versions, download the updated package, and restart the local repository server with the latest files.
+[**Upgrading the Offline Repository:**](#upgrading-an-offline-pgedge-repository) Check for newer versions, download the updated package, and restart the local repository server with the latest files.
 
 **Updating and Upgrading the pgEdge CLI:** Refresh metadata and upgrade the pgEdge command line interface (CLI) on each node.
 
-**Upgrading Components:** Upgrade individual components (for example, Spock or Snowflake) to their latest versions using the CLI.
+**Upgrading Components:** Upgrade individual components (for example, Spock or Snowflake) to their latest versions using the [CLI Update Manager](../pgedge_commands/um.md).
 
 The following sections provide detailed instructions, including commands and configuration steps, for each part of the process.
 
@@ -55,7 +55,7 @@ Then, you can use the repository to configure and deploy a pgEdge Distributed Po
 
 ### Upgrading an Offline pgEdge Repository
 
-The steps that follow outline how to upgrade your existing repository to a newer version of pgEdge software. The steps in this section explain how to update the repository itself, the CLI, and supported components like Spock. These instructions assume the repository is hosted on the same machine as your node; adjust the paths if your setup uses a shared system or a custom web server.
+The steps that follow outline how to upgrade your existing repository to a newer version of pgEdge software. The steps in this section explain how to update the repository itself for use upgrading the CLI and supported components like Spock. These instructions assume the repository is hosted on the same machine as your node; adjust the paths if your setup uses a shared system or a custom web server.
 
 **Checking the Latest Version of the Offline Repository**
 
