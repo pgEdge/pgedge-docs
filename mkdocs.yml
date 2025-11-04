@@ -66,14 +66,14 @@ nav:
       - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
-    #- Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS: 
-    #  - Debian & Ubuntu Version Support: enterprise/debian/index.md
-    #  - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
-    #  - Installing Postgres: enterprise/debian/installing.md
-    #  - Installing Supporting Components: enterprise/debian/components.md
-    #  - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
-    #  - Upgrading Spock: enterprise/debian/upgrading-spock.md
-    #  - Creating an Offline Repo: enterprise/debian/offline.md
+    - Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS: 
+      - Debian & Ubuntu Version Support: enterprise/debian/index.md
+      - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
+      - Installing Postgres: enterprise/debian/installing.md
+      - Installing Supporting Components: enterprise/debian/components.md
+      - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
+      - Upgrading Spock: enterprise/debian/upgrading-spock.md
+      - Creating an Offline Repo: enterprise/debian/offline.md
 
   - pgEdge Distributed Postgres:
     - CLI Overview: platform/index.md
@@ -109,7 +109,7 @@ nav:
       - Using ACE Functions: platform/ace/ace_functions.md
       - ACE API Endpoints: platform/ace/ace_api.md
       - Scheduling ACE Operations and Repairs: platform/ace/schedule_ace.md
-    - CLI Command Reference:
+    - CLI Reference:
       - Using the CLI: platform/pgedge_commands/index.md
       - ace Commands: 
         - ACE commands: platform/pgedge_commands/ace/index.md
@@ -270,7 +270,7 @@ nav:
 
   - pgEdge Containers: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
   
-  #  - ACE: '!import https://github.com/pgEdge/ace.git?branch=main'
+  # - ACE: '!import https://github.com/pgEdge/ace.git?branch=ace_go_docs'
   - lolor: '!import https://github.com/pgEdge/lolor.git?branch=main'
   - Snowflake: '!import https://github.com/pgEdge/snowflake.git?branch=main'
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'

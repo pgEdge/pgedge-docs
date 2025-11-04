@@ -36,7 +36,7 @@ You must ensure the system with internet access and the offline target server th
 
 3. Download the content of the `pgedge` repository:
 
-    `sudo dnf -y install --downloadonly --downloaddir=<target_directory>/pgedge-enterprise-all_17 pgedge-*` 
+    `sudo dnf -y install --downloadonly --downloaddir=<target_directory>/pgedge-enterprise-all_18 pgedge-*` 
 
 4. After creating the model of the repository on the temporary host, you can transfer the entire repo to the offline repository host.
 
@@ -44,13 +44,13 @@ You must ensure the system with internet access and the offline target server th
 
 To use your local repository, include the `localinstall` clause when you invoke `dnf` to install packages.  For example, to install all of the pgEdge Enterprise Postgres packages:
 
-`sudo dnf localinstall pgedge-enterprise-all_17*` 
+`sudo dnf localinstall pgedge-enterprise-all_18*` 
 
 To install just the pgEdge Enterprise Postgres packages:
 
-`sudo dnf localinstall pgedge-enterprise-postgres_17*` 
+`sudo dnf localinstall pgedge-enterprise-postgres_18*` 
 
 Or, to install each pgEdge component individually, specify a component name:
 
-`sudo dnf localinstall pgedge-spock50_17*` 
+`sudo dnf localinstall pgedge-spock50_18*` 
 

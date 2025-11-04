@@ -1,6 +1,6 @@
 # Managing Exceptions during Replication
 
-Spock includes functionality that allows you to write some exceptions to the *exception log table*. This functionality can prevent interruptions in replication, and allow you to gracefully handle replication errors at a time that best suits your schedule and the server traffic. The exception table also provides visibility into the history of replication errors, and provides enough information to later remediate the errors with tools like ACE.
+Spock includes functionality that allows you to write some exceptions to the *exception log table*. This functionality can prevent interruptions in replication, and allow you to gracefully handle replication errors at a time that best suits your schedule and the server traffic. The exception table also provides visibility into the history of replication errors, and provides information to later remediate the errors with tools like ACE.
 
 pgEdge Distributed Postgres (VM Edition) clusters running the Spock extension can use a mechanism that allows you to make changes on one node, while not replicating those changes to other nodes (a *repair mode*). You can use repair mode when fixing data anomalies on a single node, to ensure the modifications don’t propagate to other nodes in the cluster. 
 

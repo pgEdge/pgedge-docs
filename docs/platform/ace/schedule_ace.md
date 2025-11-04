@@ -18,7 +18,7 @@ MIN_RUN_FREQUENCY = timedelta(minutes=5)
 * `LISTEN_PORT` (default=5000) is the default port ACE should listen on when started as a background process.
 * `MIN_RUN_FREQUENCY` (default=timedelta(minutes=5)) is the minimum interval between consecutive runs of a background job. This value can be set using any timedelta unit -- such as minutes, seconds, or hours. For example, if MIN_RUN_FREQUENCY is set to 5 minutes, then no job can be scheduled to run more frequently than once every 5 minutes.
 
-Additionally, you can use properties in the following sections to define jobs and schedules for their execution.
+Additionally, use properties in the following sections to define jobs and schedules for their execution.
 
 ## Scheduling a Job
 
@@ -28,18 +28,18 @@ Additionally, you can use properties in the following sections to define jobs an
 
 Each job in `schedule_jobs` supports:
 
-    - `name` (required): Unique identifier for the job
-    - `cluster_name` (required): Name of the cluster
-    - `table_name` OR `repset_name` (required): Fully qualified table name or repset name
-    - `args` (optional): Dictionary of table-diff parameters:
-        - `max_cpu_ratio`: Maximum CPU usage ratio
-        - `batch_size`: Batch size for processing
-        - `block_rows`: Number of rows per block
-        - `table_filter`: `SQL WHERE` clause used to filter rows for comparison
-        - `nodes`: Nodes to include
-        - `output`: Output format ["json", "csv", "html"]
-        - `quiet`: Suppress output
-        - `dbname`: Database name
+- `name` (required): Unique identifier for the job
+- `cluster_name` (required): Name of the cluster
+- `table_name` OR `repset_name` (required): Fully qualified table name or repset name
+- `args` (optional): Dictionary of table-diff parameters
+  - `max_cpu_ratio`: Maximum CPU usage ratio
+  - `batch_size`: Batch size for processing
+  - `block_rows`: Number of rows per block
+  - `table_filter`: `SQL WHERE` clause used to filter rows for comparison
+  - `nodes`: Nodes to include
+  - `output`: Output format ["json", "csv", "html"]
+  - `quiet`: Suppress output
+  - `dbname`: Database name
 
 **For Example**
 

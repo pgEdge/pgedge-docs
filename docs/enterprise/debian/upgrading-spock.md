@@ -2,10 +2,13 @@
 
 Spock 5.0.4 is supported on PG versions 16, 17, and 18, running on:
 
-* RHEL 9 / 10
-* AlmaLinux
-* Rocky Linux
-* Oracle Enterprise Linux (OEL)
+Ubuntu
+
+  * Ubuntu 22.04 LTS and 24.04 LTS (AMD & ARM)
+
+Debian
+
+  * Debian 11, 12, and 13 (AMD & ARM)
 
 Before performing an upgrade to a newer version of Spock, ensure you have a current backup of your system.
 
@@ -17,11 +20,11 @@ Before performing an upgrade to a newer version of Spock, ensure you have a curr
     ALTER SYSTEM SET spock.allow_ddl_from_functions = off;
     SELECT pg_reload_conf();
     ```
-After stopping automatic DDL replication on all of the nodes in your cluster, update the Spock extension on each node.
+    After stopping automatic DDL replication on all of the nodes in your cluster, update the Spock extension on each node.
 
 2. Stop the Postgres Server:
 
-    `sudo systemctl stop postgresql-<xx>`
+    `sudo pg_ctlcluster <xx> main stop`
 
     or
 
@@ -29,21 +32,23 @@ After stopping automatic DDL replication on all of the nodes in your cluster, up
 
 3. Upgrade the Spock package using your package manager:
 
-    `sudo dnf upgrade pgedge-spock50_<xx>`
+    `sudo apt-get update`
 
-    For example, to upgrade to the latest version supported on Postgres 18, use the command:
+    `sudo apt-get upgrade pgedge-postgresql-<xx>-spock50`
 
-    `sudo dnf upgrade pgedge-spock50_18`
+    For example, to upgrade to the latest version supported on Postgres 17, use the command:
+
+    `sudo apt-get upgrade pgedge-postgresql-17-spock50`
 
 4. Start the Postgres server:
 
-    `pg_ctl -D /path/to/data start`
+    `sudo pg_ctlcluster <xx> main start`
 
     or:
 
-    `systemctl start postgresql-18`
+    `sudo systemctl start postgresql`
 
-5. Connect with psql and upgrade the version of the Spock Extension registered with Postgres:
+5. Connect with psql and check the version of the Spock Extension registered with Postgres:
 
     `SELECT extname, extversion FROM pg_extension WHERE extname = 'spock';`
 
@@ -52,7 +57,6 @@ After stopping automatic DDL replication on all of the nodes in your cluster, up
     `ALTER EXTENSION spock UPDATE TO '5.0.4';`
 
     `SELECT extname, extversion FROM pg_extension WHERE extname = 'spock';`
-
 
 6. Use psql to verify the node's replication status:
 
@@ -65,8 +69,8 @@ After stopping automatic DDL replication on all of the nodes in your cluster, up
     When you've upgraded the Spock extension on all of the nodes in your cluster, enable Auto-DDL (as needed):
 
     ```sql
-    ALTER SYSTEM SET spock.enable_ddl_replication = on;
+    SYSTEM SET spock.enable_ddl_replication = on;
     ALTER SYSTEM SET spock.include_ddl_repset = on;
-    SYSTEM SET spock.allow_ddl_from_functions = on;
+    ALTER SYSTEM SET spock.allow_ddl_from_functions = on;
     SELECT pg_reload_conf();
     ```

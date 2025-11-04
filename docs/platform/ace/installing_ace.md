@@ -4,7 +4,7 @@ ACE is a supporting component for pgEdge Distributed Postgres. You can install A
 
 1. Navigate to the directory where ACE will be installed and invoke the installer with the command: 
 
-    `python3 -c "$(curl -fsSL https://downloads.pgedge.com/platform/repos/download/install.py)`
+`python3 -c "$(curl -fsSL https://downloads.pgedge.com/platform/repos/download/install.py)`
 
 2. Create a directory named `cluster` in the `pgedge` directory created by the installer.
 
