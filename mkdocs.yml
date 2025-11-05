@@ -3,6 +3,10 @@ site_name: pgEdge Documentation
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  # Pulled from control-plane repo for install page
+  - /control-plane/scripts/generate-stack.js
+
 markdown_extensions:
   - admonition
   - pymdownx.details
