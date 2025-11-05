@@ -13,6 +13,11 @@ plugins:
   - multirepo:
       cleanup: true
       keep_docs_dir: false
+  - macros:
+      j2_variable_start_string: "<<"
+      j2_variable_end_string: ">>"
+      j2_comment_start_string: "<#"
+      j2_comment_end_string: "#>"
 
 theme: 
   name: material
@@ -49,6 +54,10 @@ theme:
 
 extra:
   generator: false
+  # These values are required for pgedge-helm documentation templating
+  # https://github.com/pgEdge/pgedge-helm/blob/main/mkdocs.yml#L52
+  cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.27/releases/cnpg-1.27.1.yaml
+  certmanager_manifest_url: https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
 
 copyright: Copyright &copy; 2023 - 2025 pgEdge, Inc
 repo_url: https://github.com/pgEdge
@@ -268,7 +277,9 @@ nav:
     - Troubleshooting: cloud/troubleshooting.md
     - pgEdge Distributed Postgres (Cloud Edition) Release Notes: cloud/cl_release_notes.md  
 
-  - pgEdge Containers: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
+  # Pinned to latest release - this should be updated when a new release is cut
+  # Macro variables under extra also need to be updated, if changed
+  - pgEdge Containers: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.0.4'
   - ACE: '!import https://github.com/pgEdge/ace.git?branch=main'
   - lolor: '!import https://github.com/pgEdge/lolor.git?branch=main'
   - Snowflake: '!import https://github.com/pgEdge/snowflake.git?branch=main'
