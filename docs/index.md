@@ -1,3 +1,9 @@
+---
+hide:
+  - toc
+  - navigation
+---
+
 # Welcome to pgEdge Documentation
 
 pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-master database capabilities to the network edge, enabling low-latency and high availability for modern workloads.
