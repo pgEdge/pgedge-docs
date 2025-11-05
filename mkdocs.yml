@@ -25,6 +25,7 @@ plugins:
       j2_comment_start_string: "<#"
       j2_comment_end_string: "#>"
   - redoc-tag
+  - gh-admonitions
 
 theme: 
   name: material
