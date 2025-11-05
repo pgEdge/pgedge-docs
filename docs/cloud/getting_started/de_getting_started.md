@@ -1,6 +1,6 @@
 # Getting Started with pgEdge Distributed Postgres (Cloud Edition) Developer Edition
 
-Signing up for Developer Edition is easy; simply navigate to [the pgEdge sign-in page](https://app.pgedge.com/login?plan=developer&screen_hint=signup) and provide a name and password, or log in with your Google or Github account. 
+Signing up for Developer Edition Cloud is easy; simply navigate to [the pgEdge sign-in page](https://app.pgedge.com/login?plan=developer&screen_hint=signup) and provide a name and password, or log in with your Google or Github account. 
 
 To convert a Developer Edition account to an Enterprise Edition account, reach out to the [pgEdge customer success team](https://www.pgedge.com/contact).
 

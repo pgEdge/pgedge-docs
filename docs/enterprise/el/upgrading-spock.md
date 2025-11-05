@@ -1,0 +1,72 @@
+# Upgrading Spock on a pgEdge Enterprise Postgres Installation
+
+Spock 5.0.4 is supported on PG versions 16, 17, and 18, running on:
+
+* RHEL 9 / 10
+* AlmaLinux
+* Rocky Linux
+* Oracle Enterprise Linux (OEL)
+
+Before performing an upgrade to a newer version of Spock, ensure you have a current backup of your system.
+
+1. Before starting to upgrade individual nodes, disable Auto-DDL on all of the nodes in your cluster:
+
+    ```sql
+    ALTER SYSTEM SET spock.enable_ddl_replication = off;
+    ALTER SYSTEM SET spock.include_ddl_repset = off;
+    ALTER SYSTEM SET spock.allow_ddl_from_functions = off;
+    SELECT pg_reload_conf();
+    ```
+After stopping automatic DDL replication on all of the nodes in your cluster, update the Spock extension on each node.
+
+2. Stop the Postgres Server:
+
+    `sudo systemctl stop postgresql-<xx>`
+
+    or
+
+    `pg_ctl -D /path/to/data stop -m fast`
+
+3. Upgrade the Spock package using your package manager:
+
+    `sudo dnf upgrade pgedge-spock50_<xx>`
+
+    For example, to upgrade to the latest version supported on Postgres 18, use the command:
+
+    `sudo dnf upgrade pgedge-spock50_18`
+
+4. Start the Postgres server:
+
+    `pg_ctl -D /path/to/data start`
+
+    or:
+
+    `systemctl start postgresql-18`
+
+5. Connect with psql and upgrade the version of the Spock Extension registered with Postgres:
+
+    `SELECT extname, extversion FROM pg_extension WHERE extname = 'spock';`
+
+    If the command does not return the latest Spock extension version, run the following commands:
+
+    `ALTER EXTENSION spock UPDATE TO '5.0.4';`
+
+    `SELECT extname, extversion FROM pg_extension WHERE extname = 'spock';`
+
+
+6. Use psql to verify the node's replication status:
+
+    ```sql
+    SELECT sub_name, sub_enabled FROM spock.subscription;
+    SELECT slot_name, active FROM pg_replication_slots;
+    SELECT * FROM spock.node;
+    ```
+
+    When you've upgraded the Spock extension on all of the nodes in your cluster, enable Auto-DDL (as needed):
+
+    ```sql
+    ALTER SYSTEM SET spock.enable_ddl_replication = on;
+    ALTER SYSTEM SET spock.include_ddl_repset = on;
+    SYSTEM SET spock.allow_ddl_from_functions = on;
+    SELECT pg_reload_conf();
+    ```

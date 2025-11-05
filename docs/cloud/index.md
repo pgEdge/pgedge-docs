@@ -2,7 +2,7 @@
 
 pgEdge Cloud offers single node or fully-distributed PostgreSQL, deployable across multiple cloud regions or data centers.
 
-## Fully distributed PostgreSQL made easy
+## Fully distributed PostgreSQL Made Easy
 
 **Multi-Region and Multi-Cloud:** Deploy nodes across multiple cloud provider regions to provide optimal placement relative to your users. Cloud provisions clusters on AWS, Azure and Google Cloud.
 
