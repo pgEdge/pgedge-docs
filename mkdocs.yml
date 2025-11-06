@@ -66,7 +66,7 @@ extra:
   # https://github.com/pgEdge/pgedge-helm/blob/main/mkdocs.yml#L52
   cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.27/releases/cnpg-1.27.1.yaml
   certmanager_manifest_url: https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
-  control_plane_version: v0.5.0-rc.1
+  control_plane_version: v0.5.0-rc.2
 
 copyright: Copyright &copy; 2023 - 2025 pgEdge, Inc
 repo_url: https://github.com/pgEdge
@@ -293,7 +293,7 @@ nav:
   - lolor: '!import https://github.com/pgEdge/lolor.git?branch=main'
   - Snowflake: '!import https://github.com/pgEdge/snowflake.git?branch=main'
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
-  - Control Plane: '!import https://github.com/pgEdge/control-plane.git?branch=docs/PLAT-155/multirepo-docs-fixes'
+  - Control Plane: '!import https://github.com/pgEdge/control-plane.git?branch=v0.5.0-rc.2'
 
 
 
