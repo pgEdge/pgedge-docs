@@ -18,6 +18,7 @@ pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-
 ## Component Documentation
 
 * [ACE (Active Consistency Engine)](ace/index.md): Data integrity for replicating clusters.
+* [Control Plane](control-plane/index.md): A distributed application that provides a declarative API to deploy and manage Postgres databases.
 * [lolor](lolor/index.md): A large object replication extension for Postgres.
 * [Snowflake](snowflake/index.md): Cluster-wide unique (Snowflake) sequence extension for Postgres.
 * [Spock v5](spock-v5/index.md): Multi-master replication for Postgres.
