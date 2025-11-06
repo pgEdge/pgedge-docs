@@ -17,7 +17,7 @@ The command-line interface (CLI) supports deploying a new cluster with pgBackRes
 ```sh
 export PGBACKREST_REPO1_S3_KEY=AIYFHTUKJVOLPLPEN
 export PGBACKREST_REPO1_S3_BUCKET=bucket-876t3xpf
-export PGBACKREST_REPO1_S3_KEY_SECRET=G9tl9pTwj2+yTKLO3qMjeKG9a7Gk4mo
+export PGBACKREST_REPO1_S3_KEY_SECRET=G9tl9mpTwj2+yTKLO3qMjeKG9a7Gk4mo
 export PGBACKREST_REPO1_S3_ENDPOINT=s3.amazonaws.com
 export PGBACKREST_REPO1_S3_REGION=eu-west-2
 ```
