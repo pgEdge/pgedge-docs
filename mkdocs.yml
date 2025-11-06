@@ -184,7 +184,7 @@ nav:
   # - ACE: '!import https://github.com/pgEdge/ace.git?branch=ace_go_docs'
   - lolor: '!import https://github.com/pgEdge/lolor.git?branch=main'
   - Snowflake: '!import https://github.com/pgEdge/snowflake.git?branch=main'
-  - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=spoc_243'
+  - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=spoc-243-v2'
 
 
   
