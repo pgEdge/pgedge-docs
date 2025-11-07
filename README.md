@@ -1,8 +1,5 @@
 # pgEdge Documentation
 
-__WARNING: This is a v2.0 Work In Progress. See the pgedge-docs-sandbox repo 
-for the current docs.__
-
 This repository contains the core pgEdge product documentation and 
 infrastructure for generating the docs website. It is based on 
 [MkDocs](https://www.mkdocs.org), using the 
