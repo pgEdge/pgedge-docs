@@ -83,7 +83,7 @@ After confirming that each node is `ACTIVE` and has minimal replication lag, you
 
 ### Performing a Minor Version Upgrade with the CLI
 
-You can use the CLI's [Upgrade Manager (UM) module](../pgedge_commands/um.md) to perform a minor version upgrade of Spock.  To upgrade the installed version of Spock, navigate into the `pgedge` directory and invoke the command:
+You can use the CLI's [Upgrade Manager (UM) module](../pgedge_commands/um/index.md) to perform a minor version upgrade of Spock.  To upgrade the installed version of Spock, navigate into the `pgedge` directory and invoke the command:
 
 `./pgedge um upgrade spockXX`
 

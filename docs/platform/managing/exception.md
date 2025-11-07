@@ -12,7 +12,7 @@ One example of a replication error that can induce a protective pause occurs if 
 
 You can customize exception logging behavior related to a failed `INSERT`, `UPDATE`, or `DELETE` statement for your cluster by setting the GUC values that follow. These GUCs allow you to specify behaviors on a granular level, applying the actions you choose for operations within a transaction, rather than to an entire transaction. Note that changes to these GUCs require a system restart to apply.
 
-To set the values and reload the server, use the CLI's [`db guc-set` command](../pgedge_commands/db.md):
+To set the values and reload the server, use the CLI's [`db guc-set` command](../pgedge_commands/db/index.md):
 
 `./pgedge db guc-set guc_name guc_value`
 

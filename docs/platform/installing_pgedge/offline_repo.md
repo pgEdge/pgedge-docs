@@ -8,7 +8,7 @@ pgEdge provides a package you can use to create an offline repository if your in
 
 **Updating and Upgrading the pgEdge CLI:** Refresh metadata and upgrade the pgEdge command line interface (CLI) on each node.
 
-**Upgrading Components:** Upgrade individual components (for example, Spock or Snowflake) to their latest versions using the [CLI Update Manager](../pgedge_commands/um.md).
+**Upgrading Components:** Upgrade individual components (for example, Spock or Snowflake) to their latest versions using the [CLI Update Manager](../pgedge_commands/um/index.md).
 
 The following sections provide detailed instructions, including commands and configuration steps, for each part of the process.
 

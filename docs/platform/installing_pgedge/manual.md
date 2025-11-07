@@ -19,7 +19,7 @@ Then, install the CLI on each node with the command:
 
 Paste the command into your command line client and press `Return`.
 
-After [installing the CLI](../installing_pgedge/manual.md), you can use the CLI's [`setup` command](../pgedge_commands/setup.md) to create a cluster. The `setup` command supports clauses that specify details such as:
+After [installing the CLI](../installing_pgedge/manual.md), you can use the CLI's [`setup` command](../pgedge_commands/setup/index.md) to create a cluster. The `setup` command supports clauses that specify details such as:
 
  * the name of the user that will own the database (`-U` or `--User=user_name`); required
  * the password for the user (`-P` or `--passwd=password`); required
@@ -38,7 +38,7 @@ After [installing the CLI](../installing_pgedge/manual.md), you can use the CLI'
 * [Snowflake](https://github.com/pgEdge/snowflake), an extension that provides robust sequences for distributed clusters.
 * other extensions that support database management on a distributed cluster.
 
-On each server that will host a cluster node, move into the `pgedge` directory, and invoke the [`setup`](../pgedge_commands/setup.md) command: 
+On each server that will host a cluster node, move into the `pgedge` directory, and invoke the [`setup`](../pgedge_commands/doc/setup.md) command: 
 
 `./pgedge setup -U db_superuser_name -P db_superuser_password -d db_name`
 
@@ -52,7 +52,7 @@ The `setup` command also creates a [Postgres replication role](https://www.postg
 
 ## Creating Nodes
 
-After installing the CLI and running [setup](../pgedge_commands/setup.md), we'll use [spock node-create](../pgedge_commands/doc/spock-node-create.md) to create a *replication node* on each host. A replication node is a named collection of databases, tables, and other artifacts that are replicated via a Spock subscription. The syntax is:
+After installing the CLI and running [setup](../pgedge_commands/doc/setup.md), we'll use [spock node-create](../pgedge_commands/doc/spock-node-create.md) to create a *replication node* on each host. A replication node is a named collection of databases, tables, and other artifacts that are replicated via a Spock subscription. The syntax is:
 
 `./pgedge spock node-create node_name 'host=IP_address_of_n1 user=replication_user_name dbname=db_name' db_name`
 
@@ -174,7 +174,7 @@ db_name=# SELECT sub_id, sub_name, sub_slot_name, sub_replication_sets FROM spoc
 (1 row)
 ```
 
-The `sub_replication_sets` column shown above displays the system-created replication sets. You can add custom replication sets with the [`spock repset-create`](../pgedge_commands/spock.md) and [`spock sub-add-repset`](../pgedge_commands/spock.md) commands.
+The `sub_replication_sets` column shown above displays the system-created replication sets. You can add custom replication sets with the [`spock repset-create`](../pgedge_commands/doc/spock-repset-create.md) and [`spock sub-add-repset`](../pgedge_commands/doc/spock-sub-add-repset.md) commands.
 
 ## Testing Replication
 

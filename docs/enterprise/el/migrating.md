@@ -75,7 +75,7 @@ To perform a migration from an older major version of community Postgres to a mo
 
     `sudo dnf config-manager --disable pgdg*`
 
-2. [Enable the `pgedge` repository](../el/configuring.md) with the commands:
+2. [Enable the `pgedge` repository](../el/configure-repo.md) with the commands:
 
     `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
   

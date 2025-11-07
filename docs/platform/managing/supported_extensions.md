@@ -1,6 +1,6 @@
 # Managing Extensions on a pgEdge Distributed Postgres (VM Edition) Cluster 
 
-You can use VM Edition's command-line interface (CLI) and the Update Manager [(um)](../pgedge_commands/um.md) module to help manage extensions on a pgEdge cluster. Command options let you install, remove, upgrade, and check the availability of extensions for your Postgres installation. 
+You can use VM Edition's command-line interface (CLI) and the Update Manager [(um)](../pgedge_commands/um/index.md) module to help manage extensions on a pgEdge cluster. Command options let you install, remove, upgrade, and check the availability of extensions for your Postgres installation. 
 
 To find a list of the available build versions and build dates for components that Update Manager can add to your cluster, navigate into the `pgedge` directory, and invoke the command:
 

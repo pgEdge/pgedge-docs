@@ -126,7 +126,7 @@ db_name=# SELECT sub_id, sub_name, sub_slot_name, sub_replication_sets  FROM spo
 (2 rows)
 ```
 
-The `sub_replication_sets` column shown above displays the system-created replication sets. You can add custom replication sets with the [`spock repset-create`](../pgedge_commands/spock.md) and [`spock sub-add-repset`](../pgedge_commands/spock.md) commands.
+The `sub_replication_sets` column shown above displays the system-created replication sets. You can add custom replication sets with the [`spock repset-create`](../pgedge_commands/spock/index.md) and [`spock sub-add-repset`](../pgedge_commands/spock/index.md) commands.
 
 ### Test Replication
 
