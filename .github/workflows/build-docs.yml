@@ -1,8 +1,5 @@
 name: Build Docs
 
-# Note: we use a custom port (and installation directory on Windows) for
-# PostgreSQL as the runners may already have a version installed.
-
 on:
   push:
     branches: [ "main" ]
