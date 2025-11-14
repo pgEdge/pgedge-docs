@@ -1,5 +1,9 @@
 # pgEdge Distributed Postgres (VM Edition) Release Notes
 
+## v25.4.0 on 2025-11-13
+
+  - Added support for updated Postgres versions 18.1, 17.7, and 16.11.
+
 ## v25.3.0 on 2025-10-22
 
   - Added support for Spock 5.0.4; for release details, see the [release notes](https://github.com/pgEdge/spock/blob/main/docs/spock_release_notes.md).
