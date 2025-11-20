@@ -92,6 +92,7 @@ nav:
       - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
       - Upgrading Spock: enterprise/debian/upgrading-spock.md
       - Creating an Offline Repo: enterprise/debian/offline.md
+    - Troubleshooting: enterprise/troubleshooting.md
 
   - pgEdge Distributed Postgres:
     - CLI Overview: platform/index.md

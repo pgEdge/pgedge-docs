@@ -6,6 +6,10 @@ The pgEdge Discord server is accessible at:  [pgedge.com/contact](https://discor
 
 ## Public key for pgedge-release-latest.noarch.rpm is not installed; Error: GPG check FAILED
 
+!!! note
+
+    This issue was reported on OEL 10.
+
 When installing Enterprise Postgres packages, you will run into installation issues if your certificate is rejected:
 
 ```bash
