@@ -57,11 +57,12 @@ When you install pgEdge Enterprise Postgres on a Debian host, the cluster is aut
 
 For example:
 
-    ```bash
-    sudo pg_lsclusters
-    Ver Cluster Port Status Owner    Data directory              Log file
-    18  main    5432 online postgres /var/lib/postgresql/18/main /var/log/postgresql/postgresql-18-main.log
-    ```
+  ```bash
+  sudo pg_lsclusters
+  Ver Cluster Port Status Owner    Data directory              Log file
+  18  main    5432 online postgres /var/lib/postgresql/18/main /var/log/postgresql
+  postgresql-18-main.log
+  ```
 
 You can use [`pg_ctl`](https://www.postgresql.org/docs/18/app-pg-ctl.html) to control the service on a Debian host; for example, to stop the service, use the command:
 
