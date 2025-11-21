@@ -94,8 +94,9 @@ nav:
       - Upgrading Spock: enterprise/debian/upgrading-spock.md
       - Creating an Offline Repo: enterprise/debian/offline.md
     - Troubleshooting: enterprise/troubleshooting.md
-
   - pgEdge Distributed Postgres:
+      - Overview: distributed/index.md
+  - Platform CLI:
     - CLI Overview: platform/index.md
     - Prerequisites - Preparing your System:
       - Supported Operating Systems: platform/prerequisites/platforms.md
