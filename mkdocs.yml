@@ -295,7 +295,7 @@ nav:
   - lolor: '!import https://github.com/pgEdge/lolor.git?branch=main'
   - Snowflake: '!import https://github.com/pgEdge/snowflake.git?branch=main'
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
-  - Control Plane: '!import https://github.com/pgEdge/control-plane.git?branch=main'
+  - Control Plane: '!import https://github.com/pgEdge/control-plane.git?branch=v0.5.1'
 
 
 
