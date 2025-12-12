@@ -98,6 +98,7 @@ extra:
   control_plane_version: v0.5.1
 
   # Navigation dropdown categories - maps nav item titles to dropdown menus
+  # Use simple string for auto-detected URLs, or {title: url} for explicit URLs
   nav_categories:
     Products:
       - pgEdge Enterprise Postgres
@@ -112,9 +113,12 @@ extra:
       - pgEdge Vectorizer
     Tools:
       - Control Plane
-      - pgEdge Anonymizer
-      - pgEdge Docloader
-      - pgEdge RAG Server
+      - title: pgEdge Anonymizer
+        url: pgedge-anonymizer/
+      - title: pgEdge Docloader
+        url: pgedge-docloader/
+      - title: pgEdge RAG Server
+        url: pgedge-rag-server/
 
 copyright: Copyright &copy; 2023 - 2025 pgEdge, Inc –
   <a href="#__consent">Change cookie settings</a>
@@ -349,6 +353,6 @@ nav:
 
   # Preview products
   - pgEdge Anonymizer: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=main'
-  - pgEdge Docloader: '!import https://github.com/pgEdge/pgedge-docloader?branch=main'
-  - pgEdge RAG Server: '!import https://github.com/pgEdge/pgedge-rag-server?branch=main'
+  - pgEdge Docloader: '!import https://github.com/pgEdge/pgedge-docloader?branch=v1.0.0-alpha5'
+  - pgEdge RAG Server: '!import https://github.com/pgEdge/pgedge-rag-server?branch=v1.0.0-alpha5'
   - pgEdge Vectorizer: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0-alpha3'

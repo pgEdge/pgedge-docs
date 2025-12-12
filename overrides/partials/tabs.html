@@ -16,22 +16,37 @@
     </svg>
   </button>
   <ul class="md-tabs__dropdown-menu">
-    {% for nav_item in nav_items %}
-      {% set item_title = nav_item.title | striptags | trim %}
-      {% if item_title in category_items %}
-        {% if nav_item.url and nav_item.url != "." %}
-          {% set item_url = nav_item.url %}
-        {% elif nav_item.children %}
-          {% set item_url = nav_item.children | first | attr("url") %}
-        {% else %}
-          {% set item_url = "." %}
-        {% endif %}
-        <li class="md-tabs__dropdown-item">
-          <a href="{{ item_url | url }}" class="md-tabs__dropdown-link">
-            {{ item_title }}
-          </a>
-        </li>
+    {# Process each category item - can be string or {title, url} object #}
+    {% for cat_item in category_items %}
+      {% if cat_item is string %}
+        {% set cat_title = cat_item %}
+        {% set cat_url = none %}
+      {% else %}
+        {% set cat_title = cat_item.title %}
+        {% set cat_url = cat_item.url %}
       {% endif %}
+
+      {# Find matching nav item and render link #}
+      {% for nav_item in nav_items %}
+        {% set nav_title = nav_item.title | striptags | trim %}
+        {% if nav_title == cat_title %}
+          {# Use explicit URL if provided, otherwise detect from nav #}
+          {% if cat_url %}
+            {% set item_url = cat_url %}
+          {% elif nav_item.url and nav_item.url != "." %}
+            {% set item_url = nav_item.url %}
+          {% elif nav_item.children %}
+            {% set item_url = nav_item.children | first | attr("url") %}
+          {% else %}
+            {% set item_url = "." %}
+          {% endif %}
+          <li class="md-tabs__dropdown-item">
+            <a href="{{ item_url | url }}" class="md-tabs__dropdown-link">
+              {{ nav_title }}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
     {% endfor %}
   </ul>
 </li>
