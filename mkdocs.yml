@@ -352,7 +352,8 @@ nav:
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
   - Control Plane: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
-  # Preview products
+  # Preview
+  - pgEdge MCP Server: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=main'
   - pgEdge Anonymizer: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=main'
   - pgEdge Docloader: '!import https://github.com/pgEdge/pgedge-docloader?branch=main'
   - pgEdge RAG Server: '!import https://github.com/pgEdge/pgedge-rag-server?branch=main'
