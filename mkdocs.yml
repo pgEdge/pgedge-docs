@@ -91,7 +91,7 @@ extra:
       - accept
       - reject
       - manage
-      
+
   # These values are required for pgedge-helm documentation templating
   # https://github.com/pgEdge/pgedge-helm/blob/main/mkdocs.yml#L52
   cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.27/releases/cnpg-1.27.1.yaml
@@ -130,7 +130,7 @@ nav:
 
   - pgEdge Enterprise Postgres:
     - Enterprise Edition: enterprise/index.md
-    - Enterprise Linux 9 & 10: 
+    - Enterprise Linux 9 & 10:
       - Enterprise Linux Version Support: enterprise/el/index.md
       - Getting Started - Configuring the Repository: enterprise/el/configure-repo.md
       - Installing Postgres: enterprise/el/installing.md
@@ -138,7 +138,7 @@ nav:
       - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
-    - Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS: 
+    - Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS:
       - Debian & Ubuntu Version Support: enterprise/debian/index.md
       - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
       - Installing Postgres: enterprise/debian/installing.md
@@ -185,7 +185,7 @@ nav:
       - Scheduling ACE Operations and Repairs: platform/ace/schedule_ace.md
     - CLI Reference:
       - Using the CLI: platform/pgedge_commands/index.md
-      - ace Commands: 
+      - ace Commands:
         - ACE commands: platform/pgedge_commands/ace/index.md
         - ace-mtree: platform/pgedge_commands/doc/ace-mtree.md
         - ace-repset-diff: platform/pgedge_commands/doc/ace-repset-diff.md
@@ -196,7 +196,7 @@ nav:
         - ace-table-diff: platform/pgedge_commands/doc/ace-table-diff.md
         - ace-table-repair: platform/pgedge_commands/doc/ace-table-repair.md
         - ace-table-rerun: platform/pgedge_commands/doc/ace-table-rerun.md
-      - db Commands: 
+      - db Commands:
         - db Commands: platform/pgedge_commands/db/index.md
         - db-create: platform/pgedge_commands/doc/db-create.md
         - db-guc-set: platform/pgedge_commands/doc/db-guc-set.md
@@ -221,11 +221,11 @@ nav:
         - cluster-replication-begin: platform/pgedge_commands/doc/cluster-replication-begin.md
         - cluster-replication-check: platform/pgedge_commands/doc/cluster-replication-check.md
         - cluster-ssh: platform/pgedge_commands/doc/cluster-ssh.md
-      - localhost Commands: 
+      - localhost Commands:
         - localhost Commands: platform/pgedge_commands/localhost/index.md
         - localhost-cluster-create: platform/pgedge_commands/doc/localhost-cluster-create.md
         - localhost-cluster-deploy: platform/pgedge_commands/doc/localhost-cluster-destroy.md
-      - service Commands: 
+      - service Commands:
         - service Commands: platform/pgedge_commands/service/index.md
         - service-config: platform/pgedge_commands/doc/service-config.md
         - service-disable: platform/pgedge_commands/doc/service-disable.md
@@ -236,10 +236,10 @@ nav:
         - service-start: platform/pgedge_commands/doc/service-start.md
         - service-status: platform/pgedge_commands/doc/service-status.md
         - service-stop: platform/pgedge_commands/doc/service-stop.md
-      - The setup Command: 
+      - The setup Command:
         - The setup Command: platform/pgedge_commands/setup/index.md
         - setup: platform/pgedge_commands/doc/setup.md
-      - spock Commands: 
+      - spock Commands:
         - spock Commands: platform/pgedge_commands/spock/index.md
         - spock-health-check: platform/pgedge_commands/doc/spock-health-check.md
         - spock-metrics-check: platform/pgedge_commands/doc/spock-metrics-check.md
@@ -272,7 +272,7 @@ nav:
         - spock-sub-show-table: platform/pgedge_commands/doc/spock-sub-show-table.md
         - spock-sub-wait-for-sync: platform/pgedge_commands/doc/spock-sub-wait-for-sync.md
         - spock-table-wait-for-sync: platform/pgedge_commands/doc/spock-table-wait-for-sync.md
-      - update manager Commands: 
+      - update manager Commands:
         - um Commands: platform/pgedge_commands/um/index.md
         - um-clean.md: platform/pgedge_commands/doc/um-clean.md
         - um-download.md: platform/pgedge_commands/doc/um-download.md
@@ -287,10 +287,10 @@ nav:
 
   - pgEdge Cloud:
     - Cloud Edition: cloud/index.md
-    - Getting Started: 
+    - Getting Started:
       - Enterprise Edition: cloud/getting_started/ee_getting_started.md
       - Developer Edition: cloud/getting_started/de_getting_started.md
-    - Prerequisites: 
+    - Prerequisites:
       - Adding an SSH Key: cloud/prerequisites/ssh_key.md
       - Linking and Managing your Cloud Provider Accounts:
         - Managing Cloud Provider Accounts: cloud/prerequisites/cloud_accounts/index.md
@@ -309,19 +309,19 @@ nav:
       - Reviewing your Databases: cloud/database/index.md
       - Creating a Database: cloud/database/create_db.md
       - Managing a Database: cloud/database/manage_db.md
-    - Modifying a Database or a Cluster: 
+    - Modifying a Database or a Cluster:
       - Using the Actions Menu: cloud/mod_cluster/actions.md
       - Adding a Database or Cluster Node: cloud/mod_cluster/add.md
       - Dropping a Database, Node, or Cluster: cloud/mod_cluster/drop.md
       - Modifying a Database, Node, or Cluster: cloud/mod_cluster/modify.md
-    - Database Administration: 
+    - Database Administration:
       - Creating and Managing Tables: cloud/database_admin/table_mgmt.md
       - Using Integrations: cloud/database_admin/integrations.md
       - Reviewing Database Metrics: cloud/database_admin/metrics.md
       - Viewing Log Files: cloud/database_admin/logs.md
       - Reviewing Backup Details: cloud/database_admin/backup_details.md
       - Using Postgres Extensions: cloud/database_admin/extensions.md
-    - Connecting to a Database: 
+    - Connecting to a Database:
       - Connecting to your Database or Cluster: cloud/connecting/index.md
       - Connecting with SSH: cloud/connecting/ssh.md
       - Connecting with psql: cloud/connecting/psql.md
@@ -341,7 +341,7 @@ nav:
     - Settings: cloud/settings.md
     - Team Resources: cloud/teams.md
     - Troubleshooting: cloud/troubleshooting.md
-    - pgEdge Distributed Postgres (Cloud Edition) Release Notes: cloud/cl_release_notes.md  
+    - pgEdge Distributed Postgres (Cloud Edition) Release Notes: cloud/cl_release_notes.md
 
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed
@@ -354,6 +354,6 @@ nav:
 
   # Preview products
   - pgEdge Anonymizer: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=main'
-  - pgEdge Docloader: '!import https://github.com/pgEdge/pgedge-docloader?branch=v1.0.0-alpha5'
-  - pgEdge RAG Server: '!import https://github.com/pgEdge/pgedge-rag-server?branch=v1.0.0-alpha5'
+  - pgEdge Docloader: '!import https://github.com/pgEdge/pgedge-docloader?branch=main'
+  - pgEdge RAG Server: '!import https://github.com/pgEdge/pgedge-rag-server?branch=main'
   - pgEdge Vectorizer: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0-alpha3'
