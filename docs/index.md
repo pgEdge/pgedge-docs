@@ -34,4 +34,4 @@ pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-
 * [pgEdge RAG Server](pgedge-rag-server/index.md): An API server for running RAG (Retrieval-Augmented Generation) queries based on documents stored in Postgres, supporting multiple pipelines and LLMs/models.
 * [pgEdge Vectorizer](pgedge-vectorizer/index.md): A Postgres extension for chunking and vectorising documents in Postgres for semantic search with pgvector.
 
-The AI-enabling extensions used by the pgEdge Agentic AI Toolkit are distributed via the [pgEdge Enterprise Postgres](enterprise/index.md) Repository, and are built into the standard images used by both the Control Plane (control-plane/index.md) and the pgEdge Containers HELM chart (pgedge-containers/index.md).
+The AI-enabling extensions used by the pgEdge Agentic AI Toolkit are distributed via the [pgEdge Enterprise Postgres](enterprise/index.md) Repository, and are built into the standard images used by the [Control Plane](control-plane/index.md) and the [pgEdge Containers HELM chart](pgedge-containers/index.md).
