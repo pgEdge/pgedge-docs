@@ -96,7 +96,7 @@ extra:
   # https://github.com/pgEdge/pgedge-helm/blob/main/mkdocs.yml#L52
   cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.27/releases/cnpg-1.27.1.yaml
   certmanager_manifest_url: https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
-  control_plane_version: v0.5.1
+  control_plane_version: v0.6.0
 
   # Navigation dropdown categories - maps nav item titles to dropdown menus
   # Use simple string for auto-detected URLs, or {title: url} for explicit URLs
@@ -352,7 +352,7 @@ nav:
   - lolor: '!import https://github.com/pgEdge/lolor.git?branch=main'
   - Snowflake: '!import https://github.com/pgEdge/snowflake.git?branch=main'
   - Spock v5: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
-  - Control Plane: '!import https://github.com/pgEdge/control-plane.git?branch=main'
+  - Control Plane: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.0'
 
   # AI Toolkit
   - pgEdge Postgres MCP Server: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=main'
