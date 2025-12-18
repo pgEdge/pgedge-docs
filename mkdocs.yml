@@ -103,7 +103,7 @@ extra:
   # https://github.com/pgEdge/pgedge-helm/blob/main/mkdocs.yml#L52
   cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.27/releases/cnpg-1.27.1.yaml
   certmanager_manifest_url: https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
-  control_plane_version: v0.5.1
+  control_plane_version: v0.6.0
 
   # Versioned documentation - list docsets that have multiple versions
   # Versions are auto-detected from nav structure
@@ -402,7 +402,6 @@ nav:
 
   - Control Plane: 
     - v0.6.0: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.0'
-    - v0.5.0: '!import https://github.com/pgEdge/control-plane.git?branch=v0.5.0'
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
   # AI Toolkit - pgEdge Postgres MCP Server (versioned documentation)
