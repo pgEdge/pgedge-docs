@@ -101,9 +101,9 @@ extra:
       
   # These values are required for pgedge-helm documentation templating
   # https://github.com/pgEdge/pgedge-helm/blob/main/mkdocs.yml#L52
-  cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.27/releases/cnpg-1.27.1.yaml
+  cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.yaml
   certmanager_manifest_url: https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
-  control_plane_version: v0.6.0
+  control_plane_version: v0.6.1
 
   # Versioned documentation - list docsets that have multiple versions
   # Versions are auto-detected from nav structure
@@ -378,8 +378,7 @@ nav:
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed
   - pgEdge Containers: 
-    - v0.0.4: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.0.4'
-    - v0.0.3: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.0.3'
+    - v0.1: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.1.0'
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE: 
@@ -401,7 +400,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
 
   - Control Plane: 
-    - v0.6.0: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.0'
+    - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.1'
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
   # AI Toolkit - pgEdge Postgres MCP Server (versioned documentation)
