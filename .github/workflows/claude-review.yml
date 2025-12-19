@@ -1,0 +1,56 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  claude-review:
+    # Run on PR events, or on comments that mention @claude
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          show_full_output: true
+          claude_args: "--allowedTools 'mcp__github__*,mcp__github_inline_comment__*,Bash(gh pr *:*),Bash(gh issue *:*),Read,Glob,Grep'"
+          prompt: |
+            You are reviewing PR #${{ github.event.pull_request.number }} in the ${{ github.repository }} repository.
+
+            This project is a documentation website, combining documents from other projects with local content.
+            Review documentation changes in this pull request following the styleguide in /pgedge_stylesheet.md.
+
+            Focus on:
+            - Ensuring documentation changes meet the stylesheet requirements
+            - Security issues (SQL injection, auth bypasses, input validation), in documented examples or code
+            - Code style (4-space indentation, language best practices), for non-documentation changes
+            - Project documentation (the top level README) updates if needed
+
+            IMPORTANT: After your review, you MUST post a comment on the PR using the
+            mcp__github__create_pull_request_review tool or the gh pr comment command.
+            Do not just analyze - actually post your review as a PR comment.
+
+            Be constructive and specific. If changes look good, say so briefly.
+        env:
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
