@@ -9,7 +9,7 @@ distribution - a robust shared architecture allows you to install your
 Postgres deployment across multiple data centers, in containers, or in bare
 metal deployments with enterprise-quality tooling.
 
-| pgEdge Feature | [<span style="color: blue; font-size: 1.2em;">pgEdge Enterprise Postgres</span>](enterprise/index.md) | [<span style="color: blue; font-size: 1.2em;">pgEdge Cloud</span>](cloud/cloud) | [<span style="color: blue; font-size: 1.2em;">Containers</span>](pgedge-containers) | [<span style="color: blue; font-size: 1.2em;">pgEdge Distributed Postgres</span>](platform/index.md) |
+| pgEdge Feature | [<span style="color: blue; font-size: 1.2em;">pgEdge Enterprise Postgres</span>](enterprise/) | [<span style="color: blue; font-size: 1.2em;">pgEdge Cloud</span>](/cloud/) | [<span style="color: blue; font-size: 1.2em;">Containers</span>](pgedge-containers/) | [<span style="color: blue; font-size: 1.2em;">pgEdge Distributed Postgres</span>](platform/) |
 |---------|:---:|:---:|:---:|:---:|
 | [<span style="color: blue; font-size: 1.2em;">ACE</span>](ace/) ensures and maintains data consistency across nodes. | ✓ | - | ✓ | ✓ |
 | [<span style="color: blue; font-size: 1.2em;">Control Plane</span>](control-plane/) provides a CLI for managing distributed clusters. | ✓ | ✓ | ✓ | ✓ |
