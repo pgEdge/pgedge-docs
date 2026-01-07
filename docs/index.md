@@ -4,41 +4,29 @@ hide:
   - navigation
 ---
 
-# Welcome to pgEdge Documentation
+pgEdge Postgres is designed for high availability and global
+distribution - a robust shared architecture allows you to install your
+Postgres deployment across multiple data centers, in containers, or in bare
+metal deployments with enterprise-quality tooling.
 
-pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-master database capabilities to the network edge, enabling low-latency and high availability for modern workloads.
+| pgEdge Feature | [pgEdge Enterprise Postgres](enterprise/index.md) | [pgEdge Cloud](cloud/cloud) | [Containers](pgedge-containers) | [pgEdge Distributed Postgres](platform/index.md) |
+|---------|:---:|:---:|:---:|:---:|
+| [ACE](ace/) *ensures and maintains data consistency across nodes.* | ✓ | - | ✓ | ✓ |
+| [Control Plane](control-plane/) *provides a CLI for managing distributed clusters.* | ✓ | ✓ | ✓ | ✓ |
+| [lolor Extension](lolor/) *provides logical-logical replication for data sync.* | ✓ | ~ | ✓ | ✓ |
+| [pgEdge Anonymizer](pgedge-anonymizer/) *enables data masking for compliance.* | ✓ | ~ | ✓ | ✓ |
+| [pgEdge Docloader](pgedge-docloader/) *loads unstructured data for AI applications.* | ✓ | ~ | ✓ | ✓ |
+| [pgedge-loadgen](pgedge-loadgen/) *provides performance testing and benchmarking.* | ✓ | ~ | ✓ | ✓ |
+| [pgEdge Postgres MCP Server](pgedge-postgres-mcp-server/) *implements AI agent protocol.* | ✓ | ~ | ✓ | ✓ |
+| [pgEdge RAG Server](pgedge-rag-server/) *enables retrieval-augmented generation.* | ✓ | ~ | ✓ | ✓ |
+| [pgEdge Vectorizer Extension](pgedge-vectorizer/) *generates automatic vector embeddings.* | ✓ | ~ | ✓ | ✓ |
+| [radar](radar/) *provides cluster monitoring and observability.* | ✓ | - | ✓ | ✓ |
+| [Snowflake Extension](snowflake/) *is a foreign data wrapper for querying Snowflake.* | ✓ | - | ✓ | ✓ |
+| [Spock Extension](spock-v5/) *enables multi-master logical replication.* | ✓ | ✓ | ✓ | ✓ |
 
-## Product Suite Documentation
+Legend:
 
-* [pgEdge Enterprise Postgres](enterprise/index.md): An enterprise ready Postgres distribution for VMs and bare metal.
-* [pgEdge Distributed Postgres](platform/index.md): Multi-master Postgres for VMs and bare metal.
-* [pgEdge Cloud](cloud/index.md): Deploy single node or fully-distributed Postgres in the Cloud.
-* [pgEdge Containers](pgedge-containers/index.md): Deploy single node or fully-distributed Postgres on Kubernetes.
+    ✓ = included / first-class support
+    ~ = integrates or optional
+    — = not typically used with distribution
 
-## Component Documentation
-
-* [ACE (Active Consistency Engine)](ace/index.md): Data integrity for replicating clusters.
-* [Control Plane](control-plane/index.md): A distributed application that provides a declarative API to deploy and manage Postgres databases.
-* [lolor](lolor/index.md): A large object replication extension for Postgres.
-* [Snowflake](snowflake/index.md): Cluster-wide unique (Snowflake) sequence extension for Postgres.
-* [Spock v5](spock-v5/index.md): Multi-master replication for Postgres.
-
-## pgEdge Agentic AI Toolkit for Postgres
-
-!!! warning "Early Development"
-    The products listed below are previews intended for early development and experimentation only. They are not recommended for production use without comprehensive testing.
-
-* [pgEdge Postgres MCP Server](pgedge-postgres-mcp-server/index.md): The MCP server allows you to use natural language queries when interacting with a Postgres database.
-* [pgEdge Anonymizer](pgedge-anonymizer/index.md): A command line tool for replacing PII and other sensitive data in copies of production databases for dev/test.
-* [pgEdge Docloader](pgedge-docloader/index.md): A command line tool for loading and maintaining documents in Postgres.
-* [pgEdge RAG Server](pgedge-rag-server/index.md): An API server for running RAG (Retrieval-Augmented Generation) queries based on documents stored in Postgres, supporting multiple pipelines and LLMs/models.
-* [pgEdge Vectorizer](pgedge-vectorizer/index.md): A Postgres extension for chunking and vectorising documents in Postgres for semantic search with pgvector.
-
-The AI-enabling extensions used by the pgEdge Agentic AI Toolkit are distributed via the [pgEdge Enterprise Postgres](enterprise/index.md) Repository, and are built into the standard images used by the [Control Plane](control-plane/index.md) and the [pgEdge Containers HELM chart](pgedge-containers/index.md).
-
-## pgEdge Tools and Utilities
-
-Useful tools and utilities from the development team at pgEdge:
-
-* [pgedge-loadgen](pgedge-loadgen/index.md): A CLI tool for generating realistic PostgreSQL workloads. Creates schemas for fictional applications, populates them with test data, and runs load simulations with temporal usage patterns.
-* [radar](radar/index.md): Agentless, zero-dependency diagnostic data collection tool for PostgreSQL and system metrics.

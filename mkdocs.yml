@@ -144,6 +144,13 @@ extra:
         url: snowflake/
       - title: Spock v5
         url: spock-v5/
+    AI Toolkit:
+      - title: pgEdge Postgres MCP Server
+        url: pgedge-postgres-mcp-server/
+      - title: pgEdge RAG Server
+        url: pgedge-rag-server/
+      - title: pgEdge Vectorizer
+        url: pgedge-vectorizer/
     Tools:
       - title: ACE
         url: ace/
@@ -155,10 +162,6 @@ extra:
         url: pgedge-docloader/
       - title: pgEdge Loadgen
         url: pgedge-loadgen/
-      - title: pgEdge Postgres MCP Server
-        url: pgedge-postgres-mcp-server/
-      - title: pgEdge RAG Server
-        url: pgedge-rag-server/
       - title: Radar
         url: radar/
 
@@ -413,11 +416,11 @@ nav:
     - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.2'
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
-  - Radar: 
+  - Radar:
     - v0.1.0: '!import https://github.com/pgEdge/radar?branch=v0.1.0'
     - Development: '!import https://github.com/pgEdge/radar?branch=main'
 
-  - pgEdge Loadgen: 
+  - pgEdge Loadgen:
     - v1.0.0-beta1: '!import https://github.com/pgEdge/pgedge-loadgen?branch=v1.0.0-beta1'
     - Development: '!import https://github.com/pgEdge/pgedge-loadgen?branch=main'
 
