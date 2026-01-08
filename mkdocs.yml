@@ -3,6 +3,7 @@ site_url: https://docs.pgedge.com
 
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/chat.css
 
 extra_javascript:
   # Pulled from control-plane repo for install page
@@ -11,6 +12,7 @@ extra_javascript:
   - javascripts/tabs-dropdown.js
   - javascripts/org-stars.js
   - javascripts/version-selector.js
+  - javascripts/chat.js
 
 hooks:
   - hooks/versioned_redirects.py
