@@ -15,7 +15,7 @@ The chat interface consists of:
 
 With CORS enabled on the RAG server, the browser can connect directly:
 
-```
+```text
 ┌─────────────┐                    ┌─────────────────────┐
 │   Browser   │───────────────────▶│     RAG Server      │
 │             │      HTTPS         │  (with CORS enabled)│
@@ -31,7 +31,7 @@ This is the simplest deployment option:
 
 For additional security, you can use a Cloudflare Worker and Tunnel to avoid exposing the RAG server directly:
 
-```
+```text
 ┌─────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
 │   Browser   │────▶│  Cloudflare Worker  │────▶│  Cloudflare Tunnel  │
 │             │     │  (API Gateway)      │     │  (cloudflared)      │
@@ -322,7 +322,7 @@ server:
 
 ### Health Check
 
-```
+```http
 GET /v1/health
 ```
 
@@ -330,7 +330,7 @@ Returns `200 OK` if the server is healthy.
 
 ### Query Pipeline
 
-```
+```http
 POST /v1/pipelines/{pipeline_name}
 Content-Type: application/json
 
@@ -347,7 +347,7 @@ Content-Type: application/json
 
 **Response (SSE stream):**
 
-```
+```text
 data: {"type": "chunk", "content": "To install pgEdge, "}
 data: {"type": "chunk", "content": "you can use..."}
 data: {"type": "done"}

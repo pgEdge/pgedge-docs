@@ -336,6 +336,10 @@
                     throw new Error(`HTTP error: ${response.status}`);
                 }
 
+                if (!response.body) {
+                    throw new Error('No response body');
+                }
+
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 let buffer = '';
@@ -666,8 +670,13 @@
                 .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
                 // Italic
                 .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-                // Links
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+                // Links (validate URL to prevent javascript: protocol XSS)
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+                    if (/^(https?:\/\/|mailto:|\/)/i.test(url)) {
+                        return `<a href="${url}" target="_blank" rel="noopener">${text}</a>`;
+                    }
+                    return match;
+                })
                 // Wrap consecutive <li> in <ul>
                 .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
                 // Line breaks (but not after block elements)

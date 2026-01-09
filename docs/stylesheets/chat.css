@@ -85,6 +85,11 @@
     transform: scale(0.95);
 }
 
+.ellie-fab:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
 .ellie-fab svg {
     width: 24px;
     height: 24px;
@@ -217,6 +222,11 @@
 
 .ellie-header__btn:hover {
     background: rgba(255, 255, 255, 0.2);
+}
+
+.ellie-header__btn:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
 }
 
 .ellie-header__btn svg {
@@ -407,6 +417,11 @@
 
 .ellie-send-btn:active {
     transform: scale(0.95);
+}
+
+.ellie-send-btn:focus-visible {
+    outline: 2px solid var(--ellie-primary);
+    outline-offset: 2px;
 }
 
 .ellie-send-btn svg {
