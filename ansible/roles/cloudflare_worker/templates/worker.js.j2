@@ -1,0 +1,87 @@
+// pgEdge Chat API Proxy Worker
+// Managed by Ansible - regenerate with: ansible-playbook playbooks/site.yml --tags cloudflare_worker
+//
+// This worker proxies chat requests from the documentation site to the RAG server
+// via Cloudflare Tunnel, adding authentication and CORS handling.
+
+export default {
+  async fetch(request, env) {
+    const ALLOWED_ORIGIN = '{{ cf_allowed_origin }}';
+    const RAG_INTERNAL_URL = '{{ cf_rag_internal_url }}';
+    const PIPELINE_NAME = '{{ cf_pipeline_name }}';
+
+    // CORS headers
+    const corsHeaders = {
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
+    };
+
+    // Handle CORS preflight requests
+    if (request.method === 'OPTIONS') {
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders,
+      });
+    }
+
+    // Only allow POST requests
+    if (request.method !== 'POST') {
+      return new Response('Method not allowed', {
+        status: 405,
+        headers: corsHeaders,
+      });
+    }
+
+    // Validate origin
+    const origin = request.headers.get('Origin');
+    if (origin !== ALLOWED_ORIGIN) {
+      return new Response('Forbidden', {
+        status: 403,
+        headers: corsHeaders,
+      });
+    }
+
+    try {
+      // Forward request to RAG server via tunnel
+      const ragUrl = `${RAG_INTERNAL_URL}/v1/pipelines/${PIPELINE_NAME}`;
+
+      const response = await fetch(ragUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/event-stream',
+          'X-Internal-Secret': env.RAG_SECRET,
+        },
+        body: request.body,
+      });
+
+      // Create response with CORS headers
+      const newHeaders = new Headers(response.headers);
+      Object.entries(corsHeaders).forEach(([key, value]) => {
+        newHeaders.set(key, value);
+      });
+
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: newHeaders,
+      });
+
+    } catch (error) {
+      console.error('Error proxying to RAG server:', error);
+
+      return new Response(JSON.stringify({
+        error: 'Failed to connect to RAG server',
+        message: error.message,
+      }), {
+        status: 502,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+  },
+};

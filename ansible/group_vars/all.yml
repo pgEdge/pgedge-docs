@@ -1,0 +1,210 @@
+# =============================================================================
+# pgEdge RAG Server - Ansible Configuration Variables
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# EC2 Instance Configuration
+# -----------------------------------------------------------------------------
+ec2:
+  region: us-east-1
+  availability_zone: us-east-1a
+
+  # Debian Trixie AMI (update with current AMI ID for your region)
+  # Find AMIs at: https://wiki.debian.org/Cloud/AmazonEC2Image
+  ami_id: ami-0123456789abcdef0
+
+  instance_type: t3.medium
+
+  # Root volume configuration
+  root_volume:
+    size_gb: 50
+    type: gp3
+    iops: 3000
+    throughput: 125
+    encrypted: true
+
+  # SSH key pair name (must exist in AWS)
+  key_name: pgedge-rag
+
+  # Security group configuration
+  security_group:
+    name: pgedge-rag-sg
+    description: Security group for pgEdge RAG server
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+        description: SSH access
+      # Note: No inbound rules for RAG server - cloudflared handles connectivity
+
+  # Instance tags
+  tags:
+    Name: pgedge-rag-server
+    Environment: production
+    Project: pgedge-docs
+    ManagedBy: ansible
+
+  # VPC configuration (optional - uses default VPC if not specified)
+  # vpc_id: vpc-xxxxxxxx
+  # subnet_id: subnet-xxxxxxxx
+
+# -----------------------------------------------------------------------------
+# PostgreSQL Configuration
+# -----------------------------------------------------------------------------
+postgresql:
+  version: "17"
+
+  # pgEdge repository configuration
+  repo:
+    url: "https://apt.pgedge.com/deb"
+    key_url: "https://apt.pgedge.com/keys/pgedge-apt-key.gpg"
+    distribution: trixie
+    components: main
+
+  # Database for RAG vector storage
+  database:
+    name: docloader
+    user: ragserver
+    # Password should be stored in Ansible Vault in production
+    password: "{{ vault_postgres_password | default('changeme') }}"
+
+  # Extensions to install (postgresql-XX-name format)
+  extensions:
+    - pgvector
+
+  # Standalone packages (don't follow postgresql-XX-name format)
+  standalone_packages:
+    - pgedge-vectorizer
+
+  # PostgreSQL configuration tweaks for vector workloads
+  config:
+    shared_buffers: 256MB
+    work_mem: 64MB
+    maintenance_work_mem: 128MB
+    effective_cache_size: 768MB
+    max_connections: 100
+
+  # Vectorizer configuration for automatic embedding generation
+  vectorizer:
+    embedding_model: text-embedding-3-small
+    embedding_dimensions: 1536
+    chunk_size: 1000
+    chunk_overlap: 200
+    # Template for embedding - includes product/version metadata
+    template: "Product: $product, Version: $version\n\n$content"
+    schedule_interval: "1 minute"
+
+# -----------------------------------------------------------------------------
+# RAG Server Configuration
+# -----------------------------------------------------------------------------
+rag_server:
+  # Installation
+  package_name: pgedge-rag-server
+
+  # Service configuration
+  user: ragserver
+  group: ragserver
+
+  # Server settings
+  listen_address: "127.0.0.1"  # Only localhost - cloudflared provides access
+  port: 8080
+
+  # CORS (disabled when using Cloudflare Worker)
+  cors:
+    enabled: false
+
+  # Directories
+  config_dir: /etc/pgedge/rag-server
+  data_dir: /var/lib/pgedge/rag-server
+  log_dir: /var/log/pgedge/rag-server
+
+  # API keys directory
+  keys_dir: /etc/pgedge/keys
+
+  # Pipeline configuration
+  pipeline:
+    name: pgedge-docs
+    description: "pgEdge documentation search"
+
+    # The docs table is created by the postgresql role and vectorized by pgedge-vectorizer
+    # The embedding column is automatically added by the vectorizer
+    tables:
+      - table: "public.docs"
+        text_column: "content"
+        vector_column: "embedding"
+
+    embedding_llm:
+      provider: openai
+      model: text-embedding-3-small
+
+    rag_llm:
+      provider: anthropic
+      model: claude-sonnet-4-20250514
+
+    system_prompt: |
+      You are a helpful assistant called Ellie that answers questions based on
+      the documentation for pgEdge products, PostgreSQL, and PostgreSQL tools,
+      utilities, and extensions supported by pgEdge.
+
+      Answer the question using only the information from the documentation.
+      If the documentation doesn't contain enough information to answer, say so.
+      Be concise and accurate in your responses.
+
+      When referencing source material, say "based on the documentation" rather
+      than "based on the context provided".
+
+# -----------------------------------------------------------------------------
+# Cloudflare Tunnel Configuration
+# -----------------------------------------------------------------------------
+cloudflared:
+  # Tunnel name
+  tunnel_name: pgedge-rag
+
+  # Internal hostname (configured in Cloudflare DNS)
+  internal_hostname: rag-internal.pgedge.com
+
+  # Service to expose
+  service_url: "http://localhost:{{ rag_server.port }}"
+
+  # Credentials (obtained after `cloudflared tunnel login`)
+  # In production, store these in Ansible Vault
+  credentials_file: /etc/cloudflared/credentials.json
+
+  # Config location
+  config_file: /etc/cloudflared/config.yml
+
+# -----------------------------------------------------------------------------
+# Cloudflare Worker Configuration
+# -----------------------------------------------------------------------------
+cloudflare_worker:
+  # Cloudflare API credentials (store in Ansible Vault)
+  api_token: "{{ vault_cloudflare_api_token | default('') }}"
+  account_id: "{{ vault_cloudflare_account_id | default('') }}"
+
+  # Worker configuration
+  worker_name: pgedge-chat-proxy
+
+  # Route configuration
+  zone_name: pgedge.com
+  route_pattern: "docs.pgedge.com/api/chat*"
+
+  # Allowed origin for CORS
+  allowed_origin: "https://docs.pgedge.com"
+
+  # Shared secret for RAG server authentication (store in Ansible Vault)
+  rag_secret: "{{ vault_rag_secret | default('changeme') }}"
+
+  # Internal tunnel URL
+  rag_internal_url: "https://{{ cloudflared.internal_hostname }}"
+
+  # Pipeline name
+  pipeline_name: "{{ rag_server.pipeline.name }}"
+
+# -----------------------------------------------------------------------------
+# API Keys (store actual values in Ansible Vault)
+# -----------------------------------------------------------------------------
+api_keys:
+  openai: "{{ vault_openai_api_key | default('') }}"
+  anthropic: "{{ vault_anthropic_api_key | default('') }}"
+  voyage: "{{ vault_voyage_api_key | default('') }}"

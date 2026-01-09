@@ -1,0 +1,131 @@
+# Cloudflare Worker Role - Main Tasks
+#
+# This role deploys a Cloudflare Worker using the Cloudflare API.
+# It requires:
+#   - cloudflare_worker.api_token: API token with Workers permissions
+#   - cloudflare_worker.account_id: Your Cloudflare account ID
+#
+---
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - cf_api_token | length > 0
+      - cf_account_id | length > 0
+    fail_msg: |
+      Cloudflare Worker deployment requires:
+        - cloudflare_worker.api_token (store in Ansible Vault)
+        - cloudflare_worker.account_id
+
+      You can also deploy the worker manually via the Cloudflare dashboard.
+      See ASK_ELLIE.md for the worker script.
+
+- name: Create worker script from template
+  ansible.builtin.template:
+    src: worker.js.j2
+    dest: /tmp/pgedge-chat-worker.js
+    mode: '0644'
+
+- name: Read worker script content
+  ansible.builtin.slurp:
+    src: /tmp/pgedge-chat-worker.js
+  register: worker_script
+
+- name: Get zone ID for {{ cf_zone_name }}
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones?name={{ cf_zone_name }}"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ cf_api_token }}"
+      Content-Type: application/json
+    status_code: 200
+  register: zone_response
+
+- name: Set zone ID fact
+  ansible.builtin.set_fact:
+    cf_zone_id: "{{ zone_response.json.result[0].id }}"
+  when: zone_response.json.result | length > 0
+
+- name: Fail if zone not found
+  ansible.builtin.fail:
+    msg: "Zone {{ cf_zone_name }} not found in Cloudflare account"
+  when: zone_response.json.result | length == 0
+
+- name: Upload worker script
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/accounts/{{ cf_account_id }}/workers/scripts/{{ cf_worker_name }}"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ cf_api_token }}"
+      Content-Type: application/javascript
+    body: "{{ worker_script.content | b64decode }}"
+    status_code: [200, 201]
+  register: upload_response
+
+- name: Display upload result
+  ansible.builtin.debug:
+    msg: "Worker {{ cf_worker_name }} uploaded successfully"
+  when: upload_response.status in [200, 201]
+
+- name: Set worker secret (RAG_SECRET)
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/accounts/{{ cf_account_id }}/workers/scripts/{{ cf_worker_name }}/secrets"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ cf_api_token }}"
+      Content-Type: application/json
+    body_format: json
+    body:
+      name: RAG_SECRET
+      text: "{{ cf_rag_secret }}"
+      type: secret_text
+    status_code: [200, 201]
+  no_log: true
+
+- name: Check existing routes
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/workers/routes"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ cf_api_token }}"
+      Content-Type: application/json
+    status_code: 200
+  register: existing_routes
+
+- name: Find existing route for pattern
+  ansible.builtin.set_fact:
+    existing_route_id: "{{ item.id }}"
+  loop: "{{ existing_routes.json.result }}"
+  when: item.pattern == cf_route_pattern
+
+- name: Create or update worker route
+  ansible.builtin.uri:
+    url: "https://api.cloudflare.com/client/v4/zones/{{ cf_zone_id }}/workers/routes{{ '/' + existing_route_id if existing_route_id is defined else '' }}"
+    method: "{{ 'PUT' if existing_route_id is defined else 'POST' }}"
+    headers:
+      Authorization: "Bearer {{ cf_api_token }}"
+      Content-Type: application/json
+    body_format: json
+    body:
+      pattern: "{{ cf_route_pattern }}"
+      script: "{{ cf_worker_name }}"
+    status_code: [200, 201]
+  register: route_response
+
+- name: Display deployment summary
+  ansible.builtin.debug:
+    msg: |
+      Cloudflare Worker Deployed Successfully!
+
+      Worker Name: {{ cf_worker_name }}
+      Route: {{ cf_route_pattern }}
+      Zone: {{ cf_zone_name }}
+
+      The worker is now proxying requests from:
+        {{ cf_route_pattern }}
+      To:
+        {{ cf_rag_internal_url }}/v1/pipelines/{{ cf_pipeline_name }}
+
+- name: Clean up temporary files
+  ansible.builtin.file:
+    path: /tmp/pgedge-chat-worker.js
+    state: absent

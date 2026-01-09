@@ -1,0 +1,10 @@
+# RAG Server Role - Handlers
+---
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart RAG Server
+  ansible.builtin.systemd:
+    name: pgedge-rag-server
+    state: restarted

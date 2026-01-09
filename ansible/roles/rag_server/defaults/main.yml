@@ -1,0 +1,18 @@
+# RAG Server Role - Default Variables
+
+rag_package_name: "{{ rag_server.package_name | default('pgedge-rag-server') }}"
+rag_user: "{{ rag_server.user | default('ragserver') }}"
+rag_group: "{{ rag_server.group | default('ragserver') }}"
+
+rag_listen_address: "{{ rag_server.listen_address | default('127.0.0.1') }}"
+rag_port: "{{ rag_server.port | default(8080) }}"
+
+rag_cors_enabled: "{{ rag_server.cors.enabled | default(false) }}"
+rag_cors_origins: "{{ rag_server.cors.allowed_origins | default([]) }}"
+
+rag_config_dir: "{{ rag_server.config_dir | default('/etc/pgedge/rag-server') }}"
+rag_data_dir: "{{ rag_server.data_dir | default('/var/lib/pgedge/rag-server') }}"
+rag_log_dir: "{{ rag_server.log_dir | default('/var/log/pgedge/rag-server') }}"
+rag_keys_dir: "{{ rag_server.keys_dir | default('/etc/pgedge/keys') }}"
+
+rag_pipeline: "{{ rag_server.pipeline }}"

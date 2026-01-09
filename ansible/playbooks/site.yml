@@ -1,0 +1,82 @@
+# =============================================================================
+# pgEdge RAG Server - Main Playbook
+# =============================================================================
+#
+# This playbook configures the RAG server on existing hosts.
+# To deploy EC2 instances first, run: ansible-playbook playbooks/deploy_ec2.yml
+#
+# Usage:
+#   ansible-playbook playbooks/site.yml
+#   ansible-playbook playbooks/site.yml --tags postgresql
+#   ansible-playbook playbooks/site.yml --tags rag_server
+#   ansible-playbook playbooks/site.yml --tags cloudflared
+#
+# With Vault:
+#   ansible-playbook playbooks/site.yml --ask-vault-pass
+#
+# =============================================================================
+
+---
+- name: Configure pgEdge RAG Server
+  hosts: rag_servers
+  become: true
+  gather_facts: true
+
+  pre_tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      tags: always
+
+    - name: Install common packages
+      ansible.builtin.apt:
+        name:
+          - curl
+          - gnupg
+          - apt-transport-https
+          - ca-certificates
+          - python3-psycopg2
+        state: present
+      tags: always
+
+  roles:
+    - role: postgresql
+      tags: postgresql
+
+    - role: rag_server
+      tags: rag_server
+
+    - role: cloudflared
+      tags: cloudflared
+
+  post_tasks:
+    - name: Display completion message
+      ansible.builtin.debug:
+        msg: |
+          RAG Server deployment complete!
+
+          Services:
+            - PostgreSQL: running on localhost:5432
+            - RAG Server: running on {{ rag_server.listen_address }}:{{ rag_server.port }}
+            - Cloudflared: connecting to {{ cloudflared.internal_hostname }}
+
+          Next steps:
+            1. Load your documentation into the database
+            2. Configure the Cloudflare Worker (run deploy_worker.yml)
+            3. Test the chat interface on your documentation site
+      tags: always
+
+
+# =============================================================================
+# Deploy Cloudflare Worker (runs locally)
+# =============================================================================
+- name: Deploy Cloudflare Worker
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  roles:
+    - role: cloudflare_worker
+      tags: cloudflare_worker
+      when: cloudflare_worker.api_token | length > 0

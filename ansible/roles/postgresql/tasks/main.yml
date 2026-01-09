@@ -1,0 +1,153 @@
+# PostgreSQL Role - Main Tasks
+---
+- name: Add pgEdge APT signing key
+  ansible.builtin.get_url:
+    url: "{{ pg_repo_key_url }}"
+    dest: /usr/share/keyrings/pgedge-apt-key.gpg
+    mode: '0644'
+
+- name: Add pgEdge APT repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/pgedge-apt-key.gpg] {{ pg_repo_url }} {{ pg_repo_distribution }} {{ pg_repo_components }}"
+    filename: pgedge
+    state: present
+    update_cache: true
+
+- name: Install PostgreSQL packages
+  ansible.builtin.apt:
+    name:
+      - "postgresql-{{ pg_version }}"
+      - "postgresql-client-{{ pg_version }}"
+      - "postgresql-{{ pg_version }}-pgvector"
+    state: present
+
+- name: Install PostgreSQL extensions (postgresql-XX-name format)
+  ansible.builtin.apt:
+    name: "postgresql-{{ pg_version }}-{{ item }}"
+    state: present
+  loop: "{{ pg_extensions }}"
+  when:
+    - item != 'pgvector'
+    - item not in pg_standalone_packages
+
+- name: Install standalone packages (pgedge-vectorizer, etc.)
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ pg_standalone_packages }}"
+  when: pg_standalone_packages | length > 0
+
+- name: Ensure PostgreSQL is started and enabled
+  ansible.builtin.systemd:
+    name: postgresql
+    state: started
+    enabled: true
+
+- name: Configure PostgreSQL settings
+  ansible.builtin.lineinfile:
+    path: "/etc/postgresql/{{ pg_version }}/main/postgresql.conf"
+    regexp: "^#?{{ item.key }}\\s*="
+    line: "{{ item.key }} = '{{ item.value }}'"
+    state: present
+  loop: "{{ pg_config | dict2items }}"
+  notify: Restart PostgreSQL
+  when: pg_config | length > 0
+
+- name: Create RAG database user
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ pg_user }}"
+    password: "{{ pg_password }}"
+    role_attr_flags: LOGIN,NOSUPERUSER,NOCREATEDB,NOCREATEROLE
+    state: present
+
+- name: Create RAG database
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_db:
+    name: "{{ pg_database }}"
+    owner: "{{ pg_user }}"
+    encoding: UTF8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    template: template0
+    state: present
+
+- name: Enable pgvector extension
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_ext:
+    name: vector
+    db: "{{ pg_database }}"
+    state: present
+
+- name: Grant privileges to RAG user
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_privs:
+    database: "{{ pg_database }}"
+    roles: "{{ pg_user }}"
+    type: database
+    privs: ALL
+    state: present
+
+- name: Configure pg_hba.conf for local connections
+  ansible.builtin.lineinfile:
+    path: "/etc/postgresql/{{ pg_version }}/main/pg_hba.conf"
+    line: "host    {{ pg_database }}    {{ pg_user }}    127.0.0.1/32    scram-sha-256"
+    insertafter: "^# IPv4 local connections"
+    state: present
+  notify: Reload PostgreSQL
+
+- name: Flush handlers to ensure PostgreSQL is reloaded
+  ansible.builtin.meta: flush_handlers
+
+- name: Deploy database schema script
+  ansible.builtin.template:
+    src: schema.sql.j2
+    dest: /tmp/pgedge_schema.sql
+    mode: '0644'
+
+- name: Apply database schema
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_script:
+    db: "{{ pg_database }}"
+    path: /tmp/pgedge_schema.sql
+  register: schema_result
+  changed_when: schema_result.status_message != "OK"
+
+- name: Deploy vectorizer configuration script
+  ansible.builtin.template:
+    src: vectorizer.sql.j2
+    dest: /tmp/pgedge_vectorizer.sql
+    mode: '0644'
+
+- name: Check if vectorizer is already configured
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_query:
+    db: "{{ pg_database }}"
+    query: >
+      SELECT COUNT(*) as count FROM pg_catalog.pg_extension
+      WHERE extname = 'vectorizer'
+  register: vectorizer_check
+
+- name: Apply vectorizer configuration
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_script:
+    db: "{{ pg_database }}"
+    path: /tmp/pgedge_vectorizer.sql
+  when: vectorizer_check.query_result[0].count | int > 0
+  register: vectorizer_result
+  failed_when: false  # Vectorizer may already be configured
+
+- name: Clean up temporary SQL files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/pgedge_schema.sql
+    - /tmp/pgedge_vectorizer.sql

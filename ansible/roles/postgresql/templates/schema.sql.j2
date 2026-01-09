@@ -1,0 +1,71 @@
+-- pgEdge Documentation Database Schema
+-- Managed by Ansible - do not edit manually
+
+-- Enable required extensions
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Documentation chunks table
+-- Stores documentation content with metadata for RAG retrieval
+CREATE TABLE IF NOT EXISTS public.docs (
+    id SERIAL PRIMARY KEY,
+
+    -- Document metadata
+    product VARCHAR(100) NOT NULL,          -- Product name (e.g., 'pgedge', 'spock', 'ace')
+    version VARCHAR(50) NOT NULL,           -- Version string (e.g., '5.0', '4.0.1')
+
+    -- Source information
+    source_url TEXT,                        -- Original documentation URL
+    source_path TEXT,                       -- File path in documentation repo
+    title TEXT,                             -- Page/section title
+
+    -- Content
+    content TEXT NOT NULL,                  -- The actual documentation text
+
+    -- Chunking metadata
+    chunk_index INTEGER DEFAULT 0,          -- Index of chunk within the source document
+    chunk_type VARCHAR(50) DEFAULT 'content', -- 'title', 'content', 'code', etc.
+
+    -- Timestamps
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+
+    -- Constraints
+    CONSTRAINT docs_content_not_empty CHECK (length(trim(content)) > 0)
+);
+
+-- Indexes for common query patterns
+CREATE INDEX IF NOT EXISTS idx_docs_product ON public.docs(product);
+CREATE INDEX IF NOT EXISTS idx_docs_version ON public.docs(version);
+CREATE INDEX IF NOT EXISTS idx_docs_product_version ON public.docs(product, version);
+CREATE INDEX IF NOT EXISTS idx_docs_chunk_type ON public.docs(chunk_type);
+
+-- Full text search index
+CREATE INDEX IF NOT EXISTS idx_docs_content_fts ON public.docs
+    USING gin(to_tsvector('english', content));
+
+-- Grant permissions to RAG server user
+GRANT SELECT ON public.docs TO {{ pg_user }};
+GRANT USAGE, SELECT ON SEQUENCE public.docs_id_seq TO {{ pg_user }};
+
+-- Function to update timestamp on modification
+CREATE OR REPLACE FUNCTION update_docs_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to auto-update timestamp
+DROP TRIGGER IF EXISTS docs_update_timestamp ON public.docs;
+CREATE TRIGGER docs_update_timestamp
+    BEFORE UPDATE ON public.docs
+    FOR EACH ROW
+    EXECUTE FUNCTION update_docs_timestamp();
+
+-- Comment on table
+COMMENT ON TABLE public.docs IS 'Documentation content for RAG-powered search and Q&A';
+COMMENT ON COLUMN public.docs.product IS 'Product name (pgedge, spock, ace, etc.)';
+COMMENT ON COLUMN public.docs.version IS 'Product version string';
+COMMENT ON COLUMN public.docs.content IS 'Documentation text content (chunked for embedding)';
+COMMENT ON COLUMN public.docs.chunk_type IS 'Type of chunk: title, content, code, etc.';

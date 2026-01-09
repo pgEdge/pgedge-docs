@@ -1,0 +1,64 @@
+# pgEdge RAG Server Configuration
+# Managed by Ansible - do not edit manually
+
+server:
+  listen_address: "{{ rag_listen_address }}"
+  port: {{ rag_port }}
+  cors:
+    enabled: {{ rag_cors_enabled | lower }}
+{% if rag_cors_enabled and rag_cors_origins | length > 0 %}
+    allowed_origins:
+{% for origin in rag_cors_origins %}
+      - "{{ origin }}"
+{% endfor %}
+{% endif %}
+
+api_keys:
+{% if api_keys.openai | length > 0 %}
+  openai: "{{ rag_keys_dir }}/openai.key"
+{% endif %}
+{% if api_keys.anthropic | length > 0 %}
+  anthropic: "{{ rag_keys_dir }}/anthropic.key"
+{% endif %}
+{% if api_keys.voyage | length > 0 %}
+  voyage: "{{ rag_keys_dir }}/voyage.key"
+{% endif %}
+
+pipelines:
+  - name: "{{ rag_pipeline.name }}"
+    description: "{{ rag_pipeline.description }}"
+
+    database:
+      host: "localhost"
+      port: 5432
+      database: "{{ postgresql.database.name }}"
+      username: "{{ postgresql.database.user }}"
+      password: "{{ postgresql.database.password }}"
+
+    tables:
+{% for table in rag_pipeline.tables %}
+      - table: "{{ table.table }}"
+        text_column: "{{ table.text_column }}"
+        vector_column: "{{ table.vector_column }}"
+{% if table.filter is defined %}
+        filter:
+          conditions:
+{% for condition in table.filter.conditions %}
+            - column: "{{ condition.column }}"
+              operator: "{{ condition.operator }}"
+              value: "{{ condition.value }}"
+{% endfor %}
+          logic: "{{ table.filter.logic | default('AND') }}"
+{% endif %}
+{% endfor %}
+
+    embedding_llm:
+      provider: "{{ rag_pipeline.embedding_llm.provider }}"
+      model: "{{ rag_pipeline.embedding_llm.model }}"
+
+    rag_llm:
+      provider: "{{ rag_pipeline.rag_llm.provider }}"
+      model: "{{ rag_pipeline.rag_llm.model }}"
+
+    system_prompt: |
+{{ rag_pipeline.system_prompt | indent(6, first=true) }}
