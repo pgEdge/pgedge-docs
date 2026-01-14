@@ -679,8 +679,8 @@
                     }
                     return match;
                 })
-                // Wrap consecutive <li> in <ul>
-                .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+                // Wrap consecutive <li> in <ul> (non-greedy to prevent ReDoS)
+                .replace(/(<li>.*?<\/li>\n?)+/g, '<ul>$&</ul>')
                 // Line breaks (but not after block elements)
                 .replace(/\n(?!<)/g, '<br>')
                 // Clean up extra <br> after block elements
