@@ -10,9 +10,9 @@
 #   ansible-playbook playbooks/site.yml --tags postgresql
 #   ansible-playbook playbooks/site.yml --tags rag_server
 #   ansible-playbook playbooks/site.yml --tags cloudflared
+#   ansible-playbook playbooks/site.yml --tags docloader
 #
-# With Vault:
-#   ansible-playbook playbooks/site.yml --ask-vault-pass
+# Note: Vault password is read from .pgedge-docs-vault-pass (configured in ansible.cfg)
 #
 # =============================================================================
 
@@ -21,6 +21,8 @@
   hosts: rag_servers
   become: true
   gather_facts: true
+  vars_files:
+    - ../inventory/group_vars/all/vault.yml
 
   pre_tasks:
     - name: Update apt cache
@@ -50,6 +52,9 @@
     - role: cloudflared
       tags: cloudflared
 
+    - role: docloader
+      tags: docloader
+
   post_tasks:
     - name: Display completion message
       ansible.builtin.debug:
@@ -61,10 +66,15 @@
             - RAG Server: running on {{ rag_server.listen_address }}:{{ rag_server.port }}
             - Cloudflared: connecting to {{ cloudflared.internal_hostname }}
 
+          Documentation Loading:
+            - Config: /etc/pgedge/docloader/config.yaml
+            - Run: sudo load-docs
+
           Next steps:
-            1. Load your documentation into the database
-            2. Configure the Cloudflare Worker (run deploy_worker.yml)
-            3. Test the chat interface on your documentation site
+            1. Edit /etc/pgedge/docloader/config.yaml to customize sources
+            2. Run 'sudo load-docs' to load documentation into the database
+            3. Configure the Cloudflare Worker (run deploy_worker.yml)
+            4. Test the chat interface on your documentation site
       tags: always
 
 
@@ -75,6 +85,8 @@
   hosts: localhost
   connection: local
   gather_facts: false
+  vars_files:
+    - ../inventory/group_vars/all/vault.yml
 
   roles:
     - role: cloudflare_worker

@@ -20,3 +20,6 @@ docs/pgedge-vectorizer/index.md
 docs/radar/index.md
 docs/snowflake/index.md
 docs/spock-v5/index.md
+
+# Ansible vault password file
+ansible/.pgedge-docs-vault-pass

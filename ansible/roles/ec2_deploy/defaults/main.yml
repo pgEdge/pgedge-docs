@@ -18,5 +18,5 @@ ec2_security_group_description: "{{ ec2.security_group.description | default('Se
 
 ec2_tags: "{{ ec2.tags | default({}) }}"
 
-ec2_vpc_id: "{{ ec2.vpc_id | default(omit) }}"
-ec2_subnet_id: "{{ ec2.subnet_id | default(omit) }}"
+ec2_vpc_id: "{{ ec2.vpc_id | default('') }}"
+ec2_subnet_id: "{{ ec2.subnet_id | default('') }}"

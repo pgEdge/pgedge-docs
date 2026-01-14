@@ -1,0 +1,36 @@
+# Docloader Role - Default Variables
+---
+# Installation method: 'github' or 'apt'
+# github: Downloads from GitHub Releases (beta2+ with native git support)
+# apt: Installs from pgEdge apt repository
+# NOTE: Change to 'github' once v1.0.0-beta2 is released for native git support
+docloader_install_method: apt
+
+# GitHub Release settings
+docloader_version: v1.0.0-beta2
+docloader_github_release_url: "https://github.com/pgEdge/pgedge-docloader/releases/download/{{ docloader_version }}/pgedge-docloader-linux-amd64"
+
+# Apt package name (used when docloader_install_method == 'apt')
+docloader_package: pgedge-docloader
+
+# Installation paths
+docloader_config_dir: /etc/pgedge/docloader
+docloader_data_dir: /var/lib/pgedge/docloader
+
+# User/group (reuse ragserver user)
+docloader_user: ragserver
+docloader_group: ragserver
+
+# Database connection (from postgresql role)
+docloader_db_host: localhost
+docloader_db_port: 5432
+docloader_db_name: "{{ postgresql.database.name }}"
+docloader_db_user: "{{ postgresql.database.user }}"
+docloader_db_password: "{{ postgresql.database.password }}"
+docloader_db_table: docs
+docloader_db_sslmode: prefer
+
+# Column mappings to match the docs table schema
+docloader_col_title: title
+docloader_col_content: content
+docloader_col_filename: source_path

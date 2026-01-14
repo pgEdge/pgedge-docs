@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.docs (
 
     -- Document metadata
     product VARCHAR(100) NOT NULL,          -- Product name (e.g., 'pgedge', 'spock', 'ace')
-    version VARCHAR(50) NOT NULL,           -- Version string (e.g., '5.0', '4.0.1')
+    version VARCHAR(50) NOT NULL DEFAULT '',  -- Version string (e.g., '5.0', '4.0.1')
 
     -- Source information
     source_url TEXT,                        -- Original documentation URL
@@ -38,14 +38,22 @@ CREATE INDEX IF NOT EXISTS idx_docs_product ON public.docs(product);
 CREATE INDEX IF NOT EXISTS idx_docs_version ON public.docs(version);
 CREATE INDEX IF NOT EXISTS idx_docs_product_version ON public.docs(product, version);
 CREATE INDEX IF NOT EXISTS idx_docs_chunk_type ON public.docs(chunk_type);
+CREATE INDEX IF NOT EXISTS idx_docs_source_path ON public.docs(source_path);
 
 -- Full text search index
 CREATE INDEX IF NOT EXISTS idx_docs_content_fts ON public.docs
     USING gin(to_tsvector('english', content));
 
--- Grant permissions to RAG server user
-GRANT SELECT ON public.docs TO {{ pg_user }};
-GRANT USAGE, SELECT ON SEQUENCE public.docs_id_seq TO {{ pg_user }};
+-- Grant permissions to RAG server user (SELECT for queries, INSERT/UPDATE/DELETE for docloader)
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.docs TO {{ pg_user }};
+GRANT USAGE, SELECT, UPDATE ON SEQUENCE public.docs_id_seq TO {{ pg_user }};
+
+-- Grant permissions on all current and future tables/sequences in public schema
+-- (needed for vectorizer-created tables like docs_content_chunks)
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO {{ pg_user }};
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA public TO {{ pg_user }};
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO {{ pg_user }};
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO {{ pg_user }};
 
 -- Function to update timestamp on modification
 CREATE OR REPLACE FUNCTION update_docs_timestamp()

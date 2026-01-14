@@ -30,8 +30,29 @@ pip install boto3 botocore
 ### AWS
 
 - AWS credentials configured (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)
-- SSH key pair created in your target region
+- SSH key pair created in your target region (see below)
 - Appropriate IAM permissions for EC2, VPC, and Security Groups
+
+#### Creating an SSH Key Pair
+
+Create a new key pair in AWS and save the private key locally:
+
+```bash
+# Create key pair and save private key
+aws ec2 create-key-pair --region us-east-1 --key-name pgedge-rag \
+  --query 'KeyMaterial' --output text > ~/.ssh/pgedge-rag.pem
+
+# Set correct permissions
+chmod 400 ~/.ssh/pgedge-rag.pem
+```
+
+Alternatively, import an existing public key:
+
+```bash
+# Import existing key
+aws ec2 import-key-pair --region us-east-1 --key-name pgedge-rag \
+  --public-key-material fileb://~/.ssh/id_rsa.pub
+```
 
 ### Cloudflare (Optional)
 
@@ -43,7 +64,7 @@ pip install boto3 botocore
 
 ### 1. Configure Variables
 
-Edit `group_vars/all.yml` with your settings:
+Edit `inventory/group_vars/all.yml` with your settings:
 
 ```yaml
 ec2:
@@ -65,7 +86,7 @@ api_keys:
 
 ```bash
 # Create vault file
-ansible-vault create group_vars/vault.yml
+ansible-vault create inventory/group_vars/vault.yml
 ```
 
 Add your secrets:
@@ -79,13 +100,25 @@ vault_cloudflare_account_id: your-account-id
 vault_rag_secret: shared-secret-for-worker
 ```
 
-### 3. Deploy EC2 Instance
+### 3. Create Vault Password File
+
+Create a password file so you don't need to enter the vault password each time:
+
+```bash
+# Create the password file (replace with your actual vault password)
+echo "your-vault-password" > .pgedge-docs-vault-pass
+chmod 600 .pgedge-docs-vault-pass
+```
+
+This file is already in `.gitignore` and will not be committed.
+
+### 4. Deploy EC2 Instance
 
 ```bash
 ansible-playbook playbooks/deploy_ec2.yml
 ```
 
-### 4. Update Inventory
+### 5. Update Inventory
 
 Add the new instance to `inventory/hosts.yml`:
 
@@ -100,17 +133,17 @@ all:
           ansible_ssh_private_key_file: ~/.ssh/your-key.pem
 ```
 
-### 5. Deploy RAG Server Stack
+### 6. Deploy RAG Server Stack
 
 ```bash
-# Full deployment
-ansible-playbook playbooks/site.yml --ask-vault-pass
+# Full deployment (vault password is read from .pgedge-docs-vault-pass)
+ansible-playbook playbooks/site.yml
 
 # Or deploy specific components
-ansible-playbook playbooks/site.yml --tags postgresql --ask-vault-pass
-ansible-playbook playbooks/site.yml --tags rag_server --ask-vault-pass
-ansible-playbook playbooks/site.yml --tags cloudflared --ask-vault-pass
-ansible-playbook playbooks/site.yml --tags cloudflare_worker --ask-vault-pass
+ansible-playbook playbooks/site.yml --tags postgresql
+ansible-playbook playbooks/site.yml --tags rag_server
+ansible-playbook playbooks/site.yml --tags cloudflared
+ansible-playbook playbooks/site.yml --tags cloudflare_worker
 ```
 
 ## Directory Structure
@@ -119,10 +152,10 @@ ansible-playbook playbooks/site.yml --tags cloudflare_worker --ask-vault-pass
 ansible/
 ├── ansible.cfg              # Ansible configuration
 ├── inventory/
-│   └── hosts.yml            # Inventory file
-├── group_vars/
-│   ├── all.yml              # Main variables
-│   └── vault.yml            # Encrypted secrets (create this)
+│   ├── hosts.yml            # Inventory file
+│   └── group_vars/
+│       ├── all.yml          # Main variables
+│       └── vault.yml        # Encrypted secrets (create this)
 ├── playbooks/
 │   ├── site.yml             # Main playbook
 │   └── deploy_ec2.yml       # EC2 deployment playbook
@@ -224,9 +257,12 @@ Deploys the API proxy worker:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `postgresql.version` | PostgreSQL version | `17` |
+| `postgresql.version` | PostgreSQL version | `18` |
 | `postgresql.database.name` | Database name | `docloader` |
 | `postgresql.database.user` | Database user | `ragserver` |
+| `postgresql.vectorizer.enabled` | Enable automatic embeddings | `true` |
+| `postgresql.vectorizer.provider` | Embedding provider | `openai` |
+| `postgresql.vectorizer.chunk_size` | Token chunk size | `400` |
 
 ### RAG Server Variables
 

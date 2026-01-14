@@ -1,0 +1,66 @@
+# Docloader Role - Main Tasks
+---
+- name: Install docloader dependencies
+  ansible.builtin.apt:
+    name:
+      - git
+      - python3-yaml
+    state: present
+
+# Install from GitHub Release (beta2 has native git support)
+- name: Download docloader from GitHub Release
+  ansible.builtin.get_url:
+    url: "{{ docloader_github_release_url }}"
+    dest: /usr/local/bin/pgedge-docloader
+    mode: '0755'
+    force: "{{ docloader_force_download | default(false) }}"
+  when: docloader_install_method == 'github'
+
+# Alternative: Install from apt package
+- name: Install docloader package from apt
+  ansible.builtin.apt:
+    name: "{{ docloader_package }}"
+    state: present
+  when: docloader_install_method == 'apt'
+
+- name: Create docloader directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0750'
+  loop:
+    - "{{ docloader_config_dir }}"
+    - "{{ docloader_data_dir }}"
+
+- name: Check if docloader config exists
+  ansible.builtin.stat:
+    path: "{{ docloader_config_dir }}/config.yaml"
+  register: docloader_config_stat
+
+- name: Deploy initial docloader configuration
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: "{{ docloader_config_dir }}/config.yaml"
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0640'
+  when: not docloader_config_stat.stat.exists
+
+- name: Deploy docloader wrapper script
+  ansible.builtin.template:
+    src: load-docs.sh.j2
+    dest: /usr/local/bin/load-docs
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy database password file for docloader
+  ansible.builtin.copy:
+    content: "{{ docloader_db_password }}"
+    dest: "{{ docloader_config_dir }}/.pgpass"
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0600'
+  no_log: true

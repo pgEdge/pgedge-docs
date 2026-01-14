@@ -11,7 +11,7 @@ ec2:
 
   # Debian Trixie AMI (update with current AMI ID for your region)
   # Find AMIs at: https://wiki.debian.org/Cloud/AmazonEC2Image
-  ami_id: ami-0123456789abcdef0
+  ami_id: ami-05c546c5ae2f91899
 
   instance_type: t3.medium
 
@@ -23,8 +23,8 @@ ec2:
     throughput: 125
     encrypted: true
 
-  # SSH key pair name (must exist in AWS)
-  key_name: pgedge-rag
+  # SSH key pair name (must exist in AWS) - stored in vault
+  key_name: "{{ vault_ec2_key_name }}"
 
   # Security group configuration
   security_group:
@@ -35,7 +35,7 @@ ec2:
         from_port: 22
         to_port: 22
         cidr_ip: 0.0.0.0/0
-        description: SSH access
+        rule_desc: SSH access
       # Note: No inbound rules for RAG server - cloudflared handles connectivity
 
   # Instance tags
@@ -53,14 +53,7 @@ ec2:
 # PostgreSQL Configuration
 # -----------------------------------------------------------------------------
 postgresql:
-  version: "17"
-
-  # pgEdge repository configuration
-  repo:
-    url: "https://apt.pgedge.com/deb"
-    key_url: "https://apt.pgedge.com/keys/pgedge-apt-key.gpg"
-    distribution: trixie
-    components: main
+  version: "18"
 
   # Database for RAG vector storage
   database:
@@ -69,13 +62,13 @@ postgresql:
     # Password should be stored in Ansible Vault in production
     password: "{{ vault_postgres_password | default('changeme') }}"
 
-  # Extensions to install (postgresql-XX-name format)
+  # Extensions to install (pgedge-postgresql-XX-name format)
   extensions:
     - pgvector
 
-  # Standalone packages (don't follow postgresql-XX-name format)
+  # Additional packages (pgedge-postgresql-XX-name format)
   standalone_packages:
-    - pgedge-vectorizer
+    - vectorizer
 
   # PostgreSQL configuration tweaks for vector workloads
   config:
@@ -87,13 +80,14 @@ postgresql:
 
   # Vectorizer configuration for automatic embedding generation
   vectorizer:
+    enabled: true
+    provider: openai
+    api_key: "{{ vault_openai_api_key | default('') }}"
     embedding_model: text-embedding-3-small
-    embedding_dimensions: 1536
-    chunk_size: 1000
-    chunk_overlap: 200
-    # Template for embedding - includes product/version metadata
-    template: "Product: $product, Version: $version\n\n$content"
-    schedule_interval: "1 minute"
+    chunk_size: 400
+    chunk_overlap: 50
+    num_workers: 2
+    batch_size: 10
 
 # -----------------------------------------------------------------------------
 # RAG Server Configuration
@@ -158,11 +152,11 @@ rag_server:
 # Cloudflare Tunnel Configuration
 # -----------------------------------------------------------------------------
 cloudflared:
-  # Tunnel name
-  tunnel_name: pgedge-rag
+  # Tunnel name - stored in vault
+  tunnel_name: "{{ vault_cloudflared_tunnel_name }}"
 
-  # Internal hostname (configured in Cloudflare DNS)
-  internal_hostname: rag-internal.pgedge.com
+  # Internal hostname (configured in Cloudflare DNS) - stored in vault
+  internal_hostname: "{{ vault_cloudflared_internal_hostname }}"
 
   # Service to expose
   service_url: "http://localhost:{{ rag_server.port }}"

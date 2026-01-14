@@ -1,5 +1,13 @@
 # EC2 Deployment Role - Main Tasks
 ---
+- name: Debug ec2 variable
+  ansible.builtin.debug:
+    msg:
+      - "ec2 variable: {{ ec2 | default('UNDEFINED') }}"
+      - "ec2_ami_id: {{ ec2_ami_id | default('UNDEFINED') }}"
+      - "ec2_key_name: {{ ec2_key_name | default('UNDEFINED') }}"
+  when: ec2_ami_id is not defined or ec2_key_name is not defined
+
 - name: Validate required variables
   ansible.builtin.assert:
     that:
@@ -7,7 +15,7 @@
       - ec2_ami_id | length > 0
       - ec2_key_name is defined
       - ec2_key_name | length > 0
-    fail_msg: "ec2.ami_id and ec2.key_name must be defined in group_vars/all.yml"
+    fail_msg: "ec2.ami_id and ec2.key_name must be defined in group_vars/all.yml. Got ami_id={{ ec2_ami_id | default('undefined') }}, key_name={{ ec2_key_name | default('undefined') }}"
 
 - name: Get default VPC if not specified
   amazon.aws.ec2_vpc_net_info:
@@ -15,11 +23,17 @@
     filters:
       isDefault: "true"
   register: default_vpc
-  when: ec2_vpc_id is not defined or ec2_vpc_id == ''
+  when: ec2_vpc_id | length == 0
 
-- name: Set VPC ID
+- name: Set VPC ID from config
   ansible.builtin.set_fact:
-    effective_vpc_id: "{{ ec2_vpc_id | default(default_vpc.vpcs[0].vpc_id) }}"
+    effective_vpc_id: "{{ ec2_vpc_id }}"
+  when: ec2_vpc_id | length > 0
+
+- name: Set VPC ID from default
+  ansible.builtin.set_fact:
+    effective_vpc_id: "{{ default_vpc.vpcs[0].vpc_id }}"
+  when: ec2_vpc_id | length == 0
 
 - name: Get default subnet if not specified
   amazon.aws.ec2_vpc_subnet_info:
@@ -29,11 +43,17 @@
       availability-zone: "{{ ec2_az }}"
       default-for-az: "true"
   register: default_subnet
-  when: ec2_subnet_id is not defined or ec2_subnet_id == ''
+  when: ec2_subnet_id | length == 0
 
-- name: Set Subnet ID
+- name: Set Subnet ID from config
   ansible.builtin.set_fact:
-    effective_subnet_id: "{{ ec2_subnet_id | default(default_subnet.subnets[0].subnet_id) }}"
+    effective_subnet_id: "{{ ec2_subnet_id }}"
+  when: ec2_subnet_id | length > 0
+
+- name: Set Subnet ID from default
+  ansible.builtin.set_fact:
+    effective_subnet_id: "{{ default_subnet.subnets[0].subnet_id }}"
+  when: ec2_subnet_id | length == 0
 
 - name: Create security group
   amazon.aws.ec2_security_group:
@@ -45,7 +65,7 @@
     rules_egress:
       - proto: all
         cidr_ip: 0.0.0.0/0
-        description: Allow all outbound traffic
+        rule_desc: Allow all outbound traffic
     tags:
       Name: "{{ ec2_security_group_name }}"
       Project: pgedge-docs
@@ -55,7 +75,6 @@
   amazon.aws.ec2_instance:
     name: "{{ ec2_tags.Name | default('pgedge-rag-server') }}"
     region: "{{ ec2_region }}"
-    availability_zone: "{{ ec2_az }}"
     image_id: "{{ ec2_ami_id }}"
     instance_type: "{{ ec2_instance_type }}"
     key_name: "{{ ec2_key_name }}"

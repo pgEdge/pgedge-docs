@@ -30,3 +30,9 @@ vault_cloudflare_account_id: "your-cloudflare-account-id"
 # Shared secret for RAG server authentication via Worker
 # Generate with: openssl rand -hex 32
 vault_rag_secret: "generate-a-random-secret-here"
+
+# Infrastructure details
+vault_rag_server_ip: "your-server-ip-address"
+vault_cloudflared_internal_hostname: "your-internal-hostname.example.com"
+vault_cloudflared_tunnel_name: "your-tunnel-name"
+vault_ec2_key_name: "your-aws-key-pair-name"

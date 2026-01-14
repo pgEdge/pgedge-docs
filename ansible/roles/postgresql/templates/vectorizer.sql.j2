@@ -3,45 +3,26 @@
 --
 -- This configures pgedge-vectorizer to create embeddings for the docs table
 
--- Enable the vectorizer extension
-CREATE EXTENSION IF NOT EXISTS vectorizer;
-
--- Create vectorizer for the docs table
+-- Enable vectorization on the docs table content column
 -- This will:
---   1. Add an 'embedding' column to the docs table
---   2. Automatically generate embeddings for new/updated rows
---   3. Use the configured embedding model
-SELECT vectorizer.create(
-    -- Source table to vectorize
-    source_table => 'public.docs',
-
-    -- Column containing text to embed
-    source_column => 'content',
-
-    -- Embedding configuration
-    embedding => vectorizer.embedding_openai(
-        model => '{{ vectorizer_embedding_model }}',
-        dimensions => {{ vectorizer_embedding_dimensions }}
-    ),
-
-    -- Chunking configuration (content is already chunked, so minimal chunking)
-    chunking => vectorizer.chunking_character_text_splitter(
-        chunk_size => {{ vectorizer_chunk_size }},
-        chunk_overlap => {{ vectorizer_chunk_overlap }},
-        separator => E'\n\n'
-    ),
-
-    -- Formatting template - include metadata in the embedded text
-    formatting => vectorizer.formatting_python_template(
-        template => '{{ vectorizer_template }}'
-    ),
-
-    -- Schedule for processing (how often to check for new content)
-    scheduling => vectorizer.scheduling_timescaledb(
-        interval => '{{ vectorizer_schedule_interval }}'::interval
-    )
+--   1. Create a chunks table (docs_content_chunks) with an embedding column
+--   2. Automatically chunk and vectorize content when rows are inserted/updated
+--   3. Use background workers to generate embeddings asynchronously
+SELECT pgedge_vectorizer.enable_vectorization(
+    source_table := 'public.docs',
+    source_column := 'content',
+    chunk_strategy := 'token_based',
+    chunk_size := {{ vectorizer_chunk_size }},
+    chunk_overlap := {{ vectorizer_chunk_overlap }}
 );
 
--- Grant permissions on the embedding column to RAG user
--- (The vectorizer creates additional structures that need permissions)
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{ pg_user }};
+-- Grant permissions on the chunks table to RAG user
+-- Full permissions needed because docloader triggers create chunks
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.docs_content_chunks TO {{ pg_user }};
+GRANT USAGE, SELECT, UPDATE ON public.docs_content_chunks_id_seq TO {{ pg_user }};
+
+-- Grant permissions on the pgedge_vectorizer schema (for trigger functions)
+GRANT USAGE ON SCHEMA pgedge_vectorizer TO {{ pg_user }};
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA pgedge_vectorizer TO {{ pg_user }};
+GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA pgedge_vectorizer TO {{ pg_user }};
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA pgedge_vectorizer TO {{ pg_user }};

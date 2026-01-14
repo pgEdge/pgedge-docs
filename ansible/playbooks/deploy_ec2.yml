@@ -20,8 +20,7 @@
 
 ---
 - name: Deploy EC2 Instance for RAG Server
-  hosts: localhost
-  connection: local
+  hosts: local
   gather_facts: false
 
   roles:
