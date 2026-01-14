@@ -554,7 +554,9 @@
                 if (key === 'className') {
                     el.className = value;
                 } else if (key === 'innerHTML') {
-                    el.innerHTML = value;
+                    // Safe: innerHTML values are either hardcoded SVG icons or
+                    // content that has been HTML-escaped via renderMarkdown()
+                    el.innerHTML = value; // eslint-disable-line xss/no-mixed-html
                 } else {
                     el.setAttribute(key, value);
                 }
@@ -562,6 +564,8 @@
             return el;
         }
 
+        // Static SVG icons - safe hardcoded HTML, not user input
+        /* eslint-disable xss/no-mixed-html */
         getIconSVG(name) {
             const icons = {
                 chat: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>',
@@ -573,6 +577,7 @@
             };
             return icons[name] || '';
         }
+        /* eslint-enable xss/no-mixed-html */
 
         showFab() {
             this.elements.fab.classList.add('ellie-fab--visible');
@@ -623,7 +628,8 @@
             });
 
             if (role === 'assistant') {
-                contentEl.innerHTML = this.renderMarkdown(content);
+                // Safe: renderMarkdown() escapes all HTML before converting markdown to safe tags
+                contentEl.innerHTML = this.renderMarkdown(content); // eslint-disable-line xss/no-mixed-html
             } else {
                 contentEl.textContent = content;
             }
@@ -636,7 +642,8 @@
         }
 
         updateStreamingMessage(contentEl, fullContent) {
-            contentEl.innerHTML = this.renderMarkdown(fullContent);
+            // Safe: renderMarkdown() escapes all HTML before converting markdown to safe tags
+            contentEl.innerHTML = this.renderMarkdown(fullContent); // eslint-disable-line xss/no-mixed-html
             this.scrollToBottom();
         }
 
@@ -694,7 +701,8 @@
         }
 
         clearMessages() {
-            this.elements.messages.innerHTML = '';
+            // Safe: setting to empty string to clear container
+            this.elements.messages.innerHTML = ''; // eslint-disable-line xss/no-mixed-html
             this.addWelcomeMessage();
         }
 
@@ -706,6 +714,8 @@
         }
 
         setStreaming(isStreaming) {
+            // Safe: getIconSVG() returns hardcoded SVG strings, not user input
+            // eslint-disable-next-line xss/no-mixed-html
             this.elements.sendBtn.innerHTML = isStreaming ?
                 this.getIconSVG('stop') :
                 this.getIconSVG('send');
@@ -1110,8 +1120,9 @@
     }
 
     // Re-initialize after instant navigation (MkDocs Material)
+    // document$ is a global RxJS observable provided by MkDocs Material for instant navigation
     if (typeof document$ !== 'undefined') {
-        document$.subscribe(init);
+        document$.subscribe(init); // eslint-disable-line no-undef
     }
 
     // Export for external access if needed
