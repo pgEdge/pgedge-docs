@@ -670,10 +670,12 @@
                 .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
                 // Italic
                 .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-                // Links (validate URL to prevent javascript: protocol XSS)
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+                // Links (validate URL and escape for attribute context)
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
                     if (/^(https?:\/\/|mailto:|\/)/i.test(url)) {
-                        return `<a href="${url}" target="_blank" rel="noopener">${text}</a>`;
+                        // Escape URL for href attribute (quotes could break out)
+                        const safeUrl = url.replace(/"/g, '&quot;');
+                        return `<a href="${safeUrl}" target="_blank" rel="noopener">${linkText}</a>`;
                     }
                     return match;
                 })
