@@ -121,10 +121,9 @@ rag_server:
     name: pgedge-docs
     description: "pgEdge documentation search"
 
-    # The docs table is created by the postgresql role and vectorized by pgedge-vectorizer
-    # The embedding column is automatically added by the vectorizer
+    # The vectorizer creates docs_content_chunks from the docs table with embeddings
     tables:
-      - table: "public.docs"
+      - table: "public.docs_content_chunks"
         text_column: "content"
         vector_column: "embedding"
 
@@ -135,6 +134,10 @@ rag_server:
     rag_llm:
       provider: anthropic
       model: claude-sonnet-4-20250514
+
+    # Retrieval settings - higher values improve response quality
+    token_budget: 8000  # Maximum tokens for context (default: 4000)
+    top_n: 20           # Number of chunks to retrieve (default: 10)
 
     system_prompt: |
       You are a helpful assistant called Ellie that answers questions based on
