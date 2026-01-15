@@ -6,13 +6,26 @@
 
 export default {
   async fetch(request, env) {
-    const ALLOWED_ORIGIN = '{{ cf_allowed_origin }}';
+    const ALLOWED_ORIGINS = [
+      '{{ cf_allowed_origin }}',
+      // Allow Cloudflare Pages preview deployments
+      /^https:\/\/[a-z0-9-]+\.pgedge-docs\.pages\.dev$/,
+    ];
     const RAG_INTERNAL_URL = '{{ cf_rag_internal_url }}';
     const PIPELINE_NAME = '{{ cf_pipeline_name }}';
 
-    // CORS headers
+    // Check if origin is allowed
+    const origin = request.headers.get('Origin') || '';
+    const isAllowedOrigin = ALLOWED_ORIGINS.some(allowed => {
+      if (typeof allowed === 'string') {
+        return origin === allowed;
+      }
+      return allowed.test(origin);
+    });
+
+    // CORS headers - use requesting origin if allowed, otherwise production
     const corsHeaders = {
-      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+      'Access-Control-Allow-Origin': isAllowedOrigin ? origin : '{{ cf_allowed_origin }}',
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': '86400',
@@ -35,8 +48,7 @@ export default {
     }
 
     // Validate origin
-    const origin = request.headers.get('Origin');
-    if (origin !== ALLOWED_ORIGIN) {
+    if (!isAllowedOrigin) {
       return new Response('Forbidden', {
         status: 403,
         headers: corsHeaders,
