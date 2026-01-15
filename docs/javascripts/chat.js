@@ -1018,14 +1018,18 @@
             }
 
             // History navigation
-            if (e.key === 'ArrowUp' && this.ui.elements.input.selectionStart === 0) {
+            const input = this.ui.elements.input;
+            const isNavigatingHistory = this.ui.inputHistoryIndex > -1;
+
+            // Up arrow: navigate to older history when at start of text, or continue if already navigating
+            if (e.key === 'ArrowUp' && (isNavigatingHistory || input.selectionStart === 0)) {
                 e.preventDefault();
                 this.ui.navigateHistory('up', this.history.loadInputHistory());
                 return;
             }
 
-            const input = this.ui.elements.input;
-            if (e.key === 'ArrowDown' && input.selectionStart === input.value.length) {
+            // Down arrow: navigate to newer history when already navigating, or at end of text
+            if (e.key === 'ArrowDown' && (isNavigatingHistory || input.selectionStart === input.value.length)) {
                 e.preventDefault();
                 this.ui.navigateHistory('down', this.history.loadInputHistory());
                 return;
