@@ -224,3 +224,42 @@ api_keys:
   openai: "{{ vault_openai_api_key | default('') }}"
   anthropic: "{{ vault_anthropic_api_key | default('') }}"
   voyage: "{{ vault_voyage_api_key | default('') }}"
+
+# -----------------------------------------------------------------------------
+# AWS Backup Configuration
+# -----------------------------------------------------------------------------
+aws_backup:
+  enabled: true
+  region: "{{ ec2.region }}"
+
+  # Backup vault name
+  vault_name: pgedge-rag-backup-vault
+
+  # Backup plan name
+  plan_name: pgedge-rag-backup-plan
+
+  # IAM role for AWS Backup service
+  iam_role_name: AWSBackupRole-pgedge-rag
+
+  # Backup schedule and retention
+  # - Daily backups at 5 AM UTC, kept for 7 days
+  # - Weekly backups on Sundays, kept for 4 weeks
+  # - Monthly backups on 1st of month, kept for 12 months
+  rules:
+    - name: daily
+      schedule: "cron(0 5 * * ? *)"
+      retention_days: 7
+    - name: weekly
+      schedule: "cron(0 5 ? * SUN *)"
+      retention_days: 28
+    - name: monthly
+      schedule: "cron(0 5 1 * ? *)"
+      retention_days: 365
+
+  # Resources to backup (by tag)
+  resource_tags:
+    Project: pgedge-docs
+    ManagedBy: ansible
+
+  # Optional: SNS topic for backup notifications (store ARN in vault)
+  sns_topic_arn: "{{ vault_backup_sns_topic_arn | default('') }}"
