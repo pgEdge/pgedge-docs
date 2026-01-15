@@ -556,6 +556,7 @@
                 } else if (key === 'innerHTML') {
                     // Safe: innerHTML values are either hardcoded SVG icons or
                     // content that has been HTML-escaped via renderMarkdown()
+                    // nosemgrep: javascript.browser.security.innerHTML.property-assignment
                     el.innerHTML = value; // eslint-disable-line xss/no-mixed-html
                 } else {
                     el.setAttribute(key, value);
@@ -629,6 +630,7 @@
 
             if (role === 'assistant') {
                 // Safe: renderMarkdown() escapes all HTML before converting markdown to safe tags
+                // nosemgrep: javascript.browser.security.innerHTML.property-assignment
                 contentEl.innerHTML = this.renderMarkdown(content); // eslint-disable-line xss/no-mixed-html
             } else {
                 contentEl.textContent = content;
@@ -643,6 +645,7 @@
 
         updateStreamingMessage(contentEl, fullContent) {
             // Safe: renderMarkdown() escapes all HTML before converting markdown to safe tags
+            // nosemgrep: javascript.browser.security.innerHTML.property-assignment
             contentEl.innerHTML = this.renderMarkdown(fullContent); // eslint-disable-line xss/no-mixed-html
             this.scrollToBottom();
         }
@@ -702,6 +705,7 @@
 
         clearMessages() {
             // Safe: setting to empty string to clear container
+            // nosemgrep: javascript.browser.security.innerHTML.property-assignment
             this.elements.messages.innerHTML = ''; // eslint-disable-line xss/no-mixed-html
             this.addWelcomeMessage();
         }
@@ -715,6 +719,7 @@
 
         setStreaming(isStreaming) {
             // Safe: getIconSVG() returns hardcoded SVG strings, not user input
+            // nosemgrep: javascript.browser.security.innerHTML.property-assignment
             // eslint-disable-next-line xss/no-mixed-html
             this.elements.sendBtn.innerHTML = isStreaming ?
                 this.getIconSVG('stop') :
