@@ -60,5 +60,9 @@ pipelines:
       provider: "{{ rag_pipeline.rag_llm.provider }}"
       model: "{{ rag_pipeline.rag_llm.model }}"
 
+    # Retrieval settings for response quality
+    token_budget: {{ rag_pipeline.token_budget | default(8000) }}
+    top_n: {{ rag_pipeline.top_n | default(20) }}
+
     system_prompt: |
 {{ rag_pipeline.system_prompt | indent(6, first=true) }}
