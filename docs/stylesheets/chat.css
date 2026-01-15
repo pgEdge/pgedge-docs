@@ -352,6 +352,13 @@
     padding: 0;
 }
 
+/* Ensure all elements inside code blocks have transparent backgrounds */
+.ellie-message__content pre code *,
+.ellie-message__content pre span {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
 .ellie-message__content a {
     color: var(--ellie-primary);
     text-decoration: underline;
@@ -475,27 +482,13 @@
     background: var(--ellie-text-muted);
 }
 
-/* Input textarea scrollbar */
+/* Input textarea scrollbar - hide by default, show on hover/focus */
 .ellie-input {
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--ellie-border) transparent;
+    scrollbar-width: none; /* Firefox */
 }
 
 .ellie-input::-webkit-scrollbar {
-    width: 6px;
-}
-
-.ellie-input::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 8px 0;
-}
-
-.ellie-input::-webkit-scrollbar-thumb {
-    background: var(--ellie-border);
-    border-radius: 3px;
-}
-
-.ellie-input::-webkit-scrollbar-thumb:hover {
-    background: var(--ellie-text-muted);
+    width: 0;
+    display: none;
 }
