@@ -1024,7 +1024,8 @@
                 return;
             }
 
-            if (e.key === 'ArrowDown') {
+            const input = this.ui.elements.input;
+            if (e.key === 'ArrowDown' && input.selectionStart === input.value.length) {
                 e.preventDefault();
                 this.ui.navigateHistory('down', this.history.loadInputHistory());
                 return;
