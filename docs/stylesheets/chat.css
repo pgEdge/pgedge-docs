@@ -347,14 +347,18 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
-.ellie-message__content pre code {
-    background: transparent;
+.ellie-message__content pre code,
+[data-md-color-scheme="slate"] .ellie-message__content pre code {
+    background: transparent !important;
+    background-color: transparent !important;
     padding: 0;
 }
 
 /* Ensure all elements inside code blocks have transparent backgrounds */
 .ellie-message__content pre code *,
-.ellie-message__content pre span {
+.ellie-message__content pre span,
+[data-md-color-scheme="slate"] .ellie-message__content pre code *,
+[data-md-color-scheme="slate"] .ellie-message__content pre span {
     background: transparent !important;
     background-color: transparent !important;
 }
