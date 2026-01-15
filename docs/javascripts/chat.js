@@ -448,6 +448,7 @@
             this.elements.fab = this.createElement('button', {
                 className: 'ellie-fab',
                 'aria-label': 'Open Ask Ellie chat',
+                title: 'Ask Ellie',
                 innerHTML: this.getIconSVG('chat')
             });
 
