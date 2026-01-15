@@ -466,6 +466,10 @@
                         <span class="ellie-header__title">Ask Ellie</span>
                     </div>
                     <div class="ellie-header__actions">
+                        <button class="ellie-header__btn ellie-header__btn--save"
+                                aria-label="Save conversation" title="Save conversation">
+                            ${this.getIconSVG('save')}
+                        </button>
                         <button class="ellie-header__btn ellie-header__btn--clear"
                                 aria-label="Clear conversation" title="Clear conversation">
                             ${this.getIconSVG('trash')}
@@ -524,6 +528,7 @@
             document.body.appendChild(this.elements.window);
 
             // Cache button references
+            this.elements.saveBtn = this.elements.header.querySelector('.ellie-header__btn--save');
             this.elements.clearBtn = this.elements.header.querySelector('.ellie-header__btn--clear');
             this.elements.closeBtn = this.elements.header.querySelector('.ellie-header__btn--close');
 
@@ -574,6 +579,7 @@
                 send: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
                 stop: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12"/></svg>',
                 trash: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+                save: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>',
                 bot: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2zM7.5 13A1.5 1.5 0 006 14.5 1.5 1.5 0 007.5 16 1.5 1.5 0 009 14.5 1.5 1.5 0 007.5 13zm9 0a1.5 1.5 0 00-1.5 1.5 1.5 1.5 0 001.5 1.5 1.5 1.5 0 001.5-1.5 1.5 1.5 0 00-1.5-1.5zM12 9a5 5 0 00-5 5v1h10v-1a5 5 0 00-5-5z"/></svg>'
             };
             return icons[name] || '';
@@ -860,6 +866,9 @@
             // Close button
             this.ui.elements.closeBtn.addEventListener('click', () => this.handleClose());
 
+            // Save button
+            this.ui.elements.saveBtn.addEventListener('click', () => this.handleSave());
+
             // Clear button
             this.ui.elements.clearBtn.addEventListener('click', () => this.handleClear());
 
@@ -954,6 +963,41 @@
                 this.history.clear();
                 this.ui.clearMessages();
             }
+        }
+
+        handleSave() {
+            // Filter out system messages and generate markdown
+            const userMessages = this.messages.filter(msg => msg.role !== 'system');
+
+            if (userMessages.length === 0) {
+                return;
+            }
+
+            // Generate markdown content
+            const lines = userMessages.map(msg => {
+                const speaker = msg.role === 'user' ? 'User' : 'Ellie';
+                return `**${speaker}:** ${msg.content}`;
+            });
+
+            const markdown = lines.join('\n\n');
+
+            // Generate filename with current date
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const filename = `ellie-chat-${year}-${month}-${day}.md`;
+
+            // Create and trigger download
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         handleSendOrStop() {

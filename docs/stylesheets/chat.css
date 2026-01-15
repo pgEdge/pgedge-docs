@@ -474,3 +474,28 @@
 .ellie-messages::-webkit-scrollbar-thumb:hover {
     background: var(--ellie-text-muted);
 }
+
+/* Input textarea scrollbar */
+.ellie-input {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ellie-border) transparent;
+}
+
+.ellie-input::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ellie-input::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 8px 0;
+}
+
+.ellie-input::-webkit-scrollbar-thumb {
+    background: var(--ellie-border);
+    border-radius: 3px;
+}
+
+.ellie-input::-webkit-scrollbar-thumb:hover {
+    background: var(--ellie-text-muted);
+}
