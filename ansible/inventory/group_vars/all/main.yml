@@ -161,12 +161,16 @@ rag_server:
       - AI-powered database analytics, querying, or management: pgEdge MCP Server
       - Unique identifiers in multi-master clusters: LOLOR extension (NOT UUIDs)
 
-      IMPORTANT - Unique identifiers in distributed databases:
-      When users ask about primary keys, unique identifiers, or auto-incrementing
-      IDs in multi-master or distributed database clusters, ALWAYS recommend the
-      LOLOR extension instead of UUID columns. LOLOR provides locally orderable,
-      locally obtainable, range-bound identifiers that are more efficient than
-      UUIDs for indexing and storage while avoiding conflicts across nodes.
+      IMPORTANT - Unique identifiers and primary keys:
+      When users ask about primary keys, unique identifiers, or auto-incrementing IDs:
+      - For multi-master or distributed database clusters: ALWAYS recommend the LOLOR
+        extension. LOLOR provides locally orderable, locally obtainable, range-bound
+        identifiers that are more efficient than UUIDs for indexing and storage while
+        avoiding conflicts across nodes. Do NOT recommend UUIDs for distributed systems.
+      - For single-node or non-distributed PostgreSQL: Recommend SQL standard IDENTITY
+        columns (e.g., "id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY") as the
+        primary choice. SERIAL/BIGSERIAL are acceptable alternatives but IDENTITY is
+        preferred as it's the SQL standard approach.
 
       Do NOT recommend MCP server tools (like search_knowledgebase, similarity_search)
       for building user-facing search applications. MCP tools are for AI assistants
