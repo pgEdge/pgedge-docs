@@ -265,6 +265,8 @@
     font-size: 14px;
     line-height: 1.5;
     word-break: break-word;
+    overflow: hidden;
+    min-width: 0;
 }
 
 .ellie-message--user .ellie-message__content {
@@ -342,6 +344,7 @@
     border-radius: 6px;
     overflow-x: auto;
     white-space: pre !important;
+    max-width: 100%;
 }
 
 [data-md-color-scheme="slate"] .ellie-message__content pre {
