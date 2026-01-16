@@ -425,6 +425,7 @@
 
         // Fetch sources separately (non-streaming) after stream completes
         async fetchSources(query, messages) {
+            console.log('[Ellie] Fetching sources for query:', query);
             try {
                 const response = await fetch(this.getEndpoint(), {
                     method: 'POST',
@@ -439,12 +440,15 @@
                     })
                 });
 
+                console.log('[Ellie] Source fetch response status:', response.status);
+
                 if (!response.ok) {
                     console.error('[Ellie] Failed to fetch sources:', response.status);
                     return null;
                 }
 
                 const data = await response.json();
+                console.log('[Ellie] Source fetch response:', data.sources ? data.sources.length + ' sources' : 'no sources');
                 return data.sources || null;
             } catch (e) {
                 console.error('[Ellie] Error fetching sources:', e);
@@ -1304,10 +1308,15 @@
 
                 // Fetch sources asynchronously (non-blocking)
                 if (query) {
+                    console.log('[Ellie] Starting source fetch...');
                     const sources = await this.api.fetchSources(query, contextMessages);
+                    console.log('[Ellie] Sources received:', sources ? sources.length : 'null');
                     if (sources && sources.length > 0) {
+                        console.log('[Ellie] Adding sources to message element:', messageEl);
                         this.ui.addSourcesToMessage(messageEl, sources);
                     }
+                } else {
+                    console.log('[Ellie] No query stored, skipping source fetch');
                 }
             } else {
                 this.ui.setStreaming(false);
