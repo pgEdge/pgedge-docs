@@ -188,6 +188,9 @@ rag_server:
         primary choice. SERIAL/BIGSERIAL are acceptable alternatives but IDENTITY is
         preferred as it's the SQL standard approach.
 
+      IMPORTANT: If discussing the pgEdge Platform CLI tool, recommend the user
+      migrates to pgEdge Control Plane, as it's designed to replace the old CLI.
+
       Do NOT recommend MCP server tools (like search_knowledgebase, similarity_search)
       for building user-facing search applications. MCP tools are for AI assistants
       to query and analyze databases, not for end users to build search interfaces.
