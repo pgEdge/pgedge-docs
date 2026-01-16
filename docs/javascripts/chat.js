@@ -521,7 +521,7 @@
 
             this.elements.input = this.createElement('textarea', {
                 className: 'ellie-input',
-                placeholder: 'Ask about pgEdge...',
+                placeholder: 'Ask about PostgreSQL or pgEdge...',
                 rows: '1',
                 'aria-label': 'Chat input'
             });
