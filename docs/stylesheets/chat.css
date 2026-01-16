@@ -346,6 +346,9 @@
     overflow-x: auto;
     white-space: pre !important;
     max-width: 100%;
+    /* Scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: #c0c0c0 transparent;
 }
 
 /* Copy button for code blocks */
@@ -396,44 +399,35 @@
 
 [data-md-color-scheme="slate"] .ellie-message__content pre {
     background: rgba(0, 0, 0, 0.3);
+    scrollbar-color: #555555 transparent;
 }
 
-/* Code block scrollbar styling - target directly by class */
-pre.ellie-code::-webkit-scrollbar {
-    height: 6px !important;
-    width: 6px !important;
+/* Code block scrollbar styling - webkit */
+.ellie-message__content pre::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
 }
 
-pre.ellie-code::-webkit-scrollbar-track {
-    background: transparent !important;
+.ellie-message__content pre::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-pre.ellie-code::-webkit-scrollbar-thumb {
-    background: #c0c0c0 !important;
-    border-radius: 3px !important;
+.ellie-message__content pre::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 3px;
 }
 
-pre.ellie-code::-webkit-scrollbar-thumb:hover {
-    background: #999999 !important;
+.ellie-message__content pre::-webkit-scrollbar-thumb:hover {
+    background: #999999;
 }
 
-/* Dark mode */
-[data-md-color-scheme="slate"] pre.ellie-code::-webkit-scrollbar-thumb {
-    background: #555555 !important;
+/* Dark mode webkit */
+[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb {
+    background: #555555;
 }
 
-[data-md-color-scheme="slate"] pre.ellie-code::-webkit-scrollbar-thumb:hover {
-    background: #777777 !important;
-}
-
-/* Firefox scrollbar */
-pre.ellie-code {
-    scrollbar-width: thin !important;
-    scrollbar-color: #c0c0c0 transparent !important;
-}
-
-[data-md-color-scheme="slate"] pre.ellie-code {
-    scrollbar-color: #555555 transparent !important;
+[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb:hover {
+    background: #777777;
 }
 
 .ellie-message__content pre code,
