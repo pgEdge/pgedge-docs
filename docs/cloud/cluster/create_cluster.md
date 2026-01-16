@@ -20,8 +20,8 @@ navigation pane. Then:
 ![Select a cloud account](../images/cloud_account.png)
 
 Next, select up to 5 availability zones in any regions to which you have access.
-  To use the map for location selection, use the `Show map` toggle to enable
-  the map.
+To use the map for location selection, use the `Show map` toggle to enable
+the map.
 
 ![Select the regions for deployment](../images/cluster_regions.png)
 
