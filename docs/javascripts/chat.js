@@ -61,6 +61,106 @@
     };
 
     // =========================================================================
+    // StreamBuffer - Buffers streaming content for smoother display
+    // =========================================================================
+    // Waits for word boundaries before displaying text, and holds code blocks
+    // until they're complete to avoid showing raw markdown during streaming.
+    class StreamBuffer {
+        constructor() {
+            this.content = '';  // Full accumulated content
+        }
+
+        /**
+         * Add a chunk and return the portion safe to display.
+         * @param {string} chunk - New content from stream
+         * @returns {string} Content safe to display (may be less than full content)
+         */
+        add(chunk) {
+            this.content += chunk;
+            return this.getDisplayContent();
+        }
+
+        /**
+         * Get the portion of content that's safe to display.
+         * Excludes incomplete words and incomplete code blocks.
+         */
+        getDisplayContent() {
+            const safePoint = this.findSafePoint();
+            return this.content.slice(0, safePoint);
+        }
+
+        /**
+         * Find the position up to which content is safe to display.
+         * - Code blocks are only shown when complete (has closing ```)
+         * - Regular text is shown up to the last word boundary
+         */
+        findSafePoint() {
+            let pos = 0;
+            let inCodeBlock = false;
+            let codeBlockStart = 0;
+            let lastSafePoint = 0;
+
+            while (pos < this.content.length) {
+                // Check for code fence (```)
+                if (this.content.slice(pos, pos + 3) === '```') {
+                    if (!inCodeBlock) {
+                        // Entering code block - remember where it started
+                        codeBlockStart = pos;
+                        inCodeBlock = true;
+                        pos += 3;
+                        // Skip language identifier
+                        while (pos < this.content.length && this.content[pos] !== '\n') {
+                            pos++;
+                        }
+                        if (pos < this.content.length) pos++;
+                        continue;
+                    } else {
+                        // Leaving code block - it's now complete
+                        inCodeBlock = false;
+                        pos += 3;
+                        // Include trailing newline if present
+                        if (pos < this.content.length && this.content[pos] === '\n') {
+                            pos++;
+                        }
+                        lastSafePoint = pos;
+                        continue;
+                    }
+                }
+                pos++;
+            }
+
+            if (inCodeBlock) {
+                // Inside incomplete code block - only show up to where it started
+                return codeBlockStart;
+            }
+
+            // Not in code block - find last word boundary after lastSafePoint
+            let lastWordBoundary = lastSafePoint;
+            for (let i = lastSafePoint; i < this.content.length; i++) {
+                if (/\s/.test(this.content[i])) {
+                    lastWordBoundary = i + 1; // Include the whitespace
+                }
+            }
+
+            return lastWordBoundary;
+        }
+
+        /**
+         * Get the full accumulated content (for final display).
+         */
+        getFullContent() {
+            return this.content;
+        }
+
+        /**
+         * Reset the buffer for a new stream.
+         */
+        reset() {
+            this.content = '';
+        }
+    }
+
+    // =========================================================================
     // TokenCounter - Estimates token count for messages
     // =========================================================================
     class TokenCounter {
@@ -853,7 +953,7 @@
             this.history = new ChatHistory(config);
             this.messages = [];
             this.fullHistory = [];  // Uncompacted history for exports
-            this.currentStreamContent = '';
+            this.streamBuffer = new StreamBuffer();
             this.currentStreamElements = null;
             this.initialized = false;
             this.busyMessageTimer = null;
@@ -1119,7 +1219,7 @@
 
         startStream(query) {
             this.ui.setStreaming(true);
-            this.currentStreamContent = '';
+            this.streamBuffer.reset();
             this.currentStreamElements = null;
 
             // Start showing busy messages
@@ -1138,10 +1238,11 @@
                         this.stopBusyMessages();
                         this.currentStreamElements = this.ui.addMessage('assistant', '', true);
                     }
-                    this.currentStreamContent += chunk;
+                    // Buffer handles word boundaries and code blocks
+                    const displayContent = this.streamBuffer.add(chunk);
                     this.ui.updateStreamingMessage(
                         this.currentStreamElements.content,
-                        this.currentStreamContent
+                        displayContent
                     );
                 },
                 // onDone
@@ -1163,6 +1264,7 @@
 
                     this.ui.showError(errorMsg);
                     this.ui.setStreaming(false);
+                    this.streamBuffer.reset();
                     if (this.currentStreamElements) {
                         this.currentStreamElements.message.remove();
                         this.currentStreamElements = null;
@@ -1195,18 +1297,24 @@
             this.stopBusyMessages();
 
             if (this.currentStreamElements) {
+                // Display the full content (flush any buffered text/code blocks)
+                const fullContent = this.streamBuffer.getFullContent();
+                this.ui.updateStreamingMessage(
+                    this.currentStreamElements.content,
+                    fullContent
+                );
                 this.ui.finalizeStreamingMessage(this.currentStreamElements.message);
 
                 // Add assistant message to history
-                if (this.currentStreamContent) {
-                    this.messages.push({ role: 'assistant', content: this.currentStreamContent });
-                    this.fullHistory.push({ role: 'assistant', content: this.currentStreamContent });
+                if (fullContent) {
+                    this.messages.push({ role: 'assistant', content: fullContent });
+                    this.fullHistory.push({ role: 'assistant', content: fullContent });
                     this.saveFullHistory();
                     this.messages = this.history.save(this.messages);
                 }
 
                 this.currentStreamElements = null;
-                this.currentStreamContent = '';
+                this.streamBuffer.reset();
             }
 
             this.ui.setStreaming(false);
