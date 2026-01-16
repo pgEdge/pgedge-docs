@@ -742,7 +742,7 @@
         addWelcomeMessage() {
             this.addMessage('assistant',
                 "Hi! I'm Ellie, your pgEdge documentation assistant. " +
-                "Ask me anything about pgEdge products, installation, configuration, or troubleshooting."
+                "Ask me anything about PostgreSQL, pgEdge, and the PostgreSQL extentions and tools we support."
             );
         }
 
