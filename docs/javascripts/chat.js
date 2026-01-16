@@ -341,9 +341,6 @@
             this.abortController = new AbortController();
             const signal = this.abortController.signal;
 
-            // Track sources received during streaming
-            this.currentSources = null;
-
             try {
                 const response = await fetch(this.getEndpoint(), {
                     method: 'POST',
@@ -408,31 +405,14 @@
             try {
                 const data = JSON.parse(trimmed.slice(6));
 
-                // Debug: log all SSE events to help diagnose sources
-                if (data.type !== 'chunk') {
-                    console.log('[Ellie] SSE event:', data.type, data);
-                }
-
                 switch (data.type) {
                     case 'chunk':
                         if (data.content) {
                             onChunk(data.content);
                         }
                         break;
-                    case 'sources':
-                        // Store sources for later use
-                        this.currentSources = data.sources || [];
-                        console.log('[Ellie] Received sources:', this.currentSources.length);
-                        break;
                     case 'done':
-                        // Sources might be in the done event directly
-                        if (data.sources && !this.currentSources) {
-                            this.currentSources = data.sources;
-                            console.log('[Ellie] Sources in done event:', this.currentSources.length);
-                        }
-                        // Pass sources to onDone callback
-                        onDone(this.currentSources);
-                        this.currentSources = null;
+                        onDone();
                         break;
                     case 'error':
                         onError(new Error(data.error || 'Unknown server error'));
@@ -443,8 +423,33 @@
             }
         }
 
-        getSources() {
-            return this.currentSources;
+        // Fetch sources separately (non-streaming) after stream completes
+        async fetchSources(query, messages) {
+            try {
+                const response = await fetch(this.getEndpoint(), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        stream: false,
+                        messages: messages,
+                        include_sources: true
+                    })
+                });
+
+                if (!response.ok) {
+                    console.error('[Ellie] Failed to fetch sources:', response.status);
+                    return null;
+                }
+
+                const data = await response.json();
+                return data.sources || null;
+            } catch (e) {
+                console.error('[Ellie] Error fetching sources:', e);
+                return null;
+            }
         }
 
         abort() {
@@ -1202,12 +1207,14 @@
             this.ui.setStreaming(true);
             this.currentStreamContent = '';
             this.currentStreamElements = null;
+            this.currentQuery = query;  // Store for source fetching
 
             // Start showing busy messages
             this.startBusyMessages();
 
             // Prepare messages for API (exclude current query, it goes in query field)
             const contextMessages = this.messages.slice(0, -1);
+            this.currentContextMessages = contextMessages;  // Store for source fetching
 
             this.api.streamQuery(
                 query,
@@ -1225,9 +1232,9 @@
                         this.currentStreamContent
                     );
                 },
-                // onDone (receives sources array)
-                (sources) => {
-                    this.finalizeCurrentStream(sources);
+                // onDone
+                () => {
+                    this.finalizeCurrentStream();
                 },
                 // onError
                 (error) => {
@@ -1272,16 +1279,16 @@
             this.ui.hideBusyStatus();
         }
 
-        finalizeCurrentStream(sources = null) {
+        async finalizeCurrentStream() {
             this.stopBusyMessages();
 
             if (this.currentStreamElements) {
                 this.ui.finalizeStreamingMessage(this.currentStreamElements.message);
 
-                // Display sources if available
-                if (sources && sources.length > 0) {
-                    this.ui.addSourcesToMessage(this.currentStreamElements.message, sources);
-                }
+                // Store references before clearing
+                const messageEl = this.currentStreamElements.message;
+                const query = this.currentQuery;
+                const contextMessages = this.currentContextMessages;
 
                 // Add assistant message to history
                 if (this.currentStreamContent) {
@@ -1293,9 +1300,18 @@
 
                 this.currentStreamElements = null;
                 this.currentStreamContent = '';
-            }
+                this.ui.setStreaming(false);
 
-            this.ui.setStreaming(false);
+                // Fetch sources asynchronously (non-blocking)
+                if (query) {
+                    const sources = await this.api.fetchSources(query, contextMessages);
+                    if (sources && sources.length > 0) {
+                        this.ui.addSourcesToMessage(messageEl, sources);
+                    }
+                }
+            } else {
+                this.ui.setStreaming(false);
+            }
         }
 
         renderExistingMessages() {
