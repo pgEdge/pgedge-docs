@@ -59,11 +59,15 @@ export default {
       // Forward request to RAG server via tunnel
       const ragUrl = `${RAG_INTERNAL_URL}/v1/pipelines/${PIPELINE_NAME}`;
 
+      // Parse request to check if streaming
+      const requestBody = await request.clone().json().catch(() => ({}));
+      const isStreaming = requestBody.stream !== false;
+
       const response = await fetch(ragUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'text/event-stream',
+          'Accept': isStreaming ? 'text/event-stream' : 'application/json',
           'X-Internal-Secret': env.RAG_SECRET,
         },
         body: request.body,
