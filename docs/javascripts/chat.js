@@ -351,8 +351,7 @@
                     body: JSON.stringify({
                         query: query,
                         stream: true,
-                        messages: messages,
-                        include_sources: true
+                        messages: messages
                     }),
                     signal
                 });
@@ -420,39 +419,6 @@
                 }
             } catch (e) {
                 console.error('[Ellie] Failed to parse SSE:', trimmed, e);
-            }
-        }
-
-        // Fetch sources separately (non-streaming) after stream completes
-        async fetchSources(query, messages) {
-            console.log('[Ellie] Fetching sources for query:', query);
-            try {
-                const response = await fetch(this.getEndpoint(), {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        query: query,
-                        stream: false,
-                        messages: messages,
-                        include_sources: true
-                    })
-                });
-
-                console.log('[Ellie] Source fetch response status:', response.status);
-
-                if (!response.ok) {
-                    console.error('[Ellie] Failed to fetch sources:', response.status);
-                    return null;
-                }
-
-                const data = await response.json();
-                console.log('[Ellie] Source fetch response:', data.sources ? data.sources.length + ' sources' : 'no sources');
-                return data.sources || null;
-            } catch (e) {
-                console.error('[Ellie] Error fetching sources:', e);
-                return null;
             }
         }
 
@@ -724,62 +690,6 @@
 
         finalizeStreamingMessage(msgEl) {
             msgEl.classList.remove('ellie-message--streaming');
-        }
-
-        addSourcesToMessage(msgEl, sources) {
-            if (!sources || sources.length === 0) return;
-
-            const sourcesContainer = document.createElement('div');
-            sourcesContainer.className = 'ellie-sources';
-
-            const toggle = document.createElement('button');
-            toggle.className = 'ellie-sources__toggle';
-            toggle.innerHTML = `<span class="ellie-sources__icon">📚</span> Sources (${sources.length})`;
-            toggle.setAttribute('aria-expanded', 'false');
-
-            const list = document.createElement('div');
-            list.className = 'ellie-sources__list';
-            list.style.display = 'none';
-
-            sources.forEach((source, index) => {
-                const item = document.createElement('div');
-                item.className = 'ellie-sources__item';
-
-                // Extract useful info from source - adjust based on RAG server response format
-                const title = source.title || source.filename || `Source ${index + 1}`;
-                const product = source.product || '';
-                const score = source.score ? ` (${(source.score * 100).toFixed(0)}%)` : '';
-                const content = source.content || source.chunk || '';
-
-                let html = `<div class="ellie-sources__title">${this.escapeHtml(title)}${score}</div>`;
-                if (product) {
-                    html += `<div class="ellie-sources__product">${this.escapeHtml(product)}</div>`;
-                }
-                if (content) {
-                    // Show truncated preview of content
-                    const preview = content.length > 200 ? content.substring(0, 200) + '...' : content;
-                    html += `<div class="ellie-sources__preview">${this.escapeHtml(preview)}</div>`;
-                }
-
-                item.innerHTML = html;
-                list.appendChild(item);
-            });
-
-            toggle.addEventListener('click', () => {
-                const expanded = toggle.getAttribute('aria-expanded') === 'true';
-                toggle.setAttribute('aria-expanded', !expanded);
-                list.style.display = expanded ? 'none' : 'block';
-            });
-
-            sourcesContainer.appendChild(toggle);
-            sourcesContainer.appendChild(list);
-            msgEl.appendChild(sourcesContainer);
-        }
-
-        escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
         }
 
         renderMarkdown(text) {
@@ -1211,14 +1121,12 @@
             this.ui.setStreaming(true);
             this.currentStreamContent = '';
             this.currentStreamElements = null;
-            this.currentQuery = query;  // Store for source fetching
 
             // Start showing busy messages
             this.startBusyMessages();
 
             // Prepare messages for API (exclude current query, it goes in query field)
             const contextMessages = this.messages.slice(0, -1);
-            this.currentContextMessages = contextMessages;  // Store for source fetching
 
             this.api.streamQuery(
                 query,
@@ -1283,16 +1191,11 @@
             this.ui.hideBusyStatus();
         }
 
-        async finalizeCurrentStream() {
+        finalizeCurrentStream() {
             this.stopBusyMessages();
 
             if (this.currentStreamElements) {
                 this.ui.finalizeStreamingMessage(this.currentStreamElements.message);
-
-                // Store references before clearing
-                const messageEl = this.currentStreamElements.message;
-                const query = this.currentQuery;
-                const contextMessages = this.currentContextMessages;
 
                 // Add assistant message to history
                 if (this.currentStreamContent) {
@@ -1304,23 +1207,9 @@
 
                 this.currentStreamElements = null;
                 this.currentStreamContent = '';
-                this.ui.setStreaming(false);
-
-                // Fetch sources asynchronously (non-blocking)
-                if (query) {
-                    console.log('[Ellie] Starting source fetch...');
-                    const sources = await this.api.fetchSources(query, contextMessages);
-                    console.log('[Ellie] Sources received:', sources ? sources.length : 'null');
-                    if (sources && sources.length > 0) {
-                        console.log('[Ellie] Adding sources to message element:', messageEl);
-                        this.ui.addSourcesToMessage(messageEl, sources);
-                    }
-                } else {
-                    console.log('[Ellie] No query stored, skipping source fetch');
-                }
-            } else {
-                this.ui.setStreaming(false);
             }
+
+            this.ui.setStreaming(false);
         }
 
         renderExistingMessages() {
