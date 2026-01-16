@@ -398,6 +398,30 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
+/* Code block scrollbar styling */
+.ellie-message__content pre::-webkit-scrollbar {
+    height: 6px;
+}
+
+.ellie-message__content pre::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ellie-message__content pre::-webkit-scrollbar-thumb {
+    background: var(--ellie-border);
+    border-radius: 3px;
+}
+
+.ellie-message__content pre::-webkit-scrollbar-thumb:hover {
+    background: var(--ellie-text-muted);
+}
+
+/* Firefox scrollbar */
+.ellie-message__content pre {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ellie-border) transparent;
+}
+
 .ellie-message__content pre code,
 .ellie-message__content pre code.hljs,
 [data-md-color-scheme="slate"] .ellie-message__content pre code,

@@ -861,8 +861,10 @@
                 const index = codeBlocks.length;
                 const isPending = hasPendingCode && !html.slice(offset + match.length).includes('```');
                 const pendingClass = isPending ? ' ellie-code--pending' : '';
+                // Trim trailing whitespace to avoid extra space at bottom of code block
+                const trimmedCode = code.replace(/\s+$/, '');
                 // Store the code block HTML with actual newlines preserved
-                codeBlocks.push(`<pre class="ellie-code${pendingClass}"><code class="language-${lang}">${code}</code></pre>`);
+                codeBlocks.push(`<pre class="ellie-code${pendingClass}"><code class="language-${lang}">${trimmedCode}</code></pre>`);
                 return `\x00CODE_BLOCK_${index}\x00`;
             });
 
