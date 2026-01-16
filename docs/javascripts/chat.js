@@ -341,6 +341,9 @@
             this.abortController = new AbortController();
             const signal = this.abortController.signal;
 
+            // Track sources received during streaming
+            this.currentSources = null;
+
             try {
                 const response = await fetch(this.getEndpoint(), {
                     method: 'POST',
@@ -352,7 +355,7 @@
                         query: query,
                         stream: true,
                         messages: messages,
-                        include_sources: false
+                        include_sources: true
                     }),
                     signal
                 });
@@ -411,8 +414,14 @@
                             onChunk(data.content);
                         }
                         break;
+                    case 'sources':
+                        // Store sources for later use
+                        this.currentSources = data.sources || [];
+                        break;
                     case 'done':
-                        onDone();
+                        // Pass sources to onDone callback
+                        onDone(this.currentSources);
+                        this.currentSources = null;
                         break;
                     case 'error':
                         onError(new Error(data.error || 'Unknown server error'));
@@ -421,6 +430,10 @@
             } catch (e) {
                 console.error('[Ellie] Failed to parse SSE:', trimmed, e);
             }
+        }
+
+        getSources() {
+            return this.currentSources;
         }
 
         abort() {
@@ -691,6 +704,62 @@
 
         finalizeStreamingMessage(msgEl) {
             msgEl.classList.remove('ellie-message--streaming');
+        }
+
+        addSourcesToMessage(msgEl, sources) {
+            if (!sources || sources.length === 0) return;
+
+            const sourcesContainer = document.createElement('div');
+            sourcesContainer.className = 'ellie-sources';
+
+            const toggle = document.createElement('button');
+            toggle.className = 'ellie-sources__toggle';
+            toggle.innerHTML = `<span class="ellie-sources__icon">📚</span> Sources (${sources.length})`;
+            toggle.setAttribute('aria-expanded', 'false');
+
+            const list = document.createElement('div');
+            list.className = 'ellie-sources__list';
+            list.style.display = 'none';
+
+            sources.forEach((source, index) => {
+                const item = document.createElement('div');
+                item.className = 'ellie-sources__item';
+
+                // Extract useful info from source - adjust based on RAG server response format
+                const title = source.title || source.filename || `Source ${index + 1}`;
+                const product = source.product || '';
+                const score = source.score ? ` (${(source.score * 100).toFixed(0)}%)` : '';
+                const content = source.content || source.chunk || '';
+
+                let html = `<div class="ellie-sources__title">${this.escapeHtml(title)}${score}</div>`;
+                if (product) {
+                    html += `<div class="ellie-sources__product">${this.escapeHtml(product)}</div>`;
+                }
+                if (content) {
+                    // Show truncated preview of content
+                    const preview = content.length > 200 ? content.substring(0, 200) + '...' : content;
+                    html += `<div class="ellie-sources__preview">${this.escapeHtml(preview)}</div>`;
+                }
+
+                item.innerHTML = html;
+                list.appendChild(item);
+            });
+
+            toggle.addEventListener('click', () => {
+                const expanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', !expanded);
+                list.style.display = expanded ? 'none' : 'block';
+            });
+
+            sourcesContainer.appendChild(toggle);
+            sourcesContainer.appendChild(list);
+            msgEl.appendChild(sourcesContainer);
+        }
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         renderMarkdown(text) {
@@ -1145,9 +1214,9 @@
                         this.currentStreamContent
                     );
                 },
-                // onDone
-                () => {
-                    this.finalizeCurrentStream();
+                // onDone (receives sources array)
+                (sources) => {
+                    this.finalizeCurrentStream(sources);
                 },
                 // onError
                 (error) => {
@@ -1192,11 +1261,16 @@
             this.ui.hideBusyStatus();
         }
 
-        finalizeCurrentStream() {
+        finalizeCurrentStream(sources = null) {
             this.stopBusyMessages();
 
             if (this.currentStreamElements) {
                 this.ui.finalizeStreamingMessage(this.currentStreamElements.message);
+
+                // Display sources if available
+                if (sources && sources.length > 0) {
+                    this.ui.addSourcesToMessage(this.currentStreamElements.message, sources);
+                }
 
                 // Add assistant message to history
                 if (this.currentStreamContent) {
