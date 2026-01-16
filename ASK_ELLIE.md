@@ -8,12 +8,36 @@ The chat interface consists of:
 
 - **Frontend**: A floating chat widget (`docs/javascripts/chat.js` and `docs/stylesheets/chat.css`)
 - **Backend**: The [pgEdge RAG Server](https://github.com/pgEdge/pgedge-rag-server) providing semantic search and LLM-powered responses
+- **Infrastructure**: Ansible-managed deployment with Cloudflare Worker and Tunnel
 
 ## Architecture
 
+### Production Setup (Cloudflare Tunnel)
+
+The production deployment uses a Cloudflare Worker and Tunnel to keep the RAG server private:
+
+```text
+┌─────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
+│   Browser   │────▶│  Cloudflare Worker  │────▶│  Cloudflare Tunnel  │
+│             │     │  (API Gateway)      │     │  (cloudflared)      │
+└─────────────┘     └─────────────────────┘     └──────────┬──────────┘
+                                                          │
+                                                          ▼
+                                              ┌─────────────────────┐
+                                              │     RAG Server      │
+                                              │  (localhost only)   │
+                                              └─────────────────────┘
+```
+
+Benefits of this approach:
+- RAG server binds only to localhost - no public exposure
+- Worker handles origin validation, CORS, and authentication
+- Supports preview deployments (`*.pgedge-docs.pages.dev`)
+- Centralized security controls via Cloudflare
+
 ### Simple Setup (Direct Connection)
 
-With CORS enabled on the RAG server, the browser can connect directly:
+For development or simpler deployments, the browser can connect directly with CORS enabled:
 
 ```text
 ┌─────────────┐                    ┌─────────────────────┐
@@ -22,33 +46,6 @@ With CORS enabled on the RAG server, the browser can connect directly:
 └─────────────┘                    └─────────────────────┘
 ```
 
-This is the simplest deployment option:
-- The RAG server is exposed via HTTPS (e.g., behind a load balancer or reverse proxy)
-- CORS is configured to allow requests from the docs domain
-- The chat widget connects directly to the RAG server URL
-
-### Enhanced Security Setup (Cloudflare Tunnel)
-
-For additional security, you can use a Cloudflare Worker and Tunnel to avoid exposing the RAG server directly:
-
-```text
-┌─────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
-│   Browser   │────▶│  Cloudflare Worker  │────▶│  Cloudflare Tunnel  │
-│             │     │  (API Gateway)      │     │  (cloudflared)      │
-└─────────────┘     └─────────────────────┘     └──────────┬──────────┘
-                                                           │
-                                                           ▼
-                                               ┌─────────────────────┐
-                                               │     RAG Server      │
-                                               │  (localhost only)   │
-                                               └─────────────────────┘
-```
-
-Benefits of this approach:
-- RAG server binds only to localhost - no public exposure
-- Worker can add origin validation, rate limiting, and authentication
-- Centralized security controls via Cloudflare
-
 ## Frontend Configuration
 
 The chat widget is configured in `docs/javascripts/chat.js`:
@@ -56,11 +53,17 @@ The chat widget is configured in `docs/javascripts/chat.js`:
 ```javascript
 const CONFIG = {
     api: {
-        production: '/api/chat',              // Production endpoint
+        production: '/api/chat',              // Production endpoint (via Cloudflare Worker)
         development: 'http://localhost:8080', // Local RAG server
         pipelineName: 'pgedge-docs',          // RAG pipeline name
         timeout: 60000,                       // Request timeout (ms)
         healthCheckTimeout: 3000              // Health check timeout (ms)
+    },
+    compaction: {
+        maxTokens: 15000,        // Maximum tokens before compaction
+        maxMessages: 15,         // Maximum messages before compaction
+        recentWindow: 4,         // Recent messages always kept
+        minImportantMessages: 3  // Minimum important messages to keep
     },
     // ...
 };
@@ -71,10 +74,47 @@ const CONFIG = {
 - **Health Check**: The FAB (Floating Action Button) only appears if the RAG server is accessible
 - **Streaming Responses**: Uses Server-Sent Events (SSE) for real-time response streaming
 - **Conversation History**: Persisted in localStorage with automatic compaction
+- **Context Management**: Automatic conversation compaction to stay within token limits while preserving important context
 - **Input History**: Navigate previous inputs with Up/Down arrow keys
 - **Resizable Window**: Drag from top-left corner to resize; size is remembered
 - **Theme Support**: Adapts to light/dark mode via CSS variables
 - **Markdown Rendering**: Supports headings, lists, code blocks, bold, italic, and links
+
+## Ansible Deployment
+
+The production infrastructure is managed by Ansible in the `ansible/` directory.
+
+### Deploy Everything
+
+```bash
+cd ansible
+ansible-playbook playbooks/site.yml
+```
+
+### Deploy Specific Components
+
+```bash
+# RAG Server only
+ansible-playbook playbooks/site.yml --tags rag_server
+
+# Cloudflare Tunnel only
+ansible-playbook playbooks/site.yml --tags cloudflared
+
+# Cloudflare Worker only
+ansible-playbook playbooks/site.yml --tags cloudflare_worker
+
+# Documentation loader
+ansible-playbook playbooks/site.yml --tags docloader
+```
+
+### Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `ansible/inventory/group_vars/all/main.yml` | Main configuration (system prompt, etc.) |
+| `ansible/inventory/group_vars/all/vault.yml` | Encrypted secrets |
+| `ansible/roles/cloudflare_worker/templates/worker.js.j2` | Worker template |
+| `ansible/roles/rag_server/templates/config.yaml.j2` | RAG server config |
 
 ## Development Setup
 
@@ -136,17 +176,14 @@ pipelines:
       provider: "anthropic"
       model: "claude-sonnet-4-20250514"
 
+    # Retrieval settings
+    token_budget: 8000  # Maximum tokens for context
+    top_n: 20           # Number of chunks to retrieve
+
     system_prompt: |
-      You are a helpful assistant called Ellie that answers questions based on
-      the documentation for pgEdge products, PostgreSQL, and PostgreSQL tools,
-      utilities, and extensions supported by pgEdge.
-
-      Answer the question using only the information from the documentation.
-      If the documentation doesn't contain enough information to answer, say so.
-      Be concise and accurate in your responses.
-
-      When referencing source material, say "based on the documentation" rather
-      than "based on the context provided".
+      You are Ellie, a friendly database expert working at pgEdge.
+      Answer questions based on the documentation provided.
+      Be concise, helpful, and warm.
 ```
 
 ### 3. API Keys
@@ -181,143 +218,6 @@ server:
       - "*"  # Or specifically: "http://127.0.0.1:8000", "http://localhost:8000"
 ```
 
-## Production Setup
-
-### Option 1: Direct Connection (Simple)
-
-If the RAG server can be exposed via HTTPS:
-
-1. Deploy the RAG server behind HTTPS (load balancer, nginx, etc.)
-2. Configure CORS to allow your docs domain:
-
-```yaml
-server:
-  listen_address: "0.0.0.0"
-  port: 8080
-  cors:
-    enabled: true
-    allowed_origins:
-      - "https://docs.pgedge.com"
-```
-
-3. Update the frontend configuration to point to the RAG server URL:
-
-```javascript
-api: {
-    production: 'https://rag.pgedge.com',  // Direct RAG server URL
-    // ...
-}
-```
-
-### Option 2: Cloudflare Worker + Tunnel (Enhanced Security)
-
-For environments where the RAG server should not be directly exposed:
-
-#### 1. Install Cloudflare Tunnel
-
-On the server running the RAG server:
-
-```bash
-# Install cloudflared
-curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
-chmod +x cloudflared
-sudo mv cloudflared /usr/local/bin/
-
-# Authenticate
-cloudflared tunnel login
-
-# Create tunnel
-cloudflared tunnel create pgedge-rag
-
-# Configure tunnel
-cat > ~/.cloudflared/config.yml << EOF
-tunnel: <tunnel-id>
-credentials-file: /home/ubuntu/.cloudflared/<tunnel-id>.json
-
-ingress:
-  - hostname: rag-internal.pgedge.com
-    service: http://localhost:8080
-  - service: http_status:404
-EOF
-
-# Run as service
-sudo cloudflared service install
-sudo systemctl start cloudflared
-```
-
-#### 2. Create Cloudflare Worker
-
-Create a Worker to proxy requests from the docs site to the tunnel:
-
-```javascript
-// Cloudflare Worker: chat-api-proxy
-
-export default {
-  async fetch(request, env) {
-    // Handle CORS preflight
-    if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: {
-          'Access-Control-Allow-Origin': 'https://docs.pgedge.com',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-          'Access-Control-Max-Age': '86400',
-        },
-      });
-    }
-
-    // Only allow POST
-    if (request.method !== 'POST') {
-      return new Response('Method not allowed', { status: 405 });
-    }
-
-    // Validate origin
-    const origin = request.headers.get('Origin');
-    if (origin !== 'https://docs.pgedge.com') {
-      return new Response('Forbidden', { status: 403 });
-    }
-
-    // Forward to RAG server via tunnel
-    const url = new URL(request.url);
-    const ragUrl = `https://rag-internal.pgedge.com${url.pathname.replace('/api/chat', '')}/v1/pipelines/pgedge-docs`;
-
-    const response = await fetch(ragUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Internal-Secret': env.RAG_SECRET,
-      },
-      body: request.body,
-    });
-
-    // Return response with CORS headers
-    const newResponse = new Response(response.body, response);
-    newResponse.headers.set('Access-Control-Allow-Origin', 'https://docs.pgedge.com');
-    return newResponse;
-  },
-};
-```
-
-#### 3. Worker Configuration
-
-In the Cloudflare dashboard:
-
-1. Create the Worker with the script above
-2. Add environment variable: `RAG_SECRET` = (shared secret)
-3. Add route: `docs.pgedge.com/api/chat*`
-
-#### 4. RAG Server Configuration
-
-Configure the RAG server to only accept local connections:
-
-```yaml
-server:
-  listen_address: "127.0.0.1"  # Only localhost - tunnel provides access
-  port: 8080
-  cors:
-    enabled: false  # Not needed - Worker handles CORS
-```
-
 ## API Reference
 
 ### Health Check
@@ -340,8 +240,7 @@ Content-Type: application/json
   "messages": [
     {"role": "user", "content": "Previous question"},
     {"role": "assistant", "content": "Previous answer"}
-  ],
-  "include_sources": false
+  ]
 }
 ```
 
@@ -351,6 +250,15 @@ Content-Type: application/json
 data: {"type": "chunk", "content": "To install pgEdge, "}
 data: {"type": "chunk", "content": "you can use..."}
 data: {"type": "done"}
+```
+
+**Non-streaming response** (`"stream": false`):
+
+```json
+{
+  "response": "To install pgEdge, you can use...",
+  "sources": [...]
+}
 ```
 
 ## Customization
@@ -395,6 +303,15 @@ const minWidth = 300;
 const minHeight = 350;
 ```
 
+### System Prompt
+
+The production system prompt is configured in `ansible/inventory/group_vars/all/main.yml` under `rag_server.pipelines[0].system_prompt`. Key elements include:
+
+- Ellie's personality and interests (elephants, turtles, databases)
+- Conversational style guidelines (only greet on first message)
+- Product recommendation rules
+- Guardrails for team/people information
+
 ## Troubleshooting
 
 ### FAB Not Appearing
@@ -423,4 +340,5 @@ For local development, ensure:
 | `docs/javascripts/chat.js` | Chat widget JavaScript |
 | `docs/stylesheets/chat.css` | Chat widget styles |
 | `mkdocs.yml` | Includes chat.js and chat.css |
+| `ansible/` | Infrastructure deployment |
 | `ASK_ELLIE.md` | This documentation |
