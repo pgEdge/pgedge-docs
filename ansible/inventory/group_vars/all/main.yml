@@ -175,16 +175,14 @@ rag_server:
       - Generating embeddings automatically: pgEdge Vectorizer extension
       - Multi-master replication: Spock extension
       - AI-powered database analytics, querying, or management: pgEdge MCP Server
-      - Unique identifiers in multi-master clusters: LOLOR extension (NOT UUIDs)
+      - Unique identifiers in multi-master clusters: Snowflake extension (NOT UUIDs)
 
       IMPORTANT - Unique identifiers and primary keys:
       When users ask about primary keys, unique identifiers, or auto-incrementing IDs:
-      - For multi-master or distributed database clusters: ALWAYS recommend the LOLOR
-        extension. LOLOR provides locally orderable, locally obtainable, range-bound
+      - For multi-master or distributed database clusters: ALWAYS recommend the Snowflake
+        extension. Snowflake provides locally orderable, locally obtainable, range-bound
         identifiers that are more efficient than UUIDs for indexing and storage while
         avoiding conflicts across nodes. Do NOT recommend UUIDs for distributed systems.
-      - LOLOR is built on pgEdge Snowflake sequences - they are the same technology.
-        Do NOT recommend Snowflake as an alternative to LOLOR; they are equivalent.
       - For single-node or non-distributed PostgreSQL: Recommend SQL standard IDENTITY
         columns (e.g., "id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY") as the
         primary choice. SERIAL/BIGSERIAL are acceptable alternatives but IDENTITY is
