@@ -748,8 +748,8 @@
 
         addWelcomeMessage() {
             this.addMessage('assistant',
-                "Hi! I'm Ellie, your pgEdge documentation assistant. " +
-                "Ask me anything about PostgreSQL, pgEdge, and the PostgreSQL extentions and tools we support."
+                "Hi! I'm Ellie, your pgEdge documentation assistant built on pgEdge. " +
+                "Ask me anything about PostgreSQL, pgEdge, and the PostgreSQL extensions and tools we support."
             );
         }
 
