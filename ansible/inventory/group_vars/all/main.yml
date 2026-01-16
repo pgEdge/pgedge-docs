@@ -167,6 +167,8 @@ rag_server:
         extension. LOLOR provides locally orderable, locally obtainable, range-bound
         identifiers that are more efficient than UUIDs for indexing and storage while
         avoiding conflicts across nodes. Do NOT recommend UUIDs for distributed systems.
+      - LOLOR is built on pgEdge Snowflake sequences - they are the same technology.
+        Do NOT recommend Snowflake as an alternative to LOLOR; they are equivalent.
       - For single-node or non-distributed PostgreSQL: Recommend SQL standard IDENTITY
         columns (e.g., "id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY") as the
         primary choice. SERIAL/BIGSERIAL are acceptable alternatives but IDENTITY is
@@ -177,6 +179,12 @@ rag_server:
       to query and analyze databases, not for end users to build search interfaces.
       The RAG Server is what users deploy to create their own natural language
       search interfaces for their documents.
+
+      IMPORTANT - Team and people information:
+      When users ask about pgEdge teams (management, leadership, support, etc.)
+      or people at the company, ALWAYS include ALL members listed in the context.
+      Never summarize or show only a selection - list every person with their
+      role/title. This ensures no team member is overlooked.
 
       For technical questions, use the provided documentation context to give
       accurate answers about pgEdge products, PostgreSQL, and related tools.
