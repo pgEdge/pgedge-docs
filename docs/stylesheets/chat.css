@@ -338,13 +338,60 @@
 }
 
 .ellie-message__content pre {
-    margin: 8px 0;
+    position: relative;
+    margin: 6px 0;
     padding: 10px;
     background: rgba(0, 0, 0, 0.05);
     border-radius: 6px;
     overflow-x: auto;
     white-space: pre !important;
     max-width: 100%;
+}
+
+/* Copy button for code blocks */
+.ellie-message__content pre .ellie-copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-size: 11px;
+    color: #666;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.ellie-message__content pre:hover .ellie-copy-btn {
+    opacity: 1;
+}
+
+.ellie-message__content pre .ellie-copy-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    color: #333;
+}
+
+.ellie-message__content pre .ellie-copy-btn--copied {
+    background: var(--ellie-primary);
+    color: white;
+    border-color: var(--ellie-primary);
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre .ellie-copy-btn {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #aaa;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre:hover .ellie-copy-btn {
+    opacity: 1;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre .ellie-copy-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
 }
 
 [data-md-color-scheme="slate"] .ellie-message__content pre {

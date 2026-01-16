@@ -807,6 +807,35 @@
                     hljs.highlightElement(block);
                 });
             }
+            this.addCopyButtons(container);
+        }
+
+        /**
+         * Add copy buttons to code blocks.
+         */
+        addCopyButtons(container) {
+            container.querySelectorAll('pre.ellie-code').forEach(pre => {
+                // Skip if already has a copy button
+                if (pre.querySelector('.ellie-copy-btn')) return;
+
+                const btn = document.createElement('button');
+                btn.className = 'ellie-copy-btn';
+                btn.textContent = 'Copy';
+                btn.addEventListener('click', () => {
+                    const code = pre.querySelector('code');
+                    if (code) {
+                        navigator.clipboard.writeText(code.textContent).then(() => {
+                            btn.textContent = 'Copied!';
+                            btn.classList.add('ellie-copy-btn--copied');
+                            setTimeout(() => {
+                                btn.textContent = 'Copy';
+                                btn.classList.remove('ellie-copy-btn--copied');
+                            }, 1500);
+                        });
+                    }
+                });
+                pre.appendChild(btn);
+            });
         }
 
         renderMarkdown(text, hasPendingCode = false) {
@@ -875,6 +904,10 @@
             html = html.replace(/\x00CODE_BLOCK_(\d+)\x00/g, (_match, index) => {
                 return codeBlocks[parseInt(index, 10)];
             });
+
+            // Clean up <br> before/after code blocks (placeholders weren't treated as block elements)
+            html = html.replace(/<br>(<pre)/g, '$1');
+            html = html.replace(/(<\/pre>)<br>/g, '$1');
 
             return html;
         }
