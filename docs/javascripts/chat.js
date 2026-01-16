@@ -705,7 +705,9 @@
             return html
                 // Code blocks (must be before other replacements)
                 .replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>')
-                // Headings (## and ###)
+                // Headings (process longest patterns first)
+                .replace(/^##### (.+)$/gm, '<h6>$1</h6>')
+                .replace(/^#### (.+)$/gm, '<h5>$1</h5>')
                 .replace(/^### (.+)$/gm, '<h4>$1</h4>')
                 .replace(/^## (.+)$/gm, '<h3>$1</h3>')
                 .replace(/^# (.+)$/gm, '<h2>$1</h2>')
@@ -733,7 +735,7 @@
                 // Line breaks (but not after block elements)
                 .replace(/\n(?!<)/g, '<br>')
                 // Clean up extra <br> after block elements
-                .replace(/(<\/(?:h[2-4]|ul|pre|li)>)<br>/g, '$1');
+                .replace(/(<\/(?:h[2-6]|ul|pre|li)>)<br>/g, '$1');
         }
 
         scrollToBottom() {
