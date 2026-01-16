@@ -398,28 +398,43 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
-/* Code block scrollbar styling */
+/* Code block scrollbar styling - light mode */
 .ellie-message__content pre::-webkit-scrollbar {
-    height: 6px;
+    height: 6px !important;
+    width: 6px !important;
 }
 
 .ellie-message__content pre::-webkit-scrollbar-track {
-    background: transparent;
+    background: transparent !important;
 }
 
 .ellie-message__content pre::-webkit-scrollbar-thumb {
-    background: var(--ellie-border);
-    border-radius: 3px;
+    background: #c0c0c0 !important;
+    border-radius: 3px !important;
 }
 
 .ellie-message__content pre::-webkit-scrollbar-thumb:hover {
-    background: var(--ellie-text-muted);
+    background: #999999 !important;
 }
 
-/* Firefox scrollbar */
+/* Code block scrollbar styling - dark mode */
+[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb {
+    background: #555555 !important;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb:hover {
+    background: #777777 !important;
+}
+
+/* Firefox scrollbar - light mode */
 .ellie-message__content pre {
-    scrollbar-width: thin;
-    scrollbar-color: var(--ellie-border) transparent;
+    scrollbar-width: thin !important;
+    scrollbar-color: #c0c0c0 transparent !important;
+}
+
+/* Firefox scrollbar - dark mode */
+[data-md-color-scheme="slate"] .ellie-message__content pre {
+    scrollbar-color: #555555 transparent !important;
 }
 
 .ellie-message__content pre code,
