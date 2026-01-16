@@ -248,9 +248,31 @@
         load() {
             try {
                 const stored = localStorage.getItem(this.storageKey);
-                return stored ? JSON.parse(stored) : [];
+                if (!stored) return [];
+
+                const messages = JSON.parse(stored);
+
+                // Validate loaded messages - filter out any corrupt entries
+                if (!Array.isArray(messages)) {
+                    console.warn('[Ellie] Invalid chat history format, clearing');
+                    this.clear();
+                    return [];
+                }
+
+                return messages.filter(msg => {
+                    const valid = msg &&
+                        typeof msg === 'object' &&
+                        typeof msg.role === 'string' &&
+                        typeof msg.content === 'string' &&
+                        ['user', 'assistant', 'system'].includes(msg.role);
+                    if (!valid) {
+                        console.warn('[Ellie] Filtering invalid message:', msg);
+                    }
+                    return valid;
+                });
             } catch (e) {
                 console.error('[Ellie] Failed to load chat history:', e);
+                this.clear(); // Clear corrupt data
                 return [];
             }
         }
@@ -1092,7 +1114,16 @@
                 (error) => {
                     console.error('[Ellie] Stream error:', error);
                     this.stopBusyMessages();
-                    this.ui.showError(error.message || 'Failed to get response. Please try again.');
+
+                    // Provide helpful error messages based on error type
+                    let errorMsg = error.message || 'Failed to get response.';
+                    if (errorMsg === 'Load failed' || errorMsg === 'Failed to fetch' || error.name === 'TypeError') {
+                        errorMsg = 'Network error. Please check your connection and try again. If the problem persists, try clearing the conversation (trash icon).';
+                    } else if (errorMsg.includes('413') || errorMsg.includes('too large')) {
+                        errorMsg = 'Conversation too long. Please clear the conversation (trash icon) and try again.';
+                    }
+
+                    this.ui.showError(errorMsg);
                     this.ui.setStreaming(false);
                     if (this.currentStreamElements) {
                         this.currentStreamElements.message.remove();
