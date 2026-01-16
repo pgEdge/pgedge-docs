@@ -54,6 +54,7 @@
         ],
         storage: {
             messages: 'ellie_chat_messages',
+            fullHistory: 'ellie_chat_full_history',
             inputHistory: 'ellie_input_history',
             isOpen: 'ellie_chat_open'
         }
@@ -190,13 +191,15 @@
                 ...recentMessages
             ];
 
-            // Remove duplicates based on index
+            // Remove duplicates based on index and sort by original order
             const seen = new Set();
-            const uniqueKept = kept.filter(m => {
-                if (seen.has(m.index)) return false;
-                seen.add(m.index);
-                return true;
-            });
+            const uniqueKept = kept
+                .filter(m => {
+                    if (seen.has(m.index)) return false;
+                    seen.add(m.index);
+                    return true;
+                })
+                .sort((a, b) => a.index - b.index);
 
             // Step 5: Generate summary of dropped messages
             const droppedMessages = middleMessages.filter(
@@ -848,6 +851,7 @@
             this.api = new ChatAPI(config);
             this.history = new ChatHistory(config);
             this.messages = [];
+            this.fullHistory = [];  // Uncompacted history for exports
             this.currentStreamContent = '';
             this.currentStreamElements = null;
             this.initialized = false;
@@ -873,6 +877,7 @@
 
             // Load existing messages
             this.messages = this.history.load();
+            this.loadFullHistory();
             this.renderExistingMessages();
 
             // Bind events
@@ -993,14 +998,34 @@
         handleClear() {
             if (confirm('Clear conversation history?')) {
                 this.messages = [];
+                this.fullHistory = [];
                 this.history.clear();
+                localStorage.removeItem(this.config.storage.fullHistory);
                 this.ui.clearMessages();
             }
         }
 
+        loadFullHistory() {
+            try {
+                const stored = localStorage.getItem(this.config.storage.fullHistory);
+                this.fullHistory = stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                console.error('[Ellie] Failed to load full history:', e);
+                this.fullHistory = [];
+            }
+        }
+
+        saveFullHistory() {
+            try {
+                localStorage.setItem(this.config.storage.fullHistory, JSON.stringify(this.fullHistory));
+            } catch (e) {
+                console.error('[Ellie] Failed to save full history:', e);
+            }
+        }
+
         handleSave() {
-            // Filter out system messages and generate markdown
-            const userMessages = this.messages.filter(msg => msg.role !== 'system');
+            // Filter out system messages and generate markdown from full (uncompacted) history
+            const userMessages = this.fullHistory.filter(msg => msg.role !== 'system');
 
             if (userMessages.length === 0) {
                 return;
@@ -1082,6 +1107,8 @@
 
             // Add user message
             this.messages.push({ role: 'user', content });
+            this.fullHistory.push({ role: 'user', content });
+            this.saveFullHistory();
             this.ui.addMessage('user', content);
             this.ui.clearInput();
 
@@ -1172,6 +1199,8 @@
                 // Add assistant message to history
                 if (this.currentStreamContent) {
                     this.messages.push({ role: 'assistant', content: this.currentStreamContent });
+                    this.fullHistory.push({ role: 'assistant', content: this.currentStreamContent });
+                    this.saveFullHistory();
                     this.messages = this.history.save(this.messages);
                 }
 
@@ -1183,11 +1212,13 @@
         }
 
         renderExistingMessages() {
-            if (this.messages.length === 0) {
+            // Display from fullHistory so users see complete conversation
+            // (this.messages may be compacted for API context)
+            if (this.fullHistory.length === 0) {
                 this.ui.addWelcomeMessage();
             } else {
-                this.messages.forEach(msg => {
-                    // Skip system messages (summaries) in display
+                this.fullHistory.forEach(msg => {
+                    // Skip system messages in display
                     if (msg.role !== 'system') {
                         this.ui.addMessage(msg.role, msg.content);
                     }
