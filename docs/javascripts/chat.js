@@ -408,6 +408,11 @@
             try {
                 const data = JSON.parse(trimmed.slice(6));
 
+                // Debug: log all SSE events to help diagnose sources
+                if (data.type !== 'chunk') {
+                    console.log('[Ellie] SSE event:', data.type, data);
+                }
+
                 switch (data.type) {
                     case 'chunk':
                         if (data.content) {
@@ -417,8 +422,14 @@
                     case 'sources':
                         // Store sources for later use
                         this.currentSources = data.sources || [];
+                        console.log('[Ellie] Received sources:', this.currentSources.length);
                         break;
                     case 'done':
+                        // Sources might be in the done event directly
+                        if (data.sources && !this.currentSources) {
+                            this.currentSources = data.sources;
+                            console.log('[Ellie] Sources in done event:', this.currentSources.length);
+                        }
                         // Pass sources to onDone callback
                         onDone(this.currentSources);
                         this.currentSources = null;
