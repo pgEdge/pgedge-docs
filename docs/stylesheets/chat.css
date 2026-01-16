@@ -384,6 +384,47 @@
     50% { opacity: 0; }
 }
 
+/* Highlight.js dark mode overrides */
+[data-md-color-scheme="slate"] .ellie-message__content .hljs {
+    color: #c9d1d9;
+    background: transparent;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-comment,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-quote {
+    color: #8b949e;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-keyword,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-selector-tag,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-type {
+    color: #ff7b72;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-string,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-attr {
+    color: #a5d6ff;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-number,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-literal {
+    color: #79c0ff;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-function,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-title {
+    color: #d2a8ff;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-variable,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-params {
+    color: #c9d1d9;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-built_in {
+    color: #ffa657;
+}
+
 .ellie-message__content a {
     color: var(--ellie-primary);
     text-decoration: underline;
