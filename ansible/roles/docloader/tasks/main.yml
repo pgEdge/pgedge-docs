@@ -5,6 +5,8 @@
     name:
       - git
       - python3-yaml
+      - python3-requests
+      - python3-bs4
     state: present
 
 # Install from GitHub Release (beta2 has native git support)
@@ -64,3 +66,34 @@
     group: "{{ docloader_group }}"
     mode: '0600'
   no_log: true
+
+# Website crawler for loading web content
+- name: Deploy website crawler script
+  ansible.builtin.template:
+    src: crawl-website.py.j2
+    dest: /usr/local/bin/crawl-website
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Check if websites config exists
+  ansible.builtin.stat:
+    path: "{{ docloader_config_dir }}/websites.yaml"
+  register: websites_config_stat
+
+- name: Deploy initial websites configuration
+  ansible.builtin.template:
+    src: websites.yaml.j2
+    dest: "{{ docloader_config_dir }}/websites.yaml"
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0640'
+  when: not websites_config_stat.stat.exists
+
+- name: Create websites output directory
+  ansible.builtin.file:
+    path: "{{ docloader_data_dir }}/websites"
+    state: directory
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0750'

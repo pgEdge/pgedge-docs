@@ -224,6 +224,15 @@ sources:
     product: "psycopg2"
     version: "2.9.10"
 
+  # -------------------------------------------------------------------------
+  # Website Content (crawled by crawl-website)
+  # -------------------------------------------------------------------------
+  # Run 'sudo crawl-website' first to populate this directory
+  - local_path: "{{ docloader_data_dir }}/websites/pgedge-website"
+    doc_path: "*.md"
+    product: "pgEdge Website"
+    version: ""
+
 # =============================================================================
 # Notes
 # =============================================================================

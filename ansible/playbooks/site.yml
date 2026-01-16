@@ -70,11 +70,17 @@
             - Config: /etc/pgedge/docloader/config.yaml
             - Run: sudo load-docs
 
+          Website Crawling:
+            - Config: /etc/pgedge/docloader/websites.yaml
+            - Run: sudo crawl-website
+            - Then: sudo load-docs
+
           Next steps:
             1. Edit /etc/pgedge/docloader/config.yaml to customize sources
-            2. Run 'sudo load-docs' to load documentation into the database
-            3. Configure the Cloudflare Worker (run deploy_worker.yml)
-            4. Test the chat interface on your documentation site
+            2. Run 'sudo crawl-website' to crawl website content
+            3. Run 'sudo load-docs' to load documentation into the database
+            4. Configure the Cloudflare Worker (run deploy_worker.yml)
+            5. Test the chat interface on your documentation site
       tags: always
 
 
