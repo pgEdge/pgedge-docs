@@ -398,58 +398,57 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
-/* Code block scrollbar styling - light mode */
-.ellie-message__content pre::-webkit-scrollbar,
-.ellie-message__content pre code::-webkit-scrollbar,
-.ellie-message__content pre code.hljs::-webkit-scrollbar {
+/* Code block scrollbar styling - catch all elements within code blocks */
+.ellie-message__content pre.ellie-code::-webkit-scrollbar,
+.ellie-message__content pre.ellie-code *::-webkit-scrollbar,
+.ellie-message__content .hljs::-webkit-scrollbar {
     height: 6px !important;
     width: 6px !important;
 }
 
-.ellie-message__content pre::-webkit-scrollbar-track,
-.ellie-message__content pre code::-webkit-scrollbar-track,
-.ellie-message__content pre code.hljs::-webkit-scrollbar-track {
+.ellie-message__content pre.ellie-code::-webkit-scrollbar-track,
+.ellie-message__content pre.ellie-code *::-webkit-scrollbar-track,
+.ellie-message__content .hljs::-webkit-scrollbar-track {
     background: transparent !important;
 }
 
-.ellie-message__content pre::-webkit-scrollbar-thumb,
-.ellie-message__content pre code::-webkit-scrollbar-thumb,
-.ellie-message__content pre code.hljs::-webkit-scrollbar-thumb {
+.ellie-message__content pre.ellie-code::-webkit-scrollbar-thumb,
+.ellie-message__content pre.ellie-code *::-webkit-scrollbar-thumb,
+.ellie-message__content .hljs::-webkit-scrollbar-thumb {
     background: #c0c0c0 !important;
     border-radius: 3px !important;
 }
 
-.ellie-message__content pre::-webkit-scrollbar-thumb:hover,
-.ellie-message__content pre code::-webkit-scrollbar-thumb:hover,
-.ellie-message__content pre code.hljs::-webkit-scrollbar-thumb:hover {
+.ellie-message__content pre.ellie-code::-webkit-scrollbar-thumb:hover,
+.ellie-message__content pre.ellie-code *::-webkit-scrollbar-thumb:hover,
+.ellie-message__content .hljs::-webkit-scrollbar-thumb:hover {
     background: #999999 !important;
 }
 
 /* Code block scrollbar styling - dark mode */
-[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb,
-[data-md-color-scheme="slate"] .ellie-message__content pre code::-webkit-scrollbar-thumb,
-[data-md-color-scheme="slate"] .ellie-message__content pre code.hljs::-webkit-scrollbar-thumb {
+[data-md-color-scheme="slate"] .ellie-message__content pre.ellie-code::-webkit-scrollbar-thumb,
+[data-md-color-scheme="slate"] .ellie-message__content pre.ellie-code *::-webkit-scrollbar-thumb,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs::-webkit-scrollbar-thumb {
     background: #555555 !important;
 }
 
-[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb:hover,
-[data-md-color-scheme="slate"] .ellie-message__content pre code::-webkit-scrollbar-thumb:hover,
-[data-md-color-scheme="slate"] .ellie-message__content pre code.hljs::-webkit-scrollbar-thumb:hover {
+[data-md-color-scheme="slate"] .ellie-message__content pre.ellie-code::-webkit-scrollbar-thumb:hover,
+[data-md-color-scheme="slate"] .ellie-message__content pre.ellie-code *::-webkit-scrollbar-thumb:hover,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs::-webkit-scrollbar-thumb:hover {
     background: #777777 !important;
 }
 
-/* Firefox scrollbar - light mode */
-.ellie-message__content pre,
-.ellie-message__content pre code,
-.ellie-message__content pre code.hljs {
+/* Firefox scrollbar */
+.ellie-message__content pre.ellie-code,
+.ellie-message__content pre.ellie-code *,
+.ellie-message__content .hljs {
     scrollbar-width: thin !important;
     scrollbar-color: #c0c0c0 transparent !important;
 }
 
-/* Firefox scrollbar - dark mode */
-[data-md-color-scheme="slate"] .ellie-message__content pre,
-[data-md-color-scheme="slate"] .ellie-message__content pre code,
-[data-md-color-scheme="slate"] .ellie-message__content pre code.hljs {
+[data-md-color-scheme="slate"] .ellie-message__content pre.ellie-code,
+[data-md-color-scheme="slate"] .ellie-message__content pre.ellie-code *,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs {
     scrollbar-color: #555555 transparent !important;
 }
 
