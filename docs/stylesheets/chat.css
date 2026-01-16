@@ -363,6 +363,27 @@
     background-color: transparent !important;
 }
 
+/* Pending code block indicator (streaming) */
+.ellie-message__content .ellie-code--pending {
+    position: relative;
+}
+
+.ellie-message__content .ellie-code--pending::after {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--ellie-primary);
+    animation: ellie-cursor-blink 1s step-end infinite;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+}
+
+@keyframes ellie-cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
 .ellie-message__content a {
     color: var(--ellie-primary);
     text-decoration: underline;

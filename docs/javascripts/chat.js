@@ -63,49 +63,49 @@
     // =========================================================================
     // StreamBuffer - Buffers streaming content for smoother display
     // =========================================================================
-    // Waits for word boundaries before displaying text, and holds code blocks
-    // until they're complete to avoid showing raw markdown during streaming.
+    // Waits for word boundaries before displaying text, and streams code blocks
+    // progressively with a "pending" indicator until they're complete.
     class StreamBuffer {
         constructor() {
             this.content = '';  // Full accumulated content
         }
 
         /**
-         * Add a chunk and return the portion safe to display.
+         * Add a chunk and return display info.
          * @param {string} chunk - New content from stream
-         * @returns {string} Content safe to display (may be less than full content)
+         * @returns {{ content: string, hasPendingCode: boolean }}
          */
         add(chunk) {
             this.content += chunk;
-            return this.getDisplayContent();
+            return this.getDisplayInfo();
         }
 
         /**
-         * Get the portion of content that's safe to display.
-         * Excludes incomplete words and incomplete code blocks.
+         * Get content safe to display and whether there's a pending code block.
+         * - Text is shown up to the last word boundary
+         * - Code blocks are shown progressively with hasPendingCode flag
          */
-        getDisplayContent() {
-            const safePoint = this.findSafePoint();
-            return this.content.slice(0, safePoint);
+        getDisplayInfo() {
+            const analysis = this.analyzeContent();
+            return {
+                content: this.content.slice(0, analysis.safePoint),
+                hasPendingCode: analysis.inCodeBlock
+            };
         }
 
         /**
-         * Find the position up to which content is safe to display.
-         * - Code blocks are only shown when complete (has closing ```)
-         * - Regular text is shown up to the last word boundary
+         * Analyze content to find safe display point and code block state.
          */
-        findSafePoint() {
+        analyzeContent() {
             let pos = 0;
             let inCodeBlock = false;
-            let codeBlockStart = 0;
             let lastSafePoint = 0;
 
             while (pos < this.content.length) {
                 // Check for code fence (```)
                 if (this.content.slice(pos, pos + 3) === '```') {
                     if (!inCodeBlock) {
-                        // Entering code block - remember where it started
-                        codeBlockStart = pos;
+                        // Entering code block
                         inCodeBlock = true;
                         pos += 3;
                         // Skip language identifier
@@ -130,8 +130,8 @@
             }
 
             if (inCodeBlock) {
-                // Inside incomplete code block - only show up to where it started
-                return codeBlockStart;
+                // Inside code block - show everything (will be rendered as pending)
+                return { safePoint: this.content.length, inCodeBlock: true };
             }
 
             // Not in code block - find last word boundary after lastSafePoint
@@ -142,7 +142,7 @@
                 }
             }
 
-            return lastWordBoundary;
+            return { safePoint: lastWordBoundary, inCodeBlock: false };
         }
 
         /**
@@ -770,6 +770,10 @@
                 // Safe: renderMarkdown() escapes all HTML before converting markdown to safe tags
                 // nosemgrep: javascript.browser.security.innerHTML.property-assignment
                 contentEl.innerHTML = this.renderMarkdown(content); // eslint-disable-line xss/no-mixed-html
+                // Apply syntax highlighting for completed messages
+                if (!isStreaming) {
+                    this.highlightCode(contentEl);
+                }
             } else {
                 contentEl.textContent = content;
             }
@@ -781,29 +785,61 @@
             return { message: msgEl, content: contentEl };
         }
 
-        updateStreamingMessage(contentEl, fullContent) {
+        updateStreamingMessage(contentEl, content, hasPendingCode = false) {
             // Safe: renderMarkdown() escapes all HTML before converting markdown to safe tags
             // nosemgrep: javascript.browser.security.innerHTML.property-assignment
-            contentEl.innerHTML = this.renderMarkdown(fullContent); // eslint-disable-line xss/no-mixed-html
+            contentEl.innerHTML = this.renderMarkdown(content, hasPendingCode); // eslint-disable-line xss/no-mixed-html
             this.scrollToBottom();
         }
 
-        finalizeStreamingMessage(msgEl) {
+        finalizeStreamingMessage(msgEl, contentEl) {
             msgEl.classList.remove('ellie-message--streaming');
+            // Apply syntax highlighting to completed code blocks
+            this.highlightCode(contentEl);
         }
 
-        renderMarkdown(text) {
+        /**
+         * Apply syntax highlighting to code blocks if highlight.js is available.
+         */
+        highlightCode(container) {
+            if (typeof hljs !== 'undefined') {
+                container.querySelectorAll('pre code').forEach(block => {
+                    hljs.highlightElement(block);
+                });
+            }
+        }
+
+        renderMarkdown(text, hasPendingCode = false) {
             if (!text) return '';
 
+            let processText = text;
+
+            // If there's a pending (incomplete) code block, temporarily close it for rendering
+            if (hasPendingCode) {
+                processText += '\n```';
+            }
+
             // Escape HTML first
-            let html = text
+            let html = processText
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
 
+            // Process code blocks with pending class if needed
+            if (hasPendingCode) {
+                // Find the last code block and mark it as pending
+                html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (match, lang, code, offset) => {
+                    // Check if this is the last code block (the pending one)
+                    const remainingText = html.slice(offset + match.length);
+                    const isLastBlock = !remainingText.includes('```');
+                    const pendingClass = isLastBlock ? ' ellie-code--pending' : '';
+                    return `<pre class="ellie-code${pendingClass}"><code class="language-${lang}">${code}</code></pre>`;
+                });
+            } else {
+                html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre class="ellie-code"><code class="language-$1">$2</code></pre>');
+            }
+
             return html
-                // Code blocks (must be before other replacements)
-                .replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>')
                 // Headings (process longest patterns first)
                 .replace(/^##### (.+)$/gm, '<h6>$1</h6>')
                 .replace(/^#### (.+)$/gm, '<h5>$1</h5>')
@@ -1238,11 +1274,12 @@
                         this.stopBusyMessages();
                         this.currentStreamElements = this.ui.addMessage('assistant', '', true);
                     }
-                    // Buffer handles word boundaries and code blocks
-                    const displayContent = this.streamBuffer.add(chunk);
+                    // Buffer handles word boundaries and tracks pending code blocks
+                    const { content, hasPendingCode } = this.streamBuffer.add(chunk);
                     this.ui.updateStreamingMessage(
                         this.currentStreamElements.content,
-                        displayContent
+                        content,
+                        hasPendingCode
                     );
                 },
                 // onDone
@@ -1301,9 +1338,13 @@
                 const fullContent = this.streamBuffer.getFullContent();
                 this.ui.updateStreamingMessage(
                     this.currentStreamElements.content,
-                    fullContent
+                    fullContent,
+                    false  // No pending code - stream is complete
                 );
-                this.ui.finalizeStreamingMessage(this.currentStreamElements.message);
+                this.ui.finalizeStreamingMessage(
+                    this.currentStreamElements.message,
+                    this.currentStreamElements.content
+                );
 
                 // Add assistant message to history
                 if (fullContent) {
