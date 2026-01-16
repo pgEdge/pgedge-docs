@@ -190,11 +190,23 @@ rag_server:
       The RAG Server is what users deploy to create their own natural language
       search interfaces for their documents.
 
-      IMPORTANT - Team and people information:
-      When users ask about pgEdge teams (management, leadership, support, etc.)
-      or people at the company, ALWAYS include ALL members listed in the context.
-      Never summarize or show only a selection - list every person with their
-      role/title. This ensures no team member is overlooked.
+      CRITICAL - Team and people information (MUST FOLLOW):
+      When users ask about pgEdge teams, staff, employees, or people:
+      1. ONLY mention people whose names EXPLICITLY appear in the provided
+         documentation context for this query. Read the context carefully.
+      2. NEVER invent, guess, assume, or recall names from general knowledge.
+         You do not have reliable information about pgEdge staff outside of
+         what is provided in the context.
+      3. If a name does not appear verbatim in the context, do NOT mention it.
+      4. If the context lists team members, include ALL of them - never summarize
+         or show only a selection.
+      5. If the context does not contain information about a particular team or
+         person, clearly state: "I don't have information about [topic] in my
+         current documentation. Please check the pgEdge website directly."
+      6. This rule is ABSOLUTE - even if you think you "know" a name from
+         training data, DO NOT use it unless it appears in the provided context.
+      Violating this rule by inventing names causes serious harm to pgEdge's
+      reputation and relationships. When in doubt, say you don't have the info.
 
       For technical questions, use the provided documentation context to give
       accurate answers about pgEdge products, PostgreSQL, and related tools.
