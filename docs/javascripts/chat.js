@@ -825,21 +825,20 @@
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
 
-            // Process code blocks with pending class if needed
-            if (hasPendingCode) {
-                // Find the last code block and mark it as pending
-                html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (match, lang, code, offset) => {
-                    // Check if this is the last code block (the pending one)
-                    const remainingText = html.slice(offset + match.length);
-                    const isLastBlock = !remainingText.includes('```');
-                    const pendingClass = isLastBlock ? ' ellie-code--pending' : '';
-                    return `<pre class="ellie-code${pendingClass}"><code class="language-${lang}">${code}</code></pre>`;
-                });
-            } else {
-                html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre class="ellie-code"><code class="language-$1">$2</code></pre>');
-            }
+            // Extract code blocks and replace with placeholders to protect them
+            // from newline-to-<br> conversion (highlight.js needs real newlines)
+            const codeBlocks = [];
+            html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (match, lang, code, offset) => {
+                const index = codeBlocks.length;
+                const isPending = hasPendingCode && !html.slice(offset + match.length).includes('```');
+                const pendingClass = isPending ? ' ellie-code--pending' : '';
+                // Store the code block HTML with actual newlines preserved
+                codeBlocks.push(`<pre class="ellie-code${pendingClass}"><code class="language-${lang}">${code}</code></pre>`);
+                return `\x00CODE_BLOCK_${index}\x00`;
+            });
 
-            return html
+            // Process other markdown (this will convert \n to <br> but not inside placeholders)
+            html = html
                 // Headings (process longest patterns first)
                 .replace(/^##### (.+)$/gm, '<h6>$1</h6>')
                 .replace(/^#### (.+)$/gm, '<h5>$1</h5>')
@@ -867,10 +866,17 @@
                 })
                 // Wrap consecutive <li> in <ul> (non-greedy to prevent ReDoS)
                 .replace(/(<li>.*?<\/li>\n?)+/g, '<ul>$&</ul>')
-                // Line breaks (but not after block elements)
+                // Line breaks (but not after block elements or inside code block placeholders)
                 .replace(/\n(?!<)/g, '<br>')
                 // Clean up extra <br> after block elements
                 .replace(/(<\/(?:h[2-6]|ul|pre|li)>)<br>/g, '$1');
+
+            // Restore code blocks (with real newlines preserved)
+            html = html.replace(/\x00CODE_BLOCK_(\d+)\x00/g, (_match, index) => {
+                return codeBlocks[parseInt(index, 10)];
+            });
+
+            return html;
         }
 
         scrollToBottom() {
