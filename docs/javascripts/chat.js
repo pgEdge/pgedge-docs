@@ -871,8 +871,11 @@
             // Bind events
             this.bindEvents();
 
-            // Restore open state if configured, otherwise just show FAB
-            if (localStorage.getItem(this.config.storage.isOpen) === 'true') {
+            // Restore open state - default to open for new users
+            const savedOpenState = localStorage.getItem(this.config.storage.isOpen);
+            const shouldOpen = savedOpenState === null || savedOpenState === 'true';
+
+            if (shouldOpen) {
                 this.ui.showFab(); // Show first so close() works correctly
                 this.ui.open();
             } else {
