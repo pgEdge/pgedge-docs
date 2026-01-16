@@ -341,6 +341,7 @@
     background: rgba(0, 0, 0, 0.05);
     border-radius: 6px;
     overflow-x: auto;
+    white-space: pre !important;
 }
 
 [data-md-color-scheme="slate"] .ellie-message__content pre {
@@ -348,10 +349,14 @@
 }
 
 .ellie-message__content pre code,
-[data-md-color-scheme="slate"] .ellie-message__content pre code {
+.ellie-message__content pre code.hljs,
+[data-md-color-scheme="slate"] .ellie-message__content pre code,
+[data-md-color-scheme="slate"] .ellie-message__content pre code.hljs {
     background: transparent !important;
     background-color: transparent !important;
     padding: 0;
+    white-space: pre !important;
+    display: block;
 }
 
 /* Ensure all elements inside code blocks have transparent backgrounds */
