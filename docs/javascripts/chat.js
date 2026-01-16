@@ -530,9 +530,16 @@
                 innerHTML: this.getIconSVG('send')
             });
 
+            // Disclaimer
+            this.elements.disclaimer = this.createElement('div', {
+                className: 'ellie-disclaimer',
+                innerHTML: 'AI can make mistakes. Please verify important information.'
+            });
+
             // Assemble input area
             this.elements.inputArea.appendChild(this.elements.input);
             this.elements.inputArea.appendChild(this.elements.sendBtn);
+            this.elements.inputArea.appendChild(this.elements.disclaimer);
 
             // Resize handle (top-left corner)
             this.elements.resizeHandle = this.createElement('div', {
