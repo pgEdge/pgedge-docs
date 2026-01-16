@@ -331,7 +331,7 @@ nav:
     - Cloud Edition: cloud/index.md
     - Getting Started:
       - Enterprise Edition: cloud/getting_started/ee_getting_started.md
-      - Developer Edition: cloud/getting_started/de_getting_started.md
+      #- Developer Edition: cloud/getting_started/de_getting_started.md
     - Prerequisites:
       - Adding an SSH Key: cloud/prerequisites/ssh_key.md
       - Linking and Managing your Cloud Provider Accounts:
