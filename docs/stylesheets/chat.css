@@ -351,12 +351,6 @@
     scrollbar-color: #c0c0c0 transparent !important;
 }
 
-.ellie-message__content pre code {
-    /* Scrollbar styling - Firefox (in case code element scrolls) */
-    scrollbar-width: thin !important;
-    scrollbar-color: #c0c0c0 transparent !important;
-}
-
 /* Copy button for code blocks */
 .ellie-message__content pre .ellie-copy-btn {
     position: absolute;
@@ -408,10 +402,6 @@
     scrollbar-color: #555555 transparent !important;
 }
 
-[data-md-color-scheme="slate"] .ellie-message__content pre code {
-    scrollbar-color: #555555 transparent !important;
-}
-
 /* Code block scrollbar styling - webkit */
 .ellie-message__content pre::-webkit-scrollbar {
     height: 6px;
@@ -439,6 +429,8 @@
     padding: 0;
     white-space: pre !important;
     display: block;
+    /* Override highlight.js overflow - scrollbar should be on pre, not code */
+    overflow-x: visible !important;
 }
 
 /* Ensure all elements inside code blocks have transparent backgrounds */
