@@ -412,12 +412,21 @@
 }
 
 .ellie-message__content pre::-webkit-scrollbar-thumb {
-    background: var(--ellie-border);
+    background: #c0c0c0;
     border-radius: 3px;
 }
 
 .ellie-message__content pre::-webkit-scrollbar-thumb:hover {
-    background: var(--ellie-text-muted);
+    background: #999999;
+}
+
+/* Dark mode code block scrollbar */
+[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb {
+    background: #555555;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb:hover {
+    background: #777777;
 }
 
 .ellie-message__content pre code,
