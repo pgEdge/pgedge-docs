@@ -565,6 +565,7 @@
             this.inputHistoryIndex = -1;
             this.inputHistoryCache = [];
             this.currentInput = '';
+            this.userScrolledUp = false;  // Track if user has scrolled away from bottom
         }
 
         create() {
@@ -666,6 +667,20 @@
 
             // Restore saved size
             this.restoreSize();
+
+            // Track scroll position to avoid interrupting user when they scroll up
+            this.elements.messages.addEventListener('scroll', () => {
+                this.userScrolledUp = !this.isNearBottom();
+            });
+        }
+
+        /**
+         * Check if the messages container is scrolled near the bottom.
+         * Uses a threshold to account for small differences.
+         */
+        isNearBottom(threshold = 50) {
+            const el = this.elements.messages;
+            return el.scrollHeight - el.scrollTop - el.clientHeight < threshold;
         }
 
         restoreSize() {
@@ -748,7 +763,9 @@
             this.hideFab();
             this.elements.window.setAttribute('aria-hidden', 'false');
             this.elements.input.focus();
-            this.scrollToBottom();
+            // Reset scroll tracking and scroll to bottom when opening
+            this.userScrolledUp = false;
+            this.scrollToBottom(true);
         }
 
         close() {
@@ -914,7 +931,11 @@
             return html;
         }
 
-        scrollToBottom() {
+        scrollToBottom(force = false) {
+            // Don't auto-scroll if user has scrolled up to read earlier content
+            if (!force && this.userScrolledUp) {
+                return;
+            }
             requestAnimationFrame(() => {
                 this.elements.messages.scrollTop = this.elements.messages.scrollHeight;
             });
@@ -1282,6 +1303,9 @@
             // Add to input history
             this.history.addToInputHistory(content);
             this.ui.resetHistoryNavigation();
+
+            // Reset scroll tracking - user sending a message means they want to see the response
+            this.ui.userScrolledUp = false;
 
             // Add user message
             this.messages.push({ role: 'user', content });
