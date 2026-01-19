@@ -7,6 +7,7 @@
       - python3-yaml
       - python3-requests
       - python3-bs4
+      - python3-html2text
     state: present
 
 # Install from GitHub Release (beta2 has native git support)
@@ -97,3 +98,49 @@
     owner: "{{ docloader_user }}"
     group: "{{ docloader_group }}"
     mode: '0750'
+
+# Package scanner for generating package availability documentation
+- name: Deploy package scanner script
+  ansible.builtin.template:
+    src: scan-packages.py.j2
+    dest: /usr/local/bin/scan-packages
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create packages output directory
+  ansible.builtin.file:
+    path: "{{ docloader_data_dir }}/packages"
+    state: directory
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0750'
+
+# Wiki extractor for loading internal Confluence content
+- name: Deploy wiki extractor script
+  ansible.builtin.template:
+    src: extract-wiki.py.j2
+    dest: /usr/local/bin/extract-wiki
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create wiki output directory
+  ansible.builtin.file:
+    path: "{{ docloader_data_dir }}/wiki"
+    state: directory
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0750'
+
+- name: Deploy Atlassian credentials file
+  ansible.builtin.copy:
+    content: |
+      {{ docloader_atlassian_email }}
+      {{ docloader_atlassian_token }}
+    dest: "{{ docloader_config_dir }}/.atlassian"
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0600'
+  no_log: true
+  when: docloader_atlassian_email is defined and docloader_atlassian_token is defined

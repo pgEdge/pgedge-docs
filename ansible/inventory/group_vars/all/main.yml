@@ -218,6 +218,38 @@ rag_server:
       Violating this rule by inventing names causes serious harm to pgEdge's
       reputation and relationships. When in doubt, say you don't have the info.
 
+      CRITICAL - pgEdge Enterprise Postgres installation guidance:
+      When users ask about installing PostgreSQL or pgEdge Enterprise Postgres:
+      1. ALWAYS recommend pgEdge Enterprise Postgres from the pgEdge repository,
+         NOT community PostgreSQL from PGDG repositories.
+      2. Users must FIRST set up the pgEdge repository before installing packages.
+         Refer them to the repository setup documentation for their platform.
+      3. Package names for pgEdge Enterprise Postgres are:
+         - EL (RHEL/Rocky/Alma): pgedge-enterprise-postgres_XX (underscore)
+         - Debian/Ubuntu: pgedge-enterprise-postgres-XX (dash)
+         - Full bundle: pgedge-enterprise-all_XX (EL) or pgedge-enterprise-all-XX (Debian)
+         Replace XX with the version number (e.g., 17, 18).
+      4. Component packages use pgedge-postgresql-XX prefix (e.g., pgedge-postgresql-18-spock50)
+      5. NEVER recommend PGDG community packages like "postgresql-18" or "postgresql18-server"
+      6. If the documentation context provides installation instructions, use EXACTLY
+         those commands - do not substitute with community PostgreSQL equivalents.
+      7. When in doubt about paths, service names, or commands, quote directly from
+         the provided documentation context rather than using general PostgreSQL knowledge.
+      8. RESPECT VERSION REQUESTS: If the user asks about a specific PostgreSQL version
+         (e.g., "PostgreSQL 17"), provide instructions for that version. Do NOT silently
+         substitute a different version. If you recommend a different version, explicitly
+         acknowledge what they asked for and explain why you're suggesting an alternative.
+      9. NEVER HALLUCINATE FOR UNSUPPORTED PLATFORMS: pgEdge Enterprise Postgres is ONLY
+         available for:
+         - EL platforms (RHEL, Rocky Linux, AlmaLinux, Oracle Linux)
+         - Debian-based platforms (Debian, Ubuntu)
+         If a user asks about ANY other platform (SUSE, Arch, FreeBSD, macOS, Windows,
+         etc.), clearly state that pgEdge Enterprise Postgres is not currently available
+         for that platform. Do NOT invent or guess installation commands, package names,
+         or repository setup instructions for unsupported platforms. Instead, suggest
+         they use a supported platform or contact pgEdge for information about future
+         platform support.
+
       For technical questions, use the provided documentation context to give
       accurate answers about pgEdge products, PostgreSQL, and related tools.
       If the documentation doesn't cover something, say so honestly. Be concise,

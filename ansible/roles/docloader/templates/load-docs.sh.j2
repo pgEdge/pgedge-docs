@@ -3,13 +3,21 @@
 # load-docs - Wrapper script for pgedge-docloader
 # =============================================================================
 #
-# This script reads the configuration file, clones/updates git repositories,
-# and runs pgedge-docloader for each documentation source.
+# This script performs the following steps:
+#   1. Crawl websites (crawl-website)
+#   2. Scan package repositories (scan-packages)
+#   3. Extract wiki content (extract-wiki)
+#   4. Clone/update git repositories
+#   5. Load all documentation into the RAG database
 #
 # Usage:
-#   sudo load-docs              # Load all documentation sources
+#   sudo load-docs              # Run all steps and load all documentation
 #   sudo load-docs --dry-run    # Show what would be done without loading
 #   sudo load-docs --source N   # Load only source N (0-indexed)
+#   sudo load-docs --skip-crawl # Skip website crawling
+#   sudo load-docs --skip-packages  # Skip package scanning
+#   sudo load-docs --skip-wiki  # Skip wiki extraction
+#   sudo load-docs --skip-prep  # Skip all preparatory steps
 #
 # Configuration: {{ docloader_config_dir }}/config.yaml
 # =============================================================================
@@ -29,6 +37,41 @@ except ImportError:
 
 CONFIG_FILE = "{{ docloader_config_dir }}/config.yaml"
 RUN_USER = "{{ docloader_user }}"
+ATLASSIAN_CREDS = "{{ docloader_config_dir }}/.atlassian"
+
+
+def run_prep_script(script_name: str, description: str, dry_run: bool = False,
+                    requires_creds: str = None) -> bool:
+    """
+    Run a preparatory script (crawl-website, scan-packages, extract-wiki).
+    Returns True on success, False on failure or skip.
+    """
+    print(f"\n{'=' * 60}")
+    print(f"Step: {description}")
+    print('=' * 60)
+
+    # Check if credentials file exists for scripts that need it
+    if requires_creds and not os.path.exists(requires_creds):
+        print(f"  Skipping: credentials file not found ({requires_creds})")
+        return True  # Not a failure, just skipped
+
+    script_path = f"/usr/local/bin/{script_name}"
+    if not os.path.exists(script_path):
+        print(f"  Warning: {script_name} not found, skipping", file=sys.stderr)
+        return True  # Not a failure, just not installed
+
+    if dry_run:
+        print(f"  Would run: {script_path}")
+        return True
+
+    print(f"  Running: {script_path}")
+    result = subprocess.run([script_path], capture_output=False)
+
+    if result.returncode != 0:
+        print(f"  Warning: {script_name} returned non-zero exit code", file=sys.stderr)
+        return False
+
+    return True
 
 
 def load_config(config_path: str) -> dict:
@@ -205,10 +248,11 @@ def main():
 Configuration file: {CONFIG_FILE}
 
 Examples:
-  sudo load-docs              # Load all sources
+  sudo load-docs              # Run all steps and load all sources
   sudo load-docs --dry-run    # Show what would be done
   sudo load-docs --source 0   # Load only the first source
   sudo load-docs --list       # List all sources
+  sudo load-docs --skip-prep  # Skip prep steps, just load docs
 '''
     )
     parser.add_argument('--dry-run', '-n', action='store_true',
@@ -219,6 +263,16 @@ Examples:
                         help='List all sources and exit')
     parser.add_argument('--config', '-c', default=CONFIG_FILE,
                         help='Path to configuration file')
+
+    # Skip options for preparatory steps
+    parser.add_argument('--skip-crawl', action='store_true',
+                        help='Skip website crawling step')
+    parser.add_argument('--skip-packages', action='store_true',
+                        help='Skip package repository scanning step')
+    parser.add_argument('--skip-wiki', action='store_true',
+                        help='Skip wiki extraction step')
+    parser.add_argument('--skip-prep', action='store_true',
+                        help='Skip all preparatory steps (crawl, packages, wiki)')
 
     args = parser.parse_args()
 
@@ -264,6 +318,33 @@ Examples:
     print(f"Loading documentation from: {args.config}")
     print(f"Data directory: {data_dir}")
 
+    # Run preparatory steps (unless skipped)
+    prep_warnings = []
+
+    if not args.skip_prep:
+        # Step 1: Crawl websites
+        if not args.skip_crawl:
+            if not run_prep_script('crawl-website', 'Crawling websites', args.dry_run):
+                prep_warnings.append('Website crawling had warnings')
+
+        # Step 2: Scan package repositories
+        if not args.skip_packages:
+            if not run_prep_script('scan-packages', 'Scanning package repositories', args.dry_run):
+                prep_warnings.append('Package scanning had warnings')
+
+        # Step 3: Extract wiki content
+        if not args.skip_wiki:
+            if not run_prep_script('extract-wiki', 'Extracting wiki content', args.dry_run,
+                                   requires_creds=ATLASSIAN_CREDS):
+                prep_warnings.append('Wiki extraction had warnings')
+    else:
+        print("\nSkipping all preparatory steps (--skip-prep)")
+
+    # Step 4: Load documentation
+    print(f"\n{'=' * 60}")
+    print("Step: Loading documentation into database")
+    print('=' * 60)
+
     # Process sources
     if args.source is not None:
         if args.source < 0 or args.source >= len(sources):
@@ -287,7 +368,15 @@ Examples:
             fail_count += 1
 
     print(f"\n{'=' * 60}")
-    print(f"Completed: {success_count} successful, {fail_count} failed")
+    print("Summary")
+    print('=' * 60)
+
+    if prep_warnings:
+        print(f"Prep warnings: {len(prep_warnings)}")
+        for warning in prep_warnings:
+            print(f"  - {warning}")
+
+    print(f"Documentation loading: {success_count} successful, {fail_count} failed")
 
     sys.exit(0 if fail_count == 0 else 1)
 

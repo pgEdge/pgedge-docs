@@ -104,6 +104,8 @@ vault_cloudflare_account_id: your-account-id
 vault_rag_secret: shared-secret-for-worker
 vault_cloudflared_tunnel_name: pgedge-rag
 vault_cloudflared_internal_hostname: rag-internal.yourdomain.com
+vault_atlassian_email: your.email@pgedge.com       # For wiki extraction
+vault_atlassian_token: your-atlassian-api-token   # For wiki extraction
 ```
 
 ### 3. Create Vault Password File
@@ -167,11 +169,11 @@ After deployment, load documentation into the RAG server:
 # SSH to the server
 ssh admin@<ec2-ip>
 
-# Crawl website content (optional)
-sudo crawl-website
-
-# Load all documentation
+# Load all documentation (automatically runs crawl, scan, and extract steps)
 sudo load-docs
+
+# Or skip the preparatory steps if you just want to reload docs
+sudo load-docs --skip-prep
 ```
 
 ## Directory Structure
@@ -266,8 +268,10 @@ Deploys the API proxy worker:
 
 Sets up documentation loading tools:
 - Installs pgEdge Docloader from GitHub releases
-- Deploys `load-docs` wrapper script
+- Deploys `load-docs` wrapper script (automatically runs all prep steps)
 - Deploys `crawl-website` Python script for website crawling
+- Deploys `scan-packages` Python script for repository scanning
+- Deploys `extract-wiki` Python script for Confluence wiki extraction
 - Creates configuration files for document sources
 - Creates data directories for crawled content
 
@@ -277,19 +281,85 @@ Sets up documentation loading tools:
 |------|---------|
 | `/etc/pgedge/docloader/config.yaml` | Document sources (git repos, local paths) |
 | `/etc/pgedge/docloader/websites.yaml` | Website crawling configuration |
+| `/etc/pgedge/docloader/.atlassian` | Atlassian credentials (email + API token) |
 
 **Commands:**
 
 ```bash
-# Load documentation from all configured sources
+# Load all documentation (runs all prep steps automatically)
 sudo load-docs
 
-# Crawl websites defined in websites.yaml
-sudo crawl-website
+# Skip preparatory steps and just load docs from existing content
+sudo load-docs --skip-prep
 
-# Dry run (show what would be crawled)
-sudo crawl-website --dry-run
+# Skip individual prep steps
+sudo load-docs --skip-crawl     # Skip website crawling
+sudo load-docs --skip-packages  # Skip package scanning
+sudo load-docs --skip-wiki      # Skip wiki extraction
+
+# Dry run (show what would be done)
+sudo load-docs --dry-run
+
+# Run individual prep scripts manually (if needed)
+sudo crawl-website              # Crawl websites
+sudo scan-packages              # Scan package repositories
+sudo extract-wiki               # Extract wiki pages
 ```
+
+**Package Scanning:**
+
+The `scan-packages` command queries the pgEdge apt and dnf repositories and generates a markdown document listing all available packages, versions, and platform compatibility. This gives Ellie accurate information about which packages exist and which platforms are supported.
+
+Run `sudo scan-packages` before `sudo load-docs` to update the package list. The generated documentation is stored at `/var/lib/pgedge/docloader/packages/pgedge-packages.md`.
+
+**Wiki Extraction:**
+
+The `extract-wiki` command extracts pages from the internal pgEdge Confluence wiki and converts them to markdown for loading into the RAG database. This allows Ellie to answer questions about internal documentation.
+
+*Prerequisites:*
+
+1. Create an Atlassian API token:
+   - Go to https://id.atlassian.com/manage-profile/security/api-tokens
+   - Click "Create API token"
+   - Copy the generated token
+
+2. Add credentials to your Ansible vault (`inventory/group_vars/all/vault.yml`):
+
+```yaml
+vault_atlassian_email: your.email@pgedge.com
+vault_atlassian_token: your-api-token
+```
+
+3. Redeploy the docloader role to install the credentials file:
+
+```bash
+ansible-playbook playbooks/site.yml --tags docloader
+```
+
+*Usage:*
+
+```bash
+# Extract all wiki pages under the configured parent page
+sudo extract-wiki
+
+# Preview what would be extracted
+sudo extract-wiki --dry-run
+
+# Extract from a specific parent page
+sudo extract-wiki --page-id 12345678
+```
+
+The extracted content is stored at `/var/lib/pgedge/docloader/wiki/`. After extraction, run `sudo load-docs` to load the content into the database.
+
+*Configuration:*
+
+Default wiki settings can be overridden in your variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `docloader_wiki_url` | Confluence base URL | `https://pgedge.atlassian.net` |
+| `docloader_wiki_space` | Confluence space key | `KB` |
+| `docloader_wiki_parent_page` | Parent page ID to extract from | `61571365` |
 
 **Adding Document Sources:**
 
@@ -462,6 +532,15 @@ ansible-playbook playbooks/site.yml --tags cloudflared
 - Check docloader config: `sudo cat /etc/pgedge/docloader/config.yaml`
 - Run with verbose output: `sudo load-docs --verbose`
 - Check crawled content: `ls -la /var/lib/pgedge/docloader/websites/`
+
+### Wiki Extraction Issues
+
+- Verify credentials exist: `sudo cat /etc/pgedge/docloader/.atlassian`
+- Test API connection: `sudo extract-wiki --dry-run`
+- Check extracted content: `ls -la /var/lib/pgedge/docloader/wiki/`
+- Common errors:
+  - 401 Unauthorized: Invalid API token or email
+  - 403 Forbidden: Token lacks required permissions (needs read access to Confluence)
 
 ## Security Notes
 

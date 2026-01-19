@@ -34,3 +34,11 @@ docloader_db_sslmode: prefer
 docloader_col_title: title
 docloader_col_content: content
 docloader_col_filename: source_path
+
+# Wiki extraction settings (for extract-wiki command)
+docloader_wiki_url: "https://pgedge.atlassian.net"
+docloader_wiki_space: "KB"
+docloader_wiki_parent_page: "61571365"
+# Atlassian credentials - store in vault as:
+#   docloader_atlassian_email: your.email@pgedge.com
+#   docloader_atlassian_token: your-api-token
