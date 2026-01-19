@@ -398,7 +398,9 @@ Source: {page.url}
             seed_url = self._extract_seed_url(pattern)
             if seed_url:
                 url = self._normalize_url(seed_url)
-                if url not in self.visited and url not in self.to_visit:
+                # Only add seed URL if it actually matches the patterns
+                # (prevents adding /products when pattern is /products/*)
+                if self._should_crawl(url) and url not in self.to_visit:
                     self.to_visit.append(url)
 
         # Also add base_url if it matches a pattern
