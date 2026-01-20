@@ -2,7 +2,7 @@
 
 !!! info
 
-    To create a cluster with pgEdge Distributed Postgres (Cloud Edition),
+    To create a cluster with pgEdge Distributed Postgres Cloud Edition,
     you must have a
     [linked Cloud provider account](../prerequisites/cloud_accounts/index.md).
 

@@ -1,6 +1,6 @@
-# Getting Started with pgEdge Distributed Postgres (Cloud Edition) Enterprise Edition
+# Getting Started with pgEdge Postgres Cloud Edition
 
-Signing up for Enterprise Edition Cloud is easy; simply navigate to [the pgEdge sign-in page](https://app.pgedge.com/login?plan=developer&screen_hint=signup) and provide a name and password, or log in with your Google or Github account. 
+Signing up for pgEdge Postgres Cloud edition is easy; simply navigate to [the pgEdge sign-in page](https://app.pgedge.com/login?plan=developer&screen_hint=signup) and provide a name and password, or log in with your Google or Github account. 
 
 ![pgEdge Enterprise Edition Console](../images/ee_console.png)
 
@@ -10,7 +10,7 @@ Before creating your first cluster, you need to link your Cloud provider account
 * Azure
 * Google
 
-To [link a cloud account](../prerequisites/cloud_accounts/index.md), select the `Cloud Accounts` menu option in the left navigation pane. 
+To [link a cloud account](../prerequisites/cloud_accounts/index.md), select the `Cloud Accounts` menu option in the Cloud console's left navigation pane. 
 
 ## pgEdge Resources
 
