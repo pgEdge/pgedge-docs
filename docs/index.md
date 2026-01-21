@@ -391,7 +391,7 @@ hide:
   <p>Traditional PostgreSQL uses a primary-standby model where only one node accepts writes. pgEdge's multi-master (active-active) approach changes this paradigm:</p>
 
   <div style="text-align: center; margin-top: 1rem;">
-    <img src="img/pgedge_mmr.png" alt="pgEdge Multi-Master Replication" style="width:75%; max-width:1100px; height:auto; display:block; margin:0 auto;" />
+    <img src="img/pgedge_mmr.png" alt="pgEdge Multi-Master Replication" style="width:60%; max-width:1100px; height:auto; display:block; margin:0 auto;" />
 
     <p style="margin-top: 1rem; font-size: 0.9rem; margin-bottom: 0;">
       <a href="https://www.pgedge.com/solutions/benefit/multi-master">Learn more about multi-master architectures →</a>
