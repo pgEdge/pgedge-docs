@@ -4,6 +4,7 @@
  * A floating chat assistant that connects to pgedge-rag-server for
  * RAG-powered Q&A about pgEdge products.
  */
+/* global hljs, document$ */
 (function() {
     'use strict';
 
@@ -97,37 +98,7 @@
          * Analyze content to find safe display point and code block state.
          */
         analyzeContent() {
-            let pos = 0;
-            let inCodeBlock = false;
-            let lastSafePoint = 0;
-
-            while (pos < this.content.length) {
-                // Check for code fence (```)
-                if (this.content.slice(pos, pos + 3) === '```') {
-                    if (!inCodeBlock) {
-                        // Entering code block
-                        inCodeBlock = true;
-                        pos += 3;
-                        // Skip language identifier
-                        while (pos < this.content.length && this.content[pos] !== '\n') {
-                            pos++;
-                        }
-                        if (pos < this.content.length) pos++;
-                        continue;
-                    } else {
-                        // Leaving code block - it's now complete
-                        inCodeBlock = false;
-                        pos += 3;
-                        // Include trailing newline if present
-                        if (pos < this.content.length && this.content[pos] === '\n') {
-                            pos++;
-                        }
-                        lastSafePoint = pos;
-                        continue;
-                    }
-                }
-                pos++;
-            }
+            const { inCodeBlock, lastSafePoint } = this.findCodeBlockState();
 
             if (inCodeBlock) {
                 // Inside code block - show everything (will be rendered as pending)
@@ -135,14 +106,47 @@
             }
 
             // Not in code block - find last word boundary after lastSafePoint
-            let lastWordBoundary = lastSafePoint;
-            for (let i = lastSafePoint; i < this.content.length; i++) {
-                if (/\s/.test(this.content[i])) {
-                    lastWordBoundary = i + 1; // Include the whitespace
+            return { safePoint: this.findLastWordBoundary(lastSafePoint), inCodeBlock: false };
+        }
+
+        /**
+         * Scan content to determine code block state and last safe point.
+         */
+        findCodeBlockState() {
+            let inCodeBlock = false;
+            let lastSafePoint = 0;
+            // Match code fences: ``` optionally followed by language and newline
+            const fencePattern = /```\w*\n?/g;
+            let match;
+
+            while ((match = fencePattern.exec(this.content)) !== null) {
+                if (!inCodeBlock) {
+                    inCodeBlock = true;
+                } else {
+                    inCodeBlock = false;
+                    // Safe point is after the closing fence (and optional newline)
+                    lastSafePoint = match.index + match[0].length;
+                    // Include trailing newline if present but not matched
+                    if (lastSafePoint < this.content.length && this.content[lastSafePoint] === '\n') {
+                        lastSafePoint++;
+                    }
                 }
             }
 
-            return { safePoint: lastWordBoundary, inCodeBlock: false };
+            return { inCodeBlock, lastSafePoint };
+        }
+
+        /**
+         * Find the last word boundary position starting from a given point.
+         */
+        findLastWordBoundary(startPos) {
+            let lastBoundary = startPos;
+            for (let i = startPos; i < this.content.length; i++) {
+                if (/\s/.test(this.content[i])) {
+                    lastBoundary = i + 1; // Include the whitespace
+                }
+            }
+            return lastBoundary;
         }
 
         /**
@@ -173,7 +177,7 @@
             if (/```|`[^`]+`|function\s|const\s|let\s|var\s|=>/i.test(text)) {
                 return 'code';
             }
-            if (/^\s*[\[{]/.test(text) && /[\]}]\s*$/.test(text)) {
+            if (/^\s*[[{]/.test(text) && /[\]}]\s*$/.test(text)) {
                 return 'json';
             }
             return 'natural';
@@ -205,39 +209,48 @@
             TRANSIENT: 0.1
         };
 
-        classify(message, index) {
-            const { role, content } = message;
-            const lowercaseContent = (content || '').toLowerCase();
-
+        // Classification rules applied in order; first match wins
+        static RULES = [
             // First message is always anchor
-            if (index === 0) {
-                return { category: 'anchor', priority: MessageClassifier.PRIORITIES.ANCHOR };
-            }
-
+            { test: (_msg, _content, index) => index === 0, category: 'anchor', priority: 'ANCHOR' },
             // Transient: brief acknowledgments
-            if (content && content.length < 15 && /^(ok|yes|no|thanks|got it|i see)/i.test(lowercaseContent)) {
-                return { category: 'transient', priority: MessageClassifier.PRIORITIES.TRANSIENT };
+            {
+                test: (msg, content) => msg.content?.length < 15 && /^(ok|yes|no|thanks|got it|i see)/i.test(content),
+                category: 'transient',
+                priority: 'TRANSIENT'
+            },
+            // User corrections are important
+            {
+                test: (msg, content) => msg.role === 'user' && /actually|instead|wrong|correct|fix/i.test(content),
+                category: 'anchor',
+                priority: 'ANCHOR'
+            },
+            // Substantive user questions
+            {
+                test: (msg) => msg.role === 'user' && msg.content && (msg.content.length > 50 || /\?/.test(msg.content)),
+                category: 'important',
+                priority: 'IMPORTANT'
+            },
+            // Long assistant responses
+            {
+                test: (msg) => msg.role === 'assistant' && msg.content?.length > 500,
+                category: 'contextual',
+                priority: 'CONTEXTUAL'
+            },
+            // Assistant responses with code blocks
+            {
+                test: (msg) => msg.role === 'assistant' && /```/.test(msg.content || ''),
+                category: 'important',
+                priority: 'IMPORTANT'
             }
+        ];
 
-            if (role === 'user') {
-                // User corrections are important
-                if (/actually|instead|wrong|correct|fix/i.test(lowercaseContent)) {
-                    return { category: 'anchor', priority: MessageClassifier.PRIORITIES.ANCHOR };
-                }
-                // Substantive questions
-                if (content && (content.length > 50 || /\?/.test(content))) {
-                    return { category: 'important', priority: MessageClassifier.PRIORITIES.IMPORTANT };
-                }
-            }
+        classify(message, index) {
+            const lowercaseContent = (message.content || '').toLowerCase();
 
-            if (role === 'assistant') {
-                // Long responses with detailed information
-                if (content && content.length > 500) {
-                    return { category: 'contextual', priority: MessageClassifier.PRIORITIES.CONTEXTUAL };
-                }
-                // Contains code blocks
-                if (/```/.test(content || '')) {
-                    return { category: 'important', priority: MessageClassifier.PRIORITIES.IMPORTANT };
+            for (const rule of MessageClassifier.RULES) {
+                if (rule.test(message, lowercaseContent, index)) {
+                    return { category: rule.category, priority: MessageClassifier.PRIORITIES[rule.priority] };
                 }
             }
 
@@ -468,7 +481,8 @@
                 const decoder = new TextDecoder();
                 let buffer = '';
 
-                while (true) {
+                // Read SSE stream until done - intentional infinite loop with break
+                while (true) { // eslint-disable-line no-constant-condition
                     const { done, value } = await reader.read();
 
                     if (done) {
