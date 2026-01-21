@@ -390,41 +390,13 @@ hide:
   <h3>How pgEdge Delivers Multi-Master Replication</h3>
   <p>Traditional PostgreSQL uses a primary-standby model where only one node accepts writes. pgEdge's multi-master (active-active) approach changes this paradigm:</p>
 
-  <div class="architecture-features">
-    <div class="architecture-feature">
-      <strong>Write-Anywhere Capability</strong>
-      <p>Every node accepts both reads and writes. Applications connect to the nearest node for lowest latency—no single point of write contention.</p>
-    </div>
+  <div style="text-align: center; margin-top: 1rem;">
+    <img src="img/pgedge_mmr.png" alt="pgEdge Multi-Master Replication" style="width:75%; max-width:1100px; height:auto; display:block; margin:0 auto;" />
 
-    <div class="architecture-feature">
-      <strong>Instant Failover</strong>
-      <p>When a node fails, simply redirect traffic to remaining active nodes. No need to wait for replica promotion or election processes—all nodes are already active primaries.</p>
-    </div>
-
-    <div class="architecture-feature">
-      <strong>Bi-Directional Replication</strong>
-      <p>Data changes flow in all directions between nodes with sophisticated conflict resolution. Maintains eventual consistency across the cluster automatically.</p>
-    </div>
-
-    <div class="architecture-feature">
-      <strong>Geographic Distribution</strong>
-      <p>Deploy nodes close to users worldwide. Reduce network latency from hundreds of milliseconds to sub-50ms by writing locally and replicating globally.</p>
-    </div>
-
-    <div class="architecture-feature">
-      <strong>Data Sovereignty</strong>
-      <p>Replicate global data globally while keeping region-specific data local. Granular control at table, row, or column level for regulatory compliance.</p>
-    </div>
-
-    <div class="architecture-feature">
-      <strong>Zero-Downtime Operations</strong>
-      <p>Perform PostgreSQL upgrades, add/remove nodes, and conduct maintenance without application downtime. Cluster remains fully available throughout.</p>
-    </div>
+    <p style="margin-top: 1rem; font-size: 0.9rem; margin-bottom: 0;">
+      <a href="https://www.pgedge.com/solutions/benefit/multi-master">Learn more about multi-master architectures →</a>
+    </p>
   </div>
-
-  <p style="margin-top: 1rem; font-size: 0.9rem;">
-    <a href="https://www.pgedge.com/solutions/benefit/multi-master">Learn more about multi-master architectures →</a>
-  </p>
 </div>
 
 <!-- Footer -->
