@@ -112,10 +112,9 @@ The graphs display metrics about:
 | Memory Usage | Memory used (in MB) |
 | Disk Usage | The amount of disk space used (in GB) |
 | Running Processes | The number of running processes |
-| Network Receive | The amount of data received by the
-|  | instance |
-| Network Send | The amount of data transmitted from the
-|  | instance |
+| Network Receive | The amount of data received by the instance |
+| Network Send | The amount of data transmitted from the instance |
+
 Select the `Logs` tab to review log files for the cluster.
 
 ![The cluster log files](../images/cluster_log_details.png)
