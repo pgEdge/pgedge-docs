@@ -27,15 +27,12 @@ If you prefer to start psql with a graphical prompt or icon (rather than the com
 When you open psql, the client prompts you for authentication information:
 
 * When prompted for a `Server [localhost]`, provide the server DNS (the clause that ends with `.pgedge.io`) and press `Return`. In our example above, the server name is: `actually-massive-amoeba-iad.pgedge.io`.
-
-**Note:** If you are using Developer Edition, you should always use the DNS name when connecting; IP addresses are not supported for Developer Edition connections. This limitation may cause issues with name resolution.
-
 * When prompted for a `Database [postgres]` provide the name of the database and press `Return`. In our example, the database name is `receivables`.
 * When prompted for a `Port [5432]`, enter `5432` and press `Return`.
-* When prompted for a `Username [postgres]`, provide the name of the user in your connection string or connection properties, and press `Return`. If you're using Developer Edition, you should use the database superuser (`admin`) for your first connection.
-* When prompted for the `Password`, provide the password associated with the user.  If you are using Developer Edition, and have not created tables, enter the decrypted value from the `PGPASSWORD` clause in your `PSQL` connection string. If the value is obscured by asterisks, you can use the copy button to copy the connection to another temporary window and then select the password portion for use authenticating.
+* When prompted for a `Username [postgres]`, provide the name of the user in your connection string or connection properties, and press `Return`.
+* When prompted for the `Password`, provide the password associated with the user.
 
-Press return to connect to your database:
+Press `return` to connect to your database:
 
 ![Connecting with psql](../images/existing_psql.png)
 

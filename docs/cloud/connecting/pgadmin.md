@@ -22,7 +22,7 @@ When prompted, provide authentication details on the pgAdmin `Connection` tab. T
 
 Provide the following information on the `Parameters` tab:
 
-* Use the drop-down to the right of `SSL mode` to select `require`. All client connections to pgEdge Developer Edition are required to use SSL.
+* Use the drop-down to the right of `SSL mode` to select `require`.
 
 * Use the `+` at the top of the parameter table to open a new row, and use the drop-down list in the `Name` field to select `GSS encmode`. Set the `Value` to `disable`.
 
