@@ -20,7 +20,8 @@ information about the selected cluster:
   account.
 * User-defined [resource tags](resource_tag.md) associated with the cluster.
 
-Also in the cluster header, a set of informational panes tell you the state of the cluster at a glance:
+Also in the cluster header, a set of informational panes tell you the
+state of the cluster at a glance:
 
 * the total node count
 * the number of healthy nodes
@@ -32,26 +33,33 @@ Also in the cluster header, a set of informational panes tell you the state of t
 
 ![Cluster Overview](../images/cluster_overview.png)
 
-The tabbed browser on the `Cluster` tab provides quick access to information about the state of your cluster:
+The tabbed browser on the `Cluster` tab provides quick access to
+information about the state of your cluster:
 
 * Select the [`Overview`](#the-overview-tab) tab to view information
   about the cluster, and the databases currently deployed on the cluster.
   Detailed information about the cluster's nodes is displayed below. Click
   on an icon in the `Database` pane to navigate to detailed information
   about the selected database.
-* Select the [`Metrics`](#reviewing-cluster-metrics) tab to view details about cluster resource use.
-* Select the [`Logs`](#reviewing-cluster-log-files) tab to review cluster log files.
+* Select the [`Metrics`](#reviewing-cluster-metrics) tab to view details
+  about cluster resource use.
+* Select the [`Logs`](#reviewing-cluster-log-files) tab to review cluster
+  log files.
 
 ### The Overview Tab
 
-Select the `Overview` tab to review information about the cluster. Panes on the `Overview` tab contain links to cluster artifacts:
+Select the `Overview` tab to review information about the cluster. Panes
+on the `Overview` tab contain links to cluster artifacts:
 
-  * Select a database name in the `Databases` pane to navigate to the information page for that database.
-  * Select a backup store name in the `Backup Store` pane to navigate to the information page for the store.
+  * Select a database name in the `Databases` pane to navigate to the
+    information page for that database.
+  * Select a backup store name in the `Backup Store` pane to navigate to
+    the information page for the store.
 
 ![The cluster overview](../images/cluster_overview_details.png)
 
-The `Nodes` pane contains general node information. Use the tabbed browser to select a node to review information that node:
+The `Nodes` pane contains general node information. Use the tabbed browser
+to select a node to review information that node:
 
 * The `Availability Zone` lists the provider region in which the node
   is deployed.
@@ -74,7 +82,8 @@ city in which the node resides.
 
 **Review Firewall Configuration**
 
-The `Overview` tab also displays the currently defined [Firewall Rules](firewall.md).
+The `Overview` tab also displays the currently defined [Firewall Rules]
+(firewall.md).
 
 ![The cluster console Map tab](../images/overview_firewall_rule.png)
 
@@ -87,7 +96,8 @@ The Overview tab also displays the current [VPC Associations](vpc_assoc.md):
 
 ### Reviewing Cluster Metrics
 
-Select the `Metrics` tab to review detailed system resource usage for the cluster.
+Select the `Metrics` tab to review detailed system resource usage for
+the cluster.
 
 ![The cluster metrics](../images/cluster_metrics_details.png)
 
@@ -102,7 +112,8 @@ specify the length of time displayed by each graph.
 Select a point on a graph to display information about the graphed event
 that occurred on your cluster:
 
-![A point-in-time selected in the cluster metrics graph](../images/cluster_metrics_PIT.png)
+![A point-in-time selected in the cluster metrics graph]
+(../images/cluster_metrics_PIT.png)
 
 The graphs display metrics about:
 
@@ -119,7 +130,8 @@ Select the `Logs` tab to review log files for the cluster.
 
 ![The cluster log files](../images/cluster_log_details.png)
 
-Use the tabs across the top to select the node(s) for which you'd like to review the log files. Then:
+Use the tabs across the top to select the node(s) for which you'd like to
+review the log files. Then:
 
 * select `System logs` to review the system commands performed to
   manage your cluster.
@@ -152,7 +164,8 @@ Use controls in the table header to sort or search the selected log file:
 
 ## pgEdge Distributed PostgreSQL: Cloud Edition Resources
 
-Use the links at the end of the navigation pane to access pgEdge Distributed PostgreSQL: Cloud Edition resources:
+Use the links at the end of the navigation pane to access pgEdge
+Distributed PostgreSQL: Cloud Edition resources:
 
 * For an invitation to the pgEdge Discord server, select the
   `Community` link.

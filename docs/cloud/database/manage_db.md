@@ -29,7 +29,7 @@ The database header tells you:
 
 ## The Get Started Pane
 
-After the header, the database information console displays the `Get Started`
+After the header, the console displays the `Get Started`
 pane; the pane includes a `PSQL` connection string that you can use to
 connect to the database as the `admin` user (a database superuser).
 
@@ -41,29 +41,20 @@ For detailed information about:
   [Connecting](../connecting/index.md).
 * moving a database object into your database, see [Migrating to pgEdge
   Distributed Cloud](../migration/index.md).
-* Postgres SQL commands, see the [Postgres documentation]
-  (https://www.postgresql.org/docs/16/sql-commands.html).
+* Postgres SQL commands, see the 
+[Postgres documentation](https://www.postgresql.org/docs/16/sql-commands.html).
 
 
 ## The Users Pane
 
 ![Users Pane](../images/users.png)
 
-In its initial state, a new database has three `Users`:
-
-* The `admin` user is a database superuser. Use this identity for your
-  first login; the password is included in the `PSQL` connection string
-  on the console.
-* The `app` user is a login user without superuser privileges. 
-* The `app_read_only` user is a login user without privileges to make
-  changes to the database.
-
-You can use [psql](../connecting/psql.md) or
+The Users pane displays a list of current users.
+In its initial state, a new database has roles required to perform
+administrative tasks. You can use [psql](../connecting/psql.md) or
 [pgAdmin](../connecting/pgadmin.md) to [create additional database
-users](https://www.postgresql.org/docs/16/sql-createrole.html); remember
-the [principal of least privileges]
-(https://en.wikipedia.org/wiki/Principle_of_least_privilege) as you share
-database login access.
+users](https://www.postgresql.org/docs/16/sql-createrole.html).
+
 
 ## Connect to your database
 
@@ -157,12 +148,9 @@ point in time, hover over a graph.
 
 | Command  | Description
 |----------|-------------
-| `CPU` | The `CPU` graph displays information about the CPU
-| | usage for the server.
-| `Memory` | The `Memory` graph displays information about
-| | memory usage (in MB) for the cluster or by the node.
-| `Replication Output` | The `Replication Output` graph displays
-| | the replication traffic for the database in tuples.
+| `CPU` | The `CPU` graph displays information about the CPU usage for the server.
+| `Memory` | The `Memory` graph displays information about memory usage (in MB) for the cluster or by the node.
+| `Replication Output` | The `Replication Output` graph displays the replication traffic for the database in tuples.
 
 
 ## Reviewing the Database Logs
@@ -194,8 +182,11 @@ log table:
 
 * Select a column heading to sort alphabetically by the column value;
   click a second time to reverse the sort order.
-* Click the filter icon to the right of the `Level` heading to select a status from the drop-down; all rows assigned the selected status will be filtered to the top of the result set.
+* Click the filter icon to the right of the `Level` heading to select a status
+  from the drop-down; all rows assigned the selected status will be filtered to
+  the top of the result set.
 
 ![Filtering the database log](../images/database_log_filter.png)
 
-* Use the search box to the right of the `Message` label to enter a search string; the search term will be highlighted in the log file entries.
+* Use the search box to the right of the `Message` label to enter a search
+  string; the search term will be highlighted in the log file entries.
