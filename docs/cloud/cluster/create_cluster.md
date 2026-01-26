@@ -7,15 +7,13 @@
     [linked Cloud provider account](../prerequisites/cloud_accounts/index.md).
 
 To create a cluster, select the `+ New Cluster` button in the left
-navigation pane. Then:
-
-* Provide a unique name for your cluster in the `Cluster Name` field.
+navigation pane. Then, provide a unique name for your cluster in the `Cluster Name` field.
 
 ![Provide a cluster name](../images/unique_cluster_name.png)
 
-* Use the drop-down listbox in the `Cloud Account` field to select the
-  [cloud provider account](../prerequisites/cloud_accounts/index.md)
-  that will be used to provision your cluster.
+Use the drop-down listbox in the `Cloud Account` field to select the
+[cloud provider account](../prerequisites/cloud_accounts/index.md)
+that will be used to provision your cluster.
 
 ![Select a cloud account](../images/cloud_account.png)
 
@@ -31,10 +29,12 @@ to select from the supported Availability Zones for node deployment. One node
 will be deployed in each zone listed; you can use the `X` in the zone icon to
 remove a zone from the deployment list.
 
+![Configure Network Settings](../images/configure_network.png)
+
 Each region in which your cluster is deployed is represented by a pane in the
 `Network Settings` section; within each region, subnet details for each
-availability zone are displayed. Toggles at the top of the section control
-network details:
+availability zone are displayed. Toggles at the top of the `Network Settings` 
+section control the display of network details:
 
 * Use the `Configuration` toggle to accept the `Default configuration` for
   address assignments, or move the toggle to `Manual configuration` to
@@ -48,8 +48,6 @@ network details:
   * `Private` network clusters are not accessible from the public internet.
     Note that private network clusters are not available for Google Cloud
     Platform users.
-
-![Configure Network Settings](../images/configure_network.png)
 
 Next, specify the vendor-specific deployment details for your cluster.
 
