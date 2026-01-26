@@ -44,20 +44,19 @@ to create the store.
 
 ## Attaching a Backup Store to a Cluster
 
-You can attach multiple backup stores to each cluster when initially
-[defining the cluster](../cluster/create_cluster.md#creating-a-cluster);  Before attaching a store, you must
-[define the backup store](#defining-a-backup-store).
+You can attach multiple backup stores to each cluster
+[during cluster creation](../cluster/create_cluster.md#creating-a-cluster);
+before creating a cluster, define any available [backup stores](#defining-a-backup-store) you wish to use. Once 
+defined, a store will be included in the list of available stores on the
+`Backup Stores` drop-down.
 
-To attach the store when defining a cluster, select the backup store
-with the `Backup Stores` field. Select a defined store from the
-drop-down list or toggle the `Show map` option to `enabled` to select from
-defined stores on the map image.
+Then, to attach the store during cluster creation, select the backup store
+from the `Backup Stores` field or toggle the `Show map` option to `enabled`
+to select from stores on the map image.
 
 ![Selecting a Backup store](../images/backup_store_selection.png)
 
-
-
-Then, to attach the store to a cluster, highlight the cluster name in the
+To attach a store to a cluster, highlight the cluster name in the
 navigation panel and select `Update Backup Stores` from the `Actions` menu.
 
 ![Updating Backup Stores](../images/action_update_backup.png)
