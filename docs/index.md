@@ -256,7 +256,7 @@ hide:
     <p class="card-description">
       Cloud-native deployments with Helm charts and CloudNativePG integration. Single-command installation with declarative configuration for production clusters.
     </p>
-    <a href="pgedge-containers/" class="card-link">View Documentation →</a>
+    <a href="pgedge-helm/" class="card-link">View Documentation →</a>
   </div>
 
   <div class="card">

@@ -1,4 +1,5 @@
 site/
+temp_dir/
 pgedge-docs-venv/
 .venv/
 .claude/settings.local.json
@@ -11,7 +12,7 @@ docs/ace/index.md
 docs/control-plane/index.md
 docs/lolor/index.md
 docs/pgedge-anonymizer/index.md
-docs/pgedge-containers/index.md
+docs/pgedge-helm/index.md
 docs/pgedge-docloader/index.md
 docs/pgedge-loadgen/index.md
 docs/pgedge-postgres-mcp-server/index.md

@@ -113,7 +113,7 @@ extra:
   # Versions are auto-detected from nav structure
   # Convention: first version = latest, "Development" = unstable/main branch
   versioned_docsets:
-    - pgedge-containers
+    - pgedge-helm
     - ace
     - lolor
     - snowflake
@@ -140,8 +140,10 @@ extra:
       - title: Ansible
         url: ansible/
     Containers:
-      - title: Helm Chart
-        url: pgedge-containers/
+      - title: Kubernetes
+        url: kubernetes/
+      - title: pgEdge Helm Chart
+        url: pgedge-helm/
       - title: Container Images
         url: container-images/
     AI Toolkit:
@@ -181,11 +183,15 @@ nav:
 
   - Ansible: ansible/index.md
 
-  - Container Images: 
-    - pgEdge Container Images: container-images/index.md
-    - Available Images: container-images/images.md
-    - Pulling a Container Image: container-images/pulling.md
-    - Running a pgEdge Container: container-images/running.md
+  - Container Images:
+    - pgEdge Container Registry: container-images/index.md
+    - pgEdge Enterprise Postgres Images: container-images/postgres-images.md
+
+  - pgEdge Enterprise Postgres for Kubernetes:
+    - Overview: kubernetes/index.md
+    - Installation: kubernetes/install.md
+    - Upgrading: kubernetes/upgrade.md
+
   - pgEdge Enterprise Postgres:
     - Enterprise Edition: enterprise/index.md
     - Enterprise Linux 9 & 10:
@@ -403,7 +409,7 @@ nav:
 
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed
-  - pgEdge Containers:
+  - pgEdge Helm:
     - v0.1: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.1.0'
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
