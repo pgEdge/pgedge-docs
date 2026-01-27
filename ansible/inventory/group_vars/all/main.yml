@@ -104,7 +104,7 @@ rag_server:
   listen_address: "127.0.0.1"  # Only localhost - cloudflared provides access
   port: 8080
 
-  # CORS (disabled when using Cloudflare Worker)
+  # CORS (disabled - Pages Function handles CORS)
   cors:
     enabled: false
 
@@ -276,31 +276,15 @@ cloudflared:
   config_file: /etc/cloudflared/config.yml
 
 # -----------------------------------------------------------------------------
-# Cloudflare Worker Configuration
+# Chat API Proxy (Cloudflare Pages Functions)
 # -----------------------------------------------------------------------------
-cloudflare_worker:
-  # Cloudflare API credentials (store in Ansible Vault)
-  api_token: "{{ vault_cloudflare_api_token | default('') }}"
-  account_id: "{{ vault_cloudflare_account_id | default('') }}"
-
-  # Worker configuration
-  worker_name: pgedge-chat-proxy
-
-  # Route configuration
-  zone_name: pgedge.com
-  route_pattern: "docs.pgedge.com/api/chat*"
-
-  # Allowed origin for CORS
-  allowed_origin: "https://docs.pgedge.com"
-
-  # Shared secret for RAG server authentication (store in Ansible Vault)
-  rag_secret: "{{ vault_rag_secret | default('changeme') }}"
-
-  # Internal tunnel URL
-  rag_internal_url: "https://{{ cloudflared.internal_hostname }}"
-
-  # Pipeline name
-  pipeline_name: "{{ rag_server.pipeline.name }}"
+# The chat API proxy is handled by Cloudflare Pages Functions (functions/api/chat/)
+# which deploy automatically with the documentation site.
+#
+# Configure the following environment variables in Cloudflare Pages dashboard:
+#   RAG_INTERNAL_URL - The cloudflared tunnel URL (e.g., https://rag.internal.example.com)
+#   RAG_SECRET - Shared secret for RAG server authentication
+#   PIPELINE_NAME - Pipeline name (default: pgedge-docs)
 
 # -----------------------------------------------------------------------------
 # API Keys (store actual values in Ansible Vault)

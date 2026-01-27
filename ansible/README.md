@@ -10,9 +10,11 @@ The deployment consists of:
 2. **PostgreSQL** - Database with pgvector extension for vector storage
 3. **RAG Server** - pgEdge RAG server for documentation Q&A
 4. **Cloudflared** - Cloudflare Tunnel for secure connectivity
-5. **Cloudflare Worker** - API proxy for the documentation site
-6. **Docloader** - Documentation loading and website crawling tools
-7. **AWS Backup** - Automated daily backups with 7-day retention
+5. **Docloader** - Documentation loading and website crawling tools
+6. **AWS Backup** - Automated daily backups with 7-day retention
+
+Note: The chat API proxy is handled by **Cloudflare Pages Functions** (`functions/api/chat/`)
+which deploy automatically with the documentation site.
 
 ## Prerequisites
 
@@ -56,11 +58,13 @@ aws ec2 import-key-pair --region us-east-1 --key-name pgedge-rag \
   --public-key-material fileb://~/.ssh/id_rsa.pub
 ```
 
-### Cloudflare (Optional)
+### Cloudflare (for Tunnel)
 
 - Cloudflare account with the target domain
-- API token with Workers and DNS permissions
-- Account ID (found in Cloudflare dashboard)
+- Tunnel credentials (created via `cloudflared tunnel login`)
+
+Note: The chat API proxy uses Pages Functions (`functions/api/chat/`) which deploy
+automatically with the documentation site - no manual Cloudflare API setup needed.
 
 ## Quick Start
 
@@ -99,9 +103,7 @@ Add your secrets:
 vault_postgres_password: your-secure-password
 vault_openai_api_key: sk-xxxxxxxx
 vault_anthropic_api_key: sk-ant-xxxxxxxx
-vault_cloudflare_api_token: your-cf-token
-vault_cloudflare_account_id: your-account-id
-vault_rag_secret: shared-secret-for-worker
+vault_rag_secret: shared-secret-for-pages-function
 vault_cloudflared_tunnel_name: pgedge-rag
 vault_cloudflared_internal_hostname: rag-internal.yourdomain.com
 vault_atlassian_email: your.email@pgedge.com       # For wiki extraction
@@ -151,7 +153,6 @@ ansible-playbook playbooks/site.yml
 ansible-playbook playbooks/site.yml --tags postgresql
 ansible-playbook playbooks/site.yml --tags rag_server
 ansible-playbook playbooks/site.yml --tags cloudflared
-ansible-playbook playbooks/site.yml --tags cloudflare_worker
 ansible-playbook playbooks/site.yml --tags docloader
 ```
 
@@ -196,7 +197,6 @@ ansible/
     ├── postgresql/                # PostgreSQL + pgvector setup
     ├── rag_server/                # RAG server installation
     ├── cloudflared/               # Cloudflare Tunnel setup
-    ├── cloudflare_worker/         # Cloudflare Worker deployment
     ├── docloader/                 # Documentation loading tools
     └── aws_backup/                # AWS Backup configuration
 ```
@@ -254,15 +254,6 @@ Sets up Cloudflare Tunnel:
 - Configures tunnel for RAG server access
 - Installs as systemd service
 - Provides manual setup instructions if credentials missing
-
-### cloudflare_worker
-
-Deploys the API proxy worker:
-- Creates worker script from Ansible template
-- Uploads to Cloudflare via API
-- Configures route for docs domain
-- Sets up RAG_SECRET environment variable
-- Supports preview deployments (`*.pgedge-docs.pages.dev`)
 
 ### docloader
 
@@ -465,8 +456,6 @@ Configures AWS Backup for the RAG server:
 |----------|-------------|---------|
 | `cloudflared.tunnel_name` | Tunnel name | From vault |
 | `cloudflared.internal_hostname` | Internal hostname | From vault |
-| `cloudflare_worker.worker_name` | Worker name | `pgedge-chat-proxy` |
-| `cloudflare_worker.route_pattern` | Route pattern | Required |
 
 ### AWS Backup Variables
 
@@ -547,6 +536,5 @@ ansible-playbook playbooks/site.yml --tags cloudflared
 1. **API Keys**: Store in Ansible Vault, never in plain text
 2. **RAG Server**: Binds to localhost only; tunnel provides access
 3. **Security Group**: Only SSH (22) is open; RAG traffic goes through tunnel
-4. **Worker Secret**: Validates requests to prevent unauthorized access
-5. **CORS**: Worker restricts to specific origin domain and preview deployments
-6. **Backups**: Encrypted at rest in AWS Backup vault
+4. **RAG Secret**: Pages Function validates requests to prevent unauthorized access
+5. **Backups**: Encrypted at rest in AWS Backup vault

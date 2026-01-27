@@ -8,18 +8,18 @@ The chat interface consists of:
 
 - **Frontend**: A floating chat widget (`docs/javascripts/chat.js` and `docs/stylesheets/chat.css`)
 - **Backend**: The [pgEdge RAG Server](https://github.com/pgEdge/pgedge-rag-server) providing semantic search and LLM-powered responses
-- **Infrastructure**: Ansible-managed deployment with Cloudflare Worker and Tunnel
+- **Infrastructure**: Ansible-managed RAG server with Cloudflare Pages Functions and Tunnel
 
 ## Architecture
 
-### Production Setup (Cloudflare Tunnel)
+### Production Setup (Cloudflare Pages + Tunnel)
 
-The production deployment uses a Cloudflare Worker and Tunnel to keep the RAG server private:
+The production deployment uses Cloudflare Pages Functions and Tunnel to keep the RAG server private:
 
 ```text
 ┌─────────────┐     ┌─────────────────────┐     ┌─────────────────────┐
-│   Browser   │────▶│  Cloudflare Worker  │────▶│  Cloudflare Tunnel  │
-│             │     │  (API Gateway)      │     │  (cloudflared)      │
+│   Browser   │────▶│  Pages Function     │────▶│  Cloudflare Tunnel  │
+│             │     │  (functions/api/)   │     │  (cloudflared)      │
 └─────────────┘     └─────────────────────┘     └──────────┬──────────┘
                                                           │
                                                           ▼
@@ -31,9 +31,9 @@ The production deployment uses a Cloudflare Worker and Tunnel to keep the RAG se
 
 Benefits of this approach:
 - RAG server binds only to localhost - no public exposure
-- Worker handles origin validation, CORS, and authentication
-- Supports preview deployments (`*.pgedge-docs.pages.dev`)
-- Centralized security controls via Cloudflare
+- Pages Function deploys automatically with the documentation site
+- Works for all preview deployments without configuration
+- No separate worker management needed
 
 ### Simple Setup (Direct Connection)
 
@@ -53,7 +53,7 @@ The chat widget is configured in `docs/javascripts/chat.js`:
 ```javascript
 const CONFIG = {
     api: {
-        production: '/api/chat',              // Production endpoint (via Cloudflare Worker)
+        production: '/api/chat',              // Production endpoint (via Pages Function)
         development: 'http://localhost:8080', // Local RAG server
         pipelineName: 'pgedge-docs',          // RAG pipeline name
         timeout: 60000,                       // Request timeout (ms)
@@ -100,12 +100,12 @@ ansible-playbook playbooks/site.yml --tags rag_server
 # Cloudflare Tunnel only
 ansible-playbook playbooks/site.yml --tags cloudflared
 
-# Cloudflare Worker only
-ansible-playbook playbooks/site.yml --tags cloudflare_worker
-
 # Documentation loader
 ansible-playbook playbooks/site.yml --tags docloader
 ```
+
+Note: The chat API proxy is handled by Cloudflare Pages Functions (`functions/api/chat/`)
+which deploy automatically with the documentation site.
 
 ### Configuration Files
 
@@ -113,8 +113,8 @@ ansible-playbook playbooks/site.yml --tags docloader
 |------|---------|
 | `ansible/inventory/group_vars/all/main.yml` | Main configuration (system prompt, etc.) |
 | `ansible/inventory/group_vars/all/vault.yml` | Encrypted secrets |
-| `ansible/roles/cloudflare_worker/templates/worker.js.j2` | Worker template |
 | `ansible/roles/rag_server/templates/config.yaml.j2` | RAG server config |
+| `functions/api/chat/[[path]].js` | Pages Function for API proxy |
 
 ## Development Setup
 

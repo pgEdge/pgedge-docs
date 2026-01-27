@@ -23,11 +23,7 @@ vault_openai_api_key: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 vault_anthropic_api_key: "sk-ant-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 vault_voyage_api_key: ""  # Optional - only if using Voyage embeddings
 
-# Cloudflare credentials (for Worker deployment)
-vault_cloudflare_api_token: "your-cloudflare-api-token"
-vault_cloudflare_account_id: "your-cloudflare-account-id"
-
-# Shared secret for RAG server authentication via Worker
+# Shared secret for RAG server authentication (set in Cloudflare Pages env vars)
 # Generate with: openssl rand -hex 32
 vault_rag_secret: "generate-a-random-secret-here"
 
