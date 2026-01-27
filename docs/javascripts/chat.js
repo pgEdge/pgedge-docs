@@ -58,8 +58,113 @@
             fullHistory: 'ellie_chat_full_history',
             inputHistory: 'ellie_input_history',
             isOpen: 'ellie_chat_open'
+        },
+        security: {
+            maxInputLength: 4000,  // Maximum characters per message
+            // Patterns that may indicate prompt injection attempts (for logging)
+            suspiciousPatterns: [
+                /ignore\s+(all\s+)?(previous|prior|above)\s+(instructions?|rules?|prompts?)/i,
+                /disregard\s+(your|all|the)\s+(instructions?|rules?|guidelines?)/i,
+                /you\s+are\s+(now|actually)\s+/i,
+                /pretend\s+(to\s+be|you\s+are)/i,
+                /act\s+as\s+(if|though)\s+you/i,
+                /reveal\s+(your|the)\s+(system|hidden)\s+(prompt|instructions?)/i,
+                /\b(DAN|jailbreak|developer\s*mode|unrestricted\s*mode)\b/i,
+                /override\s+(your|security|safety)/i
+            ]
         }
     };
+
+    // =========================================================================
+    // InputValidator - Validates and sanitizes user input
+    // =========================================================================
+    class InputValidator {
+        constructor(config) {
+            this.config = config;
+        }
+
+        /**
+         * Validate and sanitize user input.
+         * @param {string} input - Raw user input
+         * @returns {{ valid: boolean, sanitized: string, warning: string|null }}
+         */
+        validate(input) {
+            if (!input || typeof input !== 'string') {
+                return { valid: false, sanitized: '', warning: 'Empty input' };
+            }
+
+            // Trim and normalize whitespace
+            let sanitized = input.trim().replace(/\s+/g, ' ');
+
+            // Check length
+            if (sanitized.length > this.config.maxInputLength) {
+                sanitized = sanitized.slice(0, this.config.maxInputLength);
+                console.warn('[Ellie] Input truncated to max length');
+            }
+
+            // Check for suspicious patterns (log only, don't block)
+            const suspicious = this.detectSuspiciousPatterns(sanitized);
+            if (suspicious) {
+                console.warn('[Ellie] Potentially suspicious input pattern detected:', suspicious);
+            }
+
+            return {
+                valid: sanitized.length > 0,
+                sanitized,
+                warning: suspicious
+            };
+        }
+
+        /**
+         * Detect common prompt injection patterns.
+         * @param {string} input - User input to check
+         * @returns {string|null} - Matched pattern description or null
+         */
+        detectSuspiciousPatterns(input) {
+            for (const pattern of this.config.suspiciousPatterns) {
+                if (pattern.test(input)) {
+                    return pattern.source;
+                }
+            }
+            return null;
+        }
+    }
+
+    // =========================================================================
+    // ResponseAnalyzer - Monitors responses for potential injection success
+    // =========================================================================
+    // Detects signs that a prompt injection may have succeeded (for logging).
+    class ResponseAnalyzer {
+        // Patterns that may indicate successful prompt injection in responses
+        static ANOMALY_PATTERNS = [
+            // Claims to be a different AI/persona
+            /I(?:'m| am)\s+(?:actually|now|no longer)\s+(?!Ellie)/i,
+            /my\s+(?:real|true)\s+(?:name|identity)\s+is\s+(?!Ellie)/i,
+            // Claims about hidden instructions
+            /(?:my|the)\s+(?:hidden|secret|real)\s+(?:instructions?|prompt|rules?)/i,
+            /system\s+prompt\s*[:=]/i,
+            // Typical jailbreak responses
+            /developer\s+mode\s+(?:enabled|activated)/i,
+            /(?:I|now)\s+(?:have|am)\s+(?:no|without)\s+(?:restrictions?|limits?|guardrails?)/i
+        ];
+
+        /**
+         * Analyze a response for potential injection success.
+         * @param {string} response - Assistant response to check
+         * @returns {boolean} - True if anomaly detected
+         */
+        static checkForAnomalies(response) {
+            if (!response || typeof response !== 'string') return false;
+
+            for (const pattern of this.ANOMALY_PATTERNS) {
+                if (pattern.test(response)) {
+                    console.warn('[Ellie] Potential injection success detected in response:', pattern.source);
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     // =========================================================================
     // StreamBuffer - Buffers streaming content for smoother display
@@ -1063,6 +1168,7 @@
             this.ui = new ChatUI(config);
             this.api = new ChatAPI(config);
             this.history = new ChatHistory(config);
+            this.validator = new InputValidator(config.security);
             this.messages = [];
             this.fullHistory = [];  // Uncompacted history for exports
             this.streamBuffer = new StreamBuffer();
@@ -1311,8 +1417,12 @@
         }
 
         sendMessage() {
-            const content = this.ui.getInput();
-            if (!content || this.api.isStreaming()) return;
+            const rawContent = this.ui.getInput();
+            if (!rawContent || this.api.isStreaming()) return;
+
+            // Validate and sanitize input
+            const { valid, sanitized: content } = this.validator.validate(rawContent);
+            if (!valid) return;
 
             // Add to input history
             this.history.addToInputHistory(content);
@@ -1427,6 +1537,9 @@
 
                 // Add assistant message to history
                 if (fullContent) {
+                    // Check for potential injection success (logging only)
+                    ResponseAnalyzer.checkForAnomalies(fullContent);
+
                     this.messages.push({ role: 'assistant', content: fullContent });
                     this.fullHistory.push({ role: 'assistant', content: fullContent });
                     this.saveFullHistory();
