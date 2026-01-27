@@ -29,10 +29,22 @@
     - "{{ rag_log_dir }}"
     - "{{ rag_keys_dir }}"
 
-- name: Install RAG server package
+# Install from GitHub Release (for pre-release/beta builds)
+- name: Download RAG server from GitHub Release
+  ansible.builtin.get_url:
+    url: "{{ rag_github_release_url }}"
+    dest: /usr/local/bin/pgedge-rag-server
+    mode: '0755'
+    force: "{{ rag_force_download | default(false) }}"
+  when: rag_install_method == 'github'
+  notify: Restart RAG Server
+
+# Alternative: Install from apt package
+- name: Install RAG server package from apt
   ansible.builtin.apt:
     name: "{{ rag_package_name }}"
     state: present
+  when: rag_install_method == 'apt'
   notify: Restart RAG Server
 
 - name: Deploy API keys

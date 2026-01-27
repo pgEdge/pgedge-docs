@@ -1,18 +1,35 @@
 # RAG Server Role - Default Variables
+---
+# Installation method: 'github' or 'apt'
+# github: Downloads from GitHub Releases (for pre-release/beta builds)
+# apt: Installs from pgEdge apt repository
+rag_install_method: github
 
+# GitHub Release settings (used when rag_install_method == 'github')
+rag_version: v0.1.1
+rag_github_release_url: "https://github.com/pgEdge/pgedge-rag-server/releases/download/{{ rag_version }}/pgedge-rag-server-linux-amd64"
+rag_force_download: false  # Set to true to re-download even if binary exists
+
+# APT package name (used when rag_install_method == 'apt')
 rag_package_name: "{{ rag_server.package_name | default('pgedge-rag-server') }}"
+
+# User/group
 rag_user: "{{ rag_server.user | default('ragserver') }}"
 rag_group: "{{ rag_server.group | default('ragserver') }}"
 
+# Server settings
 rag_listen_address: "{{ rag_server.listen_address | default('127.0.0.1') }}"
 rag_port: "{{ rag_server.port | default(8080) }}"
 
+# CORS settings
 rag_cors_enabled: "{{ rag_server.cors.enabled | default(false) }}"
 rag_cors_origins: "{{ rag_server.cors.allowed_origins | default([]) }}"
 
+# Directories
 rag_config_dir: "{{ rag_server.config_dir | default('/etc/pgedge/rag-server') }}"
 rag_data_dir: "{{ rag_server.data_dir | default('/var/lib/pgedge/rag-server') }}"
 rag_log_dir: "{{ rag_server.log_dir | default('/var/log/pgedge/rag-server') }}"
 rag_keys_dir: "{{ rag_server.keys_dir | default('/etc/pgedge/keys') }}"
 
+# Pipeline configuration
 rag_pipeline: "{{ rag_server.pipeline }}"

@@ -1,10 +1,9 @@
 # Docloader Role - Default Variables
 ---
 # Installation method: 'github' or 'apt'
-# github: Downloads from GitHub Releases (beta2+ with native git support)
+# github: Downloads from GitHub Releases (for pre-release/beta builds)
 # apt: Installs from pgEdge apt repository
-# NOTE: Change to 'github' once v1.0.0-beta2 is released for native git support
-docloader_install_method: apt
+docloader_install_method: github
 
 # GitHub Release settings
 docloader_version: v1.0.0-beta2
