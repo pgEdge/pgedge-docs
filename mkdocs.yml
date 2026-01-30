@@ -379,7 +379,6 @@ nav:
     - Settings: cloud/settings.md
     - Team Resources: cloud/teams.md
     - Troubleshooting: cloud/troubleshooting.md
-    - pgEdge Distributed Postgres (Cloud Edition) Release Notes: cloud/cl_release_notes.md
 
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed
