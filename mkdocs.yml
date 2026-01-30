@@ -355,7 +355,6 @@ nav:
       - Dropping a Database, Node, or Cluster: cloud/mod_cluster/drop.md
       - Modifying a Database, Node, or Cluster: cloud/mod_cluster/modify.md
     - Database Administration:
-      - Creating and Managing Tables: cloud/database_admin/table_mgmt.md
       - Reviewing Database Metrics: cloud/database_admin/metrics.md
       - Viewing Log Files: cloud/database_admin/logs.md
       - Reviewing Backup Details: cloud/database_admin/backup_details.md
