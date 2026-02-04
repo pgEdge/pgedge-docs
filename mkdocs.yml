@@ -365,7 +365,6 @@ nav:
       - Connecting with psql: cloud/connecting/psql.md
       - Connecting with pgAdmin: cloud/connecting/pgadmin.md
       - Connecting a Custom Client: cloud/connecting/custom_client.md
-      - Connecting over HTTPS: cloud/connecting/https.md
       - Best Practices for Managing Connections: cloud/connecting/best_practices.md
     - Managing Database Backups:
       - Reviewing Backup Details: cloud/backup/backups.md
