@@ -1,9 +1,5 @@
 # Reviewing your Cloud Clusters
 
-!!! info
-
-    Clusters are available only on pgEdge Distributed Edition (Cloud Edition) Enterprise Edition accounts.
-
 To review a list of the currently defined Postgres clusters, expand the `Clusters` node of the tree control in the console navigation pane.
 
 ![Displaying the currently defined clusters](../images/clusters.png)

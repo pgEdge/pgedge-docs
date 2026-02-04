@@ -1,16 +1,28 @@
 # Connecting a Custom Client Application
 
-The `Code Snippets` pane displays three code snippets ([TypeScript](#connecting-with-typescript), [Python](#connecting-with-python), and [Go](#connecting-with-go)) that set the environment variables for your cluster and create a cursor that lists the nodes in your cluster.
+The `Code Snippets` pane displays three code snippets:
+
+* ([TypeScript](#connecting-with-typescript)
+* [Python](#connecting-with-python)
+* [Go](#connecting-with-go))
+
+Each sample sets the environment variables for your cluster and creates a 
+cursor that lists the nodes in your cluster.
 
 ![Code Snippets](../images/code_snippets.png)
 
-You can consider the snippets a starting point for the application developers on your team.
+You can consider the snippets a starting point for the application
+developers on your team.
 
 ## Connecting with Python
 
-The code snippet on the `Python` tab provides parameters and cursor information you can use to negotiate a connection with a Python client. The following code sample demonstrates using that information.
+The code snippet on the `Python` tab provides parameters and cursor
+information you can use to negotiate a connection with a Python client. The
+following code sample demonstrates using that information.
 
-After taking care of prerequisites, the sample uses the connection properties in the code snippet to set environment variables and establish a connection with the database:
+After taking care of prerequisites, the sample uses the connection
+properties in the code snippet to set environment variables and establish a
+connection with the database:
 
 ```python
 import os
@@ -34,7 +46,9 @@ def main():
        sslmode=os.getenv("PGSSLMODE")
    )
 ```
-Then, we open a cursor that allows us to interact with the database; each call to `cur.execute` invokes a command in PostgreSQL syntax and confirms execution of the command.
+Then, we open a cursor that allows us to interact with the database; each
+call to `cur.execute` invokes a command in PostgreSQL syntax and confirms
+execution of the command.
 
 ```python
    # Open a cursor to perform database operations
@@ -72,7 +86,9 @@ Then, we open a cursor that allows us to interact with the database; each call t
    print("Table deleted")
 ```
 
-When the queries complete, we close the cursor, closing the connection with the database. The last two lines declare the entry point for the Python program: 
+When the queries complete, we close the cursor, closing the connection with
+the database. The last two lines declare the entry point for the Python
+program:
 
 ```python
    # Close communication with the database
@@ -86,9 +102,12 @@ if __name__ == "__main__":
 
 ## Connecting with TypeScript
 
-The code snippet on the `TypeScript` tab provides parameters and cursor information you can use to negotiate a connection with a TypeScript client. The following code sample demonstrates using that information. 
+The code snippet on the `TypeScript` tab provides parameters and cursor
+information you can use to negotiate a connection with a TypeScript client.
+The following code sample demonstrates using that information.
 
-As a prerequisite, the example uses a `json` file to initialize the TypeScript object:
+As a prerequisite, the example uses a `json` file to initialize the
+TypeScript object:
 
 ```json
 {
@@ -104,7 +123,9 @@ As a prerequisite, the example uses a `json` file to initialize the TypeScript o
 }
 ```
 
-Then, the example imports the `pg` TypeScript client module before using the connection properties in the code snippet to set environment variables and establish a connection with the database:
+Then, the example imports the `pg` TypeScript client module before using
+the connection properties in the code snippet to set environment variables
+and establish a connection with the database:
 
 ```typescript
 import { Client } from 'pg';
@@ -124,7 +145,8 @@ async function main(): Promise<void> {
         // Connect to the database
         await client.connect();
 ```
-Then, a series of TypeScript constructs use PostgreSQL syntax to create a table, insert and query user information, and eventually, drop the table:
+Then, a series of TypeScript constructs use PostgreSQL syntax to create a
+table, insert and query user information, and eventually, drop the table:
 
 ```typescript
         // Create a new table
@@ -166,7 +188,8 @@ Then, a series of TypeScript constructs use PostgreSQL syntax to create a table,
         await client.query(dropTableQuery);
         console.log('Table dropped');
 ```
-Finally, we check for an error message before closing the connection to the client:
+Finally, we check for an error message before closing the connection to the
+client:
 
 ```TypeScript
     } catch (err) {
@@ -183,9 +206,13 @@ main().catch(console.error);
 
 ## Connecting with Go
 
-The code snippet on the `Go` tab provides parameters you can use to negotiate a connection with a Go client. The following code sample demonstrates using that information to connect to and query the database.
+The code snippet on the `Go` tab provides parameters you can use to
+negotiate a connection with a Go client. The following code sample
+demonstrates using that information to connect to and query the database.
 
-After importing prerequisites, the sample uses the connection properties in the code snippet to set environment variables and establish a connection with the database:
+After importing prerequisites, the sample uses the connection properties in
+the code snippet to set environment variables and establish a connection
+with the database:
 
 ```go
 package main
@@ -219,7 +246,9 @@ func main() {
 	}
 	defer conn.Close(ctx)
 ```
-After connecting, the example uses the `exec` package to execute PostgreSQL syntax commands that create a table, add a user, update the user, and eventually drop the table.
+After connecting, the example uses the `exec` package to execute PostgreSQL
+syntax commands that create a table, add a user, update the user, and
+eventually drop the table.
 
 ```go
 

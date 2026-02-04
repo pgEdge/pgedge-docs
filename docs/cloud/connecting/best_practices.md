@@ -9,11 +9,6 @@ This section identifies strategies you can use in your applications to connect t
 
 Cloud provides the ability to connect to databases using latency-based routing, which automatically routes your application to the nearest Cloud node in your database based on latency. This feature makes it easier for end users to configure their applications to connect to a Cloud database without needing to manually manage connections to individual nodes.
 
-For the following configurations, latency-based routing also factors in the availability of your database:
-
-- Private DNS in Enterprise Edition AWS Clusters where the database has the "Cloudwatch Metrics" option enabled.
-- Public DNS in Developer Edition.
-
 In the event that health checks determine that a database node is unavailable, latency-based routing will automatically route your application to the next nearest node that is available.
 
 ## Maintenance Process

@@ -339,10 +339,8 @@ nav:
     - Troubleshooting: platform/troubleshooting.md
 
   - pgEdge Cloud:
-    - Cloud Edition: cloud/index.md
-    - Getting Started:
-      - Enterprise Edition: cloud/getting_started/ee_getting_started.md
-      - Developer Edition: cloud/getting_started/de_getting_started.md
+    - Cloud Edition - Overview: cloud/index.md
+    - Getting Started with pgEdge Cloud: cloud/getting_started/ee_getting_started.md
     - Prerequisites:
       - Adding an SSH Key: cloud/prerequisites/ssh_key.md
       - Linking and Managing your Cloud Provider Accounts:
@@ -368,8 +366,6 @@ nav:
       - Dropping a Database, Node, or Cluster: cloud/mod_cluster/drop.md
       - Modifying a Database, Node, or Cluster: cloud/mod_cluster/modify.md
     - Database Administration:
-      - Creating and Managing Tables: cloud/database_admin/table_mgmt.md
-      - Using Integrations: cloud/database_admin/integrations.md
       - Reviewing Database Metrics: cloud/database_admin/metrics.md
       - Viewing Log Files: cloud/database_admin/logs.md
       - Reviewing Backup Details: cloud/database_admin/backup_details.md
@@ -380,7 +376,6 @@ nav:
       - Connecting with psql: cloud/connecting/psql.md
       - Connecting with pgAdmin: cloud/connecting/pgadmin.md
       - Connecting a Custom Client: cloud/connecting/custom_client.md
-      - Connecting over HTTPS: cloud/connecting/https.md
       - Best Practices for Managing Connections: cloud/connecting/best_practices.md
     - Managing Database Backups:
       - Reviewing Backup Details: cloud/backup/backups.md
@@ -394,7 +389,6 @@ nav:
     - Settings: cloud/settings.md
     - Team Resources: cloud/teams.md
     - Troubleshooting: cloud/troubleshooting.md
-    - pgEdge Distributed Postgres (Cloud Edition) Release Notes: cloud/cl_release_notes.md
 
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed

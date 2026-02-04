@@ -1,10 +1,5 @@
 # Reviewing Backup Details
 
-Details displayed on dialogs related to backup and restore will vary based on your account type:
-
-* Enterprise Edition backups are managed with pgBackRest.
-* Developer Edition backups ar managed with pg_dump and pg_restore.
-
 You can use the Cloud `Backups` page to review and manage database backups; the `Backups` page also provides access to links that allow you to perform an ad hoc backup or restore.  To open the `Backups` page, select a database name in the navigation panel and select the `Backups` node from the navigation tree.
 
 ![Backup Configuration Details](../images/backup_configuration_details.png)
