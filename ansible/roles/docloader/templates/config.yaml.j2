@@ -10,9 +10,6 @@
 #
 # Usage: Run 'sudo load-docs' to process all sources
 #
-# NOTE: pgedge-docloader v1.0.0-beta2 will have native git repository support.
-# The load-docs wrapper script provides git cloning for beta1 compatibility.
-#
 # =============================================================================
 
 # Directory for storing downloaded/cloned documentation
@@ -106,6 +103,12 @@ sources:
   # -------------------------------------------------------------------------
   - git_url: "https://github.com/pgEdge/spock.git"
     git_tag: "v5.0.4"
+    doc_path: "README.md"
+    product: "Spock"
+    version: "5.0.4"
+
+  - git_url: "https://github.com/pgEdge/spock.git"
+    git_tag: "v5.0.4"
     doc_path: "docs/**/*.md"
     product: "Spock"
     version: "5.0.4"
@@ -115,9 +118,21 @@ sources:
   # -------------------------------------------------------------------------
   - git_url: "https://github.com/pgEdge/ace.git"
     git_tag: "v1.4.2"
+    doc_path: "README.md"
+    product: "pgEdge ACE"
+    version: "1.4.2"
+
+  - git_url: "https://github.com/pgEdge/ace.git"
+    git_tag: "v1.4.2"
     doc_path: "docs/**/*.md"
     product: "pgEdge ACE"
     version: "1.4.2"
+
+  - git_url: "https://github.com/pgEdge/pgedge-vectorizer.git"
+    git_tag: "v1.0-beta1"
+    doc_path: "README.md"
+    product: "pgEdge Vectorizer"
+    version: "1.0-beta1"
 
   - git_url: "https://github.com/pgEdge/pgedge-vectorizer.git"
     git_tag: "v1.0-beta1"
@@ -127,14 +142,32 @@ sources:
 
   - git_url: "https://github.com/pgEdge/pgedge-rag-server.git"
     git_tag: "v1.0.0-beta2"
+    doc_path: "README.md"
+    product: "pgEdge RAG Server"
+    version: "1.0.0-beta2"
+
+  - git_url: "https://github.com/pgEdge/pgedge-rag-server.git"
+    git_tag: "v1.0.0-beta2"
     doc_path: "docs/**/*.md"
     product: "pgEdge RAG Server"
     version: "1.0.0-beta2"
 
   - git_url: "https://github.com/pgEdge/pgedge-docloader.git"
     git_tag: "v1.0.0-beta1"
+    doc_path: "README.md"
+    product: "pgEdge Docloader"
+    version: "1.0.0-beta1"
+
+  - git_url: "https://github.com/pgEdge/pgedge-docloader.git"
+    git_tag: "v1.0.0-beta1"
     doc_path: "docs/**/*.md"
     product: "pgEdge Docloader"
+    version: "1.0.0-beta1"
+
+  - git_url: "https://github.com/pgEdge/pgedge-postgres-mcp.git"
+    git_tag: "v1.0.0-beta1"
+    doc_path: "README.md"
+    product: "pgEdge Postgres MCP"
     version: "1.0.0-beta1"
 
   - git_url: "https://github.com/pgEdge/pgedge-postgres-mcp.git"
@@ -145,9 +178,21 @@ sources:
 
   - git_url: "https://github.com/pgEdge/pgedge-anonymizer.git"
     git_tag: "v1.0.0-beta2"
+    doc_path: "README.md"
+    product: "pgEdge Anonymizer"
+    version: "1.0.0-beta2"
+
+  - git_url: "https://github.com/pgEdge/pgedge-anonymizer.git"
+    git_tag: "v1.0.0-beta2"
     doc_path: "docs/**/*.md"
     product: "pgEdge Anonymizer"
     version: "1.0.0-beta2"
+
+  - git_url: "https://github.com/pgEdge/snowflake.git"
+    git_tag: "v2.4"
+    doc_path: "README.md"
+    product: "pgEdge Snowflake"
+    version: "2.4"
 
   - git_url: "https://github.com/pgEdge/snowflake.git"
     git_tag: "v2.4"
@@ -157,15 +202,33 @@ sources:
 
   - git_url: "https://github.com/pgEdge/lolor.git"
     git_tag: "v1.2.2"
+    doc_path: "README.md"
+    product: "pgEdge LOLOR"
+    version: "1.2.2"
+
+  - git_url: "https://github.com/pgEdge/lolor.git"
+    git_tag: "v1.2.2"
     doc_path: "docs/**/*.md"
     product: "pgEdge LOLOR"
     version: "1.2.2"
 
   - git_url: "https://github.com/pgEdge/control-plane.git"
     git_tag: "v0.6.1"
+    doc_path: "README.md"
+    product: "pgEdge Control Plane"
+    version: "0.6.1"
+
+  - git_url: "https://github.com/pgEdge/control-plane.git"
+    git_tag: "v0.6.1"
     doc_path: "docs/**/*.md"
     product: "pgEdge Control Plane"
     version: "0.6.1"
+
+  - git_url: "https://github.com/pgEdge/pgedge-helm.git"
+    git_tag: "v0.1.0"
+    doc_path: "README.md"
+    product: "pgEdge Helm"
+    version: "0.1.0"
 
   - git_url: "https://github.com/pgEdge/pgedge-helm.git"
     git_tag: "v0.1.0"
@@ -224,6 +287,24 @@ sources:
     product: "psycopg2"
     version: "2.9.10"
 
+# =============================================================================
+# Notes
+# =============================================================================
+#
+# Supported document formats:
+#   - Markdown (.md)
+#   - HTML (.html, .htm)
+#   - reStructuredText (.rst)
+#   - DocBook SGML (.sgml)
+#   - DocBook XML (.xml)
+#
+# All formats are automatically converted to Markdown for storage.
+#
+# The pgedge-vectorizer extension will automatically generate embeddings
+# for new/updated rows in the docs table.
+#
+# =============================================================================
+
   # -------------------------------------------------------------------------
   # Website Content (crawled by crawl-website)
   # -------------------------------------------------------------------------
@@ -250,21 +331,3 @@ sources:
     doc_path: "*.md"
     product: "pgEdge Internal KB"
     version: ""
-
-# =============================================================================
-# Notes
-# =============================================================================
-#
-# Supported document formats:
-#   - Markdown (.md)
-#   - HTML (.html, .htm)
-#   - reStructuredText (.rst)
-#   - DocBook SGML (.sgml)
-#   - DocBook XML (.xml)
-#
-# All formats are automatically converted to Markdown for storage.
-#
-# The pgedge-vectorizer extension will automatically generate embeddings
-# for new/updated rows in the docs table.
-#
-# =============================================================================
