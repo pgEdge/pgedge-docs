@@ -6,8 +6,8 @@
 rag_install_method: github
 
 # GitHub Release settings (used when rag_install_method == 'github')
-rag_version: v0.1.1
-rag_github_release_url: "https://github.com/pgEdge/pgedge-rag-server/releases/download/{{ rag_version }}/pgedge-rag-server-linux-amd64"
+rag_version: v1.0.0-beta3
+rag_github_release_url: "https://github.com/pgEdge/pgedge-rag-server/releases/download/{{ rag_version }}/pgedge-rag-server_{{ rag_version | regex_replace('^v', '') }}_Linux_x86_64.tar.gz"
 rag_force_download: false  # Set to true to re-download even if binary exists
 
 # APT package name (used when rag_install_method == 'apt')

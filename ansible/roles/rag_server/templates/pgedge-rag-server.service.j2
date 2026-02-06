@@ -13,9 +13,9 @@ User={{ rag_user }}
 Group={{ rag_group }}
 
 {% if rag_install_method == 'github' %}
-ExecStart=/usr/local/bin/pgedge-rag-server --config {{ rag_config_dir }}/config.yaml
+ExecStart=/usr/local/bin/pgedge-rag-server -config {{ rag_config_dir }}/config.yaml
 {% else %}
-ExecStart=/usr/bin/pgedge-rag-server --config {{ rag_config_dir }}/config.yaml
+ExecStart=/usr/bin/pgedge-rag-server -config {{ rag_config_dir }}/config.yaml
 {% endif %}
 
 Restart=always

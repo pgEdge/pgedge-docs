@@ -30,14 +30,37 @@
     - "{{ rag_keys_dir }}"
 
 # Install from GitHub Release (for pre-release/beta builds)
-- name: Download RAG server from GitHub Release
+- name: Download RAG server tarball from GitHub Release
   ansible.builtin.get_url:
     url: "{{ rag_github_release_url }}"
-    dest: /usr/local/bin/pgedge-rag-server
-    mode: '0755'
+    dest: /tmp/pgedge-rag-server.tar.gz
     force: "{{ rag_force_download | default(false) }}"
   when: rag_install_method == 'github'
+
+- name: Extract RAG server binary from tarball
+  ansible.builtin.unarchive:
+    src: /tmp/pgedge-rag-server.tar.gz
+    dest: /tmp/
+    remote_src: true
+  when: rag_install_method == 'github'
+
+- name: Install RAG server binary
+  ansible.builtin.copy:
+    src: /tmp/pgedge-rag-server
+    dest: /usr/local/bin/pgedge-rag-server
+    mode: '0755'
+    remote_src: true
+  when: rag_install_method == 'github'
   notify: Restart RAG Server
+
+- name: Clean up tarball
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/pgedge-rag-server.tar.gz
+    - /tmp/pgedge-rag-server
+  when: rag_install_method == 'github'
 
 # Alternative: Install from apt package
 - name: Install RAG server package from apt

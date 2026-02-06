@@ -10,13 +10,36 @@
       - python3-html2text
     state: present
 
-# Install from GitHub Release (beta2 has native git support)
-- name: Download docloader from GitHub Release
+# Install from GitHub Release
+- name: Download docloader tarball from GitHub Release
   ansible.builtin.get_url:
     url: "{{ docloader_github_release_url }}"
+    dest: /tmp/pgedge-docloader.tar.gz
+    force: "{{ docloader_force_download | default(false) }}"
+  when: docloader_install_method == 'github'
+
+- name: Extract docloader binary from tarball
+  ansible.builtin.unarchive:
+    src: /tmp/pgedge-docloader.tar.gz
+    dest: /tmp/
+    remote_src: true
+  when: docloader_install_method == 'github'
+
+- name: Install docloader binary
+  ansible.builtin.copy:
+    src: /tmp/pgedge-docloader
     dest: /usr/local/bin/pgedge-docloader
     mode: '0755'
-    force: "{{ docloader_force_download | default(false) }}"
+    remote_src: true
+  when: docloader_install_method == 'github'
+
+- name: Clean up docloader tarball
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/pgedge-docloader.tar.gz
+    - /tmp/pgedge-docloader
   when: docloader_install_method == 'github'
 
 # Alternative: Install from apt package
