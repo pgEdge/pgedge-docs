@@ -7,7 +7,7 @@ extra_css:
 extra_javascript:
   # Pulled from control-plane repo for install page
   # Note: Must update version when control-plane latest version changes
-  - /control-plane/v0-6-0/scripts/generate-stack.js
+  - /control-plane/v0-6/scripts/generate-stack.js
   - javascripts/tabs-dropdown.js
   - javascripts/org-stars.js
   - javascripts/version-selector.js
