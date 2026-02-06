@@ -46,6 +46,9 @@ plugins:
   - gh-admonitions
   - redirects:
       redirect_maps:
+        # Legacy pgedge-containers versioned URLs redirect to pgedge-helm
+        pgedge-containers/v0-1/index.md: pgedge-helm/v0-1/index.md
+        pgedge-containers/development/index.md: pgedge-helm/development/index.md
         # Versioned documentation root redirects
         # Each product root redirects to the latest version
         # (The actual redirect is handled by docs/<product>/index.md files)
@@ -119,7 +122,7 @@ extra:
   # Versions are auto-detected from nav structure
   # Convention: first version = latest, "Development" = unstable/main branch
   versioned_docsets:
-    - pgedge-containers
+    - pgedge-helm
     - ace
     - lolor
     - snowflake
@@ -167,6 +170,8 @@ extra:
         url: ace/
       - title: Control Plane
         url: control-plane/
+      - title: pgEdge Helm
+        url: pgedge-helm/
       - title: pgEdge Anonymizer
         url: pgedge-anonymizer/
       - title: pgEdge Docloader
@@ -396,9 +401,20 @@ nav:
     - Team Resources: cloud/teams.md
     - Troubleshooting: cloud/troubleshooting.md
 
+  - pgEdge Containers:
+    - Overview: pgedge-containers/index.md
+    - pgEdge Enterprise Postgres for Kubernetes:
+      - Overview: kubernetes/index.md
+      - Installation: kubernetes/install.md
+      - Upgrading: kubernetes/upgrade.md
+    - pgEdge Container Registry:
+      - Overview: container-images/index.md
+      - pgEdge Enterprise Postgres Images: container-images/postgres-images.md
+    - pgEdge Helm: pgedge-containers/helm.md
+
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed
-  - pgEdge Containers:
+  - pgEdge Helm:
     - v0.1: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.1.0'
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
