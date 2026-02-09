@@ -17,13 +17,13 @@ Upgrading CloudNativePG involves two steps:
 [CloudNativePG release notes](https://cloudnative-pg.io/releases/) before
 upgrading. Some versions may have specific requirements or breaking changes.
 
-**Pre-upgrade checklist:**
+Before upgrading, complete the following pre-upgrade checklist:
 
-- [ ] Review release notes for the target version
-- [ ] Verify your Kubernetes version is supported (see
-      [Version Support](index.md#version-support-matrix))
-- [ ] Ensure all PostgreSQL clusters are healthy
-- [ ] Plan for brief application reconnection during primary switchover
+- Review the release notes for the target version.
+- Verify your Kubernetes version is supported (see
+  [Version Support](index.md#version-support-matrix)).
+- Ensure all PostgreSQL clusters are healthy.
+- Plan for brief application reconnection during primary switchover.
 
 ## Upgrading the Operator
 

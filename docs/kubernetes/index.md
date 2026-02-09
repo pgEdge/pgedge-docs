@@ -6,11 +6,11 @@ Enterprise Postgres on Kubernetes.
 
 This distribution gives you:
 
-- **Helm Charts and Manifests** ready to deploy the CloudNativePG operator
-- **kubectl Plugin** for managing PostgreSQL clusters from the command line
-- **Validated Compatibility** with pgEdge Enterprise Postgres images through
-  end-to-end testing
-- **Commercial Support** from pgEdge for your Kubernetes PostgreSQL deployments
+- helm charts and manifests ready to deploy the CloudNativePG operator.
+- a kubectl plugin for managing PostgreSQL clusters from the command line.
+- validated compatibility with pgEdge Enterprise Postgres images through
+  end-to-end testing.
+- commercial support from pgEdge for your Kubernetes PostgreSQL deployments.
 
 ## About CloudNativePG
 
@@ -56,10 +56,10 @@ the upstream CloudNativePG test suite.
 pgEdge provides support for this distribution as part of pgEdge Enterprise
 subscriptions. Support includes:
 
-- Installation and configuration assistance
-- Troubleshooting operator and cluster issues
-- Upgrade guidance between versions
-- Integration with pgEdge Enterprise Postgres images
+- installation and configuration assistance.
+- troubleshooting operator and cluster issues.
+- upgrade guidance between versions.
+- integration with pgEdge Enterprise Postgres images.
 
 For support inquiries, contact [support@pgedge.com](mailto:support@pgedge.com).
 
