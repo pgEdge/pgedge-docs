@@ -41,7 +41,7 @@ To upgrade to a specific version:
 ```bash
 helm upgrade cnpg pgedge/cloudnative-pg \
   --namespace cnpg-system \
-  --version 0.28.0
+  --version 0.27.1
 ```
 
 ### Using Manifests
@@ -50,7 +50,7 @@ Apply the new manifest version:
 
 ```bash
 kubectl apply --server-side -f \
-  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.28.0/cnpg-1.28.0.yaml
+  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.28.1/cnpg-1.28.1.yaml
 ```
 
 ## PostgreSQL Cluster Updates

@@ -60,7 +60,7 @@ To install a specific version of the operator:
 helm install cnpg pgedge/cloudnative-pg \
   --namespace cnpg-system \
   --create-namespace \
-  --version 0.27.0
+  --version 0.27.1
 ```
 
 ### Using Manifests
@@ -69,7 +69,7 @@ For a quick installation without Helm, apply the manifest directly:
 
 ```bash
 kubectl apply --server-side -f \
-  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.28.0/cnpg-1.28.0.yaml
+  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.28.1/cnpg-1.28.1.yaml
 ```
 
 This installs the operator in the `cnpg-system` namespace.
@@ -80,8 +80,8 @@ Alternatively, download charts directly from
 [GitHub Releases](https://github.com/pgEdge/pgedge-cnpg-dist/releases):
 
 ```bash
-curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/latest/download/cloudnative-pg-0.27.0.tgz
-helm install cnpg cloudnative-pg-0.27.0.tgz \
+curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/latest/download/cloudnative-pg-0.27.1.tgz
+helm install cnpg cloudnative-pg-0.27.1.tgz \
   --namespace cnpg-system \
   --create-namespace
 ```
