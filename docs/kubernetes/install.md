@@ -79,7 +79,7 @@ kubectl get deployments -n cnpg-system
 
 You should see the controller manager deployment with ready replicas:
 
-```
+```bash
 NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
 cnpg-controller-manager   1/1     1            1           1m
 ```
