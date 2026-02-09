@@ -1,10 +1,12 @@
 # pgEdge Containers
 
-pgEdge provides container images and Kubernetes tooling for deploying pgEdge Enterprise Postgres in containerized environments.
+pgEdge provides container images and Kubernetes tooling for deploying pgEdge
+Enterprise Postgres in containerized environments.
 
 ## pgEdge Enterprise Postgres for Kubernetes
 
-Deploy and manage pgEdge Enterprise Postgres on Kubernetes using pgEdge's supported distribution of the CloudNativePG operator.
+Deploy and manage pgEdge Enterprise Postgres on Kubernetes using pgEdge's
+supported distribution of the CloudNativePG operator.
 
 - Helm charts and manifests for operator deployment
 - kubectl plugin for cluster management
@@ -15,7 +17,8 @@ Deploy and manage pgEdge Enterprise Postgres on Kubernetes using pgEdge's suppor
 
 ## pgEdge Container Registry
 
-Access pgEdge container images from the pgEdge Container Registry, including Postgres images, AI Toolkit components, and supporting tools.
+Access pgEdge container images from the pgEdge Container Registry, including
+Postgres images, AI Toolkit components, and supporting tools.
 
 - Pre-built images with extensions installed
 - Multi-architecture support (amd64, arm64)
@@ -25,7 +28,8 @@ Access pgEdge container images from the pgEdge Container Registry, including Pos
 
 ## pgEdge Helm
 
-Deploy pgEdge Enterprise Postgres clusters on Kubernetes using the pgEdge Helm chart
+Deploy pgEdge Enterprise Postgres clusters on Kubernetes using the pgEdge Helm
+chart
 
 - Single-chart deployment of PostgreSQL clusters
 - Built-in Spock replication configuration

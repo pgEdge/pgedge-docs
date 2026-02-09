@@ -24,3 +24,4 @@ docs/spock-v5/index.md
 
 # Ansible vault password file
 ansible/.pgedge-docs-vault-pass
+.vscode/settings.json

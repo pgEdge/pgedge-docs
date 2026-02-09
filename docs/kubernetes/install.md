@@ -1,12 +1,14 @@
 # Installation
 
-This page covers how to install the CloudNativePG operator for use with pgEdge Enterprise Postgres.
+This page covers how to install the CloudNativePG operator for use with pgEdge
+Enterprise Postgres.
 
 ## Prerequisites
 
 Before installing, ensure you have:
 
-- A Kubernetes cluster (see [Version Support](index.md#version-support-matrix) for supported versions)
+- A Kubernetes cluster (see [Version Support](index.md#version-support-matrix)
+  for supported versions)
 - `kubectl` configured to access your cluster
 - Cluster admin permissions to install CRDs and operators
 
@@ -42,14 +44,15 @@ helm install cnpg pgedge/cloudnative-pg \
 
 #### Available Charts
 
-| Chart | Description |
-|-------|-------------|
-| `pgedge/cloudnative-pg` | CloudNativePG operator |
+| Chart                        | Description                |
+| ---------------------------- | -------------------------- |
+| `pgedge/cloudnative-pg`      | CloudNativePG operator     |
 | `pgedge/plugin-barman-cloud` | Barman Cloud backup plugin |
 
 #### Installing from GitHub Releases
 
-Alternatively, download charts directly from [GitHub Releases](https://github.com/pgEdge/pgedge-cnpg-dist/releases):
+Alternatively, download charts directly from
+[GitHub Releases](https://github.com/pgEdge/pgedge-cnpg-dist/releases):
 
 ```bash
 curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/latest/download/cloudnative-pg-0.27.0.tgz
@@ -86,19 +89,23 @@ cnpg-controller-manager   1/1     1            1           1m
 
 ## Available Versions
 
-| Manifest Version | Helm Chart Version | Upstream Release |
-|------------------|-------------------|------------------|
-| v1.28.0 | 0.27.0 | [CloudNativePG v1.28.0](https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.28.0) |
-| v1.27.1 | 0.26.1 | [CloudNativePG v1.27.1](https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.27.1) |
-| v1.27.0 | 0.26.0 | [CloudNativePG v1.27.0](https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.27.0) |
+| Manifest Version | Helm Chart Version | Upstream Release           |
+| ---------------- | ------------------ | -------------------------- |
+| v1.28.1          | 0.27.1             | [CloudNativePG v1.28.1][1] |
+| v1.27.3          | 0.26.3             | [CloudNativePG v1.27.3][2] |
+
+[1]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.28.1
+[2]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.27.3
 
 ## Installing the kubectl Plugin
 
-The `kubectl-cnpg` plugin extends kubectl with commands for managing CloudNativePG clusters.
+The `kubectl-cnpg` plugin extends kubectl with commands for managing
+CloudNativePG clusters.
 
 ### Using Krew (Recommended)
 
-[Krew](https://krew.sigs.k8s.io/) is the plugin manager for kubectl. Install the plugin from the pgEdge Krew index:
+[Krew](https://krew.sigs.k8s.io/) is the plugin manager for kubectl. Install the
+plugin from the pgEdge Krew index:
 
 ```bash
 # Add the pgEdge Krew index
@@ -116,7 +123,9 @@ kubectl krew upgrade pgedge/cnpg
 
 ### Manual Installation
 
-Download pre-built binaries from [GitHub Releases](https://github.com/pgEdge/pgedge-cnpg-dist/releases?q=kubectl-cnpg&expanded=true) and follow the instructions attached to the release.
+Download pre-built binaries from
+[GitHub Releases](https://github.com/pgEdge/pgedge-cnpg-dist/releases?q=kubectl-cnpg&expanded=true)
+and follow the instructions attached to the release.
 
 ### Basic Usage
 
@@ -131,11 +140,14 @@ kubectl cnpg promote my-cluster my-replica
 kubectl cnpg backup my-cluster
 ```
 
-For complete plugin documentation, see the [CloudNativePG kubectl Plugin docs](https://cloudnative-pg.io/documentation/current/kubectl-plugin/).
+For complete plugin documentation, see the
+[CloudNativePG kubectl Plugin docs](https://cloudnative-pg.io/documentation/current/kubectl-plugin/).
 
 ## High Availability
 
-For production deployments, run multiple operator replicas for high availability. The operator uses leader election to ensure only one instance is active at a time.
+For production deployments, run multiple operator replicas for high
+availability. The operator uses leader election to ensure only one instance is
+active at a time.
 
 With Helm:
 
