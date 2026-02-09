@@ -172,5 +172,5 @@ helm install cnpg pgedge/cloudnative-pg \
 
 - [pgEdge Helm Chart Repository](https://pgedge.github.io/charts)
 - [pgEdge Krew Index](https://github.com/pgEdge/krew-index)
-- [pgEdge CNPG Distribution on GitHub](https://github.com/pgEdge/pgedge-cnpg-dist)
+- [pgEdge Enterprise Postgres for Kubernetes Repository](https://github.com/pgEdge/pgedge-cnpg-dist)
 - [CloudNativePG Installation Docs](https://cloudnative-pg.io/docs/1.28/installation_upgrade/)
