@@ -1,7 +1,7 @@
 # pgEdge Container Registry
 
 pgEdge publishes container images to the GitHub Container Registry 
-(GCR) for deploying pgEdge components in containerized environments.
+(GHCR) for deploying pgEdge components in containerized environments.
 To review the available pgEdge container images, visit the pgEdge
 GitHub Container Registry at:
 
