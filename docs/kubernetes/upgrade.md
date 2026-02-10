@@ -7,15 +7,17 @@ clusters.
 
 Upgrading CloudNativePG involves two steps:
 
-1. **Operator upgrade**: Update the controller deployment to the new version
+1. **Operator upgrade**: Update the controller deployment to the new version.
 2. **Instance manager upgrade**: The operator automatically updates the instance
-   manager in each PostgreSQL pod
+   manager in each PostgreSQL pod.
 
 ## Before You Upgrade
 
-!!! warning "Review Release Notes" Always review the
-[CloudNativePG release notes](https://cloudnative-pg.io/releases/) before
-upgrading. Some versions may have specific requirements or breaking changes.
+!!! warning 
+
+    "Review Release Notes" Always review the
+    [CloudNativePG release notes](https://cloudnative-pg.io/releases/) before
+    upgrading. Some versions may have specific requirements or breaking changes.
 
 Before upgrading, complete the following pre-upgrade checklist:
 
