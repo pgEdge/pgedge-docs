@@ -37,11 +37,6 @@ plugins:
   - multirepo:
       cleanup: true
       keep_docs_dir: false
-  - macros:
-      j2_variable_start_string: "<<"
-      j2_variable_end_string: ">>"
-      j2_comment_start_string: "<#"
-      j2_comment_end_string: "#>"
   - redoc-tag
   - gh-admonitions
   - redirects:
@@ -114,12 +109,6 @@ extra:
       - accept
       - reject
       - manage
-
-  # These values are required for pgedge-helm documentation templating
-  # https://github.com/pgEdge/pgedge-helm/blob/main/mkdocs.yml#L52
-  cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.yaml
-  certmanager_manifest_url: https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
-  control_plane_version: v0.6.2
 
   # Versioned documentation - list docsets that have multiple versions
   # Versions are auto-detected from nav structure
@@ -442,7 +431,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
 
   - Control Plane:
-    - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.2'
+    - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.2-docs'
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
   - Radar: 
