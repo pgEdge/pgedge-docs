@@ -78,7 +78,7 @@ These images are validated for use with [CloudNativePG](https://cloudnative-pg.i
 For deployment instructions, see:
 
 - [pgEdge Enterprise Postgres for Kubernetes](../kubernetes/index.md)
-- [pgEdge Helm Charts](/pgedge-helm/)
+- [pgEdge Helm Charts](../pgedge-helm/index.md)
 
 ## Entry Points
 

@@ -26,9 +26,11 @@ Fully managed PostgreSQL service. Provision clusters across AWS, Azure, or
 GCP.
 - Documentation: https://docs.pgedge.com/cloud/
 
-### Kubernetes (Containers)
+### pgEdge Container
 Cloud-native deployments with Helm charts and CloudNativePG integration.
-- Helm Chart: https://docs.pgedge.com/pgedge-containers/
+- Overview: https://docs.pgedge.com/pgedge-container/
+- Kubernetes: https://docs.pgedge.com/kubernetes/
+- Helm Chart: https://docs.pgedge.com/pgedge-helm/
 - Container Images: https://docs.pgedge.com/container-images/
 
 ### VMs & Bare Metal

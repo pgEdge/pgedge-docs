@@ -29,7 +29,7 @@ Your PAT needs the `read:packages` scope to pull images.
 
 ## Available Images
 
-Select from the pgEdge images listed below when installing pgEdge Containers.
+Select from the pgEdge images listed below for your containerized deployments.
 
 ### Postgres
 

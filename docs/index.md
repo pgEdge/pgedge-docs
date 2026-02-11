@@ -13,7 +13,7 @@ pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-
 * [pgEdge Enterprise Postgres](enterprise/index.md): An enterprise ready Postgres distribution for VMs and bare metal.
 * [pgEdge Distributed Postgres](platform/index.md): Multi-master Postgres for VMs and bare metal.
 * [pgEdge Cloud](cloud/index.md): Deploy single node or fully-distributed Postgres in the Cloud.
-* [pgEdge Containers](pgedge-containers/index.md): Container images and Kubernetes tooling for deploying pgEdge Enterprise Postgres.
+* [pgEdge Container](pgedge-container/index.md): Container images and Kubernetes tooling for deploying pgEdge Enterprise Postgres.
 
 ## Component Documentation
 

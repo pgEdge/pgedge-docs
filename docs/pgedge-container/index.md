@@ -1,4 +1,4 @@
-# pgEdge Containers
+# pgEdge Container
 
 pgEdge provides container images and Kubernetes tooling for deploying pgEdge
 Enterprise Postgres in containerized environments.
@@ -41,4 +41,4 @@ The Helm chart features:
 - built-in Spock replication configuration.
 - flexible storage and resource configuration.
 
-[Learn more about pgEdge Helm](/pgedge-helm/)
+[Learn more about pgEdge Helm](../pgedge-helm/index.md)
