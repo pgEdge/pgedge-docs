@@ -37,15 +37,16 @@ plugins:
   - multirepo:
       cleanup: true
       keep_docs_dir: false
-  - macros:
-      j2_variable_start_string: "<<"
-      j2_variable_end_string: ">>"
-      j2_comment_start_string: "<#"
-      j2_comment_end_string: "#>"
   - redoc-tag
   - gh-admonitions
   - redirects:
       redirect_maps:
+        # Legacy pgedge-containers versioned URLs redirect to pgedge-helm
+        pgedge-containers/v0-1/index.md: pgedge-helm/v0-1/index.md
+        pgedge-containers/development/index.md: pgedge-helm/development/index.md
+        # Redirect old pgedge-containers URLs to new pgedge-container URLs
+        pgedge-containers/index.md: pgedge-container/index.md
+        pgedge-containers/helm.md: pgedge-container/helm.md
         # Versioned documentation root redirects
         # Each product root redirects to the latest version
         # (The actual redirect is handled by docs/<product>/index.md files)
@@ -109,17 +110,11 @@ extra:
       - reject
       - manage
 
-  # These values are required for pgedge-helm documentation templating
-  # https://github.com/pgEdge/pgedge-helm/blob/main/mkdocs.yml#L52
-  cnpg_manifest_url: https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.28/releases/cnpg-1.28.0.yaml
-  certmanager_manifest_url: https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
-  control_plane_version: v0.6.2
-
   # Versioned documentation - list docsets that have multiple versions
   # Versions are auto-detected from nav structure
   # Convention: first version = latest, "Development" = unstable/main branch
   versioned_docsets:
-    - pgedge-containers
+    - pgedge-helm
     - ace
     - lolor
     - snowflake
@@ -138,8 +133,8 @@ extra:
   nav_categories:
     Products:
       - pgEdge Cloud
-      - title: pgEdge Containers
-        url: pgedge-containers/
+      - title: pgEdge Container
+        url: pgedge-container/
       - pgEdge Distributed Postgres
       - pgEdge Enterprise Postgres
     AI Toolkit:
@@ -167,6 +162,8 @@ extra:
         url: ace/
       - title: Control Plane
         url: control-plane/
+      - title: pgEdge Helm
+        url: pgedge-helm/
       - title: pgEdge Anonymizer
         url: pgedge-anonymizer/
       - title: pgEdge Docloader
@@ -396,10 +393,22 @@ nav:
     - Team Resources: cloud/teams.md
     - Troubleshooting: cloud/troubleshooting.md
 
+  - pgEdge Container:
+    - Overview: pgedge-container/index.md
+    - pgEdge Enterprise Postgres for Kubernetes:
+      - Overview: kubernetes/index.md
+      - Installation: kubernetes/install.md
+      - Upgrading: kubernetes/upgrade.md
+    - pgEdge Container Registry:
+      - Overview: container-images/index.md
+      - pgEdge Enterprise Postgres Images: container-images/postgres-images.md
+    - pgEdge Helm: pgedge-container/helm.md
+
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed
-  - pgEdge Containers:
-    - v0.1: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.1.0'
+  - pgEdge Helm:
+    - v0.2: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.2.0'
+    - v0.1: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.1.0-docs'
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE:
@@ -422,7 +431,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
 
   - Control Plane:
-    - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.2'
+    - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.2-docs'
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
   - Radar: 

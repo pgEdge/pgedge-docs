@@ -13,13 +13,14 @@ pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-
 * [pgEdge Enterprise Postgres](enterprise/index.md): An enterprise ready Postgres distribution for VMs and bare metal.
 * [pgEdge Distributed Postgres](platform/index.md): Multi-master Postgres for VMs and bare metal.
 * [pgEdge Cloud](cloud/index.md): Deploy single node or fully-distributed Postgres in the Cloud.
-* [pgEdge Containers](pgedge-containers/index.md): Deploy single node or fully-distributed Postgres on Kubernetes.
+* [pgEdge Container](pgedge-container/index.md): Container images and Kubernetes tooling for deploying pgEdge Enterprise Postgres.
 
 ## Component Documentation
 
 * [ACE (Active Consistency Engine)](ace/index.md): Data integrity for replicating clusters.
 * [Control Plane](control-plane/index.md): A distributed application that provides a declarative API to deploy and manage Postgres databases.
 * [lolor](lolor/index.md): A large object replication extension for Postgres.
+* [pgEdge Helm](pgedge-helm/index.md): Helm chart for deploying pgEdge Enterprise Postgres clusters on Kubernetes.
 * [Snowflake](snowflake/index.md): Cluster-wide unique (Snowflake) sequence extension for Postgres.
 * [Spock v5](spock-v5/index.md): Multi-master replication for Postgres.
 
@@ -34,7 +35,7 @@ pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-
 * [pgEdge RAG Server](pgedge-rag-server/index.md): An API server for running RAG (Retrieval-Augmented Generation) queries based on documents stored in Postgres, supporting multiple pipelines and LLMs/models.
 * [pgEdge Vectorizer](pgedge-vectorizer/index.md): A Postgres extension for chunking and vectorising documents in Postgres for semantic search with pgvector.
 
-The AI-enabling extensions used by the pgEdge Agentic AI Toolkit are distributed via the [pgEdge Enterprise Postgres](enterprise/index.md) Repository, and are built into the standard images used by the [Control Plane](control-plane/index.md) and the [pgEdge Containers HELM chart](pgedge-containers/index.md).
+The AI-enabling extensions used by the pgEdge Agentic AI Toolkit are distributed via the [pgEdge Enterprise Postgres](enterprise/index.md) Repository, and are built into the standard [pgEdge Enterprise Postgres images](container-images/postgres-images.md) used by the [Control Plane](control-plane/index.md) and [pgEdge Helm](pgedge-helm/index.md).
 
 ## pgEdge Tools and Utilities
 

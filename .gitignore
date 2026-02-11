@@ -4,6 +4,7 @@ pgedge-docs-venv/
 .claude/settings.local.json
 __pycache__/
 *.pyc
+temp_dir/*
 
 # Auto-generated redirect files for versioned docsets
 # These are created by hooks/versioned_redirects.py at build time
@@ -23,3 +24,4 @@ docs/spock-v5/index.md
 
 # Ansible vault password file
 ansible/.pgedge-docs-vault-pass
+.vscode/settings.json

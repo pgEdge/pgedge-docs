@@ -1,6 +1,8 @@
 {#
-  Redirect template for versioned docsets.
-  Automatically redirects to the latest version based on nav structure.
+  Redirect template for versioned docsets and custom redirects.
+
+  For versioned docsets: Automatically redirects to the latest version based on nav structure.
+  For custom redirects: Use frontmatter `redirect_url: /path/to/destination/`
 
   This template outputs a minimal redirect page with JavaScript executing
   before any other content loads.
@@ -8,21 +10,28 @@
 {%- set versioned_docsets = config.extra.versioned_docsets or [] -%}
 {%- set current_path = page.url | default('') -%}
 {%- set ns = namespace(redirect_url='', docset='') -%}
-{%- for docset_slug in versioned_docsets -%}
-  {%- if current_path.startswith(docset_slug ~ '/') or current_path == docset_slug ~ '/' -%}
-    {%- set ns.docset = docset_slug -%}
-    {%- for nav_item in nav -%}
-      {%- set nav_title_slug = nav_item.title | lower | replace(' ', '-') -%}
-      {%- if nav_title_slug == docset_slug and nav_item.children -%}
-        {%- for child in nav_item.children -%}
-          {%- if child.title != 'Development' and not ns.redirect_url -%}
-            {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ (child.title | lower | replace('.', '-') | replace(' ', '-')) ~ '/' -%}
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
-    {%- endfor -%}
-  {%- endif -%}
-{%- endfor -%}
+
+{#- Check for custom redirect_url in frontmatter first -#}
+{%- if page.meta.redirect_url -%}
+  {%- set ns.redirect_url = page.meta.redirect_url -%}
+{%- else -%}
+  {#- Fall back to versioned docset redirect logic -#}
+  {%- for docset_slug in versioned_docsets -%}
+    {%- if current_path.startswith(docset_slug ~ '/') or current_path == docset_slug ~ '/' -%}
+      {%- set ns.docset = docset_slug -%}
+      {%- for nav_item in nav -%}
+        {%- set nav_title_slug = nav_item.title | lower | replace(' ', '-') -%}
+        {%- if nav_title_slug == docset_slug and nav_item.children -%}
+          {%- for child in nav_item.children -%}
+            {%- if child.title != 'Development' and not ns.redirect_url -%}
+              {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ (child.title | lower | replace('.', '-') | replace(' ', '-')) ~ '/' -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
 <!DOCTYPE html>
 <html>
 <head>
