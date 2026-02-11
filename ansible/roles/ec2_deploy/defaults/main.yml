@@ -20,3 +20,8 @@ ec2_tags: "{{ ec2.tags | default({}) }}"
 
 ec2_vpc_id: "{{ ec2.vpc_id | default('') }}"
 ec2_subnet_id: "{{ ec2.subnet_id | default('') }}"
+
+# SSM Configuration
+ec2_enable_ssm: "{{ ec2.enable_ssm | default(true) }}"
+ec2_iam_role_name: "{{ ec2.iam_role_name | default('pgedge-rag-ssm-role') }}"
+ec2_instance_profile_name: "{{ ec2.instance_profile_name | default('pgedge-rag-instance-profile') }}"

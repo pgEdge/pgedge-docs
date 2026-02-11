@@ -71,6 +71,50 @@
       Project: pgedge-docs
   register: security_group
 
+# SSM Support - IAM Role and Instance Profile
+- name: Create IAM role for SSM
+  amazon.aws.iam_role:
+    name: "{{ ec2_iam_role_name }}"
+    region: "{{ ec2_region }}"
+    assume_role_policy_document: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      }
+    managed_policies:
+      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+    state: present
+    tags:
+      Project: pgedge-docs
+      ManagedBy: ansible
+  register: iam_role
+  when: ec2_enable_ssm | bool
+
+- name: Create instance profile for SSM
+  amazon.aws.iam_instance_profile:
+    name: "{{ ec2_instance_profile_name }}"
+    region: "{{ ec2_region }}"
+    role: "{{ ec2_iam_role_name }}"
+    state: present
+    tags:
+      Project: pgedge-docs
+      ManagedBy: ansible
+  register: instance_profile
+  when: ec2_enable_ssm | bool
+
+- name: Wait for instance profile to be ready
+  ansible.builtin.pause:
+    seconds: 10
+  when: ec2_enable_ssm | bool and instance_profile.changed
+
 - name: Launch EC2 instance
   amazon.aws.ec2_instance:
     name: "{{ ec2_tags.Name | default('pgedge-rag-server') }}"
@@ -80,6 +124,7 @@
     key_name: "{{ ec2_key_name }}"
     vpc_subnet_id: "{{ effective_subnet_id }}"
     security_group: "{{ security_group.group_id }}"
+    instance_role: "{{ ec2_instance_profile_name if ec2_enable_ssm | bool else omit }}"
     network:
       assign_public_ip: true
     volumes:
