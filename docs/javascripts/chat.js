@@ -34,7 +34,8 @@
         ui: {
             maxInputHeight: 120,
             historySize: 50,
-            busyMessageInterval: 3000
+            busyMessageInterval: 3000,
+            mobileBreakpoint: 768
         },
         busyMessages: [
             "Consulting the elephants...",
@@ -1204,7 +1205,7 @@
 
             // Restore open state - default to open for new users, but not on mobile
             const savedOpenState = localStorage.getItem(this.config.storage.isOpen);
-            const isMobile = window.innerWidth < 768;
+            const isMobile = window.innerWidth < this.config.ui.mobileBreakpoint;
             const shouldOpen = !isMobile && (savedOpenState === null || savedOpenState === 'true');
 
             if (shouldOpen) {
