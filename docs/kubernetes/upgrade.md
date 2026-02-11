@@ -91,9 +91,12 @@ helm upgrade cnpg pgedge/cloudnative-pg \
 
 ## Version Compatibility
 
-CloudNativePG follows semantic versioning. All 1.x releases are compatible with
-each other, but pgEdge recommends upgrading sequentially through each minor
-version rather than skipping releases.
+CloudNativePG follows semantic versioning. Compatibility is guaranteed within
+the same minor series (patch releases only). Minor-level upgrades (e.g., 1.26 →
+1.27) can introduce behavior or breaking changes. pgEdge recommends upgrading
+sequentially through each minor version rather than skipping releases. Always
+review the release notes and intermediate minor upgrade instructions before
+upgrading.
 
 ## Verifying the Upgrade
 
