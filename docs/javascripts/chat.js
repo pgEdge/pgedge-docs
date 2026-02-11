@@ -1202,9 +1202,10 @@
             // Bind events
             this.bindEvents();
 
-            // Restore open state - default to open for new users
+            // Restore open state - default to open for new users, but not on mobile
             const savedOpenState = localStorage.getItem(this.config.storage.isOpen);
-            const shouldOpen = savedOpenState === null || savedOpenState === 'true';
+            const isMobile = window.innerWidth < 768;
+            const shouldOpen = !isMobile && (savedOpenState === null || savedOpenState === 'true');
 
             if (shouldOpen) {
                 this.ui.showFab(); // Show first so close() works correctly
@@ -1481,14 +1482,17 @@
                     this.stopBusyMessages();
 
                     // Provide helpful error messages based on error type
-                    let errorMsg = error.message || 'Failed to get response.';
+                    const errorMsg = error.message || '';
+                    let displayMsg;
                     if (errorMsg === 'Load failed' || errorMsg === 'Failed to fetch' || error.name === 'TypeError') {
-                        errorMsg = 'Network error. Please check your connection and try again. If the problem persists, try clearing the conversation (trash icon).';
+                        displayMsg = 'Network error. Please check your connection and try again. If the problem persists, try clearing the conversation (trash icon).';
                     } else if (errorMsg.includes('413') || errorMsg.includes('too large')) {
-                        errorMsg = 'Conversation too long. Please clear the conversation (trash icon) and try again.';
+                        displayMsg = 'Conversation too long. Please clear the conversation (trash icon) and try again.';
+                    } else {
+                        displayMsg = 'Something went wrong. Please try again.';
                     }
 
-                    this.ui.showError(errorMsg);
+                    this.ui.showError(displayMsg);
                     this.ui.setStreaming(false);
                     this.streamBuffer.reset();
                     if (this.currentStreamElements) {
