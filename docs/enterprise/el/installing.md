@@ -60,7 +60,7 @@ To configure the Postgres server to autostart with system reboots, use the follo
 These commands expect the service to be on the localhost, listening on port `5432`. To confirm that the service is working, you can connect with psql and query the server:
 
   ```sql
-  sudo -u postgres ./psql -U postgres -p 5432
+  sudo -u postgres psql -U postgres -p 5432
   psql (18.0)
   Type "help" for help.
 
