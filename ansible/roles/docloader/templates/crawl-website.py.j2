@@ -526,7 +526,7 @@ Examples:
 
     # Change ownership
     import subprocess
-    subprocess.run(['chown', '-R', f'{RUN_USER}:{RUN_USER}', str(output_dir)])
+    subprocess.run(['chown', '-R', f'{RUN_USER}:{RUN_USER}', str(output_dir)], check=True)
 
     # Filter sites if --site specified
     if args.site is not None:

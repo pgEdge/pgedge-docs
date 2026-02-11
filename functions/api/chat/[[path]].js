@@ -91,7 +91,7 @@ export async function onRequest(context) {
 
     return new Response(JSON.stringify({
       error: 'Failed to connect to RAG server',
-      message: error.message,
+      message: 'Service temporarily unavailable',
     }), {
       status: 502,
       headers: {

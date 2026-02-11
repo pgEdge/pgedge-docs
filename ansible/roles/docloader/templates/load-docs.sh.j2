@@ -180,13 +180,16 @@ def run_docloader(source_path: str, config: dict, product: str, version: str,
 
     print(f"  Running docloader for: {source_path}")
 
-    # Build the command with environment
-    full_cmd = ['sudo', '-u', user]
-    if env:
-        full_cmd = ['sudo', f'PGPASSWORD={env["PGPASSWORD"]}', '-u', user]
+    # Build the command - pass environment through subprocess, not command line
+    full_cmd = ['sudo', '--preserve-env=PGPASSWORD', '-u', user]
     full_cmd.extend(cmd)
 
-    result = subprocess.run(full_cmd, capture_output=False)
+    # Pass PGPASSWORD via environment to avoid exposure in process list
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+
+    result = subprocess.run(full_cmd, capture_output=False, env=run_env)
     return result.returncode == 0
 
 
@@ -219,7 +222,7 @@ def process_source(index: int, source: dict, config: dict, user: str, dry_run: b
             # Ensure repos directory exists with correct ownership
             repos_dir = os.path.join(data_dir, 'repos')
             os.makedirs(repos_dir, exist_ok=True)
-            subprocess.run(['chown', '-R', f'{user}:{user}', repos_dir])
+            subprocess.run(['chown', '-R', f'{user}:{user}', repos_dir], check=True)
 
             if not clone_or_update_repo(git_url, ref, ref_type, repo_dir, user):
                 print(f"  Error: Failed to clone/update repository", file=sys.stderr)
@@ -313,7 +316,7 @@ Examples:
     # Ensure data directory exists
     data_dir = config.get('data_dir', '/var/lib/pgedge/docloader')
     os.makedirs(data_dir, exist_ok=True)
-    subprocess.run(['chown', '-R', f'{RUN_USER}:{RUN_USER}', data_dir])
+    subprocess.run(['chown', '-R', f'{RUN_USER}:{RUN_USER}', data_dir], check=True)
 
     print(f"Loading documentation from: {args.config}")
     print(f"Data directory: {data_dir}")

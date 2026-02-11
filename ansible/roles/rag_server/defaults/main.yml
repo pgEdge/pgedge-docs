@@ -32,4 +32,4 @@ rag_log_dir: "{{ rag_server.log_dir | default('/var/log/pgedge/rag-server') }}"
 rag_keys_dir: "{{ rag_server.keys_dir | default('/etc/pgedge/keys') }}"
 
 # Pipeline configuration
-rag_pipeline: "{{ rag_server.pipeline }}"
+rag_pipeline: "{{ rag_server.pipeline | default({}) }}"
