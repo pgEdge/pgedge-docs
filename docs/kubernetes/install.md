@@ -25,7 +25,7 @@ pgEdge currently distributes the following CloudNativePG operator versions:
 [2]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.27.3
 
 You can install CloudNativePG using Helm (recommended), Kubernetes manifests, or
-using the Github Release artifacts.
+using the GitHub Release artifacts.
 
 ### Using Helm (Recommended)
 
@@ -170,6 +170,6 @@ helm install cnpg pgedge/cloudnative-pg \
 
 ## Resources
 
-- [pgEdge Enterprise Postgres for Kubernetes Github Repository](https://github.com/pgEdge/pgedge-cnpg-dist)
+- [pgEdge Enterprise Postgres for Kubernetes GitHub Repository](https://github.com/pgEdge/pgedge-cnpg-dist)
 - [pgEdge Krew Index](https://github.com/pgEdge/krew-index)
 - [CloudNativePG Installation Docs](https://cloudnative-pg.io/docs/1.28/installation_upgrade/)
