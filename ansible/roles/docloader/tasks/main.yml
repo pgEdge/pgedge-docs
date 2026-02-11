@@ -1,0 +1,169 @@
+# Docloader Role - Main Tasks
+---
+- name: Install docloader dependencies
+  ansible.builtin.apt:
+    name:
+      - git
+      - python3-yaml
+      - python3-requests
+      - python3-bs4
+      - python3-html2text
+    state: present
+
+# Install from GitHub Release
+- name: Download docloader tarball from GitHub Release
+  ansible.builtin.get_url:
+    url: "{{ docloader_github_release_url }}"
+    dest: /tmp/pgedge-docloader.tar.gz
+    force: "{{ docloader_force_download | default(false) }}"
+  when: docloader_install_method == 'github'
+
+- name: Extract docloader binary from tarball
+  ansible.builtin.unarchive:
+    src: /tmp/pgedge-docloader.tar.gz
+    dest: /tmp/
+    remote_src: true
+  when: docloader_install_method == 'github'
+
+- name: Install docloader binary
+  ansible.builtin.copy:
+    src: /tmp/pgedge-docloader
+    dest: /usr/local/bin/pgedge-docloader
+    mode: '0755'
+    remote_src: true
+  when: docloader_install_method == 'github'
+
+- name: Clean up docloader tarball
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /tmp/pgedge-docloader.tar.gz
+    - /tmp/pgedge-docloader
+  when: docloader_install_method == 'github'
+
+# Alternative: Install from apt package
+- name: Install docloader package from apt
+  ansible.builtin.apt:
+    name: "{{ docloader_package }}"
+    state: present
+  when: docloader_install_method == 'apt'
+
+- name: Create docloader directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0750'
+  loop:
+    - "{{ docloader_config_dir }}"
+    - "{{ docloader_data_dir }}"
+
+- name: Check if docloader config exists
+  ansible.builtin.stat:
+    path: "{{ docloader_config_dir }}/config.yaml"
+  register: docloader_config_stat
+
+- name: Deploy initial docloader configuration
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: "{{ docloader_config_dir }}/config.yaml"
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0640'
+  when: not docloader_config_stat.stat.exists
+
+- name: Deploy docloader wrapper script
+  ansible.builtin.template:
+    src: load-docs.sh.j2
+    dest: /usr/local/bin/load-docs
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy database password file for docloader
+  ansible.builtin.copy:
+    content: "{{ docloader_db_password }}"
+    dest: "{{ docloader_config_dir }}/.pgpass"
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0600'
+  no_log: true
+
+# Website crawler for loading web content
+- name: Deploy website crawler script
+  ansible.builtin.template:
+    src: crawl-website.py.j2
+    dest: /usr/local/bin/crawl-website
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Check if websites config exists
+  ansible.builtin.stat:
+    path: "{{ docloader_config_dir }}/websites.yaml"
+  register: websites_config_stat
+
+- name: Deploy initial websites configuration
+  ansible.builtin.template:
+    src: websites.yaml.j2
+    dest: "{{ docloader_config_dir }}/websites.yaml"
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0640'
+  when: not websites_config_stat.stat.exists
+
+- name: Create websites output directory
+  ansible.builtin.file:
+    path: "{{ docloader_data_dir }}/websites"
+    state: directory
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0750'
+
+# Package scanner for generating package availability documentation
+- name: Deploy package scanner script
+  ansible.builtin.template:
+    src: scan-packages.py.j2
+    dest: /usr/local/bin/scan-packages
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create packages output directory
+  ansible.builtin.file:
+    path: "{{ docloader_data_dir }}/packages"
+    state: directory
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0750'
+
+# Wiki extractor for loading internal Confluence content
+- name: Deploy wiki extractor script
+  ansible.builtin.template:
+    src: extract-wiki.py.j2
+    dest: /usr/local/bin/extract-wiki
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create wiki output directory
+  ansible.builtin.file:
+    path: "{{ docloader_data_dir }}/wiki"
+    state: directory
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0750'
+
+- name: Deploy Atlassian credentials file
+  ansible.builtin.copy:
+    content: |
+      {{ docloader_atlassian_email }}
+      {{ docloader_atlassian_token }}
+    dest: "{{ docloader_config_dir }}/.atlassian"
+    owner: "{{ docloader_user }}"
+    group: "{{ docloader_group }}"
+    mode: '0600'
+  no_log: true
+  when: docloader_atlassian_email is defined and docloader_atlassian_token is defined

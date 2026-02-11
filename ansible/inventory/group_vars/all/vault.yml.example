@@ -1,0 +1,34 @@
+# Ansible Vault - Secret Variables
+#
+# Copy this file to vault.yml and encrypt it:
+#   cp vault.yml.example vault.yml
+#   ansible-vault encrypt vault.yml
+#
+# To edit later:
+#   ansible-vault edit vault.yml
+#
+# To run playbooks with vault:
+#   ansible-playbook playbooks/site.yml --ask-vault-pass
+#
+# Or create a password file:
+#   echo "your-vault-password" > .vault_pass
+#   chmod 600 .vault_pass
+#   ansible-playbook playbooks/site.yml --vault-password-file .vault_pass
+
+# PostgreSQL password for RAG server user
+vault_postgres_password: "changeme-use-strong-password"
+
+# API Keys for LLM providers
+vault_openai_api_key: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+vault_anthropic_api_key: "sk-ant-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+vault_voyage_api_key: ""  # Optional - only if using Voyage embeddings
+
+# Shared secret for RAG server authentication (set in Cloudflare Pages env vars)
+# Generate with: openssl rand -hex 32
+vault_rag_secret: "generate-a-random-secret-here"
+
+# Infrastructure details
+vault_rag_server_ip: "your-server-ip-address"
+vault_cloudflared_internal_hostname: "your-internal-hostname.example.com"
+vault_cloudflared_tunnel_name: "your-tunnel-name"
+vault_ec2_key_name: "your-aws-key-pair-name"

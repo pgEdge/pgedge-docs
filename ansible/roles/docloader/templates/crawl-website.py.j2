@@ -1,0 +1,554 @@
+#!/usr/bin/env python3
+# =============================================================================
+# crawl-website - Web crawler for pgEdge documentation
+# =============================================================================
+#
+# Crawls specified websites and saves content as markdown files for
+# processing by pgedge-docloader.
+#
+# Usage:
+#   sudo crawl-website              # Crawl all configured sites
+#   sudo crawl-website --dry-run    # Show what would be crawled
+#   sudo crawl-website --list       # List configured URL patterns
+#
+# Configuration: {{ docloader_config_dir }}/websites.yaml
+# =============================================================================
+
+import os
+import sys
+import re
+import hashlib
+import argparse
+import time
+from pathlib import Path
+from urllib.parse import urljoin, urlparse
+from typing import Set, List, Dict, Optional
+from dataclasses import dataclass, field
+
+try:
+    import yaml
+except ImportError:
+    print("Error: PyYAML required. Install: apt install python3-yaml", file=sys.stderr)
+    sys.exit(1)
+
+try:
+    import requests
+except ImportError:
+    print("Error: requests required. Install: apt install python3-requests", file=sys.stderr)
+    sys.exit(1)
+
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    print("Error: BeautifulSoup required. Install: apt install python3-bs4", file=sys.stderr)
+    sys.exit(1)
+
+CONFIG_FILE = "{{ docloader_config_dir }}/websites.yaml"
+OUTPUT_DIR = "{{ docloader_data_dir }}/websites"
+RUN_USER = "{{ docloader_user }}"
+
+# Default selectors to remove (navigation, headers, footers, CTAs)
+DEFAULT_REMOVE_SELECTORS = [
+    'nav', 'header', 'footer',
+    '.nav', '.navbar', '.navigation', '.menu', '.sidebar',
+    '.header', '.site-header', '.page-header',
+    '.footer', '.site-footer', '.page-footer',
+    '.cta', '.call-to-action', '.signup', '.newsletter',
+    '.cookie-banner', '.cookie-consent', '.gdpr',
+    '.social-share', '.social-links', '.share-buttons',
+    '.breadcrumb', '.breadcrumbs',
+    '.comments', '.comment-section',
+    '.related-posts', '.recommended', '.also-like',
+    '.advertisement', '.ad', '.ads', '.sponsored',
+    'script', 'style', 'noscript', 'iframe',
+    '[role="navigation"]', '[role="banner"]', '[role="contentinfo"]',
+]
+
+# Default content selectors (in order of preference)
+DEFAULT_CONTENT_SELECTORS = [
+    'article', 'main', '.content', '.main-content', '.post-content',
+    '.article-content', '.entry-content', '.page-content',
+    '[role="main"]', '#content', '#main',
+]
+
+
+@dataclass
+class CrawlConfig:
+    """Configuration for a website crawl."""
+    name: str
+    base_url: str
+    url_patterns: List[str]
+    product: str = "pgEdge Website"
+    version: str = ""
+    max_pages: int = 100
+    delay_seconds: float = 1.0
+    remove_selectors: List[str] = field(default_factory=list)
+    content_selectors: List[str] = field(default_factory=list)
+
+
+@dataclass
+class CrawledPage:
+    """A crawled page with extracted content."""
+    url: str
+    title: str
+    content: str
+    product: str
+    version: str
+
+
+class WebCrawler:
+    """Web crawler that extracts clean content from websites."""
+
+    def __init__(self, config: CrawlConfig, output_dir: str, dry_run: bool = False):
+        self.config = config
+        self.output_dir = Path(output_dir) / self._safe_dirname(config.name)
+        self.dry_run = dry_run
+        self.visited: Set[str] = set()
+        self.to_visit: List[str] = []
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'pgEdge-Docloader/1.0 (Documentation Crawler)'
+        })
+
+        # Combine default and custom selectors
+        self.remove_selectors = DEFAULT_REMOVE_SELECTORS + config.remove_selectors
+        self.content_selectors = config.content_selectors or DEFAULT_CONTENT_SELECTORS
+
+    def _safe_dirname(self, name: str) -> str:
+        """Convert name to safe directory name."""
+        return re.sub(r'[^a-zA-Z0-9_-]', '_', name.lower())
+
+    def _normalize_url(self, url: str) -> str:
+        """Normalize URL by removing fragments and trailing slashes."""
+        parsed = urlparse(url)
+        # Remove fragment
+        normalized = parsed._replace(fragment='')
+        # Remove trailing slash from path (except root)
+        path = normalized.path.rstrip('/') or '/'
+        normalized = normalized._replace(path=path)
+        return normalized.geturl()
+
+    def _matches_pattern(self, url: str, pattern: str) -> bool:
+        """Check if URL matches a pattern (supports * wildcard)."""
+        # Convert pattern to regex
+        regex_pattern = pattern.replace('.', r'\.').replace('*', '.*')
+        regex_pattern = f'^{regex_pattern}$'
+        return bool(re.match(regex_pattern, url))
+
+    def _should_crawl(self, url: str) -> bool:
+        """Check if URL should be crawled based on patterns."""
+        normalized = self._normalize_url(url)
+
+        # Skip if already visited
+        if normalized in self.visited:
+            return False
+
+        # Check against patterns
+        for pattern in self.config.url_patterns:
+            if self._matches_pattern(normalized, pattern):
+                return True
+
+        return False
+
+    def _extract_content(self, soup: BeautifulSoup) -> str:
+        """Extract main content from page, removing navigation/headers/footers."""
+        # Create a copy to modify
+        soup = BeautifulSoup(str(soup), 'html.parser')
+
+        # Remove unwanted elements
+        for selector in self.remove_selectors:
+            for element in soup.select(selector):
+                element.decompose()
+
+        # Find main content container
+        content_element = None
+        for selector in self.content_selectors:
+            content_element = soup.select_one(selector)
+            if content_element:
+                break
+
+        # Fall back to body if no content container found
+        if not content_element:
+            content_element = soup.body or soup
+
+        # Extract text with some formatting preserved
+        return self._html_to_markdown(content_element)
+
+    def _html_to_markdown(self, element) -> str:
+        """Convert HTML element to markdown-ish text."""
+        lines = []
+
+        for child in element.descendants:
+            if child.name is None:
+                # Text node
+                text = child.strip()
+                if text:
+                    lines.append(text)
+            elif child.name in ('h1', 'h2', 'h3', 'h4', 'h5', 'h6'):
+                level = int(child.name[1])
+                text = child.get_text(strip=True)
+                if text:
+                    lines.append('')
+                    lines.append('#' * level + ' ' + text)
+                    lines.append('')
+            elif child.name == 'p':
+                text = child.get_text(strip=True)
+                if text:
+                    lines.append('')
+                    lines.append(text)
+            elif child.name in ('ul', 'ol'):
+                lines.append('')
+            elif child.name == 'li':
+                text = child.get_text(strip=True)
+                if text:
+                    # Check if parent is ol or ul
+                    parent = child.parent
+                    if parent and parent.name == 'ol':
+                        # Get index
+                        index = list(parent.children).index(child) + 1
+                        lines.append(f'{index}. {text}')
+                    else:
+                        lines.append(f'- {text}')
+            elif child.name == 'a':
+                href = child.get('href', '')
+                text = child.get_text(strip=True)
+                if text and href:
+                    # Skip if href is just # or javascript:
+                    if not href.startswith(('#', 'javascript:')):
+                        lines.append(f'[{text}]({href})')
+            elif child.name == 'code':
+                text = child.get_text(strip=True)
+                if text:
+                    lines.append(f'`{text}`')
+            elif child.name == 'pre':
+                text = child.get_text(strip=True)
+                if text:
+                    lines.append('')
+                    lines.append('```')
+                    lines.append(text)
+                    lines.append('```')
+                    lines.append('')
+            elif child.name == 'blockquote':
+                text = child.get_text(strip=True)
+                if text:
+                    lines.append('')
+                    for line in text.split('\n'):
+                        lines.append(f'> {line}')
+                    lines.append('')
+            elif child.name == 'br':
+                lines.append('')
+
+        # Clean up: remove excessive blank lines
+        result = '\n'.join(lines)
+        result = re.sub(r'\n{3,}', '\n\n', result)
+        return result.strip()
+
+    def _extract_title(self, soup: BeautifulSoup) -> str:
+        """Extract page title."""
+        # Try og:title first
+        og_title = soup.find('meta', property='og:title')
+        if og_title and og_title.get('content'):
+            return og_title['content'].strip()
+
+        # Try title tag
+        title = soup.find('title')
+        if title:
+            text = title.get_text(strip=True)
+            # Remove common suffixes like "| Company Name"
+            text = re.sub(r'\s*[|\-–—]\s*pgEdge.*$', '', text, flags=re.IGNORECASE)
+            return text.strip()
+
+        # Try h1
+        h1 = soup.find('h1')
+        if h1:
+            return h1.get_text(strip=True)
+
+        return "Untitled"
+
+    def _find_links(self, soup: BeautifulSoup, base_url: str) -> List[str]:
+        """Find all links on the page that match our patterns."""
+        links = []
+
+        for a in soup.find_all('a', href=True):
+            href = a['href']
+            # Make absolute
+            full_url = urljoin(base_url, href)
+            # Normalize
+            normalized = self._normalize_url(full_url)
+
+            if self._should_crawl(normalized):
+                links.append(normalized)
+
+        return links
+
+    def _url_to_filename(self, url: str) -> str:
+        """Convert URL to a safe filename."""
+        parsed = urlparse(url)
+        path = parsed.path.strip('/')
+
+        if not path:
+            path = 'index'
+
+        # Replace slashes with underscores
+        safe_path = path.replace('/', '_')
+
+        # Ensure it ends with .md
+        if not safe_path.endswith('.md'):
+            safe_path += '.md'
+
+        return safe_path
+
+    def crawl_page(self, url: str) -> Optional[CrawledPage]:
+        """Crawl a single page and extract content."""
+        normalized = self._normalize_url(url)
+
+        if normalized in self.visited:
+            return None
+
+        self.visited.add(normalized)
+
+        print(f"  Crawling: {normalized}")
+
+        if self.dry_run:
+            return CrawledPage(
+                url=normalized,
+                title="[DRY RUN]",
+                content="",
+                product=self.config.product,
+                version=self.config.version
+            )
+
+        try:
+            response = self.session.get(normalized, timeout=30)
+            response.raise_for_status()
+
+            # Only process HTML
+            content_type = response.headers.get('content-type', '')
+            if 'text/html' not in content_type:
+                print(f"    Skipping non-HTML: {content_type}")
+                return None
+
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            title = self._extract_title(soup)
+            content = self._extract_content(soup)
+
+            # Find more links to crawl
+            new_links = self._find_links(soup, normalized)
+            for link in new_links:
+                if link not in self.visited and link not in self.to_visit:
+                    self.to_visit.append(link)
+
+            return CrawledPage(
+                url=normalized,
+                title=title,
+                content=content,
+                product=self.config.product,
+                version=self.config.version
+            )
+
+        except requests.RequestException as e:
+            print(f"    Error: {e}")
+            return None
+
+    def save_page(self, page: CrawledPage):
+        """Save crawled page as markdown file."""
+        if self.dry_run:
+            return
+
+        # Ensure output directory exists
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        filename = self._url_to_filename(page.url)
+        filepath = self.output_dir / filename
+
+        # Create markdown content with frontmatter-like header
+        markdown = f"""# {page.title}
+
+Source: {page.url}
+
+---
+
+{page.content}
+"""
+
+        filepath.write_text(markdown, encoding='utf-8')
+        print(f"    Saved: {filepath}")
+
+    def _extract_seed_url(self, pattern: str) -> Optional[str]:
+        """Extract a seed URL from a pattern (removing wildcards)."""
+        # If no wildcard, use pattern directly
+        if '*' not in pattern:
+            return pattern
+
+        # Remove wildcard suffix to get base URL
+        # e.g., "https://example.com/blog/*" -> "https://example.com/blog"
+        base = pattern.rstrip('*').rstrip('/')
+        if base and base.startswith('http'):
+            return base
+
+        return None
+
+    def crawl(self) -> List[CrawledPage]:
+        """Crawl all configured URLs."""
+        pages = []
+
+        # Initialize with seed URLs from patterns
+        for pattern in self.config.url_patterns:
+            seed_url = self._extract_seed_url(pattern)
+            if seed_url:
+                url = self._normalize_url(seed_url)
+                # Only add seed URL if it actually matches the patterns
+                # (prevents adding /products when pattern is /products/*)
+                if self._should_crawl(url) and url not in self.to_visit:
+                    self.to_visit.append(url)
+
+        # Also add base_url if it matches a pattern
+        base = self._normalize_url(self.config.base_url)
+        if self._should_crawl(base) and base not in self.to_visit:
+            self.to_visit.insert(0, base)
+
+        print(f"\nCrawling {self.config.name}...")
+        print(f"  Base URL: {self.config.base_url}")
+        print(f"  Patterns: {len(self.config.url_patterns)}")
+        print(f"  Max pages: {self.config.max_pages}")
+
+        if self.dry_run:
+            print(f"\n  URL patterns:")
+            for pattern in self.config.url_patterns:
+                if '*' in pattern:
+                    print(f"    {pattern}  (will discover sub-pages)")
+                else:
+                    print(f"    {pattern}")
+            print()
+
+        while self.to_visit and len(pages) < self.config.max_pages:
+            url = self.to_visit.pop(0)
+
+            page = self.crawl_page(url)
+            if page:
+                pages.append(page)
+                self.save_page(page)
+
+            # Be polite
+            if not self.dry_run and self.to_visit:
+                time.sleep(self.config.delay_seconds)
+
+        print(f"  Crawled {len(pages)} pages")
+        return pages
+
+
+def load_config(config_path: str) -> List[CrawlConfig]:
+    """Load website crawl configurations."""
+    with open(config_path, 'r') as f:
+        data = yaml.safe_load(f)
+
+    configs = []
+    for site in data.get('websites', []):
+        configs.append(CrawlConfig(
+            name=site['name'],
+            base_url=site['base_url'],
+            url_patterns=site.get('url_patterns', []),
+            product=site.get('product', 'pgEdge Website'),
+            version=site.get('version', ''),
+            max_pages=site.get('max_pages', 100),
+            delay_seconds=site.get('delay_seconds', 1.0),
+            remove_selectors=site.get('remove_selectors', []),
+            content_selectors=site.get('content_selectors', []),
+        ))
+
+    return configs
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Crawl websites and save content for documentation loading',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=f'''
+Configuration: {CONFIG_FILE}
+Output: {OUTPUT_DIR}
+
+Examples:
+  sudo crawl-website              # Crawl all sites
+  sudo crawl-website --dry-run    # Show what would be crawled
+  sudo crawl-website --list       # List configured sites
+  sudo crawl-website --site 0     # Crawl only site index 0
+'''
+    )
+    parser.add_argument('--dry-run', '-n', action='store_true',
+                        help='Show what would be done without crawling')
+    parser.add_argument('--site', '-s', type=int, metavar='N',
+                        help='Crawl only site N (0-indexed)')
+    parser.add_argument('--list', '-l', action='store_true',
+                        help='List configured sites and exit')
+    parser.add_argument('--config', '-c', default=CONFIG_FILE,
+                        help='Path to configuration file')
+    parser.add_argument('--output', '-o', default=OUTPUT_DIR,
+                        help='Output directory for crawled content')
+
+    args = parser.parse_args()
+
+    # Check if running as root
+    if os.geteuid() != 0:
+        print("This script must be run as root (use sudo)", file=sys.stderr)
+        sys.exit(1)
+
+    # Load configuration
+    if not os.path.exists(args.config):
+        print(f"Error: Configuration not found: {args.config}", file=sys.stderr)
+        print("Create websites.yaml with website crawl configurations.")
+        sys.exit(1)
+
+    try:
+        configs = load_config(args.config)
+    except Exception as e:
+        print(f"Error loading config: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if not configs:
+        print("No websites configured.", file=sys.stderr)
+        sys.exit(1)
+
+    # List mode
+    if args.list:
+        print(f"Configured websites ({len(configs)} total):\n")
+        for i, cfg in enumerate(configs):
+            print(f"  [{i}] {cfg.name}")
+            print(f"      Base: {cfg.base_url}")
+            print(f"      Patterns: {len(cfg.url_patterns)}")
+            print(f"      Max pages: {cfg.max_pages}")
+            print()
+        sys.exit(0)
+
+    # Ensure output directory exists
+    output_dir = Path(args.output)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Change ownership
+    import subprocess
+    subprocess.run(['chown', '-R', f'{RUN_USER}:{RUN_USER}', str(output_dir)], check=True)
+
+    # Filter sites if --site specified
+    if args.site is not None:
+        if args.site < 0 or args.site >= len(configs):
+            print(f"Error: Site index {args.site} out of range", file=sys.stderr)
+            sys.exit(1)
+        configs = [configs[args.site]]
+
+    # Crawl each site
+    total_pages = 0
+    for config in configs:
+        crawler = WebCrawler(config, args.output, dry_run=args.dry_run)
+        pages = crawler.crawl()
+        total_pages += len(pages)
+
+    print(f"\n{'=' * 60}")
+    print(f"Total: {total_pages} pages crawled")
+
+    if not args.dry_run:
+        print(f"\nContent saved to: {args.output}")
+        print("Run 'sudo load-docs' to load into the database.")
+
+
+if __name__ == '__main__':
+    main()

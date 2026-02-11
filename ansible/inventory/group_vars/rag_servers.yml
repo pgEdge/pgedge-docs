@@ -1,0 +1,6 @@
+# RAG Servers Group Variables
+---
+# Host connection - IP address stored in vault for security
+ansible_host: "{{ vault_rag_server_ip }}"
+ansible_user: admin
+ansible_ssh_private_key_file: ~/.ssh/pgedge-rag.pem

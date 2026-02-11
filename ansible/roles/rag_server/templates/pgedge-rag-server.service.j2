@@ -1,0 +1,48 @@
+# pgEdge RAG Server systemd service
+# Managed by Ansible - do not edit manually
+
+[Unit]
+Description=pgEdge RAG Server
+Documentation=https://github.com/pgEdge/pgedge-rag-server
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User={{ rag_user }}
+Group={{ rag_group }}
+
+{% if rag_install_method == 'github' %}
+ExecStart=/usr/local/bin/pgedge-rag-server -config {{ rag_config_dir }}/config.yaml
+{% else %}
+ExecStart=/usr/bin/pgedge-rag-server -config {{ rag_config_dir }}/config.yaml
+{% endif %}
+
+Restart=always
+RestartSec=5
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+
+# Allow write access to specific directories
+ReadWritePaths={{ rag_data_dir }} {{ rag_log_dir }}
+
+# Environment
+Environment=RUST_LOG=info
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=pgedge-rag-server
+
+[Install]
+WantedBy=multi-user.target

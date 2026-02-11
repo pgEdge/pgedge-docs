@@ -1,0 +1,388 @@
+#!/usr/bin/env python3
+# =============================================================================
+# load-docs - Wrapper script for pgedge-docloader
+# =============================================================================
+#
+# This script performs the following steps:
+#   1. Crawl websites (crawl-website)
+#   2. Scan package repositories (scan-packages)
+#   3. Extract wiki content (extract-wiki)
+#   4. Clone/update git repositories
+#   5. Load all documentation into the RAG database
+#
+# Usage:
+#   sudo load-docs              # Run all steps and load all documentation
+#   sudo load-docs --dry-run    # Show what would be done without loading
+#   sudo load-docs --source N   # Load only source N (0-indexed)
+#   sudo load-docs --skip-crawl # Skip website crawling
+#   sudo load-docs --skip-packages  # Skip package scanning
+#   sudo load-docs --skip-wiki  # Skip wiki extraction
+#   sudo load-docs --skip-prep  # Skip all preparatory steps
+#
+# Configuration: {{ docloader_config_dir }}/config.yaml
+# =============================================================================
+
+import os
+import sys
+import subprocess
+import argparse
+import tempfile
+from pathlib import Path
+
+try:
+    import yaml
+except ImportError:
+    print("Error: PyYAML is required. Install with: pip install pyyaml", file=sys.stderr)
+    sys.exit(1)
+
+CONFIG_FILE = "{{ docloader_config_dir }}/config.yaml"
+RUN_USER = "{{ docloader_user }}"
+ATLASSIAN_CREDS = "{{ docloader_config_dir }}/.atlassian"
+
+
+def run_prep_script(script_name: str, description: str, dry_run: bool = False,
+                    requires_creds: str = None) -> bool:
+    """
+    Run a preparatory script (crawl-website, scan-packages, extract-wiki).
+    Returns True on success, False on failure or skip.
+    """
+    print(f"\n{'=' * 60}")
+    print(f"Step: {description}")
+    print('=' * 60)
+
+    # Check if credentials file exists for scripts that need it
+    if requires_creds and not os.path.exists(requires_creds):
+        print(f"  Skipping: credentials file not found ({requires_creds})")
+        return True  # Not a failure, just skipped
+
+    script_path = f"/usr/local/bin/{script_name}"
+    if not os.path.exists(script_path):
+        print(f"  Warning: {script_name} not found, skipping", file=sys.stderr)
+        return True  # Not a failure, just not installed
+
+    if dry_run:
+        print(f"  Would run: {script_path}")
+        return True
+
+    print(f"  Running: {script_path}")
+    result = subprocess.run([script_path], capture_output=False)
+
+    if result.returncode != 0:
+        print(f"  Warning: {script_name} returned non-zero exit code", file=sys.stderr)
+        return False
+
+    return True
+
+
+def load_config(config_path: str) -> dict:
+    """Load and parse the configuration file."""
+    with open(config_path, 'r') as f:
+        return yaml.safe_load(f)
+
+
+def run_as_user(cmd: list, user: str, cwd: str = None, env: dict = None) -> subprocess.CompletedProcess:
+    """Run a command as a specific user."""
+    full_cmd = ['sudo', '-u', user]
+    if env:
+        for k, v in env.items():
+            full_cmd.extend([f'{k}={v}'])
+    full_cmd.extend(cmd)
+    return subprocess.run(full_cmd, cwd=cwd, capture_output=False)
+
+
+def get_repo_dir(data_dir: str, git_url: str, ref: str) -> str:
+    """Generate a unique directory name for a git repo + ref combination."""
+    # Extract repo name from URL
+    repo_name = git_url.rstrip('/').split('/')[-1]
+    if repo_name.endswith('.git'):
+        repo_name = repo_name[:-4]
+
+    # Sanitize ref for use in directory name
+    safe_ref = ref.replace('/', '_').replace('\\', '_')
+
+    return os.path.join(data_dir, 'repos', f'{repo_name}_{safe_ref}')
+
+
+def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str, user: str) -> bool:
+    """Clone or update a git repository to a specific ref."""
+    repo_path = Path(repo_dir)
+
+    if repo_path.exists():
+        print(f"  Updating existing repo: {repo_dir}")
+        # Fetch and checkout
+        result = run_as_user(['git', 'fetch', '--all', '--tags'], user, cwd=repo_dir)
+        if result.returncode != 0:
+            print(f"  Warning: git fetch failed", file=sys.stderr)
+            return False
+    else:
+        print(f"  Cloning: {git_url}")
+        repo_path.parent.mkdir(parents=True, exist_ok=True)
+        # Shallow clone for efficiency
+        result = run_as_user(['git', 'clone', '--depth', '1', git_url, repo_dir], user)
+        if result.returncode != 0:
+            print(f"  Error: git clone failed", file=sys.stderr)
+            return False
+        # Fetch all refs for checkout
+        result = run_as_user(['git', 'fetch', '--all', '--tags'], user, cwd=repo_dir)
+
+    # Checkout the specific ref
+    print(f"  Checking out {ref_type}: {ref}")
+    result = run_as_user(['git', 'checkout', ref], user, cwd=repo_dir)
+    if result.returncode != 0:
+        print(f"  Error: git checkout failed", file=sys.stderr)
+        return False
+
+    # Pull if it's a branch
+    if ref_type == 'branch':
+        run_as_user(['git', 'pull', '--ff-only'], user, cwd=repo_dir)
+
+    return True
+
+
+def run_docloader(source_path: str, config: dict, product: str, version: str,
+                  user: str, password_file: str, dry_run: bool = False) -> bool:
+    """Run pgedge-docloader for a source."""
+    db = config['database']
+    cols = config['columns']
+
+    cmd = [
+        'pgedge-docloader',
+        '--source', source_path,
+        '--db-host', db['host'],
+        '--db-port', str(db['port']),
+        '--db-name', db['name'],
+        '--db-user', db['user'],
+        '--db-sslmode', db.get('sslmode', 'prefer'),
+        '--db-table', db['table'],
+        '--col-doc-title', cols['title'],
+        '--col-doc-content', cols['content'],
+        '--col-file-name', cols['filename'],
+        '--col-row-created', cols['row_created'],
+        '--col-row-updated', cols['row_updated'],
+        '--set-column', f'product={product}',
+        '--update',
+    ]
+
+    if version:
+        cmd.extend(['--set-column', f'version={version}'])
+    else:
+        cmd.extend(['--set-column', 'version='])
+
+    if dry_run:
+        print(f"  Would run: {' '.join(cmd)}")
+        return True
+
+    # Set PGPASSWORD from password file
+    env = {}
+    if password_file and os.path.exists(password_file):
+        with open(password_file, 'r') as f:
+            env['PGPASSWORD'] = f.read().strip()
+
+    print(f"  Running docloader for: {source_path}")
+
+    # Build the command - pass environment through subprocess, not command line
+    full_cmd = ['sudo', '--preserve-env=PGPASSWORD', '-u', user]
+    full_cmd.extend(cmd)
+
+    # Pass PGPASSWORD via environment to avoid exposure in process list
+    run_env = os.environ.copy()
+    if env:
+        run_env.update(env)
+
+    result = subprocess.run(full_cmd, capture_output=False, env=run_env)
+    return result.returncode == 0
+
+
+def process_source(index: int, source: dict, config: dict, user: str, dry_run: bool = False) -> bool:
+    """Process a single documentation source."""
+    product = source.get('product', 'Unknown')
+    version = source.get('version', '')
+    doc_path = source.get('doc_path', '**/*.md')
+
+    print(f"\n[{index}] Processing: {product} {version}".strip())
+
+    data_dir = config.get('data_dir', '/var/lib/pgedge/docloader')
+    password_file = config['database'].get('password_file')
+
+    # Determine source path
+    if 'git_url' in source:
+        git_url = source['git_url']
+
+        # Determine ref type and value
+        if 'git_tag' in source:
+            ref = source['git_tag']
+            ref_type = 'tag'
+        else:
+            ref = source.get('git_branch', 'main')
+            ref_type = 'branch'
+
+        repo_dir = get_repo_dir(data_dir, git_url, ref)
+
+        if not dry_run:
+            # Ensure repos directory exists with correct ownership
+            repos_dir = os.path.join(data_dir, 'repos')
+            os.makedirs(repos_dir, exist_ok=True)
+            subprocess.run(['chown', '-R', f'{user}:{user}', repos_dir], check=True)
+
+            if not clone_or_update_repo(git_url, ref, ref_type, repo_dir, user):
+                print(f"  Error: Failed to clone/update repository", file=sys.stderr)
+                return False
+        else:
+            print(f"  Would clone/update: {git_url} ({ref_type}: {ref})")
+
+        source_path = os.path.join(repo_dir, doc_path)
+
+    elif 'local_path' in source:
+        local_path = source['local_path']
+        source_path = os.path.join(local_path, doc_path)
+
+    else:
+        print(f"  Error: Source must have either 'git_url' or 'local_path'", file=sys.stderr)
+        return False
+
+    return run_docloader(source_path, config, product, version, user, password_file, dry_run)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Load documentation into the RAG database',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=f'''
+Configuration file: {CONFIG_FILE}
+
+Examples:
+  sudo load-docs              # Run all steps and load all sources
+  sudo load-docs --dry-run    # Show what would be done
+  sudo load-docs --source 0   # Load only the first source
+  sudo load-docs --list       # List all sources
+  sudo load-docs --skip-prep  # Skip prep steps, just load docs
+'''
+    )
+    parser.add_argument('--dry-run', '-n', action='store_true',
+                        help='Show what would be done without making changes')
+    parser.add_argument('--source', '-s', type=int, metavar='N',
+                        help='Process only source N (0-indexed)')
+    parser.add_argument('--list', '-l', action='store_true',
+                        help='List all sources and exit')
+    parser.add_argument('--config', '-c', default=CONFIG_FILE,
+                        help='Path to configuration file')
+
+    # Skip options for preparatory steps
+    parser.add_argument('--skip-crawl', action='store_true',
+                        help='Skip website crawling step')
+    parser.add_argument('--skip-packages', action='store_true',
+                        help='Skip package repository scanning step')
+    parser.add_argument('--skip-wiki', action='store_true',
+                        help='Skip wiki extraction step')
+    parser.add_argument('--skip-prep', action='store_true',
+                        help='Skip all preparatory steps (crawl, packages, wiki)')
+
+    args = parser.parse_args()
+
+    # Check if running as root
+    if os.geteuid() != 0:
+        print("This script must be run as root (use sudo)", file=sys.stderr)
+        sys.exit(1)
+
+    # Load configuration
+    if not os.path.exists(args.config):
+        print(f"Error: Configuration file not found: {args.config}", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        config = load_config(args.config)
+    except Exception as e:
+        print(f"Error: Failed to load configuration: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    sources = config.get('sources', [])
+    if not sources:
+        print("No sources configured in config file", file=sys.stderr)
+        sys.exit(1)
+
+    # List mode
+    if args.list:
+        print(f"Documentation sources ({len(sources)} total):\n")
+        for i, source in enumerate(sources):
+            product = source.get('product', 'Unknown')
+            version = source.get('version', '')
+            if 'git_url' in source:
+                ref = source.get('git_tag') or source.get('git_branch', 'main')
+                print(f"  [{i}] {product} {version} ({ref})")
+            else:
+                print(f"  [{i}] {product} {version} (local)")
+        sys.exit(0)
+
+    # Ensure data directory exists
+    data_dir = config.get('data_dir', '/var/lib/pgedge/docloader')
+    os.makedirs(data_dir, exist_ok=True)
+    subprocess.run(['chown', '-R', f'{RUN_USER}:{RUN_USER}', data_dir], check=True)
+
+    print(f"Loading documentation from: {args.config}")
+    print(f"Data directory: {data_dir}")
+
+    # Run preparatory steps (unless skipped)
+    prep_warnings = []
+
+    if not args.skip_prep:
+        # Step 1: Crawl websites
+        if not args.skip_crawl:
+            if not run_prep_script('crawl-website', 'Crawling websites', args.dry_run):
+                prep_warnings.append('Website crawling had warnings')
+
+        # Step 2: Scan package repositories
+        if not args.skip_packages:
+            if not run_prep_script('scan-packages', 'Scanning package repositories', args.dry_run):
+                prep_warnings.append('Package scanning had warnings')
+
+        # Step 3: Extract wiki content
+        if not args.skip_wiki:
+            if not run_prep_script('extract-wiki', 'Extracting wiki content', args.dry_run,
+                                   requires_creds=ATLASSIAN_CREDS):
+                prep_warnings.append('Wiki extraction had warnings')
+    else:
+        print("\nSkipping all preparatory steps (--skip-prep)")
+
+    # Step 4: Load documentation
+    print(f"\n{'=' * 60}")
+    print("Step: Loading documentation into database")
+    print('=' * 60)
+
+    # Process sources
+    if args.source is not None:
+        if args.source < 0 or args.source >= len(sources):
+            print(f"Error: Source index {args.source} out of range (0-{len(sources)-1})", file=sys.stderr)
+            sys.exit(1)
+        sources_to_process = [(args.source, sources[args.source])]
+    else:
+        sources_to_process = list(enumerate(sources))
+
+    success_count = 0
+    fail_count = 0
+
+    for index, source in sources_to_process:
+        try:
+            if process_source(index, source, config, RUN_USER, args.dry_run):
+                success_count += 1
+            else:
+                fail_count += 1
+        except Exception as e:
+            print(f"  Error: {e}", file=sys.stderr)
+            fail_count += 1
+
+    print(f"\n{'=' * 60}")
+    print("Summary")
+    print('=' * 60)
+
+    if prep_warnings:
+        print(f"Prep warnings: {len(prep_warnings)}")
+        for warning in prep_warnings:
+            print(f"  - {warning}")
+
+    print(f"Documentation loading: {success_count} successful, {fail_count} failed")
+
+    sys.exit(0 if fail_count == 0 else 1)
+
+
+if __name__ == '__main__':
+    main()

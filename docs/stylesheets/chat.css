@@ -1,0 +1,695 @@
+/* ==========================================================================
+   Ask Ellie Chat Interface
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties (Theme Integration)
+   -------------------------------------------------------------------------- */
+:root {
+    --ellie-primary: #4589AF;
+    --ellie-primary-dark: #3A7799;
+    --ellie-fab-size: 56px;
+    --ellie-window-width: 380px;
+    --ellie-window-height: 500px;
+    --ellie-border-radius: 12px;
+    --ellie-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --ellie-shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --ellie-transition: 200ms ease-out;
+}
+
+/* Light mode */
+[data-md-color-scheme="default"] {
+    --ellie-bg: #ffffff;
+    --ellie-bg-secondary: #f5f5f5;
+    --ellie-text: #333333;
+    --ellie-text-muted: #666666;
+    --ellie-border: #e0e0e0;
+    --ellie-user-bubble: var(--ellie-primary);
+    --ellie-user-text: #ffffff;
+    --ellie-assistant-bubble: #f0f0f0;
+    --ellie-assistant-text: #333333;
+}
+
+/* Dark mode */
+[data-md-color-scheme="slate"] {
+    --ellie-bg: #1e1e1e;
+    --ellie-bg-secondary: #2d2d2d;
+    --ellie-text: #e0e0e0;
+    --ellie-text-muted: #a0a0a0;
+    --ellie-border: #404040;
+    --ellie-user-bubble: var(--ellie-primary);
+    --ellie-user-text: #ffffff;
+    --ellie-assistant-bubble: #2d2d2d;
+    --ellie-assistant-text: #e0e0e0;
+}
+
+/* --------------------------------------------------------------------------
+   FAB (Floating Action Button)
+   -------------------------------------------------------------------------- */
+.ellie-fab {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    width: var(--ellie-fab-size);
+    height: var(--ellie-fab-size);
+    border-radius: 50%;
+    border: none;
+    background: var(--ellie-primary);
+    color: white;
+    cursor: pointer;
+    box-shadow: var(--ellie-shadow);
+    z-index: 950;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.5);
+    transition: transform var(--ellie-transition),
+                box-shadow var(--ellie-transition),
+                opacity var(--ellie-transition);
+}
+
+.ellie-fab--visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+.ellie-fab--visible:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+}
+
+.ellie-fab--visible:active {
+    transform: scale(0.95);
+}
+
+.ellie-fab:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+.ellie-fab svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   Chat Window
+   -------------------------------------------------------------------------- */
+.ellie-window {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    width: var(--ellie-window-width);
+    height: var(--ellie-window-height);
+    max-height: calc(100vh - 120px);
+    background: var(--ellie-bg);
+    border-radius: var(--ellie-border-radius);
+    box-shadow: var(--ellie-shadow);
+    z-index: 951;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+    transition: opacity var(--ellie-transition),
+                transform var(--ellie-transition);
+}
+
+[data-md-color-scheme="slate"] .ellie-window {
+    box-shadow: var(--ellie-shadow-dark);
+}
+
+.ellie-window--open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Resize Handle (top-left corner)
+   -------------------------------------------------------------------------- */
+.ellie-resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+    z-index: 10;
+}
+
+.ellie-resize-handle::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid rgba(255, 255, 255, 0.5);
+    border-top: 2px solid rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    transition: opacity var(--ellie-transition);
+}
+
+.ellie-window:hover .ellie-resize-handle::before {
+    opacity: 1;
+}
+
+.ellie-window--resizing {
+    transition: none;
+    user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+.ellie-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--ellie-primary);
+    color: white;
+    flex-shrink: 0;
+}
+
+.ellie-header__info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ellie-header__avatar {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ellie-header__avatar svg {
+    width: 100%;
+    height: 100%;
+}
+
+.ellie-header__title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.ellie-header__actions {
+    display: flex;
+    gap: 8px;
+}
+
+.ellie-header__btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--ellie-transition);
+}
+
+.ellie-header__btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.ellie-header__btn:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+.ellie-header__btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* --------------------------------------------------------------------------
+   Messages Area
+   -------------------------------------------------------------------------- */
+.ellie-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ellie-message {
+    display: flex;
+    max-width: 85%;
+}
+
+.ellie-message--user {
+    align-self: flex-end;
+}
+
+.ellie-message--assistant {
+    align-self: flex-start;
+}
+
+.ellie-message__content {
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.ellie-message--user .ellie-message__content {
+    background: var(--ellie-user-bubble);
+    color: var(--ellie-user-text);
+    border-bottom-right-radius: 4px;
+}
+
+.ellie-message--assistant .ellie-message__content {
+    background: var(--ellie-assistant-bubble);
+    color: var(--ellie-assistant-text);
+    border-bottom-left-radius: 4px;
+}
+
+/* Streaming indicator */
+.ellie-message--streaming .ellie-message__content::after {
+    content: '\25FC';
+    margin-left: 2px;
+    animation: ellie-blink 1s infinite;
+}
+
+@keyframes ellie-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* Busy status indicator */
+.ellie-busy-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    color: var(--ellie-text-muted);
+    font-size: 13px;
+    font-style: italic;
+    animation: ellie-fade-in 0.3s ease-out;
+}
+
+.ellie-busy-status::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--ellie-border);
+    border-top-color: var(--ellie-primary);
+    border-radius: 50%;
+    animation: ellie-spin 0.8s linear infinite;
+}
+
+@keyframes ellie-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes ellie-fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Code formatting in messages */
+.ellie-message__content code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9em;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content code {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ellie-message__content pre {
+    position: relative;
+    margin: 6px 0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: pre !important;
+    max-width: 100%;
+    /* Scrollbar styling - Firefox */
+    scrollbar-width: thin !important;
+    scrollbar-color: #c0c0c0 transparent !important;
+}
+
+/* Copy button for code blocks */
+.ellie-message__content pre .ellie-copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-size: 11px;
+    color: #666;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.ellie-message__content pre:hover .ellie-copy-btn {
+    opacity: 1;
+}
+
+.ellie-message__content pre .ellie-copy-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    color: #333;
+}
+
+.ellie-message__content pre .ellie-copy-btn--copied {
+    background: var(--ellie-primary);
+    color: white;
+    border-color: var(--ellie-primary);
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre .ellie-copy-btn {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #aaa;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre:hover .ellie-copy-btn {
+    opacity: 1;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre .ellie-copy-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre {
+    background: rgba(0, 0, 0, 0.3);
+    scrollbar-color: #555555 transparent !important;
+}
+
+/* Code block scrollbar styling - webkit */
+.ellie-message__content pre::-webkit-scrollbar {
+    height: 6px;
+}
+
+.ellie-message__content pre::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ellie-message__content pre::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 3px;
+}
+
+.ellie-message__content pre::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+}
+
+/* Dark mode code block scrollbar */
+[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb {
+    background: #555555;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content pre::-webkit-scrollbar-thumb:hover {
+    background: #777777;
+}
+
+.ellie-message__content pre code,
+.ellie-message__content pre code.hljs,
+[data-md-color-scheme="slate"] .ellie-message__content pre code,
+[data-md-color-scheme="slate"] .ellie-message__content pre code.hljs {
+    background: transparent !important;
+    background-color: transparent !important;
+    padding: 0;
+    white-space: pre !important;
+    display: block;
+    /* Override highlight.js overflow - scrollbar should be on pre, not code */
+    overflow-x: visible !important;
+}
+
+/* Ensure all elements inside code blocks have transparent backgrounds */
+.ellie-message__content pre code *,
+.ellie-message__content pre span,
+[data-md-color-scheme="slate"] .ellie-message__content pre code *,
+[data-md-color-scheme="slate"] .ellie-message__content pre span {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Pending code block indicator (streaming) */
+.ellie-message__content .ellie-code--pending {
+    position: relative;
+}
+
+.ellie-message__content .ellie-code--pending::after {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--ellie-primary);
+    animation: ellie-cursor-blink 1s step-end infinite;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+}
+
+@keyframes ellie-cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Highlight.js dark mode overrides */
+[data-md-color-scheme="slate"] .ellie-message__content .hljs {
+    color: #c9d1d9;
+    background: transparent;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-comment,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-quote {
+    color: #8b949e;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-keyword,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-selector-tag,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-type {
+    color: #ff7b72;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-string,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-attr {
+    color: #a5d6ff;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-number,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-literal {
+    color: #79c0ff;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-function,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-title {
+    color: #d2a8ff;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-variable,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-params {
+    color: #c9d1d9;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-built_in {
+    color: #ffa657;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-subst {
+    color: #c9d1d9;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-template-variable,
+[data-md-color-scheme="slate"] .ellie-message__content .hljs-meta {
+    color: #79c0ff;
+}
+
+.ellie-message__content a {
+    color: var(--ellie-primary);
+    text-decoration: underline;
+}
+
+/* Headings in messages */
+.ellie-message__content h2,
+.ellie-message__content h3,
+.ellie-message__content h4,
+.ellie-message__content h5,
+.ellie-message__content h6 {
+    margin: 0.75em 0 0.35em 0;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.ellie-message__content h2:first-child,
+.ellie-message__content h3:first-child,
+.ellie-message__content h4:first-child,
+.ellie-message__content h5:first-child,
+.ellie-message__content h6:first-child {
+    margin-top: 0;
+}
+
+.ellie-message__content h2 { font-size: 1.25em; }
+.ellie-message__content h3 { font-size: 1.15em; }
+.ellie-message__content h4 { font-size: 1.05em; }
+.ellie-message__content h5 { font-size: 1em; font-weight: 600; }
+.ellie-message__content h6 { font-size: 0.95em; font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   Input Area
+   -------------------------------------------------------------------------- */
+.ellie-input-area {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px 8px;
+    background: var(--ellie-bg-secondary);
+    border-top: 1px solid var(--ellie-border);
+    flex-shrink: 0;
+}
+
+.ellie-input {
+    flex: 1;
+    min-height: 40px;
+    max-height: 120px;
+    padding: 10px 14px;
+    border: 1px solid var(--ellie-border);
+    border-radius: 20px;
+    background: var(--ellie-bg);
+    color: var(--ellie-text);
+    font-size: 14px;
+    line-height: 1.4;
+    resize: none;
+    outline: none;
+    transition: border-color var(--ellie-transition);
+    font-family: inherit;
+}
+
+.ellie-input::placeholder {
+    color: var(--ellie-text-muted);
+}
+
+.ellie-input:focus {
+    border-color: var(--ellie-primary);
+}
+
+.ellie-send-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--ellie-primary);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background var(--ellie-transition),
+                transform var(--ellie-transition);
+}
+
+.ellie-send-btn:hover {
+    background: var(--ellie-primary-dark);
+}
+
+.ellie-send-btn:active {
+    transform: scale(0.95);
+}
+
+.ellie-send-btn:focus-visible {
+    outline: 2px solid var(--ellie-primary);
+    outline-offset: 2px;
+}
+
+.ellie-send-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.ellie-send-btn--stop {
+    background: #f44336;
+}
+
+.ellie-send-btn--stop:hover {
+    background: #d32f2f;
+}
+
+/* --------------------------------------------------------------------------
+   Disclaimer
+   -------------------------------------------------------------------------- */
+.ellie-disclaimer {
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    color: var(--ellie-text-muted);
+    padding-top: 6px;
+    line-height: 1.3;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+    .ellie-window {
+        width: calc(100vw - 32px);
+        right: 16px;
+        bottom: 16px;
+        height: calc(100vh - 100px);
+        max-height: none;
+    }
+
+    .ellie-fab {
+        right: 16px;
+        bottom: 16px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbar Styling
+   -------------------------------------------------------------------------- */
+.ellie-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ellie-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ellie-messages::-webkit-scrollbar-thumb {
+    background: var(--ellie-border);
+    border-radius: 3px;
+}
+
+.ellie-messages::-webkit-scrollbar-thumb:hover {
+    background: var(--ellie-text-muted);
+}
+
+/* Input textarea scrollbar - hide by default, show on hover/focus */
+.ellie-input {
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+}
+
+.ellie-input::-webkit-scrollbar {
+    width: 0;
+    display: none;
+}
