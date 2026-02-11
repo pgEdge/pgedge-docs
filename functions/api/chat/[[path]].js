@@ -49,14 +49,16 @@ export async function onRequest(context) {
   }
 
   try {
-    // Build the target URL
+    // Build the target URL, preserving query parameters
+    const requestUrl = new URL(request.url);
+    const search = requestUrl.search;
     let targetUrl;
     if (path.startsWith('v1/')) {
       // Direct API path (e.g., v1/health, v1/pipelines/...)
-      targetUrl = `${RAG_INTERNAL_URL}/${path}`;
+      targetUrl = `${RAG_INTERNAL_URL}/${path}${search}`;
     } else {
       // Default to pipeline endpoint
-      targetUrl = `${RAG_INTERNAL_URL}/v1/pipelines/${PIPELINE_NAME}`;
+      targetUrl = `${RAG_INTERNAL_URL}/v1/pipelines/${PIPELINE_NAME}${search}`;
     }
 
     // Forward the request

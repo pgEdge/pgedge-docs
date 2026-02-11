@@ -151,6 +151,7 @@
     password: "{{ pg_password }}"
     role_attr_flags: LOGIN,NOSUPERUSER,NOCREATEDB,NOCREATEROLE
     state: present
+  no_log: true
 
 - name: Create RAG database
   become: true
