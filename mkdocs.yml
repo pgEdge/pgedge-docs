@@ -419,8 +419,6 @@ nav:
     - v1.4.2: '!import https://github.com/pgEdge/ace.git?branch=v1.4.2'
     - v1.4.1: '!import https://github.com/pgEdge/ace.git?branch=v1.4.1'
     - v1.4.0: '!import https://github.com/pgEdge/ace.git?branch=v1.4.0'
-    - v1.3.5: '!import https://github.com/pgEdge/ace.git?branch=v1.3.5'
-    - v1.3.4: '!import https://github.com/pgEdge/ace.git?branch=v1.3.4'
     - Development: '!import https://github.com/pgEdge/ace.git?branch=main'
 
   - lolor:
