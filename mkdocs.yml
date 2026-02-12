@@ -412,10 +412,15 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE:
+    - v1.5.4: '!import https://github.com/pgEdge/ace.git?branch=v1.5.4'
+    - v1.5.3: '!import https://github.com/pgEdge/ace.git?branch=v1.5.3'
+    - v1.5.2: '!import https://github.com/pgEdge/ace.git?branch=v1.5.2'
     - v1.5.1: '!import https://github.com/pgEdge/ace.git?branch=fix-for-1.5.1-docs'
     - v1.4.2: '!import https://github.com/pgEdge/ace.git?branch=v1.4.2'
     - v1.4.1: '!import https://github.com/pgEdge/ace.git?branch=v1.4.1'
     - v1.4.0: '!import https://github.com/pgEdge/ace.git?branch=v1.4.0'
+    - v1.3.5: '!import https://github.com/pgEdge/ace.git?branch=v1.3.5'
+    - v1.3.4: '!import https://github.com/pgEdge/ace.git?branch=v1.3.4'
     - Development: '!import https://github.com/pgEdge/ace.git?branch=main'
 
   - lolor:
@@ -427,7 +432,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
   - Spock v5:
-    - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
+    - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
 
   - Control Plane:
