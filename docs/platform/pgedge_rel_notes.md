@@ -1,5 +1,15 @@
 # pgEdge Distributed Postgres (VM Edition) Release Notes
 
+## v25.5.0 on 2026-02-13
+
+  - Added support for updated Postgres versions 17.8, 16.11, and 15.16, as well as:
+      - Spock 5.0.5
+      - lolor 1.2.2
+      - pgbouncer 1.25.1
+      - pgbackrest 2.58.0
+      - postgis 3.5.4
+      - pgvector 0.8.1
+
 ## v25.4.0 on 2025-11-13
 
   - Added support for updated Postgres versions 18.1, 17.7, and 16.11.
