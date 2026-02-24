@@ -1,5 +1,12 @@
 # Creating and Modifying a Cluster Configuration File
 
+!!! note
+
+    pgEdge Distributed Postgres (the CLI) should be considered deprecated. We
+    suggest instead using
+    [pgEdge Control Plane](https://docs.pgedge.com/control-plane/installation/) 
+    for future deployments.
+
 You can use the CLI's `cluster` module to create a cluster configuration file that deploys and configures a pgEdge Distributed Postgres cluster, optionally running pgBackRest. The configuration file (`pgedge/cluster/cluster_name/cluster_name.json`) contains detailed information about your cluster; that information is used by [CLI management commands](../pgedge_commands/index.md) like `cluster add-node`, `cluster remove-node`, and the ACE extension. 
 
 **Overview - deploying a cluster with a cluster configuration file**
