@@ -1,5 +1,12 @@
 # Tutorial - Manually Configuring a Multi-Master Cluster with the CLI
 
+!!! note
+
+    pgEdge Distributed Postgres (the CLI) should be considered deprecated. We
+    suggest instead using
+    [pgEdge Control Plane](https://docs.pgedge.com/control-plane/installation/) 
+    for future deployments.
+
 The CLI's `setup` command used in this deployment method is designed to create clusters with nodes that reside on different hosts, and have unique IP addresses. In this tutorial, we will install a multi-master pgEdge Distributed Postgres cluster, manually create the nodes and subscriptions, and then use pgbench to create some tables and perform some read/write activity on the cluster.
 
 !!! info
