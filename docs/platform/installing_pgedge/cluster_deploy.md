@@ -1,5 +1,12 @@
 # Tutorial - Using the CLI Cluster Module to Deploy a Distributed Cluster
 
+!!! note
+
+    pgEdge Distributed Postgres (the CLI) should be considered deprecated. We
+    suggest instead using
+    [pgEdge Control Plane](https://docs.pgedge.com/control-plane/installation/) 
+    for future deployments.
+
 pgEdge Distributed Postgres supports modules that simplify deployment and management of a Postgres cluster.  One of those modules is the `cluster` module; this tutorial focuses on using `cluster` module functionality to deploy a distributed cluster.  The CLI `cluster` module allows you to:
 
 * use the `pgedge cluster json-create` command to create a cluster definition file that defines a distributed replication cluster.

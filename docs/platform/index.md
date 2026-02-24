@@ -2,6 +2,13 @@
 
 pgEdge Distributed Postgres (VM Edition) includes a command line interface (CLI) that simplifies creation and management of a multi-master distributed pgEdge Postgres cluster in your own data center or cloud account.
 
+!!! note
+
+    pgEdge Distributed Postgres (the CLI) should be considered deprecated. We
+    suggest instead using
+    [pgEdge Control Plane](https://docs.pgedge.com/control-plane/installation/) 
+    for future deployments.
+
 For self-hosted and on-prem Installations, the CLI offers the flexibility to simply and quickly deploy distributed multi-master clusters with containers/VMs or CLI/API installers and tooling. For web and AI applications that rely on Postgres for low latency and high availability, the CLI running on a Cloud provider can ensure your applications are highly available and globally responsive. You can seamlessly deploy the CLI on:
 
 * [Akamai](https://www.pgedge.com/landing-pages/platform-download-for-akamai)
