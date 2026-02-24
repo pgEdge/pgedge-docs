@@ -1,5 +1,12 @@
 # Installing pgEdge Distributed Postgres (VM Edition)
 
+!!! note
+
+    pgEdge Distributed Postgres (the CLI) should be considered deprecated. We
+    suggest instead using
+    [pgEdge Control Plane](https://docs.pgedge.com/control-plane/installation/) 
+    for future deployments.
+
 There are several ways to install pgEdge Distributed Postgres (VM Edition) and deploy a replication cluster.  You can:
 
 * Use the VM Edition's command-line interface (CLI) `cluster` module to create a .json file that [deploys a cluster on local or remote hosts](../installing_pgedge/cluster_deploy.md). This method also simplifies installation and configurion of pgBackRest on the new cluster.
