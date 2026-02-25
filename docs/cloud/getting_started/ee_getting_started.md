@@ -43,7 +43,7 @@ account.
 When you're ready to get started, select the Link Cloud Account button to
 choose your cloud provider.
 
-![pgEdge Cloud Edition free trial](../images/gs_select_provider.png)
+![pgEdge Cloud Edition free trial](../images/select_provider.png)
 
 
 
