@@ -1,6 +1,6 @@
 # Getting Started with pgEdge Postgres Cloud Edition
 
-Signing up for pgEdge Postgres Cloud edition is easy; simply navigate to
+Getting started with pgEdge Postgres Cloud edition is easy; simply navigate to
 [the pgEdge sign-in page](https://app.pgedge.com/login?plan=developer&screen_hint=signup)
 and provide a name and password, or log in with your Google or Github
 account.
