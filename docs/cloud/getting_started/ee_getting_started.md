@@ -63,7 +63,7 @@ Next, you'll create a backup store.  You can use the link on the progress
 tracker to navigate to a page where you'll define the store on your preferred
 provider.
 
-![Setup Progress tracker](../images/gs_backup_stores.png)
+![Setup Progress tracker](../images/gs_backup_store.png)
 
 Select [Create Backup Store](../cluster/backup_store.md)
 to navigate to the `Create Backup Store` dialog; complete the dialog and
