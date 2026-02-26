@@ -26,9 +26,8 @@ resources on that provider as well - those resources include:
 * SSH keys
 
 Before creating your first cluster, you need to link your Cloud provider
-account with pgEdge. To 
-[link a cloud account](../prerequisites/cloud_accounts/index.md),
-select the `Go to Cloud Accounts` button on the Welcome dialog.
+account with pgEdge. To get started, select the `Go to Cloud Accounts` button
+on the Welcome dialog.
 
 ![Linking a Cloud Account](../images/gs_link_cloud_account.png)
 
@@ -40,10 +39,70 @@ need to create an account with each provider, as well as a link to the
 provider-specific `Setup guide` for detailed information about linking your
 account. 
 
-When you're ready to get started, select the Link Cloud Account button to
+When you're ready to get started, select the `Link Cloud Account` button to
 choose your cloud provider.
 
-![pgEdge Cloud Edition free trial](../images/select_provider.png)
+![Selecting a Cloud Provider](../images/select_provider.png)
+
+Choose your provider to open the account details dialog and provide the
+information required by each provider to deploy on Cloud.
+
+![Provide Cloud Provider details](../images/gs_account_details.png)
+
+If you're [deploying on AWS](../prerequisites/cloud_accounts/link_to_AWS.md),
+you can use the `Create Stack Wizard` to use a completed AWS CloudFormation
+template to create an AWS role with the required permissions; use the link
+circled in red above to navigate to the wizard and retreive your ARN.
+
+When you've finished adding a provider account, the new account is displayed
+on the `Cloud Accounts` page, and your setup progress is updated:
+
+![Setup Progress tracker](../images/gs_progress_one.png)
+
+Next, you'll create a backup store.  You can use the link on the progress
+tracker to navigate to a page where you'll define the store on your preferred
+provider.
+
+![Setup Progress tracker](../images/gs_backup_stores.png)
+
+Select [Create Backup Store](../cluster/backup_store.md)
+to navigate to the `Create Backup Store` dialog; complete the dialog and
+click `Create Backup Store` to continue.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
