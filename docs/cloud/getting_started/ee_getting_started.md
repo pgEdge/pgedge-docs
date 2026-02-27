@@ -80,12 +80,19 @@ the link on the progress tracker to navigate to an informational page about impo
 
 ![Select Import SSH Key](../cluster/gs_import_ssh_key.png)
 
-When you're ready, select the `Import SSH Key` button.
+When you're ready, select the `Import SSH Key` button. When you've finished
+importing an SSH key, the progress tracker advances, and you can see the
+imported SSH key on the `SSH Keys` dialog.
 
+![Setup Progress tracker](../images/gs_progress_three.png)
 
+Next, you'll [create a cluster](../cluster/create_cluster.md).  You can use
+the link on the progress tracker to navigate to an informational page about importing keys.
 
+![Select Import SSH Key](../cluster/gs_create_cluster.png)
 
-
+When you're ready to create a cluster, select the `Create Cluster` button to
+navigate to the `Create New Cluster` dialog. 
 
 
 
