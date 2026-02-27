@@ -60,19 +60,27 @@ on the `Cloud Accounts` page, and your setup progress is updated:
 ![Setup Progress tracker](../images/gs_progress_one.png)
 
 Next, you'll create a backup store.  You can use the link on the progress
-tracker to navigate to a page where you'll define the store on your preferred
-provider.
-
-![Setup Progress tracker](../images/gs_backup_store.png)
+tracker (shown above) to navigate to a page where you'll define the store on
+your preferred provider.
 
 Select [Create Backup Store](../cluster/backup_store.md)
 to navigate to the `Create Backup Store` dialog; complete the dialog and
 click `Create Backup Store` to continue.
 
+![Select Create Backup Store](../cluster/gs_backup_store.md)
 
+When you've finished creating the backup store, the store is displayed on the
+Backup Stores dialog, and the progress tracker advances, prompting you to
+import an SSH key:
 
+![Setup Progress tracker](../images/gs_progress_two.png)
 
+Next, you'll [import an SSH key](../prerequisites/ssh_key.md).  You can use
+the link on the progress tracker to navigate to an informational page about importing keys.
 
+![Select Import SSH Key](../cluster/gs_import_ssh_key.md)
+
+When you're ready, select the `Import SSH Key` button.
 
 
 
