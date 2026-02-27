@@ -78,7 +78,7 @@ import an SSH key:
 Next, you'll [import an SSH key](../prerequisites/ssh_key.md).  You can use
 the link on the progress tracker to navigate to an informational page about importing keys.
 
-![Select Import SSH Key](../cluster/gs_import_ssh_key.md)
+![Select Import SSH Key](../cluster/gs_import_ssh_key.png)
 
 When you're ready, select the `Import SSH Key` button.
 
