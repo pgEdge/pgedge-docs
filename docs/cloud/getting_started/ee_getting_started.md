@@ -84,9 +84,13 @@ and you can see the imported SSH key on the `SSH Keys` dialog.
 
 ![Progress tracker](../images/gs_progress_three.png)
 
-Next, you'll [create a cluster](../cluster/create_cluster.md).  You can use
-the link on the progress tracker to navigate to a page with more information
-about cluster creation and handy links.
+Next, you'll [create a cluster](../cluster/create_cluster.md). A cluster is a
+database 'container' that can house one or more databases in one or more
+regions. Single-region clusters are not distributed; distributed clusters
+have databases in multiple regions. 
+
+Use the link on the progress tracker to navigate to a page with more
+information about cluster creation and handy links.
 
 ![Select Create Cluster](../images/gs_create_cluster.png)
 
