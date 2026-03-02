@@ -63,7 +63,7 @@ Select [Create Backup Store](../cluster/gs_backup_store.md)
 to navigate to the `Create Backup Store` dialog; complete the dialog and
 click `Create Backup Store` to continue.
 
-![Select Create Backup Store](../cluster/gs_backup_store.md)
+![Select Create Backup Store](../images/gs_backup_store.md)
 
 When you've finished creating the backup store, the store is displayed on the
 Backup Stores dialog, and the progress tracker advances, prompting you to
