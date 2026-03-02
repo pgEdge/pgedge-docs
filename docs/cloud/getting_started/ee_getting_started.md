@@ -85,12 +85,14 @@ and you can see the imported SSH key on the `SSH Keys` dialog.
 ![Progress tracker](../images/gs_progress_three.png)
 
 Next, you'll [create a cluster](../cluster/create_cluster.md).  You can use
-the link on the progress tracker to navigate to the cluster creation page.
+the link on the progress tracker to navigate to a page with more information
+about cluster creation and handy links.
 
 ![Select Create Cluster](../images/gs_create_cluster.png)
 
-When you've finished creating a cluster, the progress tracker advances, and
-you can see the imported cluster definition on the `Clusters` page.
+Then, to create a cluster, click the `Create Cluster` button; when you've 
+finished creating a cluster, the progress tracker advances, and you can see
+the imported cluster definition on the `Clusters` page.
 
 ![Progress tracker](../images/gs_progress_four.png)
 
