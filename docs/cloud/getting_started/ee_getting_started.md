@@ -26,23 +26,19 @@ resources on that provider as well - those resources include:
 * SSH keys
 
 Before creating your first cluster, you need to link your Cloud provider
-account with pgEdge. To get started, select the `Go to Cloud Accounts` button
-on the Welcome dialog.
+account with pgEdge. 
 
-![Linking a Cloud Account](../images/gs_link_cloud_account.png)
+![Linking a Cloud Account](../images/gs_link_cloud_account.png) 
 
-The progress tracker in the lower-right corner helps walk you through the
-deployment steps as you prepare your account. 
-
-Panes in the center of the page list the credentials and artifacts you will
-need to create an account with each provider, as well as a link to the
-provider-specific `Setup guide` for detailed information about linking your
-account. 
+Information panes in the center of the page list the credentials and artifacts
+you will need to create an account with each provider, as well as a link to
+the provider-specific `Setup guide` for detailed information about linking
+your account. 
 
 When you're ready to get started, select the `Link Cloud Account` button to
 choose your cloud provider.
 
-![Selecting a Cloud Provider](../images/select_provider.png)
+![Selecting a Cloud Provider](../images/gs_select_provider.png)
 
 Choose your provider to open the account details dialog and provide the
 information required by each provider to deploy on Cloud.
@@ -55,7 +51,7 @@ template to create an AWS role with the required permissions; use the link
 circled in red above to navigate to the wizard and retreive your ARN.
 
 When you've finished adding a provider account, the new account is displayed
-on the `Cloud Accounts` page, and your setup progress is updated.
+on the `Cloud Accounts` page, and the progress dialog is updated.
 
 ![Setup Progress tracker](../images/gs_progress_one.png)
 
@@ -63,7 +59,7 @@ Next, you'll create a backup store.  You can use the link on the progress
 tracker (shown above) to navigate to a page with information about creating
 a backup store on your preferred provider.
 
-Select [Create Backup Store](../cluster/backup_store.md)
+Select [Create Backup Store](../cluster/gs_backup_store.md)
 to navigate to the `Create Backup Store` dialog; complete the dialog and
 click `Create Backup Store` to continue.
 
