@@ -55,13 +55,13 @@ template to create an AWS role with the required permissions; use the link
 circled in red above to navigate to the wizard and retreive your ARN.
 
 When you've finished adding a provider account, the new account is displayed
-on the `Cloud Accounts` page, and your setup progress is updated:
+on the `Cloud Accounts` page, and your setup progress is updated.
 
 ![Setup Progress tracker](../images/gs_progress_one.png)
 
 Next, you'll create a backup store.  You can use the link on the progress
-tracker (shown above) to navigate to a page where you'll define the store on
-your preferred provider.
+tracker (shown above) to navigate to a page with information about creating
+a backup store on your preferred provider.
 
 Select [Create Backup Store](../cluster/backup_store.md)
 to navigate to the `Create Backup Store` dialog; complete the dialog and
@@ -71,7 +71,7 @@ click `Create Backup Store` to continue.
 
 When you've finished creating the backup store, the store is displayed on the
 Backup Stores dialog, and the progress tracker advances, prompting you to
-import an SSH key:
+import an SSH key.
 
 ![Setup Progress tracker](../images/gs_progress_two.png)
 
@@ -87,13 +87,22 @@ imported SSH key on the `SSH Keys` dialog.
 ![Setup Progress tracker](../images/gs_progress_three.png)
 
 Next, you'll [create a cluster](../cluster/create_cluster.md).  You can use
-the link on the progress tracker to navigate to an informational page about importing keys.
+the link on the progress tracker to navigate to the cluster creation page.
+
+![Select Create Cluster](../cluster/gs_create_cluster.png)
+
+When you've finished creating a cluster, the progress tracker advances, and
+you can see the imported cluster definition on the `Clusters` page.
+
+![Setup Progress tracker](../images/gs_progress_four.png)
+
+Next, you'll [create a database](../cluster/create_database.md).  You can use
+the link on the progress tracker to navigate to the database creation page.
 
 ![Select Import SSH Key](../cluster/gs_create_cluster.png)
 
-When you're ready to create a cluster, select the `Create Cluster` button to
-navigate to the `Create New Cluster` dialog. 
-
+When you've finished, select Create Database to create your new database and
+close the progress tracker.
 
 
 
