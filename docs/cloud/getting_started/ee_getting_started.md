@@ -102,7 +102,7 @@ the link on the progress tracker to navigate to the database creation page.
 ![Select Import SSH Key](../images/gs_create_database.png)
 
 When you're ready, select `Create Database` to create your new database and
-close the progress tracker.
+exit the progress tracker.
 
 
 
