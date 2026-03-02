@@ -56,8 +56,9 @@ on the `Cloud Accounts` page, and the progress dialog is updated.
 ![Setup Progress tracker](../images/gs_progress_one.png)
 
 Next, you'll create a backup store.  You can use the link on the progress
-tracker (shown above) for more information, and to navigate to a page where
-you can define a backup store on your preferred provider.
+tracker (shown above) to navigate to a screen that displays information about
+backup stores, with a link to a page where you can define a backup store on
+your preferred provider.
 
 ![Select Create Backup Store](../images/gs_backup_store.png)
 
