@@ -73,20 +73,21 @@ import an SSH key.
 ![Progress tracker](../images/gs_progress_two.png)
 
 Next, you'll [import an SSH key](../prerequisites/ssh_key.md).  You can use
-the link on the progress tracker to navigate to an informational page about importing keys.
+the link on the progress tracker to navigate to an informational page with
+links to more information about importing keys.
 
 ![Import an SSH Key](../images/gs_import_ssh_key.png)
 
-When you're ready, select the `Import SSH Key` button. When you've finished
-importing an SSH key, the progress tracker advances, and you can see the
-imported SSH key on the `SSH Keys` dialog.
+When you're ready, select the `Import SSH Key` button to advance to the import
+page. When you've finished importing an SSH key, the progress tracker advances
+and you can see the imported SSH key on the `SSH Keys` dialog.
 
 ![Progress tracker](../images/gs_progress_three.png)
 
 Next, you'll [create a cluster](../cluster/create_cluster.md).  You can use
 the link on the progress tracker to navigate to the cluster creation page.
 
-![Select Create Cluster](../cluster/gs_create_cluster.png)
+![Select Create Cluster](../images/gs_create_cluster.png)
 
 When you've finished creating a cluster, the progress tracker advances, and
 you can see the imported cluster definition on the `Clusters` page.
@@ -96,7 +97,7 @@ you can see the imported cluster definition on the `Clusters` page.
 Next, you'll [create a database](../cluster/create_database.md).  You can use
 the link on the progress tracker to navigate to the database creation page.
 
-![Select Import SSH Key](../cluster/gs_create_cluster.png)
+![Select Import SSH Key](../images/gs_create_database.png)
 
 When you've finished, select Create Database to create your new database and
 close the progress tracker.
