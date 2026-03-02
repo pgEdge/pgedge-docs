@@ -56,16 +56,16 @@ on the `Cloud Accounts` page, and the progress dialog is updated.
 ![Setup Progress tracker](../images/gs_progress_one.png)
 
 Next, you'll create a backup store.  You can use the link on the progress
-tracker (shown above) to navigate to a page with information about creating
-a backup store on your preferred provider.
+tracker (shown above) for more information, and to navigate to a page where
+you can define a backup store on your preferred provider.
 
-Select [Create Backup Store](../cluster/gs_backup_store.md)
+![Select Create Backup Store](../images/gs_backup_store.png)
+
+Select [Create Backup Store](../cluster/backup_store.md)
 to navigate to the `Create Backup Store` dialog; complete the dialog and
 click `Create Backup Store` to continue.
 
-![Select Create Backup Store](../images/gs_backup_store.md)
-
-When you've finished creating the backup store, the store is displayed on the
+When you've finished defining the backup store, the store is displayed on the
 Backup Stores dialog, and the progress tracker advances, prompting you to
 import an SSH key.
 
