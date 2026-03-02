@@ -53,35 +53,35 @@ circled in red above to navigate to the wizard and retreive your ARN.
 When you've finished adding a provider account, the new account is displayed
 on the `Cloud Accounts` page, and the progress dialog is updated.
 
-![Setup Progress tracker](../images/gs_progress_one.png)
+![Progress tracker](../images/gs_progress_one.png)
 
 Next, you'll create a backup store.  You can use the link on the progress
 tracker (shown above) to navigate to a screen that displays information about
 backup stores, with a link to a page where you can define a backup store on
 your preferred provider.
 
-![Select Create Backup Store](../images/gs_backup_store.png)
+![Create a Backup Store](../images/gs_backup_store.png)
 
 Select [Create Backup Store](../cluster/backup_store.md)
 to navigate to the `Create Backup Store` dialog; complete the dialog and
 click `Create Backup Store` to continue.
 
 When you've finished defining the backup store, the store is displayed on the
-Backup Stores dialog, and the progress tracker advances, prompting you to
+`Backup Stores` dialog, and the progress tracker advances, prompting you to
 import an SSH key.
 
-![Setup Progress tracker](../images/gs_progress_two.png)
+![Progress tracker](../images/gs_progress_two.png)
 
 Next, you'll [import an SSH key](../prerequisites/ssh_key.md).  You can use
 the link on the progress tracker to navigate to an informational page about importing keys.
 
-![Select Import SSH Key](../cluster/gs_import_ssh_key.png)
+![Import an SSH Key](../images/gs_import_ssh_key.png)
 
 When you're ready, select the `Import SSH Key` button. When you've finished
 importing an SSH key, the progress tracker advances, and you can see the
 imported SSH key on the `SSH Keys` dialog.
 
-![Setup Progress tracker](../images/gs_progress_three.png)
+![Progress tracker](../images/gs_progress_three.png)
 
 Next, you'll [create a cluster](../cluster/create_cluster.md).  You can use
 the link on the progress tracker to navigate to the cluster creation page.
@@ -91,7 +91,7 @@ the link on the progress tracker to navigate to the cluster creation page.
 When you've finished creating a cluster, the progress tracker advances, and
 you can see the imported cluster definition on the `Clusters` page.
 
-![Setup Progress tracker](../images/gs_progress_four.png)
+![Progress tracker](../images/gs_progress_four.png)
 
 Next, you'll [create a database](../cluster/create_database.md).  You can use
 the link on the progress tracker to navigate to the database creation page.
