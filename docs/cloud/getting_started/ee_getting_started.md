@@ -90,7 +90,7 @@ about cluster creation and handy links.
 
 ![Select Create Cluster](../images/gs_create_cluster.png)
 
-Then, to create a cluster, click the `Create Cluster` button; when you've 
+To create a cluster, click the `Create Cluster` button; when you've 
 finished creating a cluster, the progress tracker advances, and you can see
 the imported cluster definition on the `Clusters` page.
 
@@ -101,7 +101,7 @@ the link on the progress tracker to navigate to the database creation page.
 
 ![Select Import SSH Key](../images/gs_create_database.png)
 
-When you've finished, select Create Database to create your new database and
+When you're ready, select `Create Database` to create your new database and
 close the progress tracker.
 
 
