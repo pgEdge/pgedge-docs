@@ -125,7 +125,8 @@ def resolve_latest_tag(repo_dir: str, user: str, tag_prefix: str = '') -> str:
     return tags[0] if tags else ''
 
 
-def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str, user: str) -> bool:
+def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str,
+                         user: str, skip_checkout: bool = False) -> bool:
     """Clone or update a git repository to a specific ref."""
     repo_path = Path(repo_dir)
 
@@ -146,6 +147,9 @@ def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str, u
             return False
         # Fetch all refs for checkout
         result = run_as_user(['git', 'fetch', '--all', '--tags'], user, cwd=repo_dir)
+
+    if skip_checkout:
+        return True
 
     # Checkout the specific ref
     print(f"  Checking out {ref_type}: {ref}")
@@ -252,7 +256,8 @@ def process_source(index: int, source: dict, config: dict, user: str, dry_run: b
             os.makedirs(repos_dir, exist_ok=True)
             subprocess.run(['chown', '-R', f'{user}:{user}', repos_dir], check=True)
 
-            if not clone_or_update_repo(git_url, ref, ref_type, repo_dir, user):
+            if not clone_or_update_repo(git_url, ref, ref_type, repo_dir, user,
+                                        skip_checkout=use_latest):
                 print(f"  Error: Failed to clone/update repository", file=sys.stderr)
                 return False
 
@@ -269,13 +274,14 @@ def process_source(index: int, source: dict, config: dict, user: str, dry_run: b
                 if result.returncode != 0:
                     print(f"  Error: Failed to checkout {latest_tag}", file=sys.stderr)
                     return False
-                # Update version from tag (strip leading 'v' or prefix)
-                resolved_version = latest_tag
-                for prefix in ['v', 'V', tag_prefix]:
-                    if prefix and resolved_version.startswith(prefix):
-                        resolved_version = resolved_version[len(prefix):]
-                        break
-                version = resolved_version
+                # Auto-detect version from tag if not explicitly set in config
+                if not source.get('version', ''):
+                    resolved_version = latest_tag
+                    for prefix in ['v', 'V', tag_prefix]:
+                        if prefix and resolved_version.startswith(prefix):
+                            resolved_version = resolved_version[len(prefix):]
+                            break
+                    version = resolved_version
                 print(f"  Version: {version}")
         else:
             if use_latest:
