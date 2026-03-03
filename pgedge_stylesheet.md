@@ -1,6 +1,16 @@
 Documentation
 
-Apply this stylesheet to .md files only!
+Troubleshooting and problem solving sections should be added to a separate Troubleshooting section, rather than included at the end of the doc file.  The Troubleshooting section should have sub-sections for topics like:
+
+* connection issues
+* authentication issues
+* API-related issues
+etc.
+
+There should not be a 'Next Steps' section at the end of a proper documentation page - if the page needs links at the end, consider including a link to:
+
+* the Troubleshooting page: For help with the topics on this page, visit Troubleshooting ().
+* the Index
 
 Document files should be named in the form my_file.md, and docs for each project should like in the `docs` folder (or sub-directories).
 
