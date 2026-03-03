@@ -167,3 +167,29 @@
     mode: '0600'
   no_log: true
   when: docloader_atlassian_email is defined and docloader_atlassian_token is defined
+
+# Scheduled RAG index update (weekly cron job)
+- name: Create docloader log directory
+  ansible.builtin.file:
+    path: /var/log/pgedge/docloader
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Set up weekly RAG index update cron job
+  ansible.builtin.cron:
+    name: "Weekly RAG index update"
+    minute: "0"
+    hour: "3"
+    weekday: "0"
+    user: root
+    job: "/usr/local/bin/load-docs >> /var/log/pgedge/docloader/cron.log 2>&1"
+
+- name: Deploy docloader cron logrotate config
+  ansible.builtin.template:
+    src: docloader-cron-logrotate.j2
+    dest: /etc/logrotate.d/docloader-cron
+    owner: root
+    group: root
+    mode: '0644'
