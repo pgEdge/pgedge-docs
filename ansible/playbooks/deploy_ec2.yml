@@ -61,3 +61,11 @@
 
           Then run: ansible-playbook playbooks/site.yml
       when: ec2_instance is defined
+
+- name: Set up GitHub Actions OIDC for RAG updates
+  hosts: local
+  gather_facts: false
+
+  roles:
+    - role: github_oidc
+      tags: github_oidc
