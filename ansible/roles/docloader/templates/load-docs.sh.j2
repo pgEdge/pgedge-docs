@@ -103,6 +103,28 @@ def get_repo_dir(data_dir: str, git_url: str, ref: str) -> str:
     return os.path.join(data_dir, 'repos', f'{repo_name}_{safe_ref}')
 
 
+def resolve_latest_tag(repo_dir: str, user: str, tag_prefix: str = '') -> str:
+    """Find the latest tag in a repository by commit date.
+
+    If tag_prefix is set (e.g., 'v', 'REL_'), only consider tags matching that prefix.
+    Returns the tag name, or empty string if no tags found.
+    """
+    # Get tags sorted by version (newest first), using creatordate for proper ordering
+    cmd = ['git', 'tag', '--sort=-version:refname']
+    result = subprocess.run(
+        ['sudo', '-u', user] + cmd,
+        cwd=repo_dir, capture_output=True, text=True
+    )
+    if result.returncode != 0 or not result.stdout.strip():
+        return ''
+
+    tags = result.stdout.strip().split('\n')
+    if tag_prefix:
+        tags = [t for t in tags if t.startswith(tag_prefix)]
+
+    return tags[0] if tags else ''
+
+
 def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str, user: str) -> bool:
     """Clone or update a git repository to a specific ref."""
     repo_path = Path(repo_dir)
@@ -209,14 +231,20 @@ def process_source(index: int, source: dict, config: dict, user: str, dry_run: b
         git_url = source['git_url']
 
         # Determine ref type and value
+        use_latest = False
         if 'git_tag' in source:
             ref = source['git_tag']
             ref_type = 'tag'
+            if ref == 'latest':
+                use_latest = True
+                # For latest, clone to a shared repo dir (not tag-specific)
+                ref = 'main'
+                ref_type = 'branch'
         else:
             ref = source.get('git_branch', 'main')
             ref_type = 'branch'
 
-        repo_dir = get_repo_dir(data_dir, git_url, ref)
+        repo_dir = get_repo_dir(data_dir, git_url, ref if not use_latest else 'latest')
 
         if not dry_run:
             # Ensure repos directory exists with correct ownership
@@ -227,8 +255,33 @@ def process_source(index: int, source: dict, config: dict, user: str, dry_run: b
             if not clone_or_update_repo(git_url, ref, ref_type, repo_dir, user):
                 print(f"  Error: Failed to clone/update repository", file=sys.stderr)
                 return False
+
+            # Resolve latest tag after fetch
+            if use_latest:
+                tag_prefix = source.get('tag_prefix', '')
+                latest_tag = resolve_latest_tag(repo_dir, user, tag_prefix)
+                if not latest_tag:
+                    print(f"  Error: No tags found in repository", file=sys.stderr)
+                    return False
+                print(f"  Resolved latest tag: {latest_tag}")
+                # Checkout the resolved tag
+                result = run_as_user(['git', 'checkout', latest_tag], user, cwd=repo_dir)
+                if result.returncode != 0:
+                    print(f"  Error: Failed to checkout {latest_tag}", file=sys.stderr)
+                    return False
+                # Update version from tag (strip leading 'v' or prefix)
+                resolved_version = latest_tag
+                for prefix in ['v', 'V', tag_prefix]:
+                    if prefix and resolved_version.startswith(prefix):
+                        resolved_version = resolved_version[len(prefix):]
+                        break
+                version = resolved_version
+                print(f"  Version: {version}")
         else:
-            print(f"  Would clone/update: {git_url} ({ref_type}: {ref})")
+            if use_latest:
+                print(f"  Would clone/update: {git_url} (latest tag, prefix: {source.get('tag_prefix', 'any')})")
+            else:
+                print(f"  Would clone/update: {git_url} ({ref_type}: {ref})")
 
         source_path = os.path.join(repo_dir, doc_path)
 

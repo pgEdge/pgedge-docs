@@ -4,11 +4,18 @@
   ansible.builtin.apt:
     name:
       - git
+      - cron
       - python3-yaml
       - python3-requests
       - python3-bs4
       - python3-html2text
     state: present
+
+- name: Enable cron service
+  ansible.builtin.systemd:
+    name: cron
+    enabled: true
+    state: started
 
 # Install from GitHub Release
 - name: Download docloader tarball from GitHub Release

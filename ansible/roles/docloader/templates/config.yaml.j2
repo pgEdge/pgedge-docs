@@ -41,8 +41,9 @@ columns:
 #
 # Git repository options:
 #   git_url: URL to clone (required for git sources)
-#   git_tag: Specific tag to checkout (use tag OR branch, not both)
+#   git_tag: Specific tag to checkout, or "latest" to auto-detect newest tag
 #   git_branch: Specific branch to checkout (default: main)
+#   tag_prefix: Filter tags by prefix when using "latest" (e.g., "v", "REL_")
 #   doc_path: Glob pattern within repo for docs (e.g., "docs/**/*.md")
 #
 # Local path options:
