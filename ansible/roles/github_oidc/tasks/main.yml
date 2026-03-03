@@ -6,19 +6,27 @@
     region: "{{ github_oidc_region }}"
   register: caller_info
 
+- name: Check if GitHub Actions OIDC provider exists
+  ansible.builtin.command:
+    cmd: >
+      aws iam list-open-id-connect-providers
+      --region {{ github_oidc_region }}
+      --query "OpenIDConnectProviderList[?ends_with(Arn, '/token.actions.githubusercontent.com')].Arn"
+      --output text
+  register: existing_oidc
+  changed_when: false
+
 - name: Create GitHub Actions OIDC provider
-  amazon.aws.iam_oidc_provider:
-    url: https://token.actions.githubusercontent.com
-    thumbprint_list:
-      - "{{ github_oidc_thumbprint }}"
-    client_id_list:
-      - sts.amazonaws.com
-    state: present
-    region: "{{ github_oidc_region }}"
-    tags:
-      Project: pgedge-docs
-      ManagedBy: ansible
+  ansible.builtin.command:
+    cmd: >
+      aws iam create-open-id-connect-provider
+      --url https://token.actions.githubusercontent.com
+      --thumbprint-list {{ github_oidc_thumbprint }}
+      --client-id-list sts.amazonaws.com
+      --tags Key=Project,Value=pgedge-docs Key=ManagedBy,Value=ansible
+      --region {{ github_oidc_region }}
   register: oidc_provider
+  when: existing_oidc.stdout | length == 0
 
 - name: Create IAM role for GitHub Actions
   amazon.aws.iam_role:
@@ -77,9 +85,9 @@
     msg: |
       GitHub OIDC setup complete!
 
-      Role ARN: {{ github_oidc_role.arn }}
+      Role ARN: {{ github_oidc_role.iam_role.arn }}
 
       Add these secrets to the GitHub repo ({{ github_oidc_repo }}):
-        AWS_ROLE_ARN: {{ github_oidc_role.arn }}
+        AWS_ROLE_ARN: {{ github_oidc_role.iam_role.arn }}
         RAG_INSTANCE_ID: {{ github_oidc_ssm_instance_id }}
         AWS_REGION: {{ github_oidc_region }}
