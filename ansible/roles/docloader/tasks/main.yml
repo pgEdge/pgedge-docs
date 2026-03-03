@@ -188,7 +188,7 @@
   ansible.builtin.copy:
     content: |
       # Weekly RAG index update - managed by Ansible
-      0 3 * * 0 root /usr/local/bin/load-docs >> /var/log/pgedge/docloader/cron.log 2>&1
+      0 3 * * 0 root flock -n /var/lock/pgedge-load-docs.lock /usr/local/bin/load-docs >> /var/log/pgedge/docloader/cron.log 2>&1
     dest: /etc/cron.d/docloader-rag-update
     owner: root
     group: root

@@ -104,12 +104,12 @@ def get_repo_dir(data_dir: str, git_url: str, ref: str) -> str:
 
 
 def resolve_latest_tag(repo_dir: str, user: str, tag_prefix: str = '') -> str:
-    """Find the latest tag in a repository by commit date.
+    """Find the highest-version tag in a repository.
 
     If tag_prefix is set (e.g., 'v', 'REL_'), only consider tags matching that prefix.
     Returns the tag name, or empty string if no tags found.
     """
-    # Get tags sorted by version (newest first), using creatordate for proper ordering
+    # Get tags sorted by version (newest first)
     cmd = ['git', 'tag', '--sort=-version:refname']
     result = subprocess.run(
         ['sudo', '-u', user] + cmd,
@@ -147,6 +147,9 @@ def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str,
             return False
         # Fetch all refs for checkout
         result = run_as_user(['git', 'fetch', '--all', '--tags'], user, cwd=repo_dir)
+        if result.returncode != 0:
+            print(f"  Error: git fetch failed after clone", file=sys.stderr)
+            return False
 
     if skip_checkout:
         return True

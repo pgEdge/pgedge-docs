@@ -31,7 +31,7 @@ jobs:
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "${{ secrets.RAG_INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --parameters 'commands=["sudo /usr/local/bin/load-docs"]' \
+            --parameters 'commands=["flock -n /var/lock/pgedge-load-docs.lock sudo /usr/local/bin/load-docs"]' \
             --timeout-seconds 1800 \
             --comment "RAG index update triggered by docs merge" \
             --query "Command.CommandId" \
@@ -42,11 +42,25 @@ jobs:
         run: |
           echo "Waiting for command ${{ steps.ssm.outputs.command_id }} to complete..."
           for i in $(seq 1 60); do
-            STATUS=$(aws ssm get-command-invocation \
+            set +e
+            SSM_OUTPUT=$(aws ssm get-command-invocation \
               --command-id "${{ steps.ssm.outputs.command_id }}" \
               --instance-id "${{ secrets.RAG_INSTANCE_ID }}" \
               --query "Status" \
-              --output text 2>/dev/null || echo "InProgress")
+              --output text 2>&1)
+            SSM_EXIT=$?
+            set -e
+
+            if [ $SSM_EXIT -ne 0 ]; then
+              if echo "$SSM_OUTPUT" | grep -q "InvocationDoesNotExist"; then
+                STATUS="InProgress"
+              else
+                echo "AWS CLI error: $SSM_OUTPUT"
+                exit 1
+              fi
+            else
+              STATUS="$SSM_OUTPUT"
+            fi
 
             echo "  Attempt $i: status=$STATUS"
 

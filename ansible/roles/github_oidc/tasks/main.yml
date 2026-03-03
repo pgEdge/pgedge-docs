@@ -47,7 +47,8 @@
                 "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
               },
               "StringLike": {
-                "token.actions.githubusercontent.com:sub": "repo:{{ github_oidc_repo }}:ref:refs/heads/{{ github_oidc_branch }}"
+                "token.actions.githubusercontent.com:sub": "repo:{{ github_oidc_repo }}:ref:refs/heads/{{ github_oidc_branch }}",
+                "token.actions.githubusercontent.com:workflow_ref": "{{ github_oidc_repo }}/.github/workflows/{{ github_oidc_workflow_file }}@refs/heads/{{ github_oidc_branch }}"
               }
             }
           }
@@ -70,11 +71,16 @@
         "Statement": [
           {
             "Effect": "Allow",
-            "Action": [
-              "ssm:SendCommand",
-              "ssm:GetCommandInvocation"
-            ],
-            "Resource": "*"
+            "Action": "ssm:SendCommand",
+            "Resource": [
+              "arn:aws:ssm:{{ github_oidc_region }}::document/AWS-RunShellScript",
+              "arn:aws:ec2:{{ github_oidc_region }}:{{ caller_info.account }}:instance/{{ github_oidc_ssm_instance_id }}"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": "ssm:GetCommandInvocation",
+            "Resource": "arn:aws:ssm:{{ github_oidc_region }}:{{ caller_info.account }}:*"
           }
         ]
       }

@@ -17,4 +17,5 @@ github_oidc_region: "{{ ec2.region | default('us-east-1') }}"
 github_oidc_thumbprint: 6938fd4d98bab03faadb97b34396831e3780aea1
 
 # SSM permissions — which instance the role can target
-github_oidc_ssm_instance_id: "{{ vault_rag_instance_id | default('') }}"
+github_oidc_ssm_instance_id: "{{ vault_rag_instance_id }}"
+github_oidc_workflow_file: update-rag-index.yml
