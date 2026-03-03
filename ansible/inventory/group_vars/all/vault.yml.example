@@ -32,3 +32,6 @@ vault_rag_server_ip: "your-server-ip-address"
 vault_cloudflared_internal_hostname: "your-internal-hostname.example.com"
 vault_cloudflared_tunnel_name: "your-tunnel-name"
 vault_ec2_key_name: "your-aws-key-pair-name"
+
+# EC2 instance ID for SSM commands from GitHub Actions
+vault_rag_instance_id: "i-xxxxxxxxxxxxxxxxx"
