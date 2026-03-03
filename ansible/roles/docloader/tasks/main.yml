@@ -185,13 +185,14 @@
     mode: '0755'
 
 - name: Set up weekly RAG index update cron job
-  ansible.builtin.cron:
-    name: "Weekly RAG index update"
-    minute: "0"
-    hour: "3"
-    weekday: "0"
-    user: root
-    job: "/usr/local/bin/load-docs >> /var/log/pgedge/docloader/cron.log 2>&1"
+  ansible.builtin.copy:
+    content: |
+      # Weekly RAG index update - managed by Ansible
+      0 3 * * 0 root /usr/local/bin/load-docs >> /var/log/pgedge/docloader/cron.log 2>&1
+    dest: /etc/cron.d/docloader-rag-update
+    owner: root
+    group: root
+    mode: '0644'
 
 - name: Deploy docloader cron logrotate config
   ansible.builtin.template:
