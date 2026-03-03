@@ -112,23 +112,31 @@ rule.
 * Use the `Type` drop-down to select the connection type you are defining:
 
     * Select `PostgreSQL` to create a connection to port `5432`; this is
-      the port used by connecting clients that wish to query the database.
-
+      the default port used by connecting clients that wish to query the
+      database.
     * Select `HTTPS` to open port `443` for secure communication between
       PostgreSQL and a web server.
-
     * Select `SSH` to open port `22` for SSH connections.
 
-* Use the `Sources` drop-down to select the IP address(es) that will be
-  allowed to connect to the port.
+* Use the `Source Type` selector in the right column to specify the type of
+  connection source that is allowed to connect with this rule. You can choose
+  from the following options:
 
-    * Choose `My IP:x.x.x.x` to open a port for the detected IP address
-      from which you are connected.
-    * Choose `All IPV4` to allow connections to the selected port from any
-      source. This setting is not recommended for connections to the
-      database server.
+  * An IP address, specifying a single host or CIDR block.
+  * A prefix list, specifying a managed set of CIDR blocks.
+  * A security group, specifying a set of AWS instances.
 
-After selecting a protocol type and an address, choose the `+ Add Rule`
+* Use the `Sources` field in the left column to specify details about the
+  connection source that will be allowed access to your cluster with the rule.
+
+  * To remove a source, click the `X` in the rule's `Sources` field. 
+  * To add a source, click in the `Sources` field and select from the
+    predefined options, or type directly in the field.
+
+* Use the `Applies To` selector to choose the node or nodes to which the
+  rule applies.
+
+After providing rule details, choose the `+ Add Rule`
 button to add the list of firewall rules. To remove a rule from the list,
 select the `X` in the upper-right corner of the rule box.
 
