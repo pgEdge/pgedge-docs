@@ -51,9 +51,9 @@ information about the state of your cluster:
 Select the `Overview` tab to review information about the cluster. Panes
 on the `Overview` tab contain links to cluster artifacts:
 
-* Select a database name in the `Databases` pane to navigate to the
+  * Select a database name in the `Databases` pane to navigate to the
     information page for that database.
-* Select a backup store name in the `Backup Store` pane to navigate to
+  * Select a backup store name in the `Backup Store` pane to navigate to
     the information page for the store.
 
 ![The cluster overview](../images/cluster_overview_details.png)
@@ -128,8 +128,6 @@ The graphs display metrics about:
 | Running Processes | The number of running processes |
 | Network Receive | The amount of data received by the instance |
 | Network Send | The amount of data transmitted from the instance |
-
-### Reviewing Cluster Log Files
 
 Select the `Logs` tab to review log files for the cluster.
 

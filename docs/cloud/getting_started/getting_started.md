@@ -100,7 +100,7 @@ the imported cluster definition on the `Clusters` page.
 
 ![Progress tracker](../images/gs_progress_four.png)
 
-Next, you'll [create a database](../database/create_database.md).  You can use
+Next, you'll [create a database](../cluster/create_database.md).  You can use
 the link on the progress tracker to navigate to the database creation page.
 
 ![Select Import SSH Key](../images/gs_create_database.png)
