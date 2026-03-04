@@ -343,7 +343,7 @@ nav:
 
   - pgEdge Cloud:
     - Cloud Edition - Overview: cloud/index.md
-    - Getting Started with pgEdge Cloud: cloud/getting_started.md
+    - Getting Started with pgEdge Cloud: cloud/getting_started/getting_started.md
     - Prerequisites:
       - Adding an SSH Key: cloud/prerequisites/ssh_key.md
       - Linking and Managing your Cloud Provider Accounts:
