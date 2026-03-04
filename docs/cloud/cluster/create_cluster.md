@@ -6,8 +6,9 @@
     you must have a
     [linked Cloud provider account](../prerequisites/cloud_accounts/index.md).
 
-To create a cluster, select the `+ New Cluster` button in the left
-navigation pane. Then, provide a unique name for your cluster in the `Cluster Name` field.
+To create a cluster, navigate to the `Clusters` page, and select the `+ New Cluster` button. 
+
+When the `Create New Cluster` page opens, provide a unique name for your cluster in the `Cluster Name` field.
 
 ![Provide a cluster name](../images/unique_cluster_name.png)
 
@@ -17,17 +18,13 @@ that will be used to provision your cluster.
 
 ![Select a cloud account](../images/cloud_account.png)
 
-Next, select up to 5 availability zones in any regions to which you have access.
-To use the map for location selection, use the `Show map` toggle to enable
-the map.
+Next, select up to 5 availability zones in any regions to which you have access from your cloud provider. To use the map for location selection, use the `Show map` toggle to enable the map.
 
 ![Select the regions for deployment](../images/cluster_regions.png)
 
-Once selected, the region name is added to the list of selected `Regions`.
-Use the `+/-` control or the drop-down list to the right of the `Region` name
-to select from the supported Availability Zones for node deployment. One node
-will be deployed in each zone listed; you can use the `X` in the zone icon to
-remove a zone from the deployment list.
+If using the drop-down fields to define the cluster deployment, first select the region in which you wish to deploy nodes.  Once selected, the region name is displayed in the list of selected `Regions`.
+
+Then, use the `+/-` control or the drop-down list to the right of the `Region` name to select from the supported Availability Zones for node deployment. One node will be deployed in each zone listed; you can use the `X` in the zone icon to remove a zone from the deployment list.
 
 ![Configure Network Settings](../images/configure_network.png)
 
@@ -122,30 +119,28 @@ rule.
   connection source that is allowed to connect with this rule. You can choose
   from the following options:
 
-  * An IP address, specifying a single host or CIDR block.
-  * A prefix list, specifying a managed set of CIDR blocks.
-  * A security group, specifying a set of AWS instances.
+    * An IP address, specifying a single host or CIDR block.
+    * A prefix list, specifying a managed set of CIDR blocks.
+    * A security group, specifying a set of AWS instances.
 
 * Use the `Sources` field in the left column to specify details about the
   connection source that will be allowed access to your cluster with the rule.
 
-  * To remove a source, click the `X` in the rule's `Sources` field. 
-  * To add a source, click in the `Sources` field and select from the
+    * To remove a source, click the `X` in the rule's `Sources` field. 
+    * To add a source, click in the `Sources` field and select from the
     predefined options, or type directly in the field.
 
 * Use the `Applies To` selector to choose the node or nodes to which the
   rule applies.
 
-After providing rule details, choose the `+ Add Rule`
-button to add the list of firewall rules. To remove a rule from the list,
-select the `X` in the upper-right corner of the rule box.
+After providing rule details, choose the `+ Add Firewall Rule`
+button to add another rule to the list of firewall rules. To remove a rule from the list, select the `X` in the upper-right corner of the rule box.
 
 ![Defined firewall rules](../images/defined_firewall_rules.png)
 
-To create the cluster without firewall rules, check the box to the left of
-`Deploy cluster without firewall rules`. Note that if you do not open ports
-for connection, client software will be unable to connect to the OS or
-databases that reside on the cluster.
+!!! note
+
+    If you do not open ports for connection, client software will be unable to connect to the OS or databases that reside on the cluster.
 
 In the `Options` section you'll find the option to create the cluster as a
 `single-database cluster`.
