@@ -1,9 +1,9 @@
 # Getting Started with pgEdge Postgres Cloud Edition
 
-Getting started with pgEdge Postgres Cloud edition is easy; simply navigate to
+Getting started with pgEdge Postgres Cloud Edition is easy; simply navigate to
 [the pgEdge sign-in page](https://app.pgedge.com/login?plan=developer&screen_hint=signup)
 and follow the provided link to create an account, or log in with your Google
-or Github account.
+or GitHub account.
 
 ![pgEdge Cloud Edition login](../images/cloud_login.png)
 
@@ -48,7 +48,7 @@ information required by each provider to deploy on Cloud.
 If you're [deploying on AWS](../prerequisites/cloud_accounts/link_to_AWS.md),
 you can use the `Create Stack Wizard` to use a completed AWS CloudFormation
 template to create an AWS role with the required permissions; use the link
-circled in red above to navigate to the wizard and retreive your ARN.
+circled in red above to navigate to the wizard and retrieve your ARN.
 
 When you've finished adding a provider account, the new account is displayed
 on the `Cloud Accounts` page, and the progress dialog is updated.
@@ -107,34 +107,6 @@ the link on the progress tracker to navigate to the database creation page.
 
 When you're ready, select `Create Database` to create your new database and
 exit the progress tracker.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## pgEdge Resources
 
