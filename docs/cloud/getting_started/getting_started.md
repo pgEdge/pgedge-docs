@@ -26,7 +26,7 @@ resources on that provider as well - those resources include:
 * SSH keys
 
 Before creating your first cluster, you need to link your Cloud provider
-account with pgEdge. 
+account with pgEdge. Select the `Go to Cloud Accounts` button to get started.
 
 ![Linking a Cloud Account](../images/gs_link_cloud_account.png) 
 
