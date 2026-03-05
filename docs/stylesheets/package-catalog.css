@@ -72,6 +72,10 @@
   border-color: #22c55e;
   color: #22c55e;
 }
+#package-catalog .copy-btn.copy-error {
+  border-color: #ef4444;
+  color: #ef4444;
+}
 #package-catalog .install-commands {
   background: var(--md-code-bg-color);
   color: var(--md-code-fg-color);

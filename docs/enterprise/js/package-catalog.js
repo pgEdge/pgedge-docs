@@ -232,14 +232,46 @@ function buildUI(mount, catalog) {
   /* Copy button */
   copyBtn.addEventListener("click", function() {
     var code = codeEl.textContent;
-    navigator.clipboard.writeText(code).then(function() {
+
+    function onSuccess() {
       copyBtn.classList.add("copied");
       copyBtn.querySelector("span").textContent = "Copied!";
       setTimeout(function() {
         copyBtn.classList.remove("copied");
         copyBtn.querySelector("span").textContent = "Copy All";
       }, 2000);
-    });
+    }
+
+    function onError() {
+      copyBtn.classList.add("copy-error");
+      copyBtn.querySelector("span").textContent = "Failed";
+      setTimeout(function() {
+        copyBtn.classList.remove("copy-error");
+        copyBtn.querySelector("span").textContent = "Copy All";
+      }, 2000);
+    }
+
+    function fallbackCopy() {
+      var ta = document.createElement("textarea");
+      ta.value = code;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        onSuccess();
+      } catch (e) {
+        onError();
+      }
+      document.body.removeChild(ta);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(onSuccess).catch(fallbackCopy);
+    } else {
+      fallbackCopy();
+    }
   });
 
   /* -- Render catalog tree ---------------------------------------- */
