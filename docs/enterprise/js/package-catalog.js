@@ -12,7 +12,8 @@ document$.subscribe(function() {
 });
 
 function initPackageCatalog(mount) {
-  if (mount.dataset.initialized) return;
+  if (mount.dataset.initialized || mount.dataset.initializing) return;
+  mount.dataset.initializing = "true";
 
   var catalog = null;
 
@@ -24,9 +25,11 @@ function initPackageCatalog(mount) {
     .then(function(data) {
       catalog = data;
       mount.dataset.initialized = "true";
+      delete mount.dataset.initializing;
       buildUI(mount, catalog);
     })
     .catch(function() {
+      delete mount.dataset.initializing;
       mount.innerHTML =
         '<p style="color:var(--md-code-hl-special-color);padding:2rem;text-align:center">' +
         "Failed to load catalog data. Make sure catalog.json is served alongside this page.</p>";
@@ -268,6 +271,7 @@ function renderCatalogTree(container, catalog) {
       if (isOpen) {
         div.querySelectorAll(".pkg-row.expanded").forEach(function(row) {
           row.classList.remove("expanded");
+          row.setAttribute("aria-expanded", "false");
         });
       }
       div.classList.toggle("open");

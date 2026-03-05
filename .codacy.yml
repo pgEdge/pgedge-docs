@@ -1,5 +1,8 @@
 ---
 engines:
+  eslint:
+    exclude_paths:
+      - "docs/enterprise/js/package-catalog.js"
   opengrep:
     exclude_paths:
       - "docs/enterprise/js/package-catalog.js"
