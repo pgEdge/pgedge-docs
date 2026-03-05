@@ -6,7 +6,7 @@ database information in the Cloud console.
 ![pgEdge Database Console](../images/manage_db.png)
 
 Console content is displayed in a series of panes that simplify
-database management; select a pane to review information or perform
+database management; navigate to a pane to review information or perform
 management tasks.
 
 ## The Database Header
@@ -59,9 +59,9 @@ users](https://www.postgresql.org/docs/16/sql-createrole.html).
 ## Connect to your database
 
 The `Connect to your database` pane displays connection information for
-the nodes in your cluster. Select a node (`Nearest node`, `n1`, `n2`, or
-`n3`) and user name to access connection details for a specific
-node/user pair.
+the nodes in your cluster. Select a node tab (from across the top of the pane)
+and `User` (`app`, `app_read_only`, or `admin`) to access connection details
+for a specific node/user pair.
 
 ![Users Pane](../images/connect_to_your_database.png)
 
@@ -70,12 +70,12 @@ to your database, see [Connecting](../connecting/index.md).
 
 ## Password Management
 
-A random password is generated for each pre-defined user when you create
+A random password is generated for each pre-defined `User` when you create
 a database; the same user name/password pair can be used to access the
 database on each node of the cluster. The associated password and password
 management options are located in the `Connect to your database` pane. To
-access the password associated with one of the users (`app`,
-`app_read_only`, or `admin`), select the user name from the `User` field.
+access the password associated with one of the identities (`app`,
+`app_read_only`, or `admin`), select the name with the `User` field.
 
 ![Password management options](../images/password.png)
 

@@ -3,7 +3,7 @@
 To create a new database, select the `Databases` node in the navigation tree
 control; then, select the `+ New Database` icon located in the upper-right
 corner of the page. When the `Create New Database` dialog opens, use the
-fields on the dialog to define your database.
+fields to define your database.
 
 ![Creating a Database](../images/create_new_db.png)
 
@@ -17,15 +17,16 @@ fields on the dialog to define your database.
 * Use the `PostgreSQL Version` drop-down to select the version of Postgres
   that you would like to install.
 
-Select the cluster you would like to host your new database from the options
-shown under `Select a Cluster`.  Use the `Show Map` toggle to display a map
-of the node locations for the selected cluster.
+Next, the dialog displays your clusters and their deployment regions. Use the
+`Show Map` toggle to display or hide a map of node locations.
 
 ![Creating a Database](../images/create_new_db_cluster_map.png)
 
-The dialog displays your clusters and their deployment regions. Check the box
-in a cluster pane to deploy on that cluster.
- 
+Highlight the cluster you would like to host your new database from the panes
+displayed under `Select a Cluster`.  Then, use the checkboxes in each host's
+selector to indicate if the database should be deployed on that host; remove
+the check if the database should *not* deploy in a specific location.
+
 The `Backup Configuration` pane allows you to customize the configuration you
 wish to use for your Enterprise Edition database backups.
 
