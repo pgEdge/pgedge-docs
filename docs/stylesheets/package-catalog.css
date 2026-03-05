@@ -82,7 +82,7 @@
   line-height: 1.7;
 }
 #package-catalog .install-commands code {
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
 }
 #package-catalog .install-commands .comment {
   color: var(--md-default-fg-color--light);
@@ -153,6 +153,7 @@
   gap: 0.3rem;
   flex-wrap: wrap;
 }
+#package-catalog .pkg-badges-spaced { margin-top: 0.3rem; }
 #package-catalog .badge {
   display: inline-block;
   padding: 0.1rem 0.4rem;
@@ -180,7 +181,7 @@
   display: none;
   padding: 0.5rem 1rem;
   background: var(--md-code-bg-color);
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 0.85rem;
   color: var(--md-code-fg-color);
   border-bottom: 1px solid var(--md-default-fg-color--lightest);

@@ -13,7 +13,6 @@ document$.subscribe(function() {
 
 function initPackageCatalog(mount) {
   if (mount.dataset.initialized) return;
-  mount.dataset.initialized = "true";
 
   var catalog = null;
 
@@ -24,10 +23,12 @@ function initPackageCatalog(mount) {
     })
     .then(function(data) {
       catalog = data;
+      mount.dataset.initialized = "true";
       buildUI(mount, catalog);
     })
     .catch(function() {
-      mount.innerHTML =        '<p style="color:var(--md-code-hl-special-color);padding:2rem;text-align:center">' +
+      mount.innerHTML =
+        '<p style="color:var(--md-code-hl-special-color);padding:2rem;text-align:center">' +
         "Failed to load catalog data. Make sure catalog.json is served alongside this page.</p>";
     });
 }
@@ -298,7 +299,7 @@ function renderCatalogTree(container, catalog) {
       }).join("");
 
       row.innerHTML =        "<div>" +
-        '<div class="pkg-name">' + escapeHtml(pkg.name) + "</div>" +        '<div class="pkg-desc">' + escapeHtml(pkg.description) + "</div>" +        '<div class="pkg-badges" style="margin-top:0.3rem">' + pgBadges + "</div>" +        "</div>" +
+        '<div class="pkg-name">' + escapeHtml(pkg.name) + "</div>" +        '<div class="pkg-desc">' + escapeHtml(pkg.description) + "</div>" +        '<div class="pkg-badges pkg-badges-spaced">' + pgBadges + "</div>" +        "</div>" +
         '<div class="pkg-meta">' + includedBadges + "</div>";
 
       body.appendChild(row);
@@ -306,17 +307,21 @@ function renderCatalogTree(container, catalog) {
       /* Click-to-install: show install command for this package */
       if (pkg.package_name) {
         row.classList.add("clickable");
+        row.setAttribute("role", "button");
+        row.setAttribute("tabindex", "0");
+        row.setAttribute("aria-expanded", "false");
         row.dataset.packageName = pkg.package_name;
         var installEl = document.createElement("div");
         installEl.className = "pkg-install";
         body.appendChild(installEl);
 
-        row.addEventListener("click", (function(pkgName, instEl) {
+        var toggleInstall = (function(pkgName, instEl, r) {
           return function() {
-            var wasExpanded = row.classList.contains("expanded");
+            var wasExpanded = r.classList.contains("expanded");
             /* Collapse any other expanded row in this category */
-            body.querySelectorAll(".pkg-row.expanded").forEach(function(r) {
-              r.classList.remove("expanded");
+            body.querySelectorAll(".pkg-row.expanded").forEach(function(er) {
+              er.classList.remove("expanded");
+              er.setAttribute("aria-expanded", "false");
             });
             if (wasExpanded) return;
             /* Build install command from current selections */
@@ -326,9 +331,18 @@ function renderCatalogTree(container, catalog) {
             var resolved = pkgName.replace(/\{ver\}/g, pgVer);
             var cmd = platform.install_pattern.replace("{package}", resolved);
             instEl.textContent = cmd;
-            row.classList.add("expanded");
+            r.classList.add("expanded");
+            r.setAttribute("aria-expanded", "true");
           };
-        })(pkg.package_name, installEl));
+        })(pkg.package_name, installEl, row);
+
+        row.addEventListener("click", toggleInstall);
+        row.addEventListener("keydown", function(e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleInstall();
+          }
+        });
       }
     });
 

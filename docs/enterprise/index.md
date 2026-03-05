@@ -5,6 +5,11 @@ Enterprise Linux, Debian, and Ubuntu. Use the install builder below
 to configure and copy the commands for your platform.
 
 <div id="package-catalog"></div>
+<noscript>
+  <p>JavaScript is required for the interactive install builder.
+  Visit <a href="https://www.pgedge.com/downloads">pgedge.com/downloads</a>
+  for manual install instructions.</p>
+</noscript>
 
 ## Professional Grade Support, 24/7
 
