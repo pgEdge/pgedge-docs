@@ -1,0 +1,8 @@
+---
+engines:
+  opengrep:
+    exclude_paths:
+      - "docs/enterprise/js/package-catalog.js"
+  semgrep:
+    exclude_paths:
+      - "docs/enterprise/js/package-catalog.js"

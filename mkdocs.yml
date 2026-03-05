@@ -4,6 +4,7 @@ site_url: https://docs.pgedge.com
 extra_css:
   - stylesheets/extra.css
   - stylesheets/chat.css
+  - stylesheets/package-catalog.css
   # Highlight.js for dynamic code highlighting in chat
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css
 

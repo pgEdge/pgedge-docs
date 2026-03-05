@@ -1,0 +1,194 @@
+/* Package catalog styles — scoped to #package-catalog */
+
+#package-catalog .zone { margin-bottom: 2.5rem; }
+#package-catalog .zone h2 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+#package-catalog .zone-desc {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* Zone 1: Selector */
+#package-catalog .selector-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+#package-catalog .selector-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: 0.25rem;
+}
+#package-catalog .selector-group select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+}
+#package-catalog .selector-group select:focus {
+  outline: none;
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-accent-fg-color) 15%, transparent);
+}
+
+/* Meta-package description */
+#package-catalog .meta-desc {
+  font-size: 0.875rem;
+  color: var(--md-default-fg-color--light);
+  margin-top: 0.5rem;
+}
+
+/* Zone 2: Commands */
+#package-catalog .commands-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+#package-catalog .copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  background: var(--md-default-bg-color);
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--md-default-fg-color--light);
+  transition: all 0.15s;
+}
+#package-catalog .copy-btn:hover {
+  border-color: var(--md-accent-fg-color);
+  color: var(--md-accent-fg-color);
+}
+#package-catalog .copy-btn.copied {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+#package-catalog .install-commands {
+  background: var(--md-code-bg-color);
+  color: var(--md-code-fg-color);
+  padding: 1.5rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+#package-catalog .install-commands code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+#package-catalog .install-commands .comment {
+  color: var(--md-default-fg-color--light);
+}
+
+/* Zone 3: Catalog */
+#package-catalog .category {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  background: var(--md-default-bg-color);
+}
+#package-catalog .category-header {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  user-select: none;
+  color: var(--md-default-fg-color);
+}
+#package-catalog .category-header:hover {
+  background: var(--md-default-fg-color--lightest);
+}
+#package-catalog .category-header .count {
+  color: var(--md-default-fg-color--light);
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+#package-catalog .category-header .arrow {
+  transition: transform 0.2s;
+}
+#package-catalog .category.open .category-header .arrow {
+  transform: rotate(90deg);
+}
+#package-catalog .category-body {
+  display: none;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+#package-catalog .category.open .category-body { display: block; }
+#package-catalog .pkg-row {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+#package-catalog .pkg-row:last-of-type { border-bottom: none; }
+#package-catalog .pkg-name {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--md-default-fg-color);
+}
+#package-catalog .pkg-desc {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.85rem;
+}
+#package-catalog .pkg-meta {
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+  white-space: nowrap;
+}
+#package-catalog .pkg-badges {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+#package-catalog .badge {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  background: var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color--light);
+}
+#package-catalog .badge.included {
+  margin-right: 0.25rem;
+}
+#package-catalog .badge.badge-full {
+  background: color-mix(in srgb, #22c55e 15%, var(--md-default-bg-color));
+  color: #22c55e;
+}
+#package-catalog .badge.badge-minimal {
+  background: color-mix(in srgb, #a855f7 15%, var(--md-default-bg-color));
+  color: #a855f7;
+}
+#package-catalog .pkg-row.clickable { cursor: pointer; }
+#package-catalog .pkg-row.clickable:hover {
+  background: var(--md-default-fg-color--lightest);
+}
+#package-catalog .pkg-install {
+  display: none;
+  padding: 0.5rem 1rem;
+  background: var(--md-code-bg-color);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.85rem;
+  color: var(--md-code-fg-color);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  user-select: all;
+}
+#package-catalog .pkg-row.expanded + .pkg-install { display: block; }
+
+/* Responsive */
+@media (max-width: 480px) {
+  #package-catalog .selector-grid { grid-template-columns: 1fr; }
+}
