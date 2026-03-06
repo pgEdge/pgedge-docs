@@ -43,8 +43,7 @@ information about the state of your cluster:
   about the selected database.
 * Select the [`Metrics`](#reviewing-cluster-metrics) tab to view details
   about cluster resource use.
-* Select the [`Logs`](#reviewing-cluster-log-files) tab to review cluster
-  log files.
+* Select the `Logs` tab to review cluster log files.
 
 ### The Overview Tab
 
