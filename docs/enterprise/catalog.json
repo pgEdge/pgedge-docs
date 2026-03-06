@@ -1,0 +1,526 @@
+{
+  "_maintainer_note": "Package names verified against pgEdge repo. Update manually or via future maintenance script.",
+  "meta_packages": [
+    {
+      "id": "full",
+      "label": "All (Recommended)",
+      "description": "Complete pgEdge Enterprise stack: PostgreSQL + Spock + all extensions + pgAdmin + pgBouncer + pgBackRest",
+      "rpm_pattern": "pgedge-enterprise-all_{ver}",
+      "deb_pattern": "pgedge-enterprise-all-{ver}",
+      "pg_versions": [
+        "16",
+        "17",
+        "18"
+      ]
+    },
+    {
+      "id": "minimal",
+      "label": "Postgres (Minimal)",
+      "description": "Core database with replication: PostgreSQL + Spock + lolor + Snowflake + pgAudit + PostGIS + pgVector + PL languages",
+      "rpm_pattern": "pgedge-enterprise-postgres_{ver}",
+      "deb_pattern": "pgedge-enterprise-postgres-{ver}",
+      "pg_versions": [
+        "16",
+        "17",
+        "18"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "name": "Core",
+      "packages": [
+        {
+          "name": "PostgreSQL",
+          "description": "pgEdge-patched PostgreSQL database engine",
+          "package_name": null,
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full",
+            "minimal"
+          ]
+        },
+        {
+          "name": "Spock 5.0",
+          "description": "Multi-master active-active logical replication",
+          "package_name": "pgedge-spock50_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full",
+            "minimal"
+          ]
+        },
+        {
+          "name": "lolor",
+          "description": "Large object logical replication support",
+          "package_name": "pgedge-lolor_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full",
+            "minimal"
+          ]
+        },
+        {
+          "name": "Snowflake",
+          "description": "Distributed sequence ID generation",
+          "package_name": "pgedge-snowflake_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full",
+            "minimal"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AI & Machine Learning",
+      "packages": [
+        {
+          "name": "pgVector",
+          "description": "Vector similarity search for AI embeddings",
+          "package_name": "pgedge-pgvector_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full",
+            "minimal"
+          ]
+        },
+        {
+          "name": "Vectorizer",
+          "description": "Automated vector embedding generation",
+          "package_name": "pgedge-vectorizer_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pg_vectorize",
+          "description": "SQL-level vectorization functions",
+          "package_name": "pgedge-pg-vectorize_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pg_tokenizer",
+          "description": "Text tokenization for search and AI",
+          "package_name": "pgedge-pg-tokenizer_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "vchord_bm25",
+          "description": "BM25 ranking for full-text vector search",
+          "package_name": "pgedge-vchord-bm25_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "MCP Server",
+          "description": "Model Context Protocol server for LLM-database integration",
+          "package_name": "pgedge-postgres-mcp",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "RAG Server",
+          "description": "Retrieval-augmented generation server",
+          "package_name": "pgedge-rag-server",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "Anonymizer",
+          "description": "Data anonymization and masking for AI pipelines",
+          "package_name": "pgedge-anonymizer",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "Docloader",
+          "description": "Document ingestion and chunking for RAG workflows",
+          "package_name": "pgedge-docloader",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "NLA",
+          "description": "Natural language API — CLI and web interface",
+          "package_name": "pgedge-nla-cli",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": [
+            "full"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Extensions",
+      "packages": [
+        {
+          "name": "PostGIS",
+          "description": "Geospatial data types, functions, and indexing",
+          "package_name": "pgedge-postgis35_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full",
+            "minimal"
+          ]
+        },
+        {
+          "name": "pgAudit",
+          "description": "Detailed session and object audit logging",
+          "package_name": "pgedge-pgaudit_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full",
+            "minimal"
+          ]
+        },
+        {
+          "name": "pg_cron",
+          "description": "Job scheduler for running periodic SQL tasks",
+          "package_name": "pgedge-pg_cron_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pgmq",
+          "description": "Lightweight message queue built on PostgreSQL",
+          "package_name": "pgedge-pgmq_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pg_stat_monitor",
+          "description": "Query performance monitoring and statistics",
+          "package_name": "pgedge-pg-stat-monitor_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pldebugger",
+          "description": "PL/pgSQL interactive debugger",
+          "package_name": "pgedge-pldebugger_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "system_stats",
+          "description": "System-level performance statistics",
+          "package_name": "pgedge-system_stats_{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pl/Perl",
+          "description": "Perl procedural language for PostgreSQL",
+          "package_name": "pgedge-postgresql{ver}-plperl",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pl/Python",
+          "description": "Python procedural language for PostgreSQL",
+          "package_name": "pgedge-postgresql{ver}-plpython3",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pl/TCL",
+          "description": "TCL procedural language for PostgreSQL",
+          "package_name": "pgedge-postgresql{ver}-pltcl",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": [
+            "full"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Management Tools",
+      "packages": [
+        {
+          "name": "pgAdmin 4",
+          "description": "Web-based PostgreSQL administration interface",
+          "package_name": "pgedge-pgadmin4",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pgBouncer",
+          "description": "Lightweight connection pooler for PostgreSQL",
+          "package_name": "pgedge-pgbouncer",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "pgBackRest",
+          "description": "Reliable backup and restore with PITR support",
+          "package_name": "pgedge-pgbackrest",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": [
+            "full"
+          ]
+        },
+        {
+          "name": "PostgREST",
+          "description": "RESTful API server for PostgreSQL",
+          "package_name": "pgedge-postgrest",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        },
+        {
+          "name": "psycopg2",
+          "description": "Python-PostgreSQL database adapter",
+          "package_name": "pgedge-python3-psycopg2",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        }
+      ]
+    }
+  ],
+  "platforms": {
+    "el9": {
+      "label": "EL 9 (RHEL / Rocky / Alma)",
+      "family": "el",
+      "version": "9",
+      "pkg_manager": "dnf",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [],
+      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "install_pattern": "sudo dnf install -y {package}",
+      "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
+      "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
+    },
+    "el10": {
+      "label": "EL 10 (RHEL / Rocky / Alma)",
+      "family": "el",
+      "version": "10",
+      "pkg_manager": "dnf",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [],
+      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "install_pattern": "sudo dnf install -y {package}",
+      "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
+      "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
+    },
+    "debian11": {
+      "label": "Debian 11 (Bullseye)",
+      "family": "debian",
+      "version": "11",
+      "pkg_manager": "apt",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [],
+      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "install_pattern": "sudo apt-get install -y {package}",
+      "init_pattern": "sudo pg_ctlcluster {ver} main start",
+      "start_pattern": "sudo systemctl enable --now postgresql"
+    },
+    "debian12": {
+      "label": "Debian 12 (Bookworm)",
+      "family": "debian",
+      "version": "12",
+      "pkg_manager": "apt",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [],
+      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "install_pattern": "sudo apt-get install -y {package}",
+      "init_pattern": "sudo pg_ctlcluster {ver} main start",
+      "start_pattern": "sudo systemctl enable --now postgresql"
+    },
+    "debian13": {
+      "label": "Debian 13 (Trixie)",
+      "family": "debian",
+      "version": "13",
+      "pkg_manager": "apt",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [],
+      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "install_pattern": "sudo apt-get install -y {package}",
+      "init_pattern": "sudo pg_ctlcluster {ver} main start",
+      "start_pattern": "sudo systemctl enable --now postgresql"
+    },
+    "ubuntu2204": {
+      "label": "Ubuntu 22.04 (Jammy)",
+      "family": "ubuntu",
+      "version": "22.04",
+      "pkg_manager": "apt",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [],
+      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "install_pattern": "sudo apt-get install -y {package}",
+      "init_pattern": "sudo pg_ctlcluster {ver} main start",
+      "start_pattern": "sudo systemctl enable --now postgresql"
+    },
+    "ubuntu2404": {
+      "label": "Ubuntu 24.04 (Noble)",
+      "family": "ubuntu",
+      "version": "24.04",
+      "pkg_manager": "apt",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [],
+      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "install_pattern": "sudo apt-get install -y {package}",
+      "init_pattern": "sudo pg_ctlcluster {ver} main start",
+      "start_pattern": "sudo systemctl enable --now postgresql"
+    }
+  },
+  "pg_versions": [
+    "16",
+    "17",
+    "18"
+  ],
+  "default_platform": "el9",
+  "default_arch": "x86_64",
+  "default_pg_version": "18"
+}

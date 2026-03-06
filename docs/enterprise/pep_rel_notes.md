@@ -1,6 +1,12 @@
 
 # pgEdge Enterprise Postgres Release Notes
 
+## 2/26/2025 
+
+* pgEdge Enterprise Postgres versions 16.13, 17.9, and 18.3
+* pgEdge Meta Packages ( pgedge-enterprise-postgres and pgedge-enterprise-all, versions 16.13, 17.9, 18.3 )
+* Component updates: PostgREST 14.5, PostGIS 3.5.5
+
 ## 12/2/2025
 
 * pgEdge component updates: pgAdmin 9.10, pgBackRest 2.57.0, pgBouncer 1.25.0, Snowflake 2.4

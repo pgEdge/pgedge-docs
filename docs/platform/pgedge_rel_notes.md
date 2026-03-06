@@ -1,5 +1,9 @@
 # pgEdge Distributed Postgres (VM Edition) Release Notes
 
+## v25.5.1 on 2026-02-27
+
+  - Added support for updated Postgres versions 18.3, 17.9, and 16.13.
+
 ## v25.5.0 on 2026-02-13
 
   - Added support for updated Postgres versions 17.8, 16.11, and 15.16, as well as:
