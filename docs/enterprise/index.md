@@ -1,26 +1,15 @@
 # pgEdge Enterprise Postgres (VM Edition)
 
-pgEdge makes packages available via the `pgedge` repository to provide a simplified way to install and manage Postgres and the following components: 
+pgEdge makes packages available via the `pgedge` repository for
+Enterprise Linux, Debian, and Ubuntu. Use the install builder below
+to configure and copy the commands for your platform.
 
-* Postgres Versions 16, 17, and 18
-* Spock Version 5.0
-* pgEdge Postgres MCP Server
-* pgEdge RAG Server
-* pgEdge Anonymizer
-* pgEdge Docloader
-* pgEdge Vectorizer
-* Lolor (large object support)
-* Snowflake (sequence support)
-* pgAdmin (graphical client)
-* pgBouncer (connection pooling)
-* pgBackRest (backup tooling)
-* PostGIS (geographic data tooling)
-* pgVector (vector comparison tooling)
-* pgAudit (session and object audit logging)
-* pl/Perl
-* pl/Python
-* pl/TCL
-* psycopg3
+<div id="package-catalog"></div>
+<noscript>
+  <p>JavaScript is required for the interactive install builder.
+  Visit <a href="https://www.pgedge.com/downloads">pgedge.com/downloads</a>
+  for manual install instructions.</p>
+</noscript>
 
 ## Professional Grade Support, 24/7
 
@@ -38,5 +27,3 @@ For more information about support for pgEdge Distributed Postgres (VM Edition),
 !!! note
 
    The platform-specific commands shared in this section work on the majority of the corresponding systems, but may not work on *all* systems.  You may need to find a system-specific command to accomplish the task performed by the commands we've shared.
-
-
