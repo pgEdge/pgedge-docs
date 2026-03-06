@@ -1,6 +1,26 @@
 Documentation
 
-Troubleshooting and problem solving sections should be added to a separate Troubleshooting section, rather than included at the end of the doc file.  The Troubleshooting section should have sub-sections for topics like:
+The following product names are proper nouns and should be treated as such.  You should generally omit 'the' in front of the name unless using the name as an adjective to describe software or a file:
+
+pgEdge Cloud
+pgEdge Enterprise Postgres
+pgEdge Distributed Postgres
+Enterprise Postgres
+Distributed Postgres
+pgEdge Postgres
+pgEdge AI Toolkit
+Spock
+LOLOR (aka lolor)
+ACE
+pgEdge Vectorizer
+Snowflake
+pgEdge Postgres MCP Server
+pgEdge Anonymizer
+pgEdge RAG Server
+pgEdge Docloader
+
+
+Troubleshooting and problem solving sections should be added to a separate Troubleshooting section, rather than included in a section at the end of multiple doc files.  The Troubleshooting section should be sorted, and have sub-sections for topics like:
 
 * connection issues
 * authentication issues
