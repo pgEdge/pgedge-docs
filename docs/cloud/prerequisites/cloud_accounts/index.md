@@ -13,9 +13,9 @@ used to provision databases with pgEdge Cloud; to get started, select the
 
 Then, visit the vendor-specific page for information about linking an account
 with:
-    * [AWS](cloud_accounts/link_to_AWS.md)
-    * [Azure](cloud_accounts/link_to_Azure.md)
-    * [Google](cloud_accounts/link_to_Google.md)
+    * [AWS](link_to_AWS.md)
+    * [Azure](link_to_Azure.md)
+    * [Google](link_to_Google.md)
 
 After linking a provider account, that account is displayed on the
 `Linked accounts` pane. Use the `Show more details` button to display details
