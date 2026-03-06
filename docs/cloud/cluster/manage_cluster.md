@@ -81,16 +81,19 @@ city in which the node resides.
 
 **Review Firewall Configuration**
 
-The `Overview` tab also displays the currently defined [Firewall Rules]
+The `Overview` tab displays the currently defined [Firewall Rules]
 (firewall.md).
 
-![The cluster console Map tab](../images/overview_firewall_rule.png)
+![The cluster's firewall rules](../images/overview_firewall_rule.png)
+
+Select the `Manage Firewall Rules` button to open a dialog that allows you to
+[modify or create rules](firewall.md) for the cluster.
 
 **VPC Associations**
 
 The Overview tab also displays the current [VPC Associations](vpc_assoc.md):
 
-![The cluster console Map tab](../images/overview_vpc_assoc.png)
+![The cluster's VPC associations ](../images/overview_vpc_assoc.png)
 
 
 ### Reviewing Cluster Metrics
