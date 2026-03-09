@@ -1,6 +1,86 @@
-Documentation
+# Formatting README files
 
-The following product names are proper nouns and should be treated as such.  You should generally omit 'the' in front of the name unless using the name as an adjective to describe software or a file:
+This section of the stylesheet applies to the README files in our public repos - every
+public repo should have a README file.
+
+Readme file content should be wrapped at 79 characters, with the exception of links,
+which should all reside on the same line.
+
+At the top of each README file, links to the contents of the docs folder should create a
+table of contents.  The contents should include the following files in the order listed:
+
+* A first-level heading (# Project Name)
+* If applicable, links to regression testing tools or developer/dba tools
+* A second-level heading (## Table of Contents)
+
+That heading is followed by a bulleted list of linked content that resides in the docs folder
+that may include (where applicable for the project):
+
+- Architecture Guide
+- Best Practices Guide
+- Getting Started/Quick Start
+- Building the Project
+- Installing the Project
+- Configuring the Project
+- Advanced Configuration
+- Project Usage Instructions
+- Upgrading the Project Installation
+- Project Management Features
+- Modifying a Deployed Project
+- Monitoring/Logging
+- Performance 
+- Function Reference
+- API Reference
+- Troubleshooting
+- FAQ
+- Release Notes
+- Developer Resources
+
+At the end of each README file, include a second-level heading (## License) followed
+by the note:
+
+This project is licensed under the [PostgreSQL License](LICENSE.md).
+
+The LICENSE.md file should be stored in the docs folder; aliases don't work properly
+with MkDocs.
+
+
+## Documentation
+
+The Table of Contents is defined in the mkdocs.yaml file for a project.  The mkdocs.yaml file resides in the
+same directory as the docs folder.  The file content will be unique for each project, but will mirror the
+content in the TOC from the README file, and may include:
+
+- Architecture Guide
+    - Best Practices Guide
+- Installation
+    - Getting Started/Quick Start
+    - Building the Project
+        - Prerequisites
+    - Installing the Project
+    - Configuring the Project
+    - Advanced Configuration
+- Using the Project
+    - Connecting to the Project
+    - Project Usage Instructions
+    - Upgrading the Project Installation
+- Project Management Features
+    - Modifying the Installation
+    - Monitoring/Logging
+    - Performance 
+- Function Reference
+- API Reference
+- Troubleshooting
+- FAQ
+- Release Notes
+- Developer Resources
+
+Nested details can be in the same file as the steps to which it applies; for example, the Prerequisites section can reside in the same file as Building the Project.
+
+
+## Within an .md File
+
+The following product names are proper nouns and should be treated as such.  You should generally omit 'the' in front of the name unless using the name as an adjective to describe software, files, or other project artifacts:
 
 pgEdge Cloud
 pgEdge Enterprise Postgres
@@ -18,7 +98,6 @@ pgEdge Postgres MCP Server
 pgEdge Anonymizer
 pgEdge RAG Server
 pgEdge Docloader
-
 
 Troubleshooting and problem solving sections should be added to a separate Troubleshooting section, rather than included in a section at the end of multiple doc files.  The Troubleshooting section should be sorted, and have sub-sections for topics like:
 
