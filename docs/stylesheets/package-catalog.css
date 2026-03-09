@@ -194,6 +194,9 @@
 #package-catalog .pkg-row.expanded + .pkg-install { display: block; }
 
 /* Responsive */
+@media (max-width: 768px) {
+  #package-catalog .selector-grid { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 480px) {
   #package-catalog .selector-grid { grid-template-columns: 1fr; }
 }
