@@ -1,28 +1,28 @@
 # Formatting README files
 
-This section of the stylesheet applies to the README files in our public repos - every
+This section of the stylesheet applies to the README files in each of our public repos - every
 public repo should have a README file.
 
-Readme file content should be wrapped at 79 characters, with the exception of links,
-which should all reside on the same line.
 
 At the top of each README file, links to the contents of the docs folder should create a
-table of contents.  The contents should include the following files in the order listed:
+table of contents (TOC).  The top of each README file should contain:
 
 * A first-level heading (# Project Name)
 * If applicable, links to regression testing tools or developer/dba tools
 * A second-level heading (## Table of Contents)
 
 That heading is followed by a bulleted list of linked content that resides in the docs folder
-that may include (where applicable for the project):
+that may include (where applicable for the project).  Each link in the list should be in a separate
+.md file:
 
 - Architecture Guide
 - Best Practices Guide
 - Getting Started/Quick Start
 - Building the Project
+    - Should include prerequisite steps
 - Installing the Project
 - Configuring the Project
-- Advanced Configuration
+    - Advanced Configuration
 - Project Usage Instructions
 - Upgrading the Project Installation
 - Project Management Features
@@ -36,6 +36,23 @@ that may include (where applicable for the project):
 - Release Notes
 - Developer Resources
 
+---
+
+After the TOC, a short introduction should describe the project; this can include what the project 
+does, and very short descriptions of usage or who would benefit from using the project.  After the
+introductory paragraph, include details about:
+
+Building from Source
+Simple Configuration Steps
+Using the Project
+Building the Documentation from Source
+
+The intention of the README file is to include enough information to get a user started, along with
+links to deeper information for a long-term user.
+
+README file content should be wrapped at 79 characters, with the exception of links and table
+cell content, which should all reside on the same line.
+
 At the end of each README file, include a second-level heading (## License) followed
 by the note:
 
@@ -47,9 +64,10 @@ with MkDocs.
 
 ## Documentation
 
-The Table of Contents is defined in the mkdocs.yaml file for a project.  The mkdocs.yaml file resides in the
-same directory as the docs folder.  The file content will be unique for each project, but will mirror the
-content in the TOC from the README file, and may include:
+The Table of Contents for our documentation project is defined in the mkdocs.yaml file for a 
+project.  The mkdocs.yaml file resides in the same directory as the docs folder.  The file content
+will be unique for each project, but will likely mirror the content in the TOC from the README file,
+and may include:
 
 - Architecture Guide
     - Best Practices Guide
