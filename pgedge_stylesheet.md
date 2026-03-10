@@ -1,6 +1,8 @@
 # Documentation
 
-Each public project should have a docs folder that contains source documentation files in simple markdown format.  
+Lines in each .md file should be as long as possible, while wrapping content at 79 characters. Hyperlinks and table columns should not be split by wrapping.
+
+Each public repo/project should have a folder named docs that contains source documentation files in simple markdown format. Files in the doc folder are referenced by the  
 
 The LICENSE.md file should be stored in the docs folder; aliases don't work properly with MkDocs.
 
@@ -67,15 +69,16 @@ Next is the ## Documentation section; this section has an introductory sentence,
 
 At the end of the README:
 
-Include a link to the Issues page for the project:  "To report an issue with the software, visit:"
+Include a ## Support & Resources section that contains:
 
-If applicable, include a section/link for Developers/Project contributers that links to developer documentation if available (and if developer documentation is not available, link to the GH site): "We welcome your project contributions; for more information, see docs/developers.md."
+* links to help and documentation: "For more information, visit here."
+* a link to the Issues page for the project:  "To report an issue with the software, visit: followed by helpful links"
+
+If applicable, include a ## Contributing section for Developers/Project contributers that links to developer documentation or the GitHub site: "We welcome your project contributions; for more information, see docs/developers.md."
 
 Include a link to the online documentation at:  For more information, visit [docs.pgedge.com](docs.pgedge.com)
 
-At the end of each README file, include a license section: 
-
-## License
+At the end of each README file, include a ## License section that contains: 
 
 This project is licensed under the [PostgreSQL License](LICENSE.md).
 
