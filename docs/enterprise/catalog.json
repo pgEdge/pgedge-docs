@@ -499,7 +499,7 @@
       ],
       "prerequisites": [
         "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm",
-        "sudo subscription-manager repos --enable codeready-builder-for-rhel-10-x86_64-rpms"
+        "sudo subscription-manager repos --enable codeready-builder-for-rhel-10-$(arch)-rpms"
       ],
       "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
