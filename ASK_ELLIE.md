@@ -112,8 +112,12 @@ which deploy automatically with the documentation site.
 | File | Purpose |
 |------|---------|
 | `ansible/inventory/group_vars/all/main.yml` | Main configuration (system prompt, etc.) |
-| `ansible/inventory/group_vars/all/vault.yml` | Encrypted secrets |
+| `ansible/inventory/group_vars/all/vault.yml` | Encrypted secrets (API keys, passwords, instance ID) |
 | `ansible/roles/rag_server/templates/config.yaml.j2` | RAG server config |
+| `ansible/roles/docloader/templates/config.yaml.j2` | Docloader source config (initial deploy only) |
+| `ansible/roles/docloader/templates/load-docs.sh.j2` | Main doc loading script |
+| `ansible/roles/github_oidc/tasks/main.yml` | GitHub OIDC IAM role for Actions |
+| `.github/workflows/update-rag-index.yml` | GitHub Actions RAG update workflow |
 | `functions/api/chat/[[path]].js` | Pages Function for API proxy |
 
 ## Development Setup
@@ -312,6 +316,92 @@ The production system prompt is configured in `ansible/inventory/group_vars/all/
 - Product recommendation rules
 - Guardrails for team/people information
 
+## RAG Index Updates
+
+The RAG knowledge base is updated automatically through two mechanisms:
+
+### GitHub Actions (on docs merge)
+
+When changes to `docs/` are pushed to `main`, a GitHub Actions workflow triggers an update:
+
+1. The workflow authenticates to AWS via OIDC (no stored credentials)
+2. Sends an SSM RunShellScript command to the EC2 instance
+3. The instance runs `load-docs`, which clones/updates all git sources and loads them into the database
+4. The workflow polls for completion and reports success/failure
+
+**Workflow file:** `.github/workflows/update-rag-index.yml`
+
+**Required GitHub secrets (set by repo admin):**
+
+| Secret | Description |
+|--------|-------------|
+| `AWS_ROLE_ARN` | IAM role ARN created by the `github_oidc` Ansible role |
+| `RAG_INSTANCE_ID` | EC2 instance ID of the RAG server |
+| `AWS_REGION` | AWS region (e.g., `us-east-1`) |
+
+### Weekly Cron Job (all sources)
+
+A cron job runs every Sunday at 3:00 AM UTC to update all sources, including website crawls, wiki content, and package scanning that aren't triggered by docs merges.
+
+**Cron file:** `/etc/cron.d/docloader-rag-update` (managed by the `docloader` Ansible role)
+**Logs:** `/var/log/pgedge/docloader/cron.log` (rotated weekly, 4 copies)
+
+Both the workflow and cron job use `flock` to prevent concurrent runs.
+
+### Auto-Latest-Tag
+
+All git-based sources use `git_tag: "latest"` in the docloader config. On each run, `load-docs`:
+
+1. Clones or fetches the repo
+2. Lists all tags, sorted by semantic version
+3. Filters by `tag_prefix` (e.g., `v`, `REL_18_`, `pgbouncer_`)
+4. Checks out the highest-version matching tag
+5. Auto-detects the version from the tag name (strips the prefix)
+
+This means patch and minor releases are picked up automatically without config changes.
+
+**Tag prefix reference:**
+
+| Source | tag_prefix | Example tag |
+|--------|-----------|-------------|
+| PostgreSQL 18/17/16 | `REL_18_`, `REL_17_`, `REL_16_` | `REL_18_1` |
+| pgEdge products | `v` | `v5.0.4` |
+| pgAdmin 4 | `REL-` | `REL-9_10` |
+| PgBouncer | `pgbouncer_` | `pgbouncer_1_25_0` |
+| pgBackRest | `release/` | `release/2.57.0` |
+| PostGIS | `3.` | `3.5.3` |
+| pgvector | `v` | `v0.8.2` |
+
+### Manual Config Updates Required
+
+Auto-latest-tag handles patch and minor releases automatically, but the following changes require manually editing the config on the server (`/etc/pgedge/docloader/config.yaml`) or updating the Ansible template (`ansible/roles/docloader/templates/config.yaml.j2`):
+
+- **New major PostgreSQL version** — When pgEdge starts supporting PostgreSQL 19, add a new source entry with `tag_prefix: "REL_19_"` and `version: "19"`.
+- **New pgEdge product or extension** — Add a new source entry with the repo URL and appropriate `tag_prefix`.
+- **New third-party tool** — Add a new source entry. Check the repo's tag naming convention to set the right `tag_prefix`.
+- **PostGIS major version bump** — The current `tag_prefix: "3."` only picks up PostGIS 3.x tags. When PostGIS 4.0 releases, update the prefix to `"4."` (or add a second entry for both).
+- **Dropping support for an old version** — Remove the corresponding source entry.
+
+The config on the server (`/etc/pgedge/docloader/config.yaml`) is NOT overwritten by Ansible after initial deployment. To apply config template changes from the repo, either redeploy the config manually via SSM or re-run the Ansible playbook with the config file removed first.
+
+### Running load-docs Manually
+
+```bash
+# Via SSM (if no SSH access):
+aws ssm send-command \
+  --instance-ids "<INSTANCE_ID>" \
+  --document-name "AWS-RunShellScript" \
+  --parameters 'commands=["sudo /usr/local/bin/load-docs"]' \
+  --region us-east-1
+
+# On the server directly:
+sudo load-docs              # Run all steps
+sudo load-docs --dry-run    # Preview without loading
+sudo load-docs --list       # List all configured sources
+sudo load-docs --source 0   # Load only source 0
+sudo load-docs --skip-prep  # Skip website/wiki/package crawling
+```
+
 ## Troubleshooting
 
 ### FAB Not Appearing
@@ -332,6 +422,20 @@ For local development, ensure:
 - Verify the RAG server supports SSE
 - Check that `stream: true` is in the request body
 - Ensure no proxy is buffering the response
+
+### RAG Index Not Updating on Docs Merge
+
+1. Check that GitHub secrets are set: `AWS_ROLE_ARN`, `RAG_INSTANCE_ID`, `AWS_REGION`
+2. Check the Actions tab for workflow run status and logs
+3. Verify the OIDC IAM role exists: `aws iam get-role --role-name pgedge-github-actions-rag-update`
+4. Verify the EC2 instance SSM agent is online: `aws ssm describe-instance-information --region us-east-1`
+
+### load-docs Failing
+
+1. Check cron logs: `cat /var/log/pgedge/docloader/cron.log`
+2. Run manually to see output: `sudo load-docs --source 0 --skip-prep`
+3. Check database connectivity: `sudo -u postgres psql -d docloader -c "SELECT count(*) FROM docs;"`
+4. Check if a lock is held: `ls -la /var/lock/pgedge-load-docs.lock`
 
 ## Files
 

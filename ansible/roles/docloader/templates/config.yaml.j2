@@ -41,8 +41,9 @@ columns:
 #
 # Git repository options:
 #   git_url: URL to clone (required for git sources)
-#   git_tag: Specific tag to checkout (use tag OR branch, not both)
+#   git_tag: Specific tag to checkout, or "latest" to auto-detect newest tag
 #   git_branch: Specific branch to checkout (default: main)
+#   tag_prefix: Filter tags by prefix when using "latest" (e.g., "v", "REL_")
 #   doc_path: Glob pattern within repo for docs (e.g., "docs/**/*.md")
 #
 # Local path options:
@@ -51,7 +52,7 @@ columns:
 #
 # Metadata (mapped to custom columns):
 #   product: Product name (required)
-#   version: Version string (optional)
+#   version: Version string (optional — auto-detected from tag if empty)
 #
 # =============================================================================
 
@@ -59,20 +60,25 @@ sources:
   # -------------------------------------------------------------------------
   # PostgreSQL Core Documentation
   # -------------------------------------------------------------------------
+  # tag_prefix pins to major version; version is fixed since tag format
+  # (REL_18_1) doesn't map cleanly to a display version.
   - git_url: "https://github.com/postgres/postgres.git"
-    git_tag: "REL_18_1"
+    git_tag: "latest"
+    tag_prefix: "REL_18_"
     doc_path: "doc/src/sgml/*.sgml"
     product: "PostgreSQL"
     version: "18"
 
   - git_url: "https://github.com/postgres/postgres.git"
-    git_tag: "REL_17_7"
+    git_tag: "latest"
+    tag_prefix: "REL_17_"
     doc_path: "doc/src/sgml/*.sgml"
     product: "PostgreSQL"
     version: "17"
 
   - git_url: "https://github.com/postgres/postgres.git"
-    git_tag: "REL_16_11"
+    git_tag: "latest"
+    tag_prefix: "REL_16_"
     doc_path: "doc/src/sgml/*.sgml"
     product: "PostgreSQL"
     version: "16"
@@ -102,190 +108,217 @@ sources:
   # Spock Multi-Master Replication
   # -------------------------------------------------------------------------
   - git_url: "https://github.com/pgEdge/spock.git"
-    git_tag: "v5.0.4"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "Spock"
-    version: "5.0.4"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/spock.git"
-    git_tag: "v5.0.4"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "Spock"
-    version: "5.0.4"
+    version: ""
 
   # -------------------------------------------------------------------------
   # pgEdge Tools and Extensions
   # -------------------------------------------------------------------------
   - git_url: "https://github.com/pgEdge/ace.git"
-    git_tag: "v1.4.2"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge ACE"
-    version: "1.4.2"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/ace.git"
-    git_tag: "v1.4.2"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge ACE"
-    version: "1.4.2"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-vectorizer.git"
-    git_tag: "v1.0-beta1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge Vectorizer"
-    version: "1.0-beta1"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-vectorizer.git"
-    git_tag: "v1.0-beta1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge Vectorizer"
-    version: "1.0-beta1"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-rag-server.git"
-    git_tag: "v1.0.0-beta2"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge RAG Server"
-    version: "1.0.0-beta2"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-rag-server.git"
-    git_tag: "v1.0.0-beta2"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge RAG Server"
-    version: "1.0.0-beta2"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-docloader.git"
-    git_tag: "v1.0.0-beta1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge Docloader"
-    version: "1.0.0-beta1"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-docloader.git"
-    git_tag: "v1.0.0-beta1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge Docloader"
-    version: "1.0.0-beta1"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-postgres-mcp.git"
-    git_tag: "v1.0.0-beta1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge Postgres MCP"
-    version: "1.0.0-beta1"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-postgres-mcp.git"
-    git_tag: "v1.0.0-beta1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge Postgres MCP"
-    version: "1.0.0-beta1"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-anonymizer.git"
-    git_tag: "v1.0.0-beta2"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge Anonymizer"
-    version: "1.0.0-beta2"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-anonymizer.git"
-    git_tag: "v1.0.0-beta2"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge Anonymizer"
-    version: "1.0.0-beta2"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/snowflake.git"
-    git_tag: "v2.4"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge Snowflake"
-    version: "2.4"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/snowflake.git"
-    git_tag: "v2.4"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge Snowflake"
-    version: "2.4"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/lolor.git"
-    git_tag: "v1.2.2"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge LOLOR"
-    version: "1.2.2"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/lolor.git"
-    git_tag: "v1.2.2"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge LOLOR"
-    version: "1.2.2"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/control-plane.git"
-    git_tag: "v0.6.1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge Control Plane"
-    version: "0.6.1"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/control-plane.git"
-    git_tag: "v0.6.1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge Control Plane"
-    version: "0.6.1"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-helm.git"
-    git_tag: "v0.1.0"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "README.md"
     product: "pgEdge Helm"
-    version: "0.1.0"
+    version: ""
 
   - git_url: "https://github.com/pgEdge/pgedge-helm.git"
-    git_tag: "v0.1.0"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "docs/**/*.md"
     product: "pgEdge Helm"
-    version: "0.1.0"
+    version: ""
 
   # -------------------------------------------------------------------------
   # PostgreSQL Tools
   # -------------------------------------------------------------------------
   - git_url: "https://github.com/pgadmin-org/pgadmin4.git"
-    git_tag: "REL-9_10"
+    git_tag: "latest"
+    tag_prefix: "REL-"
     doc_path: "docs/en_US/**/*.rst"
     product: "pgAdmin 4"
-    version: "9.10"
+    version: ""
 
   - git_url: "https://github.com/pgbouncer/pgbouncer.git"
-    git_tag: "pgbouncer_1_25_0"
+    git_tag: "latest"
+    tag_prefix: "pgbouncer_"
     doc_path: "doc/*.md"
     product: "PgBouncer"
-    version: "1.25.0"
+    version: ""
 
   - git_url: "https://github.com/pgbackrest/pgbackrest.git"
-    git_tag: "release/2.57.0"
+    git_tag: "latest"
+    tag_prefix: "release/"
     doc_path: "doc/xml/**/*.xml"
     product: "pgBackRest"
-    version: "2.57.0"
+    version: ""
 
   # -------------------------------------------------------------------------
   # PostgreSQL Extensions
   # -------------------------------------------------------------------------
   - git_url: "https://github.com/postgis/postgis.git"
-    git_tag: "3.5.3"
+    git_tag: "latest"
+    tag_prefix: "3."
     doc_path: "doc/**/*.xml"
     product: "PostGIS"
-    version: "3.5.3"
+    version: ""
 
   - git_url: "https://github.com/pgvector/pgvector.git"
-    git_tag: "v0.8.1"
+    git_tag: "latest"
+    tag_prefix: "v"
     doc_path: "*.md"
     product: "pgvector"
-    version: "0.8.1"
+    version: ""
 
   - git_url: "https://github.com/pgaudit/pgaudit.git"
-    git_tag: "18.0"
+    git_tag: "latest"
     doc_path: "*.md"
     product: "pgAudit"
-    version: "18.0"
+    version: ""
 
   # -------------------------------------------------------------------------
   # PostgreSQL Client Libraries
   # -------------------------------------------------------------------------
   - git_url: "https://github.com/psycopg/psycopg2.git"
-    git_tag: "2.9.10"
+    git_tag: "latest"
     doc_path: "doc/src/**/*.rst"
     product: "psycopg2"
-    version: "2.9.10"
+    version: ""
 
 # =============================================================================
 # Notes
