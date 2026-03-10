@@ -33,7 +33,8 @@
         {
           "name": "PostgreSQL",
           "description": "pgEdge-patched PostgreSQL database engine",
-          "package_name": null,
+          "rpm_name": null,
+          "deb_name": null,
           "pg_versions": [
             "16",
             "17",
@@ -45,9 +46,22 @@
           ]
         },
         {
+          "name": "PostgreSQL Client",
+          "description": "Front-end programs for PostgreSQL (psql, pg_dump, pg_restore, etc.)",
+          "rpm_name": "pgedge-postgresql{ver}",
+          "deb_name": "pgedge-postgresql-client-{ver}",
+          "pg_versions": [
+            "16",
+            "17",
+            "18"
+          ],
+          "included_in": []
+        },
+        {
           "name": "Spock 5.0",
           "description": "Multi-master active-active logical replication",
-          "package_name": "pgedge-spock50_{ver}",
+          "rpm_name": "pgedge-spock50_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-spock50",
           "pg_versions": [
             "16",
             "17",
@@ -61,7 +75,8 @@
         {
           "name": "lolor",
           "description": "Large object logical replication support",
-          "package_name": "pgedge-lolor_{ver}",
+          "rpm_name": "pgedge-lolor_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-lolor",
           "pg_versions": [
             "16",
             "17",
@@ -75,7 +90,8 @@
         {
           "name": "Snowflake",
           "description": "Distributed sequence ID generation",
-          "package_name": "pgedge-snowflake_{ver}",
+          "rpm_name": "pgedge-snowflake_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-snowflake",
           "pg_versions": [
             "16",
             "17",
@@ -94,7 +110,8 @@
         {
           "name": "pgVector",
           "description": "Vector similarity search for AI embeddings",
-          "package_name": "pgedge-pgvector_{ver}",
+          "rpm_name": "pgedge-pgvector_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-pgvector",
           "pg_versions": [
             "16",
             "17",
@@ -106,9 +123,10 @@
           ]
         },
         {
-          "name": "Vectorizer",
+          "name": "pgEdge Vectorizer",
           "description": "Automated vector embedding generation",
-          "package_name": "pgedge-vectorizer_{ver}",
+          "rpm_name": "pgedge-vectorizer_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-vectorizer",
           "pg_versions": [
             "16",
             "17",
@@ -121,7 +139,8 @@
         {
           "name": "pg_vectorize",
           "description": "SQL-level vectorization functions",
-          "package_name": "pgedge-pg-vectorize_{ver}",
+          "rpm_name": "pgedge-pg-vectorize_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-pg-vectorize",
           "pg_versions": [
             "16",
             "17",
@@ -134,7 +153,8 @@
         {
           "name": "pg_tokenizer",
           "description": "Text tokenization for search and AI",
-          "package_name": "pgedge-pg-tokenizer_{ver}",
+          "rpm_name": "pgedge-pg-tokenizer_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-pg-tokenizer",
           "pg_versions": [
             "16",
             "17",
@@ -147,7 +167,8 @@
         {
           "name": "vchord_bm25",
           "description": "BM25 ranking for full-text vector search",
-          "package_name": "pgedge-vchord-bm25_{ver}",
+          "rpm_name": "pgedge-vchord-bm25_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-vchord-bm25",
           "pg_versions": [
             "16",
             "17",
@@ -160,7 +181,8 @@
         {
           "name": "MCP Server",
           "description": "Model Context Protocol server for LLM-database integration",
-          "package_name": "pgedge-postgres-mcp",
+          "rpm_name": "pgedge-postgres-mcp",
+          "deb_name": "pgedge-postgres-mcp",
           "pg_versions": [
             "all"
           ],
@@ -169,9 +191,20 @@
           ]
         },
         {
+          "name": "MCP Knowledge Base Builder",
+          "description": "Knowledge base builder for MCP Server",
+          "rpm_name": "pgedge-postgres-mcp-kb",
+          "deb_name": "pgedge-postgres-mcp-kb",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        },
+        {
           "name": "RAG Server",
           "description": "Retrieval-augmented generation server",
-          "package_name": "pgedge-rag-server",
+          "rpm_name": "pgedge-rag-server",
+          "deb_name": "pgedge-rag-server",
           "pg_versions": [
             "all"
           ],
@@ -182,7 +215,8 @@
         {
           "name": "Anonymizer",
           "description": "Data anonymization and masking for AI pipelines",
-          "package_name": "pgedge-anonymizer",
+          "rpm_name": "pgedge-anonymizer",
+          "deb_name": "pgedge-anonymizer",
           "pg_versions": [
             "all"
           ],
@@ -193,7 +227,8 @@
         {
           "name": "Docloader",
           "description": "Document ingestion and chunking for RAG workflows",
-          "package_name": "pgedge-docloader",
+          "rpm_name": "pgedge-docloader",
+          "deb_name": "pgedge-docloader",
           "pg_versions": [
             "all"
           ],
@@ -202,15 +237,26 @@
           ]
         },
         {
-          "name": "NLA",
-          "description": "Natural language API — CLI and web interface",
-          "package_name": "pgedge-nla-cli",
+          "name": "NLA CLI",
+          "description": "Natural language API — CLI client",
+          "rpm_name": "pgedge-nla-cli",
+          "deb_name": "pgedge-nla-cli",
           "pg_versions": [
             "all"
           ],
           "included_in": [
             "full"
           ]
+        },
+        {
+          "name": "NLA Web",
+          "description": "Natural language API — web interface",
+          "rpm_name": "pgedge-nla-web",
+          "deb_name": "pgedge-nla-web",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
         }
       ]
     },
@@ -220,7 +266,8 @@
         {
           "name": "PostGIS",
           "description": "Geospatial data types, functions, and indexing",
-          "package_name": "pgedge-postgis35_{ver}",
+          "rpm_name": "pgedge-postgis35_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-postgis-3",
           "pg_versions": [
             "16",
             "17",
@@ -234,7 +281,8 @@
         {
           "name": "pgAudit",
           "description": "Detailed session and object audit logging",
-          "package_name": "pgedge-pgaudit_{ver}",
+          "rpm_name": "pgedge-pgaudit_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-pgaudit",
           "pg_versions": [
             "16",
             "17",
@@ -248,7 +296,8 @@
         {
           "name": "pg_cron",
           "description": "Job scheduler for running periodic SQL tasks",
-          "package_name": "pgedge-pg_cron_{ver}",
+          "rpm_name": "pgedge-pg_cron_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-cron",
           "pg_versions": [
             "16",
             "17",
@@ -261,7 +310,8 @@
         {
           "name": "pgmq",
           "description": "Lightweight message queue built on PostgreSQL",
-          "package_name": "pgedge-pgmq_{ver}",
+          "rpm_name": "pgedge-pgmq_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-pgmq",
           "pg_versions": [
             "16",
             "17",
@@ -274,7 +324,8 @@
         {
           "name": "pg_stat_monitor",
           "description": "Query performance monitoring and statistics",
-          "package_name": "pgedge-pg-stat-monitor_{ver}",
+          "rpm_name": "pgedge-pg-stat-monitor_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-pg-stat-monitor",
           "pg_versions": [
             "16",
             "17",
@@ -287,7 +338,8 @@
         {
           "name": "pldebugger",
           "description": "PL/pgSQL interactive debugger",
-          "package_name": "pgedge-pldebugger_{ver}",
+          "rpm_name": "pgedge-pldebugger_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-pldebugger",
           "pg_versions": [
             "16",
             "17",
@@ -300,7 +352,8 @@
         {
           "name": "system_stats",
           "description": "System-level performance statistics",
-          "package_name": "pgedge-system_stats_{ver}",
+          "rpm_name": "pgedge-system_stats_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-system-stats",
           "pg_versions": [
             "16",
             "17",
@@ -313,7 +366,8 @@
         {
           "name": "pl/Perl",
           "description": "Perl procedural language for PostgreSQL",
-          "package_name": "pgedge-postgresql{ver}-plperl",
+          "rpm_name": "pgedge-postgresql{ver}-plperl",
+          "deb_name": "pgedge-postgresql-plperl-{ver}",
           "pg_versions": [
             "16",
             "17",
@@ -326,7 +380,8 @@
         {
           "name": "pl/Python",
           "description": "Python procedural language for PostgreSQL",
-          "package_name": "pgedge-postgresql{ver}-plpython3",
+          "rpm_name": "pgedge-postgresql{ver}-plpython3",
+          "deb_name": "pgedge-postgresql-plpython3-{ver}",
           "pg_versions": [
             "16",
             "17",
@@ -339,7 +394,8 @@
         {
           "name": "pl/TCL",
           "description": "TCL procedural language for PostgreSQL",
-          "package_name": "pgedge-postgresql{ver}-pltcl",
+          "rpm_name": "pgedge-postgresql{ver}-pltcl",
+          "deb_name": "pgedge-postgresql-pltcl-{ver}",
           "pg_versions": [
             "16",
             "17",
@@ -357,7 +413,8 @@
         {
           "name": "pgAdmin 4",
           "description": "Web-based PostgreSQL administration interface",
-          "package_name": "pgedge-pgadmin4",
+          "rpm_name": "pgedge-pgadmin4",
+          "deb_name": "pgedge-pgadmin4",
           "pg_versions": [
             "all"
           ],
@@ -368,7 +425,8 @@
         {
           "name": "pgBouncer",
           "description": "Lightweight connection pooler for PostgreSQL",
-          "package_name": "pgedge-pgbouncer",
+          "rpm_name": "pgedge-pgbouncer",
+          "deb_name": "pgedge-pgbouncer",
           "pg_versions": [
             "all"
           ],
@@ -379,7 +437,8 @@
         {
           "name": "pgBackRest",
           "description": "Reliable backup and restore with PITR support",
-          "package_name": "pgedge-pgbackrest",
+          "rpm_name": "pgedge-pgbackrest",
+          "deb_name": "pgedge-pgbackrest",
           "pg_versions": [
             "all"
           ],
@@ -390,7 +449,8 @@
         {
           "name": "PostgREST",
           "description": "RESTful API server for PostgreSQL",
-          "package_name": "pgedge-postgrest",
+          "rpm_name": "pgedge-postgrest",
+          "deb_name": "pgedge-postgrest",
           "pg_versions": [
             "all"
           ],
@@ -399,7 +459,8 @@
         {
           "name": "psycopg2",
           "description": "Python-PostgreSQL database adapter",
-          "package_name": "pgedge-python3-psycopg2",
+          "rpm_name": "pgedge-python3-psycopg2",
+          "deb_name": "pgedge-python3-psycopg2",
           "pg_versions": [
             "all"
           ],
@@ -409,8 +470,8 @@
     }
   ],
   "platforms": {
-    "el9": {
-      "label": "EL 9 (RHEL / Rocky / Alma)",
+    "rhel9": {
+      "label": "RHEL 9",
       "family": "el",
       "version": "9",
       "pkg_manager": "dnf",
@@ -418,14 +479,17 @@
         "x86_64",
         "aarch64"
       ],
-      "prerequisites": [],
+      "prerequisites": [
+        "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm",
+        "sudo dnf config-manager --set-enabled codeready-builder-for-rhel-9-rhui-rpms"
+      ],
       "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
     },
-    "el10": {
-      "label": "EL 10 (RHEL / Rocky / Alma)",
+    "rhel10": {
+      "label": "RHEL 10",
       "family": "el",
       "version": "10",
       "pkg_manager": "dnf",
@@ -433,7 +497,118 @@
         "x86_64",
         "aarch64"
       ],
-      "prerequisites": [],
+      "prerequisites": [
+        "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm",
+        "sudo subscription-manager repos --enable codeready-builder-for-rhel-10-$(arch)-rpms"
+      ],
+      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "install_pattern": "sudo dnf install -y {package}",
+      "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
+      "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
+    },
+    "oracle9": {
+      "label": "Oracle Linux 9",
+      "family": "el",
+      "version": "9",
+      "pkg_manager": "dnf",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [
+        "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm",
+        "sudo dnf config-manager --set-enabled ol9_codeready_builder"
+      ],
+      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "install_pattern": "sudo dnf install -y {package}",
+      "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
+      "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
+    },
+    "oracle10": {
+      "label": "Oracle Linux 10",
+      "family": "el",
+      "version": "10",
+      "pkg_manager": "dnf",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [
+        "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm",
+        "sudo dnf config-manager --set-enabled ol10_codeready_builder"
+      ],
+      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "install_pattern": "sudo dnf install -y {package}",
+      "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
+      "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
+    },
+    "rocky9": {
+      "label": "Rocky Linux 9",
+      "family": "el",
+      "version": "9",
+      "pkg_manager": "dnf",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [
+        "sudo dnf install -y epel-release",
+        "sudo dnf config-manager --set-enabled crb"
+      ],
+      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "install_pattern": "sudo dnf install -y {package}",
+      "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
+      "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
+    },
+    "rocky10": {
+      "label": "Rocky Linux 10",
+      "family": "el",
+      "version": "10",
+      "pkg_manager": "dnf",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [
+        "sudo dnf install -y epel-release",
+        "sudo dnf config-manager --set-enabled crb"
+      ],
+      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "install_pattern": "sudo dnf install -y {package}",
+      "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
+      "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
+    },
+    "alma9": {
+      "label": "Alma Linux 9",
+      "family": "el",
+      "version": "9",
+      "pkg_manager": "dnf",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [
+        "sudo dnf install -y epel-release",
+        "sudo dnf config-manager --set-enabled crb"
+      ],
+      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "install_pattern": "sudo dnf install -y {package}",
+      "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
+      "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
+    },
+    "alma10": {
+      "label": "Alma Linux 10",
+      "family": "el",
+      "version": "10",
+      "pkg_manager": "dnf",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [
+        "sudo dnf install -y epel-release",
+        "sudo dnf config-manager --set-enabled crb"
+      ],
       "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
@@ -448,7 +623,10 @@
         "x86_64",
         "aarch64"
       ],
-      "prerequisites": [],
+      "prerequisites": [
+        "sudo apt-get update",
+        "sudo apt-get install -y curl gnupg2 lsb-release"
+      ],
       "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
@@ -463,7 +641,10 @@
         "x86_64",
         "aarch64"
       ],
-      "prerequisites": [],
+      "prerequisites": [
+        "sudo apt-get update",
+        "sudo apt-get install -y curl gnupg2 lsb-release"
+      ],
       "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
@@ -478,7 +659,10 @@
         "x86_64",
         "aarch64"
       ],
-      "prerequisites": [],
+      "prerequisites": [
+        "sudo apt-get update",
+        "sudo apt-get install -y curl gnupg2 lsb-release"
+      ],
       "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
@@ -493,7 +677,10 @@
         "x86_64",
         "aarch64"
       ],
-      "prerequisites": [],
+      "prerequisites": [
+        "sudo apt-get update",
+        "sudo apt-get install -y curl gnupg2 lsb-release"
+      ],
       "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
@@ -508,7 +695,10 @@
         "x86_64",
         "aarch64"
       ],
-      "prerequisites": [],
+      "prerequisites": [
+        "sudo apt-get update",
+        "sudo apt-get install -y curl gnupg2 lsb-release"
+      ],
       "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
@@ -520,7 +710,7 @@
     "17",
     "18"
   ],
-  "default_platform": "el9",
+  "default_platform": "rhel9",
   "default_arch": "x86_64",
   "default_pg_version": "18"
 }

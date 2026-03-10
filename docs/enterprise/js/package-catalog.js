@@ -201,11 +201,11 @@ function buildUI(mount, catalog) {
     catalogTree.querySelectorAll(".pkg-row.expanded").forEach(function(row) {
       var installEl = row.nextElementSibling;
       if (!installEl || !installEl.classList.contains("pkg-install")) return;
-      var pkgName = row.dataset.packageName;
-      if (!pkgName) return;
       var platformKey = platformEl.select.value;
       var pgVer = pgEl.select.value;
       var platform = catalog.platforms[platformKey];
+      var pkgName = platform.pkg_manager === "dnf" ? row.dataset.rpmName : row.dataset.debName;
+      if (!pkgName) return;
       var resolved = pkgName.replace(/\{ver\}/g, pgVer);
       installEl.textContent = platform.install_pattern.replace("{package}", resolved);
     });
@@ -341,17 +341,18 @@ function renderCatalogTree(container, catalog) {
       body.appendChild(row);
 
       /* Click-to-install: show install command for this package */
-      if (pkg.package_name) {
+      if (pkg.rpm_name || pkg.deb_name) {
         row.classList.add("clickable");
         row.setAttribute("role", "button");
         row.setAttribute("tabindex", "0");
         row.setAttribute("aria-expanded", "false");
-        row.dataset.packageName = pkg.package_name;
+        row.dataset.rpmName = pkg.rpm_name || "";
+        row.dataset.debName = pkg.deb_name || "";
         var installEl = document.createElement("div");
         installEl.className = "pkg-install";
         body.appendChild(installEl);
 
-        var toggleInstall = (function(pkgName, instEl, r) {
+        var toggleInstall = (function(rpmName, debName, instEl, r) {
           return function() {
             var wasExpanded = r.classList.contains("expanded");
             /* Collapse any other expanded row in this category */
@@ -364,13 +365,14 @@ function renderCatalogTree(container, catalog) {
             var platformKey = document.getElementById("pc-platform").value;
             var pgVer = document.getElementById("pc-pg-version").value;
             var platform = catalog.platforms[platformKey];
+            var pkgName = platform.pkg_manager === "dnf" ? rpmName : debName;
             var resolved = pkgName.replace(/\{ver\}/g, pgVer);
             var cmd = platform.install_pattern.replace("{package}", resolved);
             instEl.textContent = cmd;
             r.classList.add("expanded");
             r.setAttribute("aria-expanded", "true");
           };
-        })(pkg.package_name, installEl, row);
+        })(pkg.rpm_name, pkg.deb_name, installEl, row);
 
         row.addEventListener("click", toggleInstall);
         row.addEventListener("keydown", function(e) {

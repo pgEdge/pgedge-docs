@@ -10,7 +10,7 @@ Before configuring local access to the repository (`pgedge`), you should ensure 
 
 ```bash
   sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
-  sudo subscription-manager repos --enable codeready-builder-for-rhel-10-x86_64-rpms
+  sudo subscription-manager repos --enable codeready-builder-for-rhel-10-$(arch)-rpms
 ```
 
 * Red Hat Enterprise Linux v9
