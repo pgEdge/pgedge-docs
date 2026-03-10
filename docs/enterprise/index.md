@@ -15,11 +15,11 @@ to configure and copy the commands for your platform.
 
 If your organization needs professional grade support, pgEdge offers support and management subscriptions. You get all of the benefits of pgEdge products, plus:
 
-- 24/7 support by phone, email or ticketing system
-- Architecture reviews, performance reviews, and guidance
-- Early access to all software updates and new features
-- A dedicated technical account manager (TAM)
-- Fully licensed for production usage (on a per vCPU basis)
+- 24/7 support by phone, email or ticketing system.
+- architecture reviews, performance reviews, and guidance.
+- early access to all software updates and new features.
+- a dedicated technical account manager (TAM).
+- fully licensed for production usage (on a per vCPU basis).
 
 For more information about support for pgEdge Distributed Postgres (VM Edition), [reach out to pgEdge](https://www.pgedge.com/contact).
 
