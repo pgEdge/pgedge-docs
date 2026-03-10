@@ -1,19 +1,23 @@
-# Formatting README files
+# Documentation
 
-This section of the stylesheet applies to the README files in each of our public repos - every
-public repo should have a README file.
+Each public project should have a docs folder that contains source documentation files in simple markdown format.  
 
+The LICENSE.md file should be stored in the docs folder; aliases don't work properly with MkDocs.
 
-At the top of each README file, links to the contents of the docs folder should create a
-table of contents (TOC).  The top of each README file should contain:
+## Formatting README files
 
-* A first-level heading (# Project Name)
-* If applicable, links to regression testing tools or developer/dba tools
+This section of the stylesheet applies to the README files that reside in each of our public repos - every
+public repo should have a README file.  The top of each README should include:
+
+* a first-level heading (#) identifying the project by name (# Project Name).
+* if applicable, links to regression testing tools or developer/dba tools
+* Github Action badges for important actions in use by the repository.
+
+The heading info noted above should be followed by a Table of Contents (TOC) heading and links that build the TOC with the contents of the docs folder:
+
 * A second-level heading (## Table of Contents)
 
-That heading is followed by a bulleted list of linked content that resides in the docs folder
-that may include (where applicable for the project).  Each link in the list should be in a separate
-.md file:
+That heading is followed by a bulleted list of linked content that resides in the docs folder.  Top level entries in the TOC should mirror the mkdocs.yaml file nav panel list for the project, and link to the same .md file used in our online documentation (docs/file_name.md); second-level links in the hierarchy may refer to content within a .md file (docs/file_name/#section_name):
 
 - Architecture Guide
 - Best Practices Guide
@@ -36,30 +40,48 @@ that may include (where applicable for the project).  Each link in the list shou
 - Release Notes
 - Developer Resources
 
----
+After the TOC, include a short introduction that describes the project, including what the project 
+does, and a very short descriptions of usage or why someone might use the project.  After the
+introductory paragraph, and include the following sections:
 
-After the TOC, a short introduction should describe the project; this can include what the project 
-does, and very short descriptions of usage or who would benefit from using the project.  After the
-introductory paragraph, include details about:
+The ## Installation section has an introductory sentence, followed by:
 
-Building from Source
-Simple Configuration Steps
-Using the Project
-Building the Documentation from Source
+* Prerequisite software or configuration details
+* How to installing the project with pgEdge software like the Control Plane if applicable.
+* How to building from source.
 
-The intention of the README file is to include enough information to get a user started, along with
-links to deeper information for a long-term user.
+Next is the ## Configuration section; this section has an introductory sentence, followed by:
 
-README file content should be wrapped at 79 characters, with the exception of links and table
-cell content, which should all reside on the same line.
+* simple configuration steps.
+* a link to more advanced installation options.
 
-At the end of each README file, include a second-level heading (## License) followed
-by the note:
+Next is the ## Using Project Name section; this section has an introductory sentence, followed by:
+
+* simple usage instructions and examples.
+* one or more links to more advanced usage pages.
+
+Next is the ## Documentation section; this section has an introductory sentence, followed by:
+
+* details about building the documentation from source.
+* links to the pgEdge documentation site.
+
+At the end of the README:
+
+Include a link to the Issues page for the project:  "To report an issue with the software, visit:"
+
+If applicable, include a section/link for Developers/Project contributers that links to developer documentation if available (and if developer documentation is not available, link to the GH site): "We welcome your project contributions; for more information, see docs/developers.md."
+
+Include a link to the online documentation at:  For more information, visit [docs.pgedge.com](docs.pgedge.com)
+
+At the end of each README file, include a license section: 
+
+## License
 
 This project is licensed under the [PostgreSQL License](LICENSE.md).
 
-The LICENSE.md file should be stored in the docs folder; aliases don't work properly
-with MkDocs.
+
+
+
 
 
 ## Documentation
@@ -96,9 +118,11 @@ and may include:
 Nested details can be in the same file as the steps to which it applies; for example, the Prerequisites section can reside in the same file as Building the Project.
 
 
-## Within an .md File
+## Within a .md File - Formatting Content Pages
 
-The following product names are proper nouns and should be treated as such.  You should generally omit 'the' in front of the name unless using the name as an adjective to describe software, files, or other project artifacts:
+Document files should be named in the form my_file.md, and docs for each project should like in the `docs` folder (or sub-directories of the `docs` folder).
+
+The following product names are proper nouns and should be treated as such.  As a rule you should generally omit 'the' in front of the name unless using the name as an adjective to describe software, files, or other project artifacts:
 
 pgEdge Cloud
 pgEdge Enterprise Postgres
@@ -117,27 +141,20 @@ pgEdge Anonymizer
 pgEdge RAG Server
 pgEdge Docloader
 
-Troubleshooting and problem solving sections should be added to a separate Troubleshooting section, rather than included in a section at the end of multiple doc files.  The Troubleshooting section should be sorted, and have sub-sections for topics like:
+Exceptions are:
 
-* connection issues
-* authentication issues
-* API-related issues
-etc.
+the Control Plane
 
-There should not be a 'Next Steps' section at the end of a proper documentation page - if the page needs links at the end, consider including a link to:
 
-* the Troubleshooting page: For help with the topics on this page, visit Troubleshooting ().
-* the Index
+Each file should have one first level heading, and multiple second level headings.  Third and fourth level headings should be used for prominent content below the hierarchically-previous heading level. 
 
-Document files should be named in the form my_file.md, and docs for each project should like in the `docs` folder (or sub-directories).
+* Each heading should have an introductory sentence or paragraph that explains the feature shown/discussed in the following section.
+* Wrap lines to 79 characters long, but keep standard inline markdown links all be on the same line.
+* Replace em-dashes with regular dashes (hyphens).
+* Remove bold highlighted text content - it is identified as a heading level by some software.
+* 
 
-Each file should have one first level heading, and multiple second level headings.  Third and fourth level headings should be used for prominent content below the hierarchically-previous heading level.
 
-Each heading should have an introductory sentence or paragraph that explains the feature shown/discussed in the following section.
-
-Wrap lines to 79 characters long, but keep standard inline markdown links all be on the same line.
-
-Replace em-dashes with regular dashes (hyphens).
 
 Replace bullet items that are in the form: **Semantic matching:** uses pgvector for similarity-based cache lookups   
   with complete sentences - for example: Semantic matching uses pgvector for similarity-based cache lookups.
@@ -184,33 +201,24 @@ Do not create links to github.io.
 
 
 
+### Troubleshooting Sections
 
-README.md file notes:
+Troubleshooting and problem solving sections should be added to a separate Troubleshooting section, rather than included in a section at the end of multiple doc files.  The Troubleshooting section should be sorted, and have sub-sections for topics like:
 
-At the top of each README file:
+* connection issues
+* authentication issues
+* API-related issues
+etc.
 
-* Include Github Action badges for important actions in use by the repository.
-* Include test deployment links (if used for the project).
-* Include a Table of Contents that mimics the nav section of the mkdocs.yaml file.
-* After the TOC include a link to the online docs, hosted at docs.pgedge.com.
+### Next Steps Sections
 
-README files should contain the steps required to get started with the project.
+As a rule, we don't include a 'Next Steps' section at the end of a technical documentation page - this content should be reserved primarily for Overview, Architecture, and Getting Started Pages
 
-This includes the commands to satisfy prerequisites, commands to build/install the binary/project, and notes about the minimal configuration changes required to deploy.
+If the page needs links at the end, consider including a link to the Troubleshooting page: 
 
-The prerequisites section should link to download/documentation links for third-party software when possible.
-
-In the deployment section, include links to the Installation, Configuration, and Usage pages in the docs/ folder.
+- For help with the topics on this page, visit Troubleshooting ().
 
 
-At the end of the README:
 
-Include a link to the Issues page for the project:  "To report an issue with the software, visit:"
 
-Include a section/link for Developers/Project contributers that links to developer documentation if available (and if developer documentation is not available, link to the GH site): "We welcome your project contributions; for more information, see docs/developers.md."
 
-Include a link to the online documentation at:  For more information, visit [docs.pgedge.com](docs.pgedge.com)
-
-Last thing in the file, include the sentence: "This project is licensed under the [PostgreSQL License](LICENCE.md)."
-
-The link in that sentence should point to either a symlink from the root of the repo or the version of the LICENCE.md file that resides in the docs folder.
