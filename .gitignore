@@ -16,6 +16,7 @@ docs/pgedge-containers/index.md
 docs/pgedge-docloader/index.md
 docs/pgedge-loadgen/index.md
 docs/pgedge-postgres-mcp-server/index.md
+docs/postgresql/index.md
 docs/pgedge-rag-server/index.md
 docs/pgedge-vectorizer/index.md
 docs/radar/index.md

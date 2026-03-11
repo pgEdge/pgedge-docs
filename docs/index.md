@@ -17,6 +17,7 @@ pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-
 
 ## Component Documentation
 
+* [PostgreSQL](postgresql/index.md): The World's Most Advanced Open Source Database.
 * [ACE (Active Consistency Engine)](ace/index.md): Data integrity for replicating clusters.
 * [Control Plane](control-plane/index.md): A distributed application that provides a declarative API to deploy and manage Postgres databases.
 * [lolor](lolor/index.md): A large object replication extension for Postgres.
