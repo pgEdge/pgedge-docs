@@ -469,12 +469,12 @@
 }
 
 /* Pagefind UI theme overrides */
-:root {
+.pagefind-modal-container {
     --pagefind-ui-scale: 0.9;
-    --pagefind-ui-primary: var(--md-primary-fg-color, #4051b5);
-    --pagefind-ui-text: var(--md-default-fg-color, #212529);
-    --pagefind-ui-background: var(--md-default-bg-color, #fff);
-    --pagefind-ui-border: var(--md-default-fg-color--lightest, #e0e0e0);
+    --pagefind-ui-primary: #4051b5;
+    --pagefind-ui-text: #333;
+    --pagefind-ui-background: #fff;
+    --pagefind-ui-border: #e0e0e0;
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-border-radius: 0.3rem;
     --pagefind-ui-font: var(--md-text-font-family, inherit);
@@ -495,12 +495,38 @@
     text-decoration: underline;
 }
 
+/* Product/version badge on search results */
+.pagefind-result-context {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.1rem 0.45rem;
+    border-radius: 0.2rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    background: var(--md-primary-fg-color, #4051b5);
+    color: #fff;
+}
+
 /* Dark mode adjustments */
 [data-md-color-scheme="slate"] .pagefind-modal-overlay {
     background: rgba(0, 0, 0, 0.7);
 }
 
 [data-md-color-scheme="slate"] .pagefind-modal-container {
+    --pagefind-ui-primary: #7b8cde;
+    --pagefind-ui-text: #ccc;
+    --pagefind-ui-background: #1e1e1e;
+    --pagefind-ui-border: #444;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-md-color-scheme="slate"] .pagefind-ui__result-link {
+    color: #7b8cde !important;
+}
+
+[data-md-color-scheme="slate"] .pagefind-result-context {
+    background: #7b8cde;
+    color: #1e1e1e;
 }
 

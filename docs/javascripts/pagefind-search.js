@@ -71,6 +71,48 @@
         }
     }
 
+    // Map URL path prefixes to friendly product names
+    // Versioned docsets use: /product-slug/version-slug/...
+    var productNames = {
+        'ace': 'ACE',
+        'control-plane': 'Control Plane',
+        'lolor': 'lolor',
+        'pgedge-anonymizer': 'pgEdge Anonymizer',
+        'pgedge-docloader': 'pgEdge Docloader',
+        'pgedge-helm': 'pgEdge Helm',
+        'pgedge-loadgen': 'pgEdge Loadgen',
+        'pgedge-postgres-mcp-server': 'pgEdge Postgres MCP Server',
+        'pgedge-rag-server': 'pgEdge RAG Server',
+        'pgedge-vectorizer': 'pgEdge Vectorizer',
+        'postgresql': 'PostgreSQL',
+        'radar': 'Radar',
+        'snowflake': 'Snowflake',
+        'spock-v5': 'Spock v5',
+        'cloud': 'pgEdge Cloud',
+        'distributed': 'pgEdge Distributed Postgres',
+        'enterprise': 'pgEdge Enterprise Postgres',
+        'pgedge-container': 'pgEdge Container'
+    };
+
+    function getResultContext(url) {
+        // Parse URL path to extract product and version
+        // Paths look like: /postgresql/v17/some/page/ or /enterprise/some/page/
+        var path = url.replace(/^https?:\/\/[^/]+/, '');
+        var parts = path.replace(/^\/|\/$/g, '').split('/');
+        if (parts.length < 1) return null;
+
+        var product = productNames[parts[0]];
+        if (!product) return null;
+
+        // Check if second segment looks like a version
+        var version = null;
+        if (parts.length >= 2 && /^(v[\d]|development|pg\d)/.test(parts[1])) {
+            version = parts[1].replace(/-/g, '.');
+        }
+
+        return version ? product + ' ' + version : product;
+    }
+
     function initPagefind() {
         if (initialized) return;
         if (typeof PagefindUI === 'undefined') return;
@@ -79,7 +121,15 @@
             element: '#pagefind-container',
             showSubResults: true,
             showImages: false,
-            autofocus: true
+            autofocus: true,
+            processResult: function(result) {
+                var context = getResultContext(result.url);
+                if (context) {
+                    result.title = result.title +
+                        ' <span class="pagefind-result-context">' + context + '</span>';
+                }
+                return result;
+            }
         });
         initialized = true;
     }
