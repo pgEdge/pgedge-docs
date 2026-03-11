@@ -403,6 +403,7 @@
    Pagefind Search Modal
    ========================================================================== */
 
+/* Overlay backdrop */
 .pagefind-modal-overlay {
     display: none;
     position: fixed;
@@ -421,24 +422,38 @@
     display: flex;
 }
 
+/* Modal container - overflow:hidden enforces rounded corner clipping */
 .pagefind-modal-container {
     position: relative;
     background: var(--md-default-bg-color);
     border-radius: 0.5rem;
+    overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     width: 90%;
     max-width: 44rem;
     max-height: 70vh;
     display: flex;
     flex-direction: column;
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: #4051b5;
+    --pagefind-ui-text: #333;
+    --pagefind-ui-background: #fff;
+    --pagefind-ui-border: #e0e0e0;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 0.3rem;
+    --pagefind-ui-font: var(--md-text-font-family, inherit);
 }
 
-/* Fixed close button above the scrollable area */
+/* Header bar with close button - in document flow, not absolute */
+.pagefind-modal-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 0.75rem 0;
+    flex-shrink: 0;
+}
+
 .pagefind-modal-close {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    background: var(--md-default-bg-color, #fff);
+    background: transparent;
     border: none;
     cursor: pointer;
     color: var(--md-default-fg-color--light);
@@ -447,24 +462,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2;
-}
-
-/* Scrollable content area with rounded corners preserved */
-#pagefind-container {
-    overflow-y: auto;
-    padding: 1rem 1.5rem 1.5rem;
-    border-radius: 0.5rem;
-}
-
-/* Ensure the search input doesn't collide with the close button */
-#pagefind-container .pagefind-ui__search-input {
-    padding-right: 5rem !important;
 }
 
 .pagefind-modal-close:hover {
     color: var(--md-default-fg-color);
     background: var(--md-default-fg-color--lightest);
+}
+
+/* Scrollable search content area */
+#pagefind-container {
+    overflow-y: auto;
+    padding: 0 1.5rem 1.5rem;
 }
 
 .pagefind-modal-error {
@@ -481,47 +489,41 @@
     font-size: 0.75rem;
 }
 
-/* Pagefind UI theme overrides */
-.pagefind-modal-container {
-    --pagefind-ui-scale: 0.9;
-    --pagefind-ui-primary: #4051b5;
-    --pagefind-ui-text: #333;
-    --pagefind-ui-background: #fff;
-    --pagefind-ui-border: #e0e0e0;
-    --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 0.3rem;
-    --pagefind-ui-font: var(--md-text-font-family, inherit);
-}
-
-/* Hide the pagefind logo/branding to keep it clean */
+/* Result message count */
 .pagefind-ui__drawer .pagefind-ui__message {
     font-size: 0.75rem;
     color: var(--md-default-fg-color--light);
 }
 
 /* Style result links to use theme accent */
-.pagefind-ui__result-link {
+#pagefind-container .pagefind-ui__result-link {
     color: var(--md-typeset-a-color, var(--md-primary-fg-color)) !important;
 }
 
-.pagefind-ui__result-link:hover {
+#pagefind-container .pagefind-ui__result-link:hover {
     text-decoration: underline;
 }
 
-/* Product/version badge on search results */
-.pagefind-result-context {
-    display: inline-block;
-    font-size: 0.65rem;
-    font-weight: 600;
-    padding: 0.1rem 0.45rem;
-    border-radius: 0.2rem;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-    background: var(--md-primary-fg-color, #4051b5);
-    color: #fff;
+/* Product/version badge on search results.
+   Uses #pagefind-container prefix + !important to beat pagefind-ui.css
+   which loads dynamically after our stylesheet. */
+#pagefind-container .pagefind-result-context {
+    display: inline-block !important;
+    font-size: 0.65rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    padding: 0.15rem 0.45rem !important;
+    border-radius: 0.2rem !important;
+    margin-left: 0.5rem !important;
+    vertical-align: middle !important;
+    background: #4051b5 !important;
+    color: #fff !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+    letter-spacing: normal !important;
 }
 
-/* Dark mode adjustments */
+/* Dark mode */
 [data-md-color-scheme="slate"] .pagefind-modal-overlay {
     background: rgba(0, 0, 0, 0.7);
 }
@@ -534,12 +536,12 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-[data-md-color-scheme="slate"] .pagefind-ui__result-link {
+[data-md-color-scheme="slate"] #pagefind-container .pagefind-ui__result-link {
     color: #7b8cde !important;
 }
 
-[data-md-color-scheme="slate"] .pagefind-result-context {
-    background: #7b8cde;
-    color: #1e1e1e;
+[data-md-color-scheme="slate"] #pagefind-container .pagefind-result-context {
+    background: #7b8cde !important;
+    color: #1e1e1e !important;
 }
 
