@@ -113,7 +113,7 @@ At the end of each README file, include a ## License section that contains:
 This project is licensed under the [PostgreSQL License](LICENSE.md).
 
 
-## Content Files
+## Formatting the Content Files
 
 The Table of Contents that appears in the left-hand navigation pane for our documentation project is defined in the mkdocs.yaml file for the given project or in the pgedge-docs repo (selected projects only). mkdocs.yaml resides in the project's root directory, alongside the docs folder for that project. The mkdocs.yaml file that organizes the navigation pane is in the same repo as the documentation files for that project. 
 
