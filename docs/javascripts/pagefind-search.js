@@ -113,6 +113,25 @@
         return version ? product + ' ' + version : product;
     }
 
+    function addBadgesToResults() {
+        var container = document.getElementById('pagefind-container');
+        if (!container) return;
+
+        var links = container.querySelectorAll('.pagefind-ui__result-link');
+        links.forEach(function(link) {
+            // Skip if already badged
+            if (link.querySelector('.pagefind-result-context')) return;
+
+            var context = getResultContext(link.getAttribute('href'));
+            if (context) {
+                var badge = document.createElement('span');
+                badge.className = 'pagefind-result-context';
+                badge.textContent = context;
+                link.appendChild(badge);
+            }
+        });
+    }
+
     function initPagefind() {
         if (initialized) return;
         if (typeof PagefindUI === 'undefined') return;
@@ -121,16 +140,16 @@
             element: '#pagefind-container',
             showSubResults: true,
             showImages: false,
-            autofocus: true,
-            processResult: function(result) {
-                var context = getResultContext(result.url);
-                if (context) {
-                    result.title = result.title +
-                        ' <span class="pagefind-result-context">' + context + '</span>';
-                }
-                return result;
-            }
+            autofocus: true
         });
+
+        // Watch for results being added to the DOM and inject badges
+        var container = document.getElementById('pagefind-container');
+        if (container) {
+            var observer = new MutationObserver(addBadgesToResults);
+            observer.observe(container, { childList: true, subtree: true });
+        }
+
         initialized = true;
     }
 
