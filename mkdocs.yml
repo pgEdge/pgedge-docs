@@ -129,6 +129,7 @@ extra:
     - pgedge-rag-server
     - pgedge-vectorizer
     - radar
+    - postgresql
 
   # Navigation dropdown categories - maps nav item titles to dropdown menus
   # Use simple string for auto-detected URLs, or {title: url} for explicit URLs
@@ -139,6 +140,8 @@ extra:
         url: pgedge-container/
       - pgEdge Distributed Postgres
       - pgEdge Enterprise Postgres
+      - title: PostgreSQL
+        url: postgresql/
     AI Toolkit:
       - title: pgEdge Postgres MCP Server
         url: pgedge-postgres-mcp-server/
@@ -476,3 +479,9 @@ nav:
     - v1.0-beta2: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0-beta2'
     - v1.0-beta1: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0-beta1'
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
+
+  - PostgreSQL:
+    - v18: '!import https://github.com/pgEdge/postgresql-docs.git?branch=pg18'
+    - v17: '!import https://github.com/pgEdge/postgresql-docs.git?branch=pg17'
+    - v16: '!import https://github.com/pgEdge/postgresql-docs.git?branch=pg16'
+    - Development: '!import https://github.com/pgEdge/postgresql-docs.git?branch=pg19'
