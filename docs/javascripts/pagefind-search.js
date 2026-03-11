@@ -42,30 +42,26 @@
 
     function loadPagefind(callback) {
         if (scriptsLoaded) { callback(); return; }
-        if (loadFailed) { return; }
+        if (loadFailed) { showSearchUnavailable(); return; }
 
-        // Use fetch to check if pagefind exists before loading.
-        // Unlike <script> or XHR, fetch 404s don't produce server-side
-        // warnings in mkdocs serve.
-        fetch('/pagefind/pagefind-ui.js', { method: 'HEAD' }).then(function(resp) {
-            if (!resp.ok) throw new Error('Not found');
+        // Load CSS
+        var css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(css);
 
-            var css = document.createElement('link');
-            css.rel = 'stylesheet';
-            css.href = '/pagefind/pagefind-ui.css';
-            document.head.appendChild(css);
-
-            var script = document.createElement('script');
-            script.src = '/pagefind/pagefind-ui.js';
-            script.onload = function() {
-                scriptsLoaded = true;
-                callback();
-            };
-            document.head.appendChild(script);
-        }).catch(function() {
+        // Load JS via script tag
+        var script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = function() {
+            scriptsLoaded = true;
+            callback();
+        };
+        script.onerror = function() {
             loadFailed = true;
             showSearchUnavailable();
-        });
+        };
+        document.head.appendChild(script);
     }
 
     function showSearchUnavailable() {
