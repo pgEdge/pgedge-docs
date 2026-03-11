@@ -429,15 +429,16 @@
     width: 90%;
     max-width: 44rem;
     max-height: 70vh;
-    overflow-y: auto;
-    padding: 1rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Fixed close button above the scrollable area */
 .pagefind-modal-close {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: none;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: var(--md-default-bg-color, #fff);
     border: none;
     cursor: pointer;
     color: var(--md-default-fg-color--light);
@@ -446,7 +447,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 2;
+}
+
+/* Scrollable content area with rounded corners preserved */
+#pagefind-container {
+    overflow-y: auto;
+    padding: 1rem 1.5rem 1.5rem;
+    border-radius: 0.5rem;
+}
+
+/* Ensure the search input doesn't collide with the close button */
+#pagefind-container .pagefind-ui__search-input {
+    padding-right: 5rem !important;
 }
 
 .pagefind-modal-close:hover {

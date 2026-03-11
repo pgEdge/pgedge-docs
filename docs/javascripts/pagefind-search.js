@@ -119,15 +119,15 @@
 
         var links = container.querySelectorAll('.pagefind-ui__result-link');
         links.forEach(function(link) {
-            // Skip if already badged
-            if (link.querySelector('.pagefind-result-context')) return;
+            // Skip if already badged (check next sibling)
+            if (link.nextElementSibling && link.nextElementSibling.classList.contains('pagefind-result-context')) return;
 
             var context = getResultContext(link.getAttribute('href'));
             if (context) {
                 var badge = document.createElement('span');
                 badge.className = 'pagefind-result-context';
                 badge.textContent = context;
-                link.appendChild(badge);
+                link.parentNode.insertBefore(badge, link.nextSibling);
             }
         });
     }
