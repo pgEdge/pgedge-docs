@@ -182,12 +182,33 @@ If the page has a `Features` or `Overview` section following the introductory pa
 
 When formatting a bulleted list:
 
-* Always leave a blank line before the first item in any list or sub-list (a sub-list may be code or indented bullets under a bullet item).
-* Each entry in a bulleted list should be a complete and correct sentence.
-* Do not use bold font bullet items.
-* Do not use a numbered list unless the steps in the list need to be performed in order.
+### Formatting Bulleted Lists
 
-When formatting code:
+- Bulleted lists should complete sentences ending with periods.
+- Each bullet item must start with a lowercase letter (unless starting with a proper noun or code element).
+- Use a lead-in sentence before the list that ends with a colon.
+- The lead-in sentence and bullet items together should form grammatically complete sentences.
+- Keep lead-in sentences concise by using "include:" or "is useful for:" rather than verbose phrases like "include the following operations:" or "is useful for the following purposes:".
+- When bullet items are gerunds (verb forms ending in -ing), they should work grammatically with the lead-in sentence.
+
+For example, the following bulleted list is correct:
+
+    The view includes:
+
+    - the total entries and expired entries.
+    - the total cache size in megabytes.
+    - the average access count per entry.
+
+The following bulleted list is not correctly formatted:
+
+    The view includes the following metrics:
+
+    - The view shows the total entries and expired entries.
+    - The view shows the total cache size in megabytes.
+    - The view shows the average access count.
+
+
+### Formatting code:
 
 If a section contains code or a code snippet, there should be an explanatory sentence before the code in the form: In the following example, the command_name command uses a column named my_column to accomplish description-of-what-the-code-does.
 
@@ -205,7 +226,7 @@ If a section contains code or a code snippet, there should be an explanatory sen
 * Include links to our Github repo when we refer to cloning the repo, or working on the project.
 * Do not create links to github.io.
 
-When formatting a numbered list:
+### Formatting a numbered list:
 
 A numbered list should always be made up of steps that must be performed in the order listed.  If the steps can be performed in any order, they belong in a bulleted list.  Before each numbered list, use an introductory sentence; then:
 
@@ -214,7 +235,7 @@ A numbered list should always be made up of steps that must be performed in the 
 * if a step involves code, that code should be properly indented and formatted (as noted above).
 * do not use bold font when writing numbered lists.
 
-When formatting a table:
+### Formatting a table:
 
 * All tables must have an introductory sentence immediately before the table. Use the pattern: "The following table [describes/shows/compares] X:".
 * The introductory sentence should be active voice and explain what the table contains
