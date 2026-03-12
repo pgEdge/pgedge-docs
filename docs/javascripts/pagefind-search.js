@@ -77,7 +77,9 @@
     // Versioned docsets use: /product-slug/version-slug/...
     var productNames = {
         'ace': 'ACE',
+        'container-images': 'pgEdge Container Registry',
         'control-plane': 'Control Plane',
+        'kubernetes': 'pgEdge Enterprise Postgres for Kubernetes',
         'lolor': 'lolor',
         'pgedge-anonymizer': 'pgEdge Anonymizer',
         'pgedge-docloader': 'pgEdge Docloader',
@@ -86,6 +88,7 @@
         'pgedge-postgres-mcp-server': 'pgEdge Postgres MCP Server',
         'pgedge-rag-server': 'pgEdge RAG Server',
         'pgedge-vectorizer': 'pgEdge Vectorizer',
+        'platform': 'pgEdge Distributed Postgres (VM Edition)',
         'postgresql': 'PostgreSQL',
         'radar': 'Radar',
         'snowflake': 'Snowflake',
@@ -155,7 +158,10 @@
         initialized = true;
     }
 
+    var lastFocusedElement = null;
+
     function openSearch() {
+        lastFocusedElement = document.activeElement;
         createModal();
         modal.classList.add('pagefind-modal--active');
         document.body.style.overflow = 'hidden';
@@ -173,6 +179,9 @@
         if (!modal) return;
         modal.classList.remove('pagefind-modal--active');
         document.body.style.overflow = '';
+        if (lastFocusedElement && lastFocusedElement.isConnected && typeof lastFocusedElement.focus === 'function') {
+            lastFocusedElement.focus();
+        }
     }
 
     function addSearchButton() {
@@ -180,10 +189,10 @@
         var header = document.querySelector('.md-header__inner');
         if (!header || header.querySelector('.md-header__button--search')) return;
 
-        var btn = document.createElement('label');
+        var btn = document.createElement('button');
+        btn.type = 'button';
         btn.className = 'md-header__button md-icon md-header__button--search';
         btn.setAttribute('aria-label', 'Search');
-        btn.setAttribute('tabindex', '0');
         btn.innerHTML =
             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
                 '<path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z" fill="currentColor"/>' +
