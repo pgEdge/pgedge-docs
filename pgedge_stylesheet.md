@@ -27,9 +27,9 @@ the Control Plane
 
 Lines in each .md file should be as long as possible, while wrapping content at 79 characters. Hyperlinks and table columns should not be split by wrapping.
 
-Replace em-dashes (added liberally by AI engines) with regular dashes (hyphens).
+Replace em-dashes with regular dashes (hyphens).
 
-Remove bold highlighted text content (also overused by some AI engines) - it is identified as a heading level by some software. 
+Remove bold highlighted text content - it is identified as a heading level by some software. 
 
 Each public repo/project should have a folder named docs that contains source documentation files in simple markdown format. Files in the doc folder are referenced by the TOC (at the top of the README file) and the mkdocs.yaml file used to build the pgEdge documentation suite.
 
@@ -38,7 +38,7 @@ The LICENSE.md file should be stored inside the docs folder; aliases from other 
 
 ## Formatting a README File
 
-This section of the stylesheet applies primarily to the README files that reside in each of our public repos - every public repo should have a README file.  The top of each README should include:
+Every public repo should have a README file.  The top of each README should include:
 
 * a first-level heading (#) identifying the project by name (# Project Name).
 * if applicable, links to regression testing tools or developer/dba tools
@@ -131,18 +131,18 @@ The mkdocs.yaml navigation content will be unique for each project, but will lik
 
 - Architecture Guide
     - Best Practices Guide
-- Installation
+- Installing this Project
     - Getting Started/Quick Start
     - Building the Project
         - Prerequisites
     - Installation
-    - Configuration
+    - Configuring this Project
         - Advanced Configuration
     - Upgrading the Project
 - Using the Project
     - Connecting to the Project
     - Project Usage Instructions
-- Project Management Features
+- Using Project Management Features
     - Modifying the Installation
     - Monitoring/Logging
     - Performance
@@ -153,19 +153,21 @@ The mkdocs.yaml navigation content will be unique for each project, but will lik
 - Release Notes
 - Developer Resources
 
-Nested details can be in the same file as the steps to which it applies; for example, the Prerequisites section can reside in the same file as Building the Project.
+Nested details can be in the same file as the steps to which it applies; for example, the Prerequisites section can reside in the same file as Building the Project/Installation.
 
 
 ## Within a .md File - Formatting Content
 
-Lines in each .md file should be as long as possible, while wrapping content at 79 characters. Hyperlinks and table columns should not be split by wrapping.
+Each file should have one first level heading, and multiple second level headings.  Third and fourth level headings should be used for prominent content below the hierarchically-previous heading level. 
 
-Each file should have one first level heading, and multiple second level headings.  Third and fourth level headings should be used for prominent content below the hierarchically-previous heading level. Each heading should be followed by an introductory sentence or paragraph that explains what will be discussed in the following section.
+Each heading should be followed by an introductory sentence or paragraph that explains what will be discussed in the following section. This applies to all heading levels - # Top-level Headings, ## Section Headings, and ### Sub-section Headings.
+
+Lines in each .md file should be as long as possible, while wrapping content at 79 characters. Hyperlinks and table columns should not be split by wrapping.
 
 DO NOT:
 
 * Use bold font within headings or text content - it is sometimes misinterpreted by MkDocs as a heading and added to the navigation pane.
-* Use Hashtags in front of a step in a stepped list - that adds the step to the nvaigation pane in the upper-right side of the documentation page.
+* Use Hashtags in front of a step in a stepped list - it adds every step with a # in the step to the navigation pane in the upper-right side of the documentation page.
 * Use fragments in bulleted or stepped lists: **Semantic matching:** uses pgvector for similarity-based cache lookups   
 Do not refer to an object as 'it' unless the object 'it' refers to is in the same sentence. It is too ambiguous!
 
