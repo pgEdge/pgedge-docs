@@ -214,6 +214,17 @@ A numbered list should always be made up of steps that must be performed in the 
 * if a step involves code, that code should be properly indented and formatted (as noted above).
 * do not use bold font when writing numbered lists.
 
+When formatting a table:
+
+* All tables must have an introductory sentence immediately before the table. Use the pattern: "The following table [describes/shows/compares] X:".
+* The introductory sentence should be active voice and explain what the table contains
+* No Icons or Emojis in Tables.  Remove all emoji and icon characters (⚡, ✓, 💾, etc.) from table cells and replace with descriptive text (Fast, Good, High, etc.) or text descriptions.
+* Keep table content professional and accessible.
+* Tables should use plain text only.
+* Tables should not use bold font in cells.
+* Avoid special characters that may not render correctly in all formats.
+* Use words rather than symbols to convey meaning.
+
 
 ## Troubleshooting Sections
 
