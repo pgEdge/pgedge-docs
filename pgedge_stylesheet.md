@@ -48,7 +48,17 @@ The heading info noted above should be followed by a Table of Contents (TOC) hea
 
 * A second-level heading (## Table of Contents)
 
-That heading is followed by a bulleted list of linked content that resides in the docs folder.  Top level entries in the TOC should mirror the mkdocs.yaml file nav panel list for the project, and link to the same .md file used in our online documentation (docs/file_name.md); second-level links in the hierarchy may refer to content within a .md file (docs/file_name/#section_name):
+That heading is followed by a bulleted list of linked content that resides in the docs folder. If possible, use a gerund in section titles and headings; the following sections are exceptions to this rule.
+
+* Architecture
+* Overview
+* Getting Started
+* Release Notes
+* FAQ
+* Developer Resources
+* Reference sections
+
+Top level entries in the TOC should mirror the mkdocs.yaml file nav panel list for the project, and link to the same .md file used in our online documentation (docs/file_name.md); second-level links in the hierarchy may refer to content within a .md file (docs/file_name/#section_name):
 
 * Architecture Guide
 * Best Practices Guide
@@ -58,9 +68,9 @@ That heading is followed by a bulleted list of linked content that resides in th
 * Installing the Project
 * Configuring the Project
     * Advanced Configuration
-* Project Usage Instructions
+* Using the Project
 * Upgrading the Project Installation
-* Project Management Features
+* Managing an Installation
 * Modifying a Deployed Project
 * Monitoring/Logging
 * Performance 
