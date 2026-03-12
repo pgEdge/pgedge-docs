@@ -237,13 +237,14 @@ etc.
 
 ### Next Steps Sections
 
-As a rule, we don't include a 'Next Steps' section at the end of a technical documentation page - this content should be reserved primarily for Overview, Architecture, and Getting Started Pages
+Include a "Next Steps" section at the end of tutorial and conceptual guide documents.
 
-If the page needs links at the end, consider including a link to the Troubleshooting page: 
-
-- For help with the topics on this page, visit Troubleshooting ().
-
-
+* The section should use H2 heading (## Next Steps).
+* Provide 2-4 bulleted links to related documentation.
+* Each bullet should be a complete sentence describing what the linked document covers.
+* Use the pattern: "- The Document Name document describes/explains/provides X.".
+* Do NOT include "Next Steps" in reference documentation, API docs, FAQs, or troubleshooting guides.
+* For FAQ and troubleshooting documents, use a support/contact section instead (e.g., "Still Have Questions?")
 
 
 
