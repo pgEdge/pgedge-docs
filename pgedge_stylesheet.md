@@ -228,7 +228,9 @@ If a section contains code or a code snippet, there should be an explanatory sen
 
 ### Formatting a numbered list:
 
-A numbered list should always be made up of steps that must be performed in the order listed.  If the steps can be performed in any order, they belong in a bulleted list.  Before each numbered list, use an introductory sentence; then:
+Preserve numbered lists for sequential procedures (installation steps, setup instructions, troubleshooting workflows) where order is critical. Remove numbered lists used for non-sequential content (feature lists, examples, comparisons) and convert to bulleted lists or narrative format.
+
+A numbered list should always be made up of steps that must be performed in the order listed.  If the steps can be performed in a random order and still work, they belong in a bulleted list.  Before each numbered list, use an introductory sentence; then:
 
 * leave a blank line before the first item.
 * each entry in a numbered list should introduce the step with a complete and correct sentence.
