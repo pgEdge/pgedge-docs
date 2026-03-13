@@ -156,21 +156,25 @@ extra:
   # Navigation dropdown categories - maps nav item titles to dropdown menus
   # Use simple string for auto-detected URLs, or {title: url} for explicit URLs
   nav_categories:
-    Products:
-      - pgEdge Cloud
-      - title: pgEdge Container
-        url: pgedge-container/
-      - pgEdge Distributed Postgres
-      - pgEdge Enterprise Postgres
+    VM / Bare Metal:
+      - title: Control Plane
+        url: control-plane/
+      - title: Distributed CLI
+        url: platform/
+      - title: pgEdge Package Repository
+        url: enterprise/
       - title: PostgreSQL
         url: postgresql/
-      - title: pgAdmin 4
-        url: pgadmin-4/
+      - title: Ansible
+        url: ansible/
+    Containers:
+      - title: pgEdge Container
+        url: pgedge-container/
+      - title: Container Registry
+        url: container-images/
     AI Toolkit:
       - title: pgEdge Postgres MCP Server
         url: pgedge-postgres-mcp-server/
-      - title: pgEdge Anonymizer
-        url: pgedge-anonymizer/
       - title: pgEdge RAG Server
         url: pgedge-rag-server/
       - title: pgEdge Docloader
@@ -178,43 +182,19 @@ extra:
       - title: pgEdge Vectorizer
         url: pgedge-vectorizer/
     Extensions:
-      - title: lolor
-        url: lolor/
-      - title: pgEdge Vectorizer
-        url: pgedge-vectorizer/
-      - title: Snowflake
-        url: snowflake/
       - title: Spock v5
         url: spock-v5/
-      - title: psycopg2
-        url: psycopg2/
-      - title: pgvector
-        url: pgvector/
-      - title: pgAudit
-        url: pgaudit/
-      - title: pgBackRest
-        url: pgbackrest/
-      - title: PgBouncer
-        url: pgbouncer/
-      - title: PostGIS
-        url: postgis/
+      - title: LOLOR
+        url: lolor/
+      - title: Snowflake
+        url: snowflake/
     Tools:
       - title: ACE
         url: ace/
-      - title: Control Plane
-        url: control-plane/
-      - title: pgEdge Helm
-        url: pgedge-helm/
       - title: pgEdge Anonymizer
         url: pgedge-anonymizer/
-      - title: pgEdge Docloader
-        url: pgedge-docloader/
       - title: pgEdge Loadgen
         url: pgedge-loadgen/
-      - title: pgEdge Postgres MCP Server
-        url: pgedge-postgres-mcp-server/
-      - title: pgEdge RAG Server
-        url: pgedge-rag-server/
       - title: Radar
         url: radar/
 
@@ -224,6 +204,8 @@ repo_url: https://github.com/pgEdge
 
 nav:
   - Welcome: index.md
+
+  - Ansible: ansible/index.md
 
   - pgEdge Enterprise Postgres:
     - Enterprise Edition: enterprise/index.md

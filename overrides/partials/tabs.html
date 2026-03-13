@@ -7,7 +7,7 @@
 {% set nav_categories = config.extra.nav_categories or {} %}
 
 {# Macro to render a dropdown menu #}
-{% macro dropdown_menu(label, category_items, nav_items, dropdown_id) %}
+{% macro dropdown_menu(label, category_items, dropdown_id) %}
 <li class="md-tabs__item md-tabs__dropdown" data-dropdown-id="{{ dropdown_id }}">
   <button type="button" class="md-tabs__dropdown-toggle" aria-expanded="false" aria-haspopup="true">
     <span>{{ label }}</span>
@@ -16,37 +16,20 @@
     </svg>
   </button>
   <ul class="md-tabs__dropdown-menu">
-    {# Process each category item - can be string or {title, url} object #}
+    {# Process each category item - render directly using title and url #}
     {% for cat_item in category_items %}
       {% if cat_item is string %}
         {% set cat_title = cat_item %}
-        {% set cat_url = none %}
+        {% set cat_url = "." %}
       {% else %}
         {% set cat_title = cat_item.title %}
-        {% set cat_url = cat_item.url %}
+        {% set cat_url = cat_item.url | default(".") %}
       {% endif %}
-
-      {# Find matching nav item and render link #}
-      {% for nav_item in nav_items %}
-        {% set nav_title = nav_item.title | striptags | trim %}
-        {% if nav_title == cat_title %}
-          {# Use explicit URL if provided, otherwise detect from nav #}
-          {% if cat_url %}
-            {% set item_url = cat_url %}
-          {% elif nav_item.url and nav_item.url != "." %}
-            {% set item_url = nav_item.url %}
-          {% elif nav_item.children %}
-            {% set item_url = nav_item.children | first | attr("url") %}
-          {% else %}
-            {% set item_url = "." %}
-          {% endif %}
-          <li class="md-tabs__dropdown-item">
-            <a href="{{ item_url | url }}" class="md-tabs__dropdown-link">
-              {{ nav_title }}
-            </a>
-          </li>
-        {% endif %}
-      {% endfor %}
+      <li class="md-tabs__dropdown-item">
+        <a href="{{ cat_url | url }}" class="md-tabs__dropdown-link">
+          {{ cat_title }}
+        </a>
+      </li>
     {% endfor %}
   </ul>
 </li>
@@ -66,10 +49,41 @@
         {% endif %}
       {% endfor %}
 
-      {# Dropdown menus from config.extra.nav_categories #}
-      {% for category_name, category_items in nav_categories.items() %}
-        {{ dropdown_menu(category_name, category_items, nav, category_name | lower | replace(' ', '-')) }}
+      {# VM / Bare Metal dropdown #}
+      {% if 'VM / Bare Metal' in nav_categories %}
+        {{ dropdown_menu('VM / Bare Metal', nav_categories['VM / Bare Metal'], 'vm-bare-metal') }}
+      {% endif %}
+
+      {# Containers dropdown #}
+      {% if 'Containers' in nav_categories %}
+        {{ dropdown_menu('Containers', nav_categories['Containers'], 'containers') }}
+      {% endif %}
+
+      {# pgEdge Cloud - direct link, no dropdown #}
+      {% for nav_item in nav %}
+        {% if nav_item.title | striptags | trim == 'pgEdge Cloud' %}
+          <li class="md-tabs__item">
+            <a href="{{ nav_item.url | url if nav_item.url else (nav_item.children | first | attr('url') | url) }}" class="md-tabs__link">
+              pgEdge Cloud
+            </a>
+          </li>
+        {% endif %}
       {% endfor %}
+
+      {# AI Toolkit dropdown #}
+      {% if 'AI Toolkit' in nav_categories %}
+        {{ dropdown_menu('AI Toolkit', nav_categories['AI Toolkit'], 'ai-toolkit') }}
+      {% endif %}
+
+      {# Extensions dropdown #}
+      {% if 'Extensions' in nav_categories %}
+        {{ dropdown_menu('Extensions', nav_categories['Extensions'], 'extensions') }}
+      {% endif %}
+
+      {# Tools dropdown #}
+      {% if 'Tools' in nav_categories %}
+        {{ dropdown_menu('Tools', nav_categories['Tools'], 'tools') }}
+      {% endif %}
     </ul>
   </div>
 </nav>
