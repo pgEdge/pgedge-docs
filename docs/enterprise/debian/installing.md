@@ -8,7 +8,7 @@ commands that follow to use your preferred package manager.
 
     If you installed the `pgedge` repository prior to March 1, 2026, you will
     need to replace and refresh your repository package.  For details, see
-    [Updating your Repo for FIPS Support](fips_update.md).
+    [Updating your Repo for FIPS Support](../fips_update.md).
 
 !!! info
 

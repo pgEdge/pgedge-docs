@@ -6,7 +6,7 @@ After installing the `pgedge` repository, you're ready to create Postgres databa
 
     If you installed the `pgedge` repository prior to March 1, 2026, you will
     need to replace and refresh your repository package.  For details, see
-    [Updating your Repo for FIPS Support](fips_update.md).
+    [Updating your Repo for FIPS Support](../fips_update.md).
 
 To review a list of packages available from the `pgedge` repository, use the command:
 
