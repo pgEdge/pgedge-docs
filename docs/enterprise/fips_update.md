@@ -8,7 +8,7 @@ package and refresh the content.
 
 ## Updating a RHEL Repository Host
 
-On a RHEL-based system, you need to:
+On a RHEL-based system, use the following steps to update your repository.
 
 1. Replace the repository package with the following commands:
 
@@ -25,6 +25,8 @@ sudo dnf upgrade <package_name>
 ```
 
 ## Updating a Debian Repository Host
+
+On a Debian system, use the following steps to update your repository.
 
 1. Replace the repository sources with the following commands:
 
