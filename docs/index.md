@@ -231,7 +231,7 @@ hide:
       </div>
     </div>
     <p class="card-description">Direct installs on servers.</p>
-    <a href="platform/" class="card-link">View Documentation →</a>
+    <a href="control-plane/" class="card-link">View Documentation →</a>
   </div>
 
   <!-- Containers -->
