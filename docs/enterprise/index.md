@@ -1,8 +1,14 @@
 # pgEdge Enterprise Postgres (VM Edition)
 
-pgEdge makes packages available via the `pgedge` repository for
+pgEdge makes FIPS-enabled packages available via the `pgedge` repository for
 Enterprise Linux, Debian, and Ubuntu. Use the install builder below
 to configure and copy the commands for your platform.
+
+!!! note
+
+    If you installed the `pgedge` repository prior to March 1, 2026, you will
+    need to replace and refresh your repository package.  For details, see
+    [Updating your Repo for FIPS Support](fips_update.md).
 
 <div id="package-catalog"></div>
 <noscript>
@@ -10,6 +16,8 @@ to configure and copy the commands for your platform.
   Visit <a href="https://www.pgedge.com/downloads">pgedge.com/downloads</a>
   for manual install instructions.</p>
 </noscript>
+
+
 
 ## Professional Grade Support, 24/7
 
