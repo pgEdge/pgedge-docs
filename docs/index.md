@@ -88,32 +88,21 @@ hide:
   line-height: 1.2;
 }
 
-/* ICON SIZE — adjust this */
+/* ICON SIZE — Lucide icons at 56px */
 .card-icon {
-  width: 56px !important;
-  height: 56px !important;
-  flex: 0 0 56px !important;
+  width: 48px !important;
+  height: 48px !important;
+  flex: 0 0 48px !important;
   display: block !important;
+  stroke: var(--md-default-fg-color--light);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
 
   /* defeat theme/global svg sizing rules */
   max-width: none !important;
   max-height: none !important;
-}
-
-.card-icon .stroke {
-  stroke: #2b2b2b;
-  stroke-width: 1.4;      /* lighter at this size */
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.card-icon .accent {
-  stroke: #00bcd4;
-  stroke-width: 1.8;      /* lighter at this size */
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .card-description {
@@ -233,10 +222,11 @@ hide:
     <div class="card-header">
       <div class="card-title-row">
         <h3>VMs &amp; Bare Metal</h3>
-        <svg class="card-icon" viewBox="4 5 16 16" aria-hidden="true">
-          <rect class="stroke" x="7" y="6.5" width="10" height="4" rx="1"/>
-          <rect class="stroke" x="7" y="12" width="10" height="4" rx="1"/>
-          <circle class="accent" cx="15.8" cy="8.5" r="0.9"/>
+        <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect width="20" height="8" x="2" y="2" rx="2" ry="2" />
+          <rect width="20" height="8" x="2" y="14" rx="2" ry="2" />
+          <line x1="6" x2="6.01" y1="6" y2="6" />
+          <line x1="6" x2="6.01" y1="18" y2="18" />
         </svg>
       </div>
     </div>
@@ -249,9 +239,12 @@ hide:
     <div class="card-header">
       <div class="card-title-row">
         <h3>Containers</h3>
-        <svg class="card-icon" viewBox="4 4 16 16" aria-hidden="true">
-          <polygon class="stroke"
-            points="12 5.5 17 8.4 17 15.6 12 18.5 7 15.6 7 8.4" />
+        <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z" />
+          <path d="M10 21.9V14L2.1 9.1" />
+          <path d="m10 14 11.9-6.9" />
+          <path d="M14 19.8v-8.1" />
+          <path d="M18 17.5V9.4" />
         </svg>
       </div>
     </div>
@@ -265,10 +258,7 @@ hide:
       <div class="card-title-row">
         <h3>pgEdge Cloud</h3>
         <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path class="stroke"
-            d="M6 17h9a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.6 1.5A3.2 3.2 0 0 0 6 17z"/>
-          <path class="accent" d="M9 13.8h6"/>
-          <path class="accent" d="M12 11.8v5"/>
+          <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
         </svg>
       </div>
     </div>
@@ -290,10 +280,12 @@ hide:
     <div class="card-header">
       <div class="card-title-row">
         <h3>Control Plane</h3>
-        <svg class="card-icon" viewBox="4 5 16 16" aria-hidden="true">
-          <path class="stroke" d="M7 8h10"/>
-          <path class="stroke" d="M7 13h10"/>
-          <circle class="accent" cx="16.5" cy="8" r="0.9"/>
+        <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="16" y="16" width="6" height="6" rx="1" />
+          <rect x="2" y="16" width="6" height="6" rx="1" />
+          <rect x="9" y="2" width="6" height="6" rx="1" />
+          <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+          <path d="M12 12V8" />
         </svg>
       </div>
     </div>
@@ -305,9 +297,11 @@ hide:
     <div class="card-header">
       <div class="card-title-row">
         <h3>Enterprise Repository</h3>
-        <svg class="card-icon" viewBox="4 5 16 16" aria-hidden="true">
-          <path class="stroke" d="M12 6.5l5 2.9v6.2L12 18.5 7 15.6V9.4L12 6.5z"/>
-          <path class="accent" d="M12 7.2v10.6"/>
+        <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />
+          <path d="M12 22V12" />
+          <polyline points="3.29 7 12 12 20.71 7" />
+          <path d="m7.5 4.27 9 5.15" />
         </svg>
       </div>
     </div>
@@ -319,9 +313,10 @@ hide:
     <div class="card-header">
       <div class="card-title-row">
         <h3>AI Toolkit</h3>
-        <svg class="card-icon" viewBox="4 5 16 16" aria-hidden="true">
-          <circle class="accent" cx="12" cy="11" r="3"/>
-          <circle class="stroke" cx="12" cy="11" r="5"/>
+        <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
+          <path d="M20 2v4" />
+          <path d="M22 4h-4" />
         </svg>
       </div>
     </div>
