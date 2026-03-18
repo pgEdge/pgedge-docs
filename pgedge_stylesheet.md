@@ -29,7 +29,7 @@ Lines in each .md file should be as long as possible, while wrapping content at 
 
 Replace em-dashes with regular dashes (hyphens).
 
-Remove bold highlighted text content - it is identified as a heading level by some software. 
+Remove bold highlighted text content that is not inline (don't use bold as headings) - it is identified as a heading level by some software. 
 
 Each public repo/project should have a folder named docs that contains source documentation files in simple markdown format. Files in the doc folder are referenced by the TOC (at the top of the README file) and the mkdocs.yaml file used to build the pgEdge documentation suite.
 
@@ -182,7 +182,18 @@ INSTEAD:
 
 If the page has a `Features` or `Overview` section following the introductory paragraph, the section should not start with a heading; instead use a sentence in the form:  "The MCP Server includes the following features:", followed by a bulleted list of the features.  
 
-When formatting a bulleted list:
+
+### Hyperlink Formatting
+
+When wrapping long lines containing hyperlinks, the complete markdown link
+syntax `[text](URL)` must remain unbroken on a single line. Break the
+surrounding prose before or after the link, but never split the link itself
+across multiple lines. This behavior supersedes the 79-character limit.
+
+Examples:
+- ✓ Correct: `See the [`pg_hba.conf` file](https://example.com/very/long/url)`
+  even if longer than 79 characters
+- ✗ Incorrect: `See the [`pg_hba.conf`\nfile](https://example.com/url)`
 
 ### Formatting Bulleted Lists
 
