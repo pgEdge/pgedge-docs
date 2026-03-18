@@ -145,15 +145,21 @@ hide:
   font-size: 0.95rem;
 }
 
-/* Extensions Grid */
+/* Extensions Grid - 4 columns */
 .extensions-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
   margin: 2rem 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .extensions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
   .extensions-grid {
     grid-template-columns: 1fr;
   }
@@ -197,16 +203,37 @@ hide:
   margin-top: 0.15rem;
 }
 
+/* Sub-headings within extension lists */
+.extension-list .ext-subheading {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--md-default-fg-color--light);
+  padding: 0.6rem 0 0.2rem;
+  border-bottom: none;
+}
+
+.extension-list .ext-subheading:first-child {
+  padding-top: 0;
+}
+
+/* Dividers within extension lists */
+.extension-list .ext-divider {
+  padding: 0;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
 </style>
 
 <!-- Hero Section -->
 <div class="hero-section">
   <h1>Welcome to pgEdge Documentation</h1>
   <p class="hero-tagline">
-    <strong>Enterprise-ready PostgreSQL that scales with your needs—from a single database to globally distributed multi-master deployments.</strong>
+    <strong>Enterprise-grade PostgreSQL for distributed data and agentic AI.</strong>
   </p>
   <p class="hero-description">
-    pgEdge delivers hardened, production-grade PostgreSQL with a seamless path from day one through global scale.
+    pgEdge delivers hardened, production-grade PostgreSQL with a complete AI toolkit and a seamless path from a single database through highly available, globally distributed deployments — self-hosted, in your cloud, or fully managed.
   </p>
 </div>
 
@@ -276,23 +303,23 @@ hide:
 
 <div class="cards-grid">
 
+  <!-- AI Toolkit -->
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <h3>Control Plane</h3>
+        <h3>AI Toolkit</h3>
         <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="16" y="16" width="6" height="6" rx="1" />
-          <rect x="2" y="16" width="6" height="6" rx="1" />
-          <rect x="9" y="2" width="6" height="6" rx="1" />
-          <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
-          <path d="M12 12V8" />
+          <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
+          <path d="M20 2v4" />
+          <path d="M22 4h-4" />
         </svg>
       </div>
     </div>
-    <p class="card-description">Lifecycle management API.</p>
-    <a href="control-plane/" class="card-link">View Documentation →</a>
+    <p class="card-description">MCP, RAG, Vectorizer.</p>
+    <a href="pgedge-postgres-mcp-server/" class="card-link">View Documentation →</a>
   </div>
 
+  <!-- Enterprise Repository -->
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
@@ -309,92 +336,172 @@ hide:
     <a href="enterprise/" class="card-link">View Documentation →</a>
   </div>
 
+  <!-- Spock -->
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <h3>AI Toolkit</h3>
+        <h3>Spock</h3>
         <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
-          <path d="M20 2v4" />
-          <path d="M22 4h-4" />
+          <path d="m17 2 4 4-4 4" />
+          <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+          <path d="m7 22-4-4 4-4" />
+          <path d="M21 13v1a4 4 0 0 1-4 4H3" />
         </svg>
       </div>
     </div>
-    <p class="card-description">MCP, RAG, Vectorizer.</p>
-    <a href="pgedge-postgres-mcp-server/" class="card-link">View Documentation →</a>
+    <p class="card-description">Multi-master replication for PostgreSQL.</p>
+    <a href="spock-v5/" class="card-link">View Documentation →</a>
   </div>
 
 </div>
 
-<!-- Extensions & Components -->
+<!-- All Documentation -->
 <div class="section-header">
-  <h2>Extensions &amp; Components</h2>
-  <p>Purpose-built extensions that enable pgEdge's advanced capabilities.</p>
+  <h2>All Documentation</h2>
 </div>
 
 <div class="extensions-grid">
   <div class="extension-group">
-    <h3>Replication &amp; Distribution</h3>
+    <h3>Deployment</h3>
     <ul class="extension-list">
+      <li class="ext-subheading">VM / Bare Metal</li>
       <li>
-        <a href="spock-v5/"><strong>Spock v5</strong></a>
-        <span class="ext-desc">Logical multi-master replication with bi-directional data flow and conflict resolution</span>
+        <a href="control-plane/"><strong>Control Plane</strong></a>
+        <span class="ext-desc">Declarative API for deploying and managing PostgreSQL clusters on VMs and bare metal</span>
       </li>
       <li>
-        <a href="lolor/"><strong>LOLOR</strong></a>
-        <span class="ext-desc">Large object replication for handling BLOBs in distributed environments</span>
+        <a href="enterprise/"><strong>Enterprise Repository</strong></a>
+        <span class="ext-desc">Hardened, tested PostgreSQL packages for enterprise Linux and Debian/Ubuntu</span>
       </li>
       <li>
-        <a href="snowflake/"><strong>Snowflake</strong></a>
-        <span class="ext-desc">Distributed sequence generation for cluster-wide unique IDs</span>
+        <a href="ansible/"><strong>Ansible</strong></a>
+        <span class="ext-desc">Automated cluster deployment and configuration management with Ansible playbooks</span>
+      </li>
+      <li class="ext-divider"></li>
+      <li>
+        <a href="pgedge-container/"><strong>Containers</strong></a>
+        <span class="ext-desc">Deploy pgEdge Enterprise Postgres on Kubernetes with Helm and CloudNativePG</span>
+      </li>
+      <li class="ext-divider"></li>
+      <li>
+        <a href="cloud/"><strong>pgEdge Cloud</strong></a>
+        <span class="ext-desc">Fully managed, globally distributed PostgreSQL as a service</span>
       </li>
     </ul>
   </div>
 
   <div class="extension-group">
-    <h3>AI &amp; Agentic Capabilities</h3>
+    <h3>AI Toolkit</h3>
     <ul class="extension-list">
+      <li class="ext-subheading">pgEdge Components</li>
       <li>
         <a href="pgedge-postgres-mcp-server/"><strong>MCP Server</strong></a>
-        <span class="ext-desc">Model Context Protocol server for LLM and AI agent access to PostgreSQL</span>
-      </li>
-      <li>
-        <a href="pgedge-vectorizer/"><strong>Vectorizer</strong></a>
-        <span class="ext-desc">Automatic document chunking and vector embedding generation</span>
+        <span class="ext-desc">Connect LLMs and AI agents directly to PostgreSQL via the Model Context Protocol</span>
       </li>
       <li>
         <a href="pgedge-rag-server/"><strong>RAG Server</strong></a>
-        <span class="ext-desc">High-performance Retrieval-Augmented Generation API with hybrid search</span>
+        <span class="ext-desc">High-performance retrieval-augmented generation API with hybrid vector and keyword search</span>
       </li>
       <li>
-        <a href="pgedge-docloader/"><strong>DocLoader</strong></a>
-        <span class="ext-desc">Command-line utility for loading documents into PostgreSQL for AI applications</span>
+        <a href="pgedge-docloader/"><strong>Docloader</strong></a>
+        <span class="ext-desc">CLI tool for loading and chunking documents into PostgreSQL for AI applications</span>
+      </li>
+      <li>
+        <a href="pgedge-vectorizer/"><strong>Vectorizer</strong></a>
+        <span class="ext-desc">Automatic document chunking and vector embedding generation inside PostgreSQL</span>
+      </li>
+      <li class="ext-divider"></li>
+      <li class="ext-subheading">Community Components</li>
+      <li>
+        <a href="pgvector/"><strong>pgVector</strong></a>
+        <span class="ext-desc">Open-source vector similarity search for PostgreSQL</span>
       </li>
     </ul>
   </div>
 
   <div class="extension-group">
-    <h3>Operations &amp; Utilities</h3>
+    <h3>Database</h3>
     <ul class="extension-list">
       <li>
-        <a href="ace/"><strong>ACE (Active Consistency Engine)</strong></a>
-        <span class="ext-desc">Automated data integrity verification and repair across replicated clusters</span>
+        <a href="postgresql/"><strong>PostgreSQL</strong></a>
+        <span class="ext-desc">Reference documentation for PostgreSQL 16, 17, and 18</span>
+      </li>
+      <li class="ext-divider"></li>
+      <li class="ext-subheading">pgEdge Extensions</li>
+      <li>
+        <a href="spock-v5/"><strong>Spock</strong></a>
+        <span class="ext-desc">Multi-master logical replication with conflict resolution for globally distributed clusters</span>
       </li>
       <li>
-        <a href="control-plane/"><strong>Control Plane</strong></a>
-        <span class="ext-desc">Declarative API for database lifecycle management and orchestration</span>
+        <a href="lolor/"><strong>LOLOR</strong></a>
+        <span class="ext-desc">Large object replication for handling BLOBs across distributed PostgreSQL nodes</span>
+      </li>
+      <li>
+        <a href="snowflake/"><strong>Snowflake</strong></a>
+        <span class="ext-desc">Cluster-wide unique sequence generation without node coordination</span>
+      </li>
+      <li>
+        <a href="pgedge-vectorizer/"><strong>Vectorizer</strong></a>
+        <span class="ext-desc">Automatic document chunking and vector embedding generation inside PostgreSQL</span>
+      </li>
+      <li class="ext-divider"></li>
+      <li class="ext-subheading">Community Extensions</li>
+      <li>
+        <a href="pgvector/"><strong>pgVector</strong></a>
+        <span class="ext-desc">Open-source vector similarity search for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="postgis/"><strong>PostGIS</strong></a>
+        <span class="ext-desc">Spatial and geographic object support for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="pgaudit/"><strong>pgAudit</strong></a>
+        <span class="ext-desc">Detailed session and object audit logging for PostgreSQL</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="extension-group">
+    <h3>Tools</h3>
+    <ul class="extension-list">
+      <li class="ext-subheading">pgEdge Tools</li>
+      <li>
+        <a href="ace/"><strong>ACE</strong></a>
+        <span class="ext-desc">Automated data integrity verification and repair across replicated cluster nodes</span>
+      </li>
+      <li>
+        <a href="pgedge-anonymizer/"><strong>Anonymizer</strong></a>
+        <span class="ext-desc">Replace PII with realistic fake data for safe dev/test database copies</span>
+      </li>
+      <li>
+        <a href="pgedge-loadgen/"><strong>Loadgen</strong></a>
+        <span class="ext-desc">Generate realistic PostgreSQL workloads for performance testing and benchmarking</span>
       </li>
       <li>
         <a href="radar/"><strong>Radar</strong></a>
         <span class="ext-desc">Agentless diagnostic data collection for PostgreSQL and system metrics</span>
       </li>
+      <li class="ext-divider"></li>
+      <li class="ext-subheading">Community Tools</li>
       <li>
-        <a href="pgedge-anonymizer/"><strong>Anonymizer</strong></a>
-        <span class="ext-desc">PII replacement for safe dev/test database copies</span>
+        <a href="pgadmin-4/"><strong>pgAdmin 4</strong></a>
+        <span class="ext-desc">Web-based administration and management tool for PostgreSQL</span>
       </li>
       <li>
-        <a href="pgedge-loadgen/"><strong>Loadgen</strong></a>
-        <span class="ext-desc">Realistic workload generation and performance testing</span>
+        <a href="pgbouncer/"><strong>pgBouncer</strong></a>
+        <span class="ext-desc">Lightweight connection pooler for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="pgbackrest/"><strong>pgBackRest</strong></a>
+        <span class="ext-desc">Reliable PostgreSQL backup and restore</span>
+      </li>
+      <li>
+        <a href="postgrest/"><strong>PostgREST</strong></a>
+        <span class="ext-desc">RESTful API server for any PostgreSQL database</span>
+      </li>
+      <li>
+        <a href="psycopg2/"><strong>psycopg2</strong></a>
+        <span class="ext-desc">PostgreSQL database adapter for Python</span>
       </li>
     </ul>
   </div>

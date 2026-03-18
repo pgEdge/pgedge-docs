@@ -6,7 +6,7 @@
 {# Get nav categories from mkdocs.yml extra section #}
 {% set nav_categories = config.extra.nav_categories or {} %}
 
-{# Macro to render a dropdown menu #}
+{# Macro to render a dropdown menu with support for headings and dividers #}
 {% macro dropdown_menu(label, category_items, dropdown_id) %}
 <li class="md-tabs__item md-tabs__dropdown" data-dropdown-id="{{ dropdown_id }}">
   <button type="button" class="md-tabs__dropdown-toggle" aria-expanded="false" aria-haspopup="true">
@@ -16,20 +16,30 @@
     </svg>
   </button>
   <ul class="md-tabs__dropdown-menu">
-    {# Process each category item - render directly using title and url #}
     {% for cat_item in category_items %}
-      {% if cat_item is string %}
+      {% if cat_item.heading is defined %}
+        {# Non-clickable sub-heading #}
+        <li class="md-tabs__dropdown-heading">{{ cat_item.heading }}</li>
+      {% elif cat_item.hr is defined %}
+        {# Horizontal rule divider #}
+        <li class="md-tabs__dropdown-divider"></li>
+      {% elif cat_item is string %}
         {% set cat_title = cat_item %}
         {% set cat_url = "." %}
+        <li class="md-tabs__dropdown-item">
+          <a href="{{ cat_url | url }}" class="md-tabs__dropdown-link">
+            {{ cat_title }}
+          </a>
+        </li>
       {% else %}
         {% set cat_title = cat_item.title %}
         {% set cat_url = cat_item.url | default(".") %}
+        <li class="md-tabs__dropdown-item">
+          <a href="{{ cat_url | url }}" class="md-tabs__dropdown-link">
+            {{ cat_title }}
+          </a>
+        </li>
       {% endif %}
-      <li class="md-tabs__dropdown-item">
-        <a href="{{ cat_url | url }}" class="md-tabs__dropdown-link">
-          {{ cat_title }}
-        </a>
-      </li>
     {% endfor %}
   </ul>
 </li>
@@ -49,35 +59,19 @@
         {% endif %}
       {% endfor %}
 
-      {# VM / Bare Metal dropdown #}
-      {% if 'VM / Bare Metal' in nav_categories %}
-        {{ dropdown_menu('VM / Bare Metal', nav_categories['VM / Bare Metal'], 'vm-bare-metal') }}
+      {# Deployment dropdown #}
+      {% if 'Deployment' in nav_categories %}
+        {{ dropdown_menu('Deployment', nav_categories['Deployment'], 'deployment') }}
       {% endif %}
-
-      {# Containers dropdown #}
-      {% if 'Containers' in nav_categories %}
-        {{ dropdown_menu('Containers', nav_categories['Containers'], 'containers') }}
-      {% endif %}
-
-      {# pgEdge Cloud - direct link, no dropdown #}
-      {% for nav_item in nav %}
-        {% if nav_item.title | striptags | trim == 'pgEdge Cloud' %}
-          <li class="md-tabs__item">
-            <a href="{{ nav_item.url | url if nav_item.url else (nav_item.children | first | attr('url') | url) }}" class="md-tabs__link">
-              pgEdge Cloud
-            </a>
-          </li>
-        {% endif %}
-      {% endfor %}
 
       {# AI Toolkit dropdown #}
       {% if 'AI Toolkit' in nav_categories %}
         {{ dropdown_menu('AI Toolkit', nav_categories['AI Toolkit'], 'ai-toolkit') }}
       {% endif %}
 
-      {# Extensions dropdown #}
-      {% if 'Extensions' in nav_categories %}
-        {{ dropdown_menu('Extensions', nav_categories['Extensions'], 'extensions') }}
+      {# Database dropdown #}
+      {% if 'Database' in nav_categories %}
+        {{ dropdown_menu('Database', nav_categories['Database'], 'database') }}
       {% endif %}
 
       {# Tools dropdown #}

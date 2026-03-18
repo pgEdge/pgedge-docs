@@ -22,7 +22,16 @@ docs/pgedge-vectorizer/index.md
 docs/radar/index.md
 docs/snowflake/index.md
 docs/spock-v5/index.md
+docs/pgadmin-4/index.md
+docs/pgaudit/index.md
+docs/pgbackrest/index.md
+docs/pgbouncer/index.md
+docs/pgvector/index.md
+docs/postgis/index.md
+docs/postgrest/index.md
+docs/psycopg2/index.md
 
 # Ansible vault password file
 ansible/.pgedge-docs-vault-pass
 .vscode/settings.json
+.superpowers/
