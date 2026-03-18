@@ -198,11 +198,13 @@ Examples:
 ### Formatting Bulleted Lists
 
 - Bulleted lists should complete sentences ending with periods.
-- Each bullet item must start with a lowercase letter (unless starting with a proper noun or code element).
+- Bullet list items should only end with periods, not semicolons. Semicolons are for linking related ideas within sentences. 
 - Use a lead-in sentence before the list that ends with a colon.
 - The lead-in sentence and bullet items together should form grammatically complete sentences.
 - Keep lead-in sentences concise by using "include:" or "is useful for:" rather than verbose phrases like "include the following operations:" or "is useful for the following purposes:".
 - When bullet items are gerunds (verb forms ending in -ing), they should work grammatically with the lead-in sentence.
+- Bullet items that successfully complete the opening sentence should start with a lowercase letter (unless starting with a proper noun or code element).
+- Bullet items that are a fragment, or that do not complete the introductory sentence should be upper-case, and not end in punctuation.
 
 For example, the following bulleted list is correct:
 
