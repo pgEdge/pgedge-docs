@@ -166,10 +166,12 @@ Lines in each .md file should be as long as possible, while wrapping content at 
 
 DO NOT:
 
-* Use bold font within headings or text content - it is sometimes misinterpreted by MkDocs as a heading and added to the navigation pane.
+* Use bold font within heading - it is sometimes misinterpreted by MkDocs as a heading and added to the navigation pane.
 * Use Hashtags in front of a step in a stepped list - it adds every step with a # in the step to the navigation pane in the upper-right side of the documentation page.
 * Use fragments in bulleted or stepped lists: **Semantic matching:** uses pgvector for similarity-based cache lookups   
 Do not refer to an object as 'it' unless the object 'it' refers to is in the same sentence. It is too ambiguous!
+
+Note: you **can** use bold within inline text without the content being misinterpreted as a heading.
 
 INSTEAD:
 
