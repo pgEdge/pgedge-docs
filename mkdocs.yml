@@ -225,7 +225,7 @@ extra:
       - heading: "Community Tools"
       - title: pgAdmin 4
         url: pgadmin-4/
-      - title: pgBouncer
+      - title: PgBouncer
         url: pgbouncer/
       - title: pgBackRest
         url: pgbackrest/

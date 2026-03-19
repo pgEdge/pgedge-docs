@@ -493,7 +493,7 @@ hide:
         <span class="ext-desc">Web-based administration and management tool for PostgreSQL</span>
       </li>
       <li>
-        <a href="pgbouncer/"><strong>pgBouncer</strong></a>
+        <a href="pgbouncer/"><strong>PgBouncer</strong></a>
         <span class="ext-desc">Lightweight connection pooler for PostgreSQL</span>
       </li>
       <li>
