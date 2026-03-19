@@ -521,6 +521,7 @@ nav:
     - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
     - v16: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg16'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg19'
+<<<<<<< component_docs
 
   - pgAdmin 4:
     - v9.13: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin913'
@@ -561,3 +562,5 @@ nav:
     - v17.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit171'
     - v16.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit161'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgauditmaster'
+=======
+>>>>>>> main

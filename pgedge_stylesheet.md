@@ -29,7 +29,7 @@ Lines in each .md file should be as long as possible, while wrapping content at 
 
 Replace em-dashes with regular dashes (hyphens).
 
-Remove bold highlighted text content - it is identified as a heading level by some software. 
+Remove bold highlighted text content that is not inline (don't use bold as headings) - it is identified as a heading level by some software. 
 
 Each public repo/project should have a folder named docs that contains source documentation files in simple markdown format. Files in the doc folder are referenced by the TOC (at the top of the README file) and the mkdocs.yaml file used to build the pgEdge documentation suite.
 
@@ -166,10 +166,12 @@ Lines in each .md file should be as long as possible, while wrapping content at 
 
 DO NOT:
 
-* Use bold font within headings or text content - it is sometimes misinterpreted by MkDocs as a heading and added to the navigation pane.
+* Use bold font within heading - it is sometimes misinterpreted by MkDocs as a heading and added to the navigation pane.
 * Use Hashtags in front of a step in a stepped list - it adds every step with a # in the step to the navigation pane in the upper-right side of the documentation page.
 * Use fragments in bulleted or stepped lists: **Semantic matching:** uses pgvector for similarity-based cache lookups   
 Do not refer to an object as 'it' unless the object 'it' refers to is in the same sentence. It is too ambiguous!
+
+Note: you **can** use bold within inline text without the content being misinterpreted as a heading.
 
 INSTEAD:
 
@@ -180,16 +182,29 @@ INSTEAD:
 
 If the page has a `Features` or `Overview` section following the introductory paragraph, the section should not start with a heading; instead use a sentence in the form:  "The MCP Server includes the following features:", followed by a bulleted list of the features.  
 
-When formatting a bulleted list:
+
+### Hyperlink Formatting
+
+When wrapping long lines containing hyperlinks, the complete markdown link
+syntax `[text](URL)` must remain unbroken on a single line. Break the
+surrounding prose before or after the link, but never split the link itself
+across multiple lines. This behavior supersedes the 79-character limit.
+
+Examples:
+- ✓ Correct: `See the [`pg_hba.conf` file](https://example.com/very/long/url)`
+  even if longer than 79 characters
+- ✗ Incorrect: `See the [`pg_hba.conf`\nfile](https://example.com/url)`
 
 ### Formatting Bulleted Lists
 
 - Bulleted lists should complete sentences ending with periods.
-- Each bullet item must start with a lowercase letter (unless starting with a proper noun or code element).
+- Bullet list items should only end with periods, not semicolons. Semicolons are for linking related ideas within sentences. 
 - Use a lead-in sentence before the list that ends with a colon.
 - The lead-in sentence and bullet items together should form grammatically complete sentences.
 - Keep lead-in sentences concise by using "include:" or "is useful for:" rather than verbose phrases like "include the following operations:" or "is useful for the following purposes:".
 - When bullet items are gerunds (verb forms ending in -ing), they should work grammatically with the lead-in sentence.
+- Bullet items that successfully complete the opening sentence should start with a lowercase letter (unless starting with a proper noun or code element).
+- Bullet items that are a fragment, or that do not complete the introductory sentence should be upper-case, and not end in punctuation.
 
 For example, the following bulleted list is correct:
 
