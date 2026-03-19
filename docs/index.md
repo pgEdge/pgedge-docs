@@ -303,11 +303,11 @@ hide:
 
 <div class="cards-grid">
 
-  <!-- AI Toolkit -->
+  <!-- MCP Server -->
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <h3>AI Toolkit</h3>
+        <h3>pgEdge Postgres MCP Server</h3>
         <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
           <path d="M20 2v4" />
@@ -315,7 +315,7 @@ hide:
         </svg>
       </div>
     </div>
-    <p class="card-description">MCP, RAG, Vectorizer.</p>
+    <p class="card-description">Give AI agents secure, structured access to PostgreSQL.</p>
     <a href="pgedge-postgres-mcp-server/" class="card-link">View Documentation →</a>
   </div>
 
@@ -393,6 +393,11 @@ hide:
   <div class="extension-group">
     <h3>AI Toolkit</h3>
     <ul class="extension-list">
+      <li>
+        <a href="ai-toolkit/"><strong>Overview</strong></a>
+        <span class="ext-desc">Architecture guide covering agent access and RAG pipelines</span>
+      </li>
+      <li class="ext-divider"></li>
       <li class="ext-subheading">pgEdge Components</li>
       <li>
         <a href="pgedge-postgres-mcp-server/"><strong>MCP Server</strong></a>
