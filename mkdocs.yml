@@ -483,7 +483,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
 
   - PostgreSQL:
-    - v18: '!import https://github.com/pgEdge/postgresql-docs.git?branch=pg18'
-    - v17: '!import https://github.com/pgEdge/postgresql-docs.git?branch=pg17'
-    - v16: '!import https://github.com/pgEdge/postgresql-docs.git?branch=pg16'
-    - Development: '!import https://github.com/pgEdge/postgresql-docs.git?branch=pg19'
+    - v18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg18'
+    - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
+    - v16: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg16'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg19'
