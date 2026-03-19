@@ -18,12 +18,20 @@ pgEdge Enterprise Postgres and pgEdge Distributed Postgres bring advanced multi-
 ## Component Documentation
 
 * [PostgreSQL](postgresql/index.md): The World's Most Advanced Open-Source Database.
+* [pgAdmin 4](pgadmin-4/index.md): Feature-rich, open-source administration and development platform for PostgreSQL.
 * [ACE (Active Consistency Engine)](ace/index.md): Data integrity for replicating clusters.
 * [Control Plane](control-plane/index.md): A distributed application that provides a declarative API to deploy and manage Postgres databases.
 * [lolor](lolor/index.md): A large object replication extension for Postgres.
 * [pgEdge Helm](pgedge-helm/index.md): Helm chart for deploying pgEdge Enterprise Postgres clusters on Kubernetes.
 * [Snowflake](snowflake/index.md): Cluster-wide unique (Snowflake) sequence extension for Postgres.
 * [Spock v5](spock-v5/index.md): Multi-master replication for Postgres.
+* [pgBackRest](pgbackrest/index.md): Reliable PostgreSQL Backup & Restore.
+* [PgBouncer](pgbouncer/index.md): Lightweight connection pooler for PostgreSQL.
+* [pgvector](pgvector/index.md): Open-source vector similarity search for PostgreSQL.
+* [pgAudit](pgaudit/index.md): Provides detailed session and object audit logging for PostgreSQL.
+* [PostGIS](postgis/index.md): Geospatial support for PostgreSQL.
+* [PostgREST](postgrest/index.md): RESTful API server for PostgreSQL.
+* [psycopg2](psycopg2/index.md): Python connector for PostgreSQL.
 
 ## pgEdge Agentic AI Toolkit for Postgres
 
