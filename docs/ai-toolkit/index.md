@@ -10,21 +10,27 @@ Both capabilities share **[pgVector](../pgvector/)** as a foundation — it prov
 
 ## Components
 
-| Component | Description |
-|-----------|-------------|
-| **[pgEdge Postgres MCP Server](../pgedge-postgres-mcp-server/)** | Secure, structured PostgreSQL access for AI agents via the Model Context Protocol |
-| **[pgEdge RAG Server](../pgedge-rag-server/)** | HTTP API for retrieval-augmented generation with hybrid vector and keyword search |
-| **[pgEdge Docloader](../pgedge-docloader/)** | CLI tool for loading documents into PostgreSQL from files, directories, and Git repos |
-| **[pgEdge Vectorizer](../pgedge-vectorizer/)** | PostgreSQL extension for automatic text chunking and vector embedding generation |
-| **[pgVector](../pgvector/)** | Open-source vector similarity search for PostgreSQL (shared dependency) |
+### pgEdge Components
+
+**[pgEdge Postgres MCP Server](../pgedge-postgres-mcp-server/)** — Gives AI agents secure, structured access to PostgreSQL through the Model Context Protocol. Exposes tools for schema inspection, SQL execution, similarity search, embedding generation, query plan analysis, and knowledgebase search. Supports Claude, OpenAI, and Ollama, with read-only defaults, authentication, TLS, and row-level security.
+
+**[pgEdge RAG Server](../pgedge-rag-server/)** — HTTP API for retrieval-augmented generation. Runs hybrid search combining pgVector cosine similarity with BM25 keyword ranking, fuses results using Reciprocal Rank Fusion, and sends assembled context to an LLM for completion. Supports multiple independent pipelines, streaming responses, and conversation history.
+
+**[pgEdge Docloader](../pgedge-docloader/)** — CLI tool for loading documents into PostgreSQL from local files, glob patterns, or Git repositories. Accepts HTML, Markdown, reStructuredText, and SGML/DocBook, converting all content to Markdown with extracted metadata. Supports transactional loading and UPSERT mode for incremental updates.
+
+**[pgEdge Vectorizer](../pgedge-vectorizer/)** — PostgreSQL extension that automatically chunks text and generates vector embeddings via background workers. Triggers detect inserts and updates on configured tables, with configurable chunking strategies and support for OpenAI, Voyage AI, and Ollama embedding providers.
+
+### Community Components
+
+**[pgVector](../pgvector/)** — Open-source PostgreSQL extension for vector similarity search. Adds a `vector` column type with IVFFlat and HNSW indexing. pgVector is a shared dependency across the toolkit: the MCP Server uses it for semantic search, the Vectorizer stores embeddings in pgVector columns, and the RAG Server queries them for retrieval.
 
 ## Connecting AI agents with the MCP Server
 
-Rather than giving an LLM raw database credentials — uncontrolled access to every table, no guardrails on query complexity, no visibility into what the model is doing — the [MCP Server](../pgedge-postgres-mcp-server/) acts as a controlled gateway. It exposes a defined set of tools that an agent can invoke (schema inspection, SQL execution, similarity search, embedding generation, query plan analysis, and knowledgebase search), while enforcing read-only transactions by default with token authentication, TLS, and PostgreSQL row-level security.
+Rather than giving an LLM raw database credentials — uncontrolled access to every table, no guardrails on query complexity, no visibility into what the model is doing — the [MCP Server](../pgedge-postgres-mcp-server/) acts as a controlled gateway with read-only defaults, authentication, TLS, and PostgreSQL row-level security.
 
-This is not a generic database access tool. The MCP Server is purpose-built for PostgreSQL and ships with a **built-in PostgreSQL knowledgebase**. When an agent needs to understand a PostgreSQL feature, diagnose a configuration issue, or write correct syntax for an extension, it queries the knowledgebase directly rather than relying on the LLM's training data (which may be outdated or imprecise). This is the difference between a thin SQL proxy and an enterprise-grade database assistant that understands PostgreSQL deeply.
+The MCP Server is purpose-built for PostgreSQL and ships with a **built-in PostgreSQL knowledgebase**. When an agent needs to understand a PostgreSQL feature, diagnose a configuration issue, or write correct syntax for an extension, it queries the knowledgebase directly rather than relying on the LLM's training data (which may be outdated or imprecise).
 
-The server supports **Anthropic Claude**, **OpenAI**, and **Ollama** as LLM providers, and offers two connection modes:
+The server offers two connection modes:
 
 - **stdio** — For desktop clients (Claude Desktop, Cursor, VS Code Copilot, Windsurf) where the server runs as a local subprocess.
 - **HTTP + SSE** — For multi-user and remote deployments where the server runs as a long-lived service. The built-in **Go CLI client** and **React web chat interface** both connect via this mode.
@@ -99,24 +105,14 @@ flowchart TB
 
 ### Ingestion: Docloader → PostgreSQL
 
-**[pgEdge Docloader](../pgedge-docloader/)** reads source content — local files, directories, glob patterns, or Git repositories — and loads it into a PostgreSQL table. Each document is converted to Markdown and stored with metadata (title, filename, timestamps). Loading is transactional (a batch fully commits or rolls back), and UPSERT mode allows re-running the same load to pick up changes without duplicating rows.
-
-At this stage, the data is plain text in standard PostgreSQL tables. No vectors or chunking are involved yet.
+**[Docloader](../pgedge-docloader/)** reads source content and loads it into a PostgreSQL table, converting documents to Markdown with extracted metadata. Loading is transactional, and UPSERT mode allows re-running the same load to pick up changes without duplicating rows. At this stage, the data is plain text — no vectors or chunking are involved yet.
 
 ### Processing: Vectorizer + pgVector
 
-**[pgEdge Vectorizer](../pgedge-vectorizer/)** watches configured tables for `INSERT` and `UPDATE` operations via triggers. Changed rows are queued, and background workers handle the rest:
-
-1. **Chunking** — Text is split into segments sized for embedding models. Strategies include fixed token windows, Markdown-aware splitting that respects document structure, and a hybrid two-pass approach.
-
-2. **Embedding** — Each chunk is sent to a configured provider (OpenAI, Voyage AI, or Ollama) and the resulting vector is stored in a chunk table using **[pgVector](../pgvector/)** column types.
-
-3. **Queue management** — Workers process batches with retry logic and exponential backoff. Completed items are cleaned up automatically.
-
-The result is a set of chunk tables where each row contains a text fragment, its vector embedding, and a foreign key back to the source document, indexed by pgVector for fast similarity search.
+**[Vectorizer](../pgedge-vectorizer/)** watches configured tables for changes via triggers. When rows are inserted or updated, background workers chunk the text and generate embeddings, storing the results in dedicated chunk tables using **[pgVector](../pgvector/)** column types. The chunk tables are indexed for fast similarity search.
 
 ### Serving: RAG Server
 
-Pointing an LLM directly at your chunk tables is both a security risk and a retrieval quality problem. The LLM has unguarded access to whatever data is in the tables, pure vector similarity misses keyword-exact matches, and near-duplicate passages waste the context window. The application is left to handle embedding generation, token budgeting, and LLM orchestration itself.
+Pointing an LLM directly at chunk tables is both a security risk and a retrieval quality problem — unguarded data access, no keyword matching, duplicate passages wasting the context window, and embedding/token/LLM orchestration left to the application.
 
-**[pgEdge RAG Server](../pgedge-rag-server/)** solves both problems. It constrains access to pre-configured pipelines against specific tables — the LLM never generates SQL. When a query arrives, the server runs a hybrid search: pgVector cosine similarity for semantic matching and BM25 for keyword matching. Results are fused using Reciprocal Rank Fusion, deduplicated, and assembled into a context window that respects a configurable token budget, then sent to an LLM (OpenAI, Anthropic, or Ollama) for a generated answer. Multiple pipelines can run independently, each with its own database, tables, and provider configuration.
+**[RAG Server](../pgedge-rag-server/)** solves this by constraining access to pre-configured pipelines against specific tables (the LLM never generates SQL) and handling hybrid retrieval (vector + BM25), deduplication, and context assembly in a single layer.
