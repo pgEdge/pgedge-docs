@@ -1,18 +1,20 @@
 # Ansible
 
-pgEdge provides an Ansible collection for deploying and managing PostgreSQL clusters on VMs and bare metal servers.
+pgEdge provides an Ansible collection for deploying and managing PostgreSQL
+clusters on VMs and bare metal servers.
 
 ## Overview
 
 The pgEdge Ansible collection includes roles for:
 
-- Deploying pgEdge Enterprise Postgres
-- Configuring pgEdge Distributed Postgres clusters
-- Managing Spock replication setup
+- deploying pgEdge Enterprise Postgres.
+- configuring pgEdge Distributed Postgres clusters.
+- managing Spock replication setup.
 
 ## Documentation
 
-For complete documentation, installation instructions, and sample playbooks, see the GitHub repository:
+For complete documentation, installation instructions, and sample playbooks,
+see the GitHub repository:
 
 **[pgEdge Ansible Collection on GitHub](https://github.com/pgEdge/pgedge-ansible)**
 
