@@ -25,39 +25,39 @@ The pgEdge AI Toolkit consists of the following components.
 
 ### pgEdge Components
 
-**[pgEdge Postgres MCP Server](../pgedge-postgres-mcp-server/)** — Gives AI
+**[pgEdge Postgres MCP Server](../pgedge-postgres-mcp-server/)** gives AI
 agents secure, structured access to PostgreSQL through the Model Context
-Protocol. Exposes tools for schema inspection, SQL execution, similarity
+Protocol. It exposes tools for schema inspection, SQL execution, similarity
 search, embedding generation, query plan analysis, and knowledgebase search.
-Supports Claude, OpenAI, and Ollama, with read-only defaults,
+It supports Claude, OpenAI, and Ollama, with read-only defaults,
 authentication, TLS, and row-level security.
 
-**[pgEdge RAG Server](../pgedge-rag-server/)** — HTTP API for
-retrieval-augmented generation. Runs hybrid search combining pgVector cosine
-similarity with BM25 keyword ranking, fuses results using Reciprocal Rank
-Fusion, and sends assembled context to an LLM for completion. Supports
-multiple independent pipelines, streaming responses, and conversation
-history.
+**[pgEdge RAG Server](../pgedge-rag-server/)** provides an HTTP API for
+retrieval-augmented generation. It runs hybrid search combining pgVector
+cosine similarity with BM25 keyword ranking, fuses results using Reciprocal
+Rank Fusion, and sends assembled context to an LLM for completion. It
+supports multiple independent pipelines, streaming responses, and
+conversation history.
 
-**[pgEdge Docloader](../pgedge-docloader/)** — CLI tool for loading
+**[pgEdge Docloader](../pgedge-docloader/)** is a CLI tool for loading
 documents into PostgreSQL from local files, glob patterns, or Git
-repositories. Accepts HTML, Markdown, reStructuredText, and SGML/DocBook,
-converting all content to Markdown with extracted metadata. Supports
+repositories. It accepts HTML, Markdown, reStructuredText, and SGML/DocBook,
+converting all content to Markdown with extracted metadata. It supports
 transactional loading and UPSERT mode for incremental updates.
 
-**[pgEdge Vectorizer](../pgedge-vectorizer/)** — PostgreSQL extension that
-automatically chunks text and generates vector embeddings via background
+**[pgEdge Vectorizer](../pgedge-vectorizer/)** is a PostgreSQL extension
+that automatically chunks text and generates vector embeddings via background
 workers. Triggers detect inserts and updates on configured tables, with
 configurable chunking strategies and support for OpenAI, Voyage AI, and
 Ollama embedding providers.
 
 ### Community Components
 
-**[pgVector](../pgvector/)** — Open-source PostgreSQL extension for vector
-similarity search. Adds a `vector` column type with IVFFlat and HNSW
-indexing. pgVector is a shared dependency across the toolkit: the MCP Server
-uses it for semantic search, the Vectorizer stores embeddings in pgVector
-columns, and the RAG Server queries them for retrieval.
+**[pgVector](../pgvector/)** is an open-source PostgreSQL extension for
+vector similarity search. It adds a `vector` column type with IVFFlat and
+HNSW indexing. pgVector is a shared dependency across the toolkit: the MCP
+Server uses it for semantic search, the Vectorizer stores embeddings in
+pgVector columns, and the RAG Server queries them for retrieval.
 
 ## Connecting AI Agents With the MCP Server
 
