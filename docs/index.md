@@ -364,7 +364,6 @@ hide:
   <div class="extension-group">
     <h3>Deployment</h3>
     <ul class="extension-list">
-      <li class="ext-subheading">VM / Bare Metal</li>
       <li>
         <a href="control-plane/"><strong>Control Plane</strong></a>
         <span class="ext-desc">Declarative API for deploying and managing PostgreSQL clusters on VMs and bare metal</span>
