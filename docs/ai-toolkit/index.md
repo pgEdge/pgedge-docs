@@ -7,7 +7,7 @@ independent capabilities: **secure database access** and
 The **pgEdge Postgres MCP Server** gives AI agents autonomous, structured
 access to your database through the Model Context Protocol — with built-in
 security, PostgreSQL-specific knowledge, and support for multiple LLM
-providers. It works standalone and requires no additional toolkit
+providers. It works as a standalone, requiring no additional toolkit
 components.
 
 For applications that need to answer questions over a document corpus, the
