@@ -167,6 +167,49 @@
     opacity: 1;
 }
 
+/* Dropdown sub-headings - non-clickable labels */
+.md-tabs__dropdown-heading {
+    padding: 0.5rem 1rem 0.2rem;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    list-style: none;
+    pointer-events: none;
+}
+
+.md-tabs__dropdown-heading:first-child {
+    padding-top: 0.2rem;
+}
+
+[data-md-color-scheme="default"] .md-tabs__dropdown-heading {
+    color: var(--md-default-fg-color);
+    opacity: 0.5;
+}
+
+[data-md-color-scheme="slate"] .md-tabs__dropdown-heading {
+    color: var(--md-primary-bg-color);
+    opacity: 0.5;
+}
+
+/* Dropdown horizontal rule dividers */
+.md-tabs__dropdown-divider {
+    margin: 0.3rem 1rem;
+    border: 0;
+    height: 1px;
+    list-style: none;
+}
+
+[data-md-color-scheme="default"] .md-tabs__dropdown-divider {
+    background: var(--md-default-fg-color);
+    opacity: 0.15;
+}
+
+[data-md-color-scheme="slate"] .md-tabs__dropdown-divider {
+    background: var(--md-primary-bg-color);
+    opacity: 0.2;
+}
+
 /* ==========================================================================
    Version Selector Styles
    ========================================================================== */
