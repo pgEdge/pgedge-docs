@@ -559,6 +559,40 @@ nav:
     - v16.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit161'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgauditmaster'
 
+  # AI Toolkit - Community Extensions (from 3rd-party-docs repo)
+  - pg_tokenizer:
+    - v0.1.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizer011'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizermaster'
+
+  - pg_vectorize:
+    - v0.26.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0260'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorizemaster'
+
+  - vchord_bm25:
+    - v0.3.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=vchordbm25030'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=vchordbm25master'
+
+  # Community Extensions - Database (from 3rd-party-docs repo)
+  - pg_cron:
+    - v1.6.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcron167'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcronmaster'
+
+  - pgmq:
+    - v1.11.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1110'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmqmaster'
+
+  - pg_stat_monitor:
+    - v2.3.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor231'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitormaster'
+
+  - pldebugger:
+    - v1.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebugger19'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebuggermaster'
+
+  - system_stats:
+    - v3.2.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstats321'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstatsmaster'
+
   # Community Tools (from 3rd-party-docs repo)
   - pgAdmin 4:
     - v9.13: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin913'
