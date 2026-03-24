@@ -140,6 +140,14 @@ extra:
     - pgvector
     - pgaudit
     - postgis
+    - pg_vectorize
+    - pg_tokenizer
+    - vchord_bm25
+    - pg_cron
+    - pgmq
+    - pg_stat_monitor
+    - pldebugger
+    - system_stats
 
   # Third-party documentation - shows a notice that content is not maintained by pgEdge
   third_party_docsets:
@@ -152,6 +160,14 @@ extra:
     - pgvector
     - pgaudit
     - postgis
+    - pg_vectorize
+    - pg_tokenizer
+    - vchord_bm25
+    - pg_cron
+    - pgmq
+    - pg_stat_monitor
+    - pldebugger
+    - system_stats
 
   # Navigation dropdown categories
   # Supported item types:
