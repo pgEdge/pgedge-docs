@@ -417,8 +417,20 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">Community Components</li>
       <li>
+        <a href="pg_tokenizer/"><strong>pg_tokenizer</strong></a>
+        <span class="ext-desc">Tokenization and text processing for search and AI workloads</span>
+      </li>
+      <li>
+        <a href="pg_vectorize/"><strong>pg_vectorize</strong></a>
+        <span class="ext-desc">RAG-focused automated vector search pipelines for PostgreSQL</span>
+      </li>
+      <li>
         <a href="pgvector/"><strong>pgVector</strong></a>
         <span class="ext-desc">Open-source vector similarity search for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="vchord_bm25/"><strong>vchord_bm25</strong></a>
+        <span class="ext-desc">BM25 full-text ranking algorithm for PostgreSQL</span>
       </li>
     </ul>
   </div>
