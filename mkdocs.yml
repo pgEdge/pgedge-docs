@@ -204,8 +204,14 @@ extra:
         url: pgedge-vectorizer/
       - hr: true
       - heading: "Community Components"
+      - title: pg_tokenizer
+        url: pg_tokenizer/
+      - title: pg_vectorize
+        url: pg_vectorize/
       - title: pgVector
         url: pgvector/
+      - title: vchord_bm25
+        url: vchord_bm25/
     Database:
       - title: PostgreSQL
         url: postgresql/
@@ -221,12 +227,22 @@ extra:
         url: pgedge-vectorizer/
       - hr: true
       - heading: "Community Extensions"
-      - title: pgVector
-        url: pgvector/
-      - title: PostGIS
-        url: postgis/
+      - title: pg_cron
+        url: pg_cron/
+      - title: pg_stat_monitor
+        url: pg_stat_monitor/
       - title: pgAudit
         url: pgaudit/
+      - title: pgmq
+        url: pgmq/
+      - title: pgVector
+        url: pgvector/
+      - title: pldebugger
+        url: pldebugger/
+      - title: PostGIS
+        url: postgis/
+      - title: system_stats
+        url: system_stats/
     Tools:
       - heading: "pgEdge Tools"
       - title: ACE
