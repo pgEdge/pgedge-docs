@@ -22,22 +22,22 @@ docs/pgedge-vectorizer/index.md
 docs/radar/index.md
 docs/snowflake/index.md
 docs/spock-v5/index.md
+docs/pg_cron/index.md
+docs/pg_stat_monitor/index.md
+docs/pg_tokenizer/index.md
+docs/pg_vectorize/index.md
 docs/pgadmin-4/index.md
 docs/pgaudit/index.md
 docs/pgbackrest/index.md
 docs/pgbouncer/index.md
+docs/pgmq/index.md
 docs/pgvector/index.md
+docs/pldebugger/index.md
 docs/postgis/index.md
 docs/postgrest/index.md
 docs/psycopg2/index.md
-docs/pg_vectorize/index.md
-docs/pg_tokenizer/index.md
-docs/vchord_bm25/index.md
-docs/pg_cron/index.md
-docs/pgmq/index.md
-docs/pg_stat_monitor/index.md
-docs/pldebugger/index.md
 docs/system_stats/index.md
+docs/vchord_bm25/index.md
 
 # Ansible vault password file
 ansible/.pgedge-docs-vault-pass

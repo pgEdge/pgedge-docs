@@ -132,42 +132,42 @@ extra:
     - pgedge-vectorizer
     - radar
     - postgresql
+    - pg_cron
+    - pg_stat_monitor
+    - pg_tokenizer
+    - pg_vectorize
     - pgadmin-4
-    - postgrest
-    - psycopg2
+    - pgaudit
     - pgbackrest
     - pgbouncer
-    - pgvector
-    - pgaudit
-    - postgis
-    - pg_vectorize
-    - pg_tokenizer
-    - vchord_bm25
-    - pg_cron
     - pgmq
-    - pg_stat_monitor
+    - pgvector
     - pldebugger
+    - postgis
+    - postgrest
+    - psycopg2
     - system_stats
+    - vchord_bm25
 
   # Third-party documentation - shows a notice that content is not maintained by pgEdge
   third_party_docsets:
     - postgresql
+    - pg_cron
+    - pg_stat_monitor
+    - pg_tokenizer
+    - pg_vectorize
     - pgadmin-4
-    - postgrest
-    - psycopg2
+    - pgaudit
     - pgbackrest
     - pgbouncer
-    - pgvector
-    - pgaudit
-    - postgis
-    - pg_vectorize
-    - pg_tokenizer
-    - vchord_bm25
-    - pg_cron
     - pgmq
-    - pg_stat_monitor
+    - pgvector
     - pldebugger
+    - postgis
+    - postgrest
+    - psycopg2
     - system_stats
+    - vchord_bm25
 
   # Navigation dropdown categories
   # Supported item types:
