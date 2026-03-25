@@ -130,6 +130,7 @@ extra:
     - pgedge-loadgen
     - pgedge-rag-server
     - pgedge-vectorizer
+    - pg-semantic-cache
     - radar
     - postgresql
     - pg-cron
@@ -229,6 +230,8 @@ extra:
       - heading: "Community Extensions"
       - title: pg_cron
         url: pg-cron/
+      - title: pg_semantic_cache
+        url: pg-semantic-cache/
       - title: pg_stat_monitor
         url: pg-stat-monitor/
       - title: pgAudit
@@ -539,6 +542,10 @@ nav:
   - pgEdge Loadgen: 
     - v1.0.0-beta1: '!import https://github.com/pgEdge/pgedge-loadgen?branch=v1.0.0-beta1'
     - Development: '!import https://github.com/pgEdge/pgedge-loadgen?branch=main'
+
+  - pg-semantic-cache:
+    - v0.1.0-beta4: '!import https://github.com/pgEdge/pg_semantic_cache?branch=v0.1.0-beta4'
+    - Development: '!import https://github.com/pgEdge/pg_semantic_cache?branch=main'
 
   # AI Toolkit - pgEdge Postgres MCP Server (versioned documentation)
   # Each version is imported separately to enable version navigation

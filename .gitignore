@@ -23,6 +23,7 @@ docs/radar/index.md
 docs/snowflake/index.md
 docs/spock-v5/index.md
 docs/pg-cron/index.md
+docs/pg-semantic-cache/index.md
 docs/pg-stat-monitor/index.md
 docs/pg-tokenizer/index.md
 docs/pg-vectorize/index.md

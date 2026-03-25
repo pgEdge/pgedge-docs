@@ -471,6 +471,10 @@ hide:
         <span class="ext-desc">Query performance monitoring with histogram aggregation</span>
       </li>
       <li>
+        <a href="pg-semantic-cache/"><strong>pg_semantic_cache</strong></a>
+        <span class="ext-desc">Semantic similarity caching for PostgreSQL</span>
+      </li>
+      <li>
         <a href="pgaudit/"><strong>pgAudit</strong></a>
         <span class="ext-desc">Detailed session and object audit logging for PostgreSQL</span>
       </li>
