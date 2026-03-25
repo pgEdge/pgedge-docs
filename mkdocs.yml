@@ -266,7 +266,7 @@ extra:
       - title: psycopg2
         url: psycopg2/
 
-copyright: Copyright &copy; 2023 - 2026, pgEdge, Inc –
+copyright: Copyright &copy; 2023 - 2026, pgEdge, Inc. Third-party documentation is copyright of its respective authors –
   <a href="#__consent">Change cookie settings</a>
 repo_url: https://github.com/pgEdge
 
