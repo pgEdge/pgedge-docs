@@ -107,7 +107,7 @@ see the imported cluster definition on the `Clusters` page.
 
 ![Progress tracker](../images/gs_progress_four.png)
 
-Next, you'll [create a database](../cluster/create_database.md). You can
+Next, you'll create a database. You can
 use the link on the progress tracker to navigate to the database creation
 page.
 

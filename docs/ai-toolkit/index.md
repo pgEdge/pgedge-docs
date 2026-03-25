@@ -15,7 +15,7 @@ remaining components form a **complete RAG pipeline**: Docloader ingests
 documents, the Vectorizer chunks and embeds them, and the RAG Server answers
 questions over the resulting knowledge base.
 
-Both capabilities share **[pgVector](../pgvector/)** as a foundation — it
+Both capabilities share **[pgVector](../pgvector/index.md)** as a foundation — it
 provides the vector similarity search that powers the MCP Server's semantic
 search tools and the RAG pipeline's hybrid retrieval.
 
@@ -25,27 +25,27 @@ The pgEdge AI Toolkit consists of the following components.
 
 ### pgEdge Components
 
-**[pgEdge Postgres MCP Server](../pgedge-postgres-mcp-server/)** gives AI
+**[pgEdge Postgres MCP Server](../pgedge-postgres-mcp-server/index.md)** gives AI
 agents secure, structured access to PostgreSQL through the Model Context
 Protocol. It exposes tools for schema inspection, SQL execution, similarity
 search, embedding generation, query plan analysis, and knowledgebase search.
 It supports Claude, OpenAI, and Ollama, with read-only defaults,
 authentication, TLS, and row-level security.
 
-**[pgEdge RAG Server](../pgedge-rag-server/)** provides an HTTP API for
+**[pgEdge RAG Server](../pgedge-rag-server/index.md)** provides an HTTP API for
 retrieval-augmented generation. It runs hybrid search combining pgVector
 cosine similarity with BM25 keyword ranking, fuses results using Reciprocal
 Rank Fusion, and sends assembled context to an LLM for completion. It
 supports multiple independent pipelines, streaming responses, and
 conversation history.
 
-**[pgEdge Docloader](../pgedge-docloader/)** is a CLI tool for loading
+**[pgEdge Docloader](../pgedge-docloader/index.md)** is a CLI tool for loading
 documents into PostgreSQL from local files, glob patterns, or Git
 repositories. It accepts HTML, Markdown, reStructuredText, and SGML/DocBook,
 converting all content to Markdown with extracted metadata. It supports
 transactional loading and UPSERT mode for incremental updates.
 
-**[pgEdge Vectorizer](../pgedge-vectorizer/)** is a PostgreSQL extension
+**[pgEdge Vectorizer](../pgedge-vectorizer/index.md)** is a PostgreSQL extension
 that automatically chunks text and generates vector embeddings via background
 workers. Triggers detect inserts and updates on configured tables, with
 configurable chunking strategies and support for OpenAI, Voyage AI, and
@@ -53,7 +53,7 @@ Ollama embedding providers.
 
 ### Community Components
 
-**[pgVector](../pgvector/)** is an open-source PostgreSQL extension for
+**[pgVector](../pgvector/index.md)** is an open-source PostgreSQL extension for
 vector similarity search. It adds a `vector` column type with IVFFlat and
 HNSW indexing. pgVector is a shared dependency across the toolkit: the MCP
 Server uses it for semantic search, the Vectorizer stores embeddings in
@@ -63,7 +63,7 @@ pgVector columns, and the RAG Server queries them for retrieval.
 
 Rather than giving an LLM raw database credentials — uncontrolled access to
 every table, no guardrails on query complexity, no visibility into what the
-model is doing — the [MCP Server](../pgedge-postgres-mcp-server/) acts as a
+model is doing — the [MCP Server](../pgedge-postgres-mcp-server/index.md) acts as a
 controlled gateway with read-only defaults, authentication, TLS, and
 PostgreSQL row-level security.
 
@@ -157,7 +157,7 @@ flowchart TB
 
 ### Ingestion: Docloader → PostgreSQL
 
-**[Docloader](../pgedge-docloader/)** reads source content and loads it into
+**[Docloader](../pgedge-docloader/index.md)** reads source content and loads it into
 a PostgreSQL table, converting documents to Markdown with extracted metadata.
 Loading is transactional, and UPSERT mode allows re-running the same load to
 pick up changes without duplicating rows. At this stage, the data is plain
@@ -165,10 +165,10 @@ text — no vectors or chunking are involved yet.
 
 ### Processing: Vectorizer + pgVector
 
-**[Vectorizer](../pgedge-vectorizer/)** watches configured tables for changes
+**[Vectorizer](../pgedge-vectorizer/index.md)** watches configured tables for changes
 via triggers. When rows are inserted or updated, background workers chunk the
 text and generate embeddings, storing the results in dedicated chunk tables
-using **[pgVector](../pgvector/)** column types. The chunk tables are indexed
+using **[pgVector](../pgvector/index.md)** column types. The chunk tables are indexed
 for fast similarity search.
 
 ### Serving: RAG Server
@@ -178,7 +178,7 @@ retrieval quality problem — unguarded data access, no keyword matching,
 duplicate passages wasting the context window, and embedding/token/LLM
 orchestration left to the application.
 
-**[RAG Server](../pgedge-rag-server/)** solves this by constraining access to
+**[RAG Server](../pgedge-rag-server/index.md)** solves this by constraining access to
 pre-configured pipelines against specific tables (the LLM never generates
 SQL) and handling hybrid retrieval (vector + BM25), deduplication, and
 context assembly in a single layer.

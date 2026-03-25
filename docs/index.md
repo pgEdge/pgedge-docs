@@ -417,8 +417,20 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">Community Components</li>
       <li>
+        <a href="pg-tokenizer/"><strong>pg_tokenizer</strong></a>
+        <span class="ext-desc">Tokenization and text processing for search and AI workloads</span>
+      </li>
+      <li>
+        <a href="pg-vectorize/"><strong>pg_vectorize</strong></a>
+        <span class="ext-desc">RAG-focused automated vector search pipelines for PostgreSQL</span>
+      </li>
+      <li>
         <a href="pgvector/"><strong>pgVector</strong></a>
         <span class="ext-desc">Open-source vector similarity search for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="vchord-bm25/"><strong>vchord_bm25</strong></a>
+        <span class="ext-desc">BM25 full-text ranking algorithm for PostgreSQL</span>
       </li>
     </ul>
   </div>
@@ -451,16 +463,36 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">Community Extensions</li>
       <li>
+        <a href="pg-cron/"><strong>pg_cron</strong></a>
+        <span class="ext-desc">Job scheduler for PostgreSQL, running SQL on a schedule</span>
+      </li>
+      <li>
+        <a href="pg-stat-monitor/"><strong>pg_stat_monitor</strong></a>
+        <span class="ext-desc">Query performance monitoring with histogram aggregation</span>
+      </li>
+      <li>
+        <a href="pgaudit/"><strong>pgAudit</strong></a>
+        <span class="ext-desc">Detailed session and object audit logging for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="pgmq/"><strong>pgmq</strong></a>
+        <span class="ext-desc">Lightweight message queue built on PostgreSQL</span>
+      </li>
+      <li>
         <a href="pgvector/"><strong>pgVector</strong></a>
         <span class="ext-desc">Open-source vector similarity search for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="pldebugger/"><strong>pldebugger</strong></a>
+        <span class="ext-desc">Interactive debugger for PL/pgSQL functions</span>
       </li>
       <li>
         <a href="postgis/"><strong>PostGIS</strong></a>
         <span class="ext-desc">Spatial and geographic object support for PostgreSQL</span>
       </li>
       <li>
-        <a href="pgaudit/"><strong>pgAudit</strong></a>
-        <span class="ext-desc">Detailed session and object audit logging for PostgreSQL</span>
+        <a href="system-stats/"><strong>system_stats</strong></a>
+        <span class="ext-desc">System-level CPU, memory, and disk statistics from PostgreSQL</span>
       </li>
     </ul>
   </div>

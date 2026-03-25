@@ -20,9 +20,9 @@ see the GitHub repository:
 
 ## Related Resources
 
-- [Distributed CLI documentation](../platform/) - Using the Distributed CLI for
+- [Distributed CLI documentation](../platform/index.md) - Using the Distributed CLI for
   manual VM deployments.
-- [Control Plane documentation](../control-plane/) - Using the Control Plane
+- [Control Plane documentation](../control-plane/index.md) - Using the Control Plane
   for declarative API-based cluster management.
-- [pgEdge Cloud documentation](../cloud/) - Using pgEdge Cloud for managed
+- [pgEdge Cloud documentation](../cloud/index.md) - Using pgEdge Cloud for managed
   cloud deployments.

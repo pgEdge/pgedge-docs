@@ -132,26 +132,42 @@ extra:
     - pgedge-vectorizer
     - radar
     - postgresql
+    - pg-cron
+    - pg-stat-monitor
+    - pg-tokenizer
+    - pg-vectorize
     - pgadmin-4
-    - postgrest
-    - psycopg2
+    - pgaudit
     - pgbackrest
     - pgbouncer
+    - pgmq
     - pgvector
-    - pgaudit
+    - pldebugger
     - postgis
+    - postgrest
+    - psycopg2
+    - system-stats
+    - vchord-bm25
 
   # Third-party documentation - shows a notice that content is not maintained by pgEdge
   third_party_docsets:
     - postgresql
+    - pg-cron
+    - pg-stat-monitor
+    - pg-tokenizer
+    - pg-vectorize
     - pgadmin-4
-    - postgrest
-    - psycopg2
+    - pgaudit
     - pgbackrest
     - pgbouncer
+    - pgmq
     - pgvector
-    - pgaudit
+    - pldebugger
     - postgis
+    - postgrest
+    - psycopg2
+    - system-stats
+    - vchord-bm25
 
   # Navigation dropdown categories
   # Supported item types:
@@ -188,8 +204,14 @@ extra:
         url: pgedge-vectorizer/
       - hr: true
       - heading: "Community Components"
+      - title: pg_tokenizer
+        url: pg-tokenizer/
+      - title: pg_vectorize
+        url: pg-vectorize/
       - title: pgVector
         url: pgvector/
+      - title: vchord_bm25
+        url: vchord-bm25/
     Database:
       - title: PostgreSQL
         url: postgresql/
@@ -205,12 +227,22 @@ extra:
         url: pgedge-vectorizer/
       - hr: true
       - heading: "Community Extensions"
-      - title: pgVector
-        url: pgvector/
-      - title: PostGIS
-        url: postgis/
+      - title: pg_cron
+        url: pg-cron/
+      - title: pg_stat_monitor
+        url: pg-stat-monitor/
       - title: pgAudit
         url: pgaudit/
+      - title: pgmq
+        url: pgmq/
+      - title: pgVector
+        url: pgvector/
+      - title: pldebugger
+        url: pldebugger/
+      - title: PostGIS
+        url: postgis/
+      - title: system_stats
+        url: system-stats/
     Tools:
       - heading: "pgEdge Tools"
       - title: ACE
@@ -558,6 +590,40 @@ nav:
     - v17.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit171'
     - v16.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit161'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgauditmaster'
+
+  # AI Toolkit - Community Extensions (from 3rd-party-docs repo)
+  - pg-tokenizer:
+    - v0.1.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizer011'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizermaster'
+
+  - pg-vectorize:
+    - v0.26.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0260'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorizemaster'
+
+  - vchord-bm25:
+    - v0.3.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=vchordbm25030'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=vchordbm25master'
+
+  # Community Extensions - Database (from 3rd-party-docs repo)
+  - pg-cron:
+    - v1.6.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcron167'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcronmaster'
+
+  - pgmq:
+    - v1.11.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1110'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmqmaster'
+
+  - pg-stat-monitor:
+    - v2.3.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor231'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitormaster'
+
+  - pldebugger:
+    - v1.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebugger19'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebuggermaster'
+
+  - system-stats:
+    - v3.2.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstats321'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstatsmaster'
 
   # Community Tools (from 3rd-party-docs repo)
   - pgAdmin 4:
