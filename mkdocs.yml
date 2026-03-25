@@ -523,6 +523,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
   - Spock v5:
+    - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5.0.6'
     - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
     - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
@@ -555,7 +556,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=main'
 
   - pgEdge Docloader:
-    - v1.0.0-beta1: '!import https://github.com/pgEdge/pgedge-docloader?branch=v1.0.0-beta1'
+    - v1.0.0: '!import https://github.com/pgEdge/pgedge-docloader?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-docloader?branch=main'
 
   - pgEdge RAG Server:
@@ -564,8 +565,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-rag-server?branch=main'
 
   - pgEdge Vectorizer:
-    - v1.0-beta2: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0-beta2'
-    - v1.0-beta1: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0-beta1'
+    - v1.0: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0'
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
 
   - PostgreSQL:
