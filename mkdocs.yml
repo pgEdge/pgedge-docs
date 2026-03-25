@@ -132,10 +132,10 @@ extra:
     - pgedge-vectorizer
     - radar
     - postgresql
-    - pg_cron
-    - pg_stat_monitor
-    - pg_tokenizer
-    - pg_vectorize
+    - pg-cron
+    - pg-stat-monitor
+    - pg-tokenizer
+    - pg-vectorize
     - pgadmin-4
     - pgaudit
     - pgbackrest
@@ -146,16 +146,16 @@ extra:
     - postgis
     - postgrest
     - psycopg2
-    - system_stats
-    - vchord_bm25
+    - system-stats
+    - vchord-bm25
 
   # Third-party documentation - shows a notice that content is not maintained by pgEdge
   third_party_docsets:
     - postgresql
-    - pg_cron
-    - pg_stat_monitor
-    - pg_tokenizer
-    - pg_vectorize
+    - pg-cron
+    - pg-stat-monitor
+    - pg-tokenizer
+    - pg-vectorize
     - pgadmin-4
     - pgaudit
     - pgbackrest
@@ -166,8 +166,8 @@ extra:
     - postgis
     - postgrest
     - psycopg2
-    - system_stats
-    - vchord_bm25
+    - system-stats
+    - vchord-bm25
 
   # Navigation dropdown categories
   # Supported item types:
@@ -205,13 +205,13 @@ extra:
       - hr: true
       - heading: "Community Components"
       - title: pg_tokenizer
-        url: pg_tokenizer/
+        url: pg-tokenizer/
       - title: pg_vectorize
-        url: pg_vectorize/
+        url: pg-vectorize/
       - title: pgVector
         url: pgvector/
       - title: vchord_bm25
-        url: vchord_bm25/
+        url: vchord-bm25/
     Database:
       - title: PostgreSQL
         url: postgresql/
@@ -228,9 +228,9 @@ extra:
       - hr: true
       - heading: "Community Extensions"
       - title: pg_cron
-        url: pg_cron/
+        url: pg-cron/
       - title: pg_stat_monitor
-        url: pg_stat_monitor/
+        url: pg-stat-monitor/
       - title: pgAudit
         url: pgaudit/
       - title: pgmq
@@ -242,7 +242,7 @@ extra:
       - title: PostGIS
         url: postgis/
       - title: system_stats
-        url: system_stats/
+        url: system-stats/
     Tools:
       - heading: "pgEdge Tools"
       - title: ACE
@@ -592,20 +592,20 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgauditmaster'
 
   # AI Toolkit - Community Extensions (from 3rd-party-docs repo)
-  - pg_tokenizer:
+  - pg-tokenizer:
     - v0.1.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizer011'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizermaster'
 
-  - pg_vectorize:
+  - pg-vectorize:
     - v0.26.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0260'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorizemaster'
 
-  - vchord_bm25:
+  - vchord-bm25:
     - v0.3.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=vchordbm25030'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=vchordbm25master'
 
   # Community Extensions - Database (from 3rd-party-docs repo)
-  - pg_cron:
+  - pg-cron:
     - v1.6.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcron167'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcronmaster'
 
@@ -613,7 +613,7 @@ nav:
     - v1.11.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1110'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmqmaster'
 
-  - pg_stat_monitor:
+  - pg-stat-monitor:
     - v2.3.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor231'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitormaster'
 
@@ -621,7 +621,7 @@ nav:
     - v1.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebugger19'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebuggermaster'
 
-  - system_stats:
+  - system-stats:
     - v3.2.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstats321'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstatsmaster'
 
