@@ -225,7 +225,7 @@ The following bulleted list is not correctly formatted:
 
 ### Formatting code:
 
-If a section contains code or a code snippet, there should be an explanatory sentence before the code in the form: In the following example, the command_name command uses a column named my_column to accomplish description-of-what-the-code-does.
+If a section contains code or a code snippet, there should be an explanatory sentence before the code that ends with a colon (:) identifying the code the user should run and describing what the code does. For example: In the following example, the command_name command uses a column named my_column to accomplish description-of-what-the-code-does.
 
 * Use a single quote around a single command or line of code:  `SELECT * FROM my code;`
 * Use block quotes around multi-line code samples and include the code type in the format tag; for example:
