@@ -51,6 +51,34 @@ plugins:
         # Redirect old pgedge-containers URLs to new pgedge-container URLs
         pgedge-containers/index.md: pgedge-container/index.md
         pgedge-containers/helm.md: pgedge-container/helm.md
+
+        # Legacy /platform/ paths that moved or were restructured
+        platform/advanced/snowflake.md: snowflake/index.md
+        platform/advanced/ace.md: platform/ace/index.md
+        platform/advanced/autoddl.md: platform/managing/autoddl.md
+        platform/advanced/exception.md: platform/managing/exception.md
+        platform/autoddl.md: platform/managing/autoddl.md
+        platform/exception.md: platform/managing/exception.md
+        platform/lolor.md: lolor/index.md
+        platform/snowflake.md: snowflake/index.md
+        platform/managing.md: platform/managing/guc_values.md
+        platform/modify.md: platform/modify/spock_sync.md
+        platform/monitoring.md: platform/monitoring/find_info.md
+        platform/troubleshooting/troubleshooting.md: platform/troubleshooting.md
+        platform/troubleshooting/logging.md: platform/troubleshooting.md
+
+        # Legacy /cloud/ paths that moved
+        cloud/cl_release_notes.md: cloud/index.md
+        cloud/getting_started.md: cloud/getting_started/getting_started.md
+        cloud/getting_started/de_getting_started.md: cloud/getting_started/getting_started.md
+        cloud/database_admin.md: cloud/database/index.md
+        cloud/database_admin/integrations.md: cloud/database/index.md
+        cloud/database_admin/table_mgmt.md: cloud/database/index.md
+        cloud/mod_cluster.md: cloud/mod_cluster/actions.md
+        cloud/prerequisites.md: cloud/prerequisites/ssh_key.md
+        cloud/backup/backup_store.md: cloud/cluster/backup_store.md
+        cloud/connecting/https.md: cloud/connecting/index.md
+
         # Versioned documentation root redirects
         # Each product root redirects to the latest version
         # (The actual redirect is handled by docs/<product>/index.md files)

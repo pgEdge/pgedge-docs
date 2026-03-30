@@ -32,6 +32,20 @@
         notFoundContent.style.display = 'block';
     }
 
+    function tryRedirect(url) {
+        fetch(url, { method: 'HEAD' })
+            .then(function(response) {
+                if (response.ok) {
+                    window.location.replace(url);
+                } else {
+                    show404();
+                }
+            })
+            .catch(function() {
+                show404();
+            });
+    }
+
     // Versioned docset redirect configuration
     // Auto-generated from nav structure
     var versionedDocsets = {
@@ -40,7 +54,47 @@
         {% endfor %}
     };
 
+    // Legacy prefix mappings (old prefix -> current docset slug)
+    var legacyPrefixes = {
+        'spock_ext': 'spock-v5',
+        'pgedge-mcp': 'pgedge-postgres-mcp-server',
+        'pgedge-postgres-mcp': 'pgedge-postgres-mcp-server',
+        'vectorizer': 'pgedge-vectorizer',
+        'rag_server': 'pgedge-rag-server',
+        'docloader': 'pgedge-docloader',
+        'container': 'pgedge-container',
+        'pgedge-containers': 'pgedge-container'
+    };
+
     var path = window.location.pathname;
+
+    // Strip .md extension if present and retry
+    if (path.endsWith('.md')) {
+        var stripped = path.slice(0, -3) + '/';
+        tryRedirect(stripped);
+        return;
+    }
+
+    // Check legacy prefix mappings first
+    for (var legacy in legacyPrefixes) {
+        var legacyPrefix = '/' + legacy + '/';
+        var legacyExact = '/' + legacy;
+        if (path.startsWith(legacyPrefix) || path === legacyExact) {
+            var newDocset = legacyPrefixes[legacy];
+            var legacySubpath = path.startsWith(legacyPrefix) ? path.substring(legacyPrefix.length) : '';
+            var latestForLegacy = versionedDocsets[newDocset];
+
+            if (latestForLegacy) {
+                // Try versioned path first
+                var versionedUrl = '/' + newDocset + '/' + latestForLegacy + '/' + legacySubpath;
+                tryRedirect(versionedUrl);
+            } else {
+                // Non-versioned docset, redirect to new prefix directly
+                tryRedirect('/' + newDocset + '/' + legacySubpath);
+            }
+            return;
+        }
+    }
 
     // Check each versioned docset
     for (var docset in versionedDocsets) {
@@ -48,34 +102,26 @@
         if (path.startsWith(prefix)) {
             var latestVersion = versionedDocsets[docset];
             var subpath = path.substring(prefix.length);
-
-            // Check if this is already a versioned path
-            // (starts with a version slug like v1-0-0-beta1 or development)
             var firstSegment = subpath.split('/')[0];
 
-            // If first segment looks like a version (starts with 'v' or is 'development'),
-            // this is a true 404 - don't redirect
+            // If path is under an old or unknown version, redirect to the
+            // equivalent path under the latest version
             if (firstSegment.match(/^v\d/) || firstSegment === 'development') {
-                show404();
+                // Strip the old version segment and redirect to latest
+                var afterVersion = subpath.substring(firstSegment.length + 1);
+                if (afterVersion) {
+                    var redirectUrl = '/' + docset + '/' + latestVersion + '/' + afterVersion;
+                    tryRedirect(redirectUrl);
+                    return;
+                }
+                // Just an old version root — redirect to latest root
+                tryRedirect('/' + docset + '/' + latestVersion + '/');
                 return;
             }
 
-            // Otherwise, redirect to the latest version
+            // Unversioned subpath — redirect to latest version
             var redirectUrl = '/' + docset + '/' + latestVersion + '/' + subpath;
-
-            // Check if target exists before redirecting
-            fetch(redirectUrl, { method: 'HEAD' })
-                .then(function(response) {
-                    if (response.ok) {
-                        window.location.replace(redirectUrl);
-                    } else {
-                        show404();
-                    }
-                })
-                .catch(function() {
-                    show404();
-                });
-
+            tryRedirect(redirectUrl);
             return;
         }
     }
