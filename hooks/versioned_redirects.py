@@ -89,9 +89,9 @@ def _get_latest_version(site_dir, docset):
 def _exclude_old_versions_from_search(site_dir, versioned_docsets):
     """Add data-pagefind-ignore to non-latest version pages.
 
-    Pagefind skips pages whose <body> has data-pagefind-ignore, so only
-    the latest version of each docset gets indexed. This avoids duplicate
-    search results across versions and reduces the pagefind index size.
+    Injects data-pagefind-ignore on the article.md-content__inner element
+    (pagefind's root selector). When the attribute is on the root selector
+    itself, pagefind excludes the entire page from the index.
     """
     total = 0
     for docset in versioned_docsets:
@@ -111,7 +111,7 @@ def _exclude_old_versions_from_search(site_dir, versioned_docsets):
             if entry == version_slug:
                 continue  # Keep latest version indexed
 
-            # Inject data-pagefind-ignore into every HTML file
+            # Inject data-pagefind-ignore on the root selector element
             count = 0
             for root, dirs, files in os.walk(entry_path):
                 for filename in files:
@@ -122,7 +122,12 @@ def _exclude_old_versions_from_search(site_dir, versioned_docsets):
                         content = f.read()
                     if 'data-pagefind-ignore' in content:
                         continue
-                    modified = content.replace('<body', '<body data-pagefind-ignore', 1)
+                    # Target the pagefind root selector element
+                    modified = content.replace(
+                        '<article class="md-content__inner',
+                        '<article data-pagefind-ignore class="md-content__inner',
+                        1,
+                    )
                     if modified != content:
                         with open(filepath, 'w') as f:
                             f.write(modified)
