@@ -6,6 +6,17 @@ Disallow: /*?*__hstc=*
 Disallow: /*?*__hssc=*
 Disallow: /*?*__hsfp=*
 
+# Block API endpoints and build artifacts
+Disallow: /api/
+Disallow: /v1/
+Disallow: /cdn-cgi/
+
+# Block .md file extension URLs (MkDocs strips these during build)
+Disallow: /*.md$
+
+# Block hashed Redoc build artifacts (change every build)
+Disallow: /*/redoc-*.html
+
 # Allow everything else
 Allow: /
 
