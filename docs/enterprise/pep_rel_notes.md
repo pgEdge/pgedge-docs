@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 3/31/2026
+* Component updates: pgBackRest 2.58.0, pgAdmin 9.13
+* pgEdge Postgres MCP Server and Natural Language Agent 1.0.0 (GA)
+  
 ## 3/25/2026
 * Component updates: Spock 5.0.6
 
