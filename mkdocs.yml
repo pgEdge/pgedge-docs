@@ -306,7 +306,8 @@ nav:
 
   - AI Toolkit: ai-toolkit/index.md
 
-  - Ansible: ansible/index.md
+  - Ansible:
+    - Development: '!import https://github.com/pgEdge/pgedge-ansible.git?branch=add_docs'
 
   - pgEdge Enterprise Postgres:
     - Enterprise Edition: enterprise/index.md
