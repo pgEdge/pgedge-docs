@@ -558,7 +558,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
   - Spock v5:
-    - TEMP: '!import https://github.com/pgEdge/spock.git?branch=doc_updates_3-26'
+    - TEMP: '!import https://github.com/pgEdge/spock.git?branch=doc_updates_4_2026'
     - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5.0.6'
     - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
