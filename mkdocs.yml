@@ -517,6 +517,7 @@ nav:
       - Connecting with pgAdmin: cloud/connecting/pgadmin.md
       - Connecting a Custom Client: cloud/connecting/custom_client.md
       - Best Practices for Managing Connections: cloud/connecting/best_practices.md
+    - Adding pgEdge AI Toolkit Functionality: cloud/services.md
     - Managing Database Backups:
       - Reviewing Backup Details: cloud/backup/backups.md
       - Backing up your Database: cloud/backup/backup_providers.md
