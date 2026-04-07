@@ -1,5 +1,10 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 4/07/2026
+* pgEdge Anonymizer 1.0.0 GA release for all supported platforms
+* pgEdge RAG Server 1.0.0 GA release for all supported platforms
+* Patroni 4.1.0 & etcd 3.6.8 initial release for all supported platforms
+
 ## 3/31/2026
 * Component updates: pgBackRest 2.58.0, pgAdmin 9.13
 * pgEdge Postgres MCP Server and Natural Language Agent 1.0.0 (GA)
