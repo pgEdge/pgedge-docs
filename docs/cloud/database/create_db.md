@@ -53,6 +53,9 @@ database is provisioned:
 * Use the toggle switch next to `Enable AWS CloudWatch Metrics` to share
   metrics with [AWS CloudWatch](https://aws.amazon.com/cloudwatch/).
 
+Use the Services section to define 
+
+
 After making your selections, click `Create Database` to initialize a
 Postgres database and start replicating data between the nodes in the
 cluster. Your new database is added to the list of databases in the left pane
