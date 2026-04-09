@@ -48,13 +48,14 @@ database is provisioned:
 
 ![Selecting database options](../images/create_db_options.png)
 
-* Use the toggle switch next to `Install Northwind Database` to install the
-  Northwind sample database and schema objects. 
 * Use the toggle switch next to `Enable AWS CloudWatch Metrics` to share
   metrics with [AWS CloudWatch](https://aws.amazon.com/cloudwatch/).
 
-Use the Services section to define 
+Use the `Services` section to add an [MCP server](https://docs.pgedge.com/pgedge-postgres-mcp-server/v1-0-0/) to your installation. Currently, MCP server functionality is supported only on private clusters with a defined ingress.  
 
+![Selecting database services](../images/create_db_services.png)
+
+Select the button labeled + MCP Server to add MCP server details for your database; for more information about adding or managing a service in the cloud, see [Adding pgEdge AI Tookit Functionality(../services.md)].
 
 After making your selections, click `Create Database` to initialize a
 Postgres database and start replicating data between the nodes in the
