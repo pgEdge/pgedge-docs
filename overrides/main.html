@@ -115,6 +115,19 @@
     {% endif %}
   {% endfor %}
 
+  {# pgEdge Labs notice #}
+  {% set labs_docsets = config.extra.labs_docsets or [] %}
+  {% for docset_slug in labs_docsets %}
+    {% if current_path.startswith(docset_slug ~ '/') %}
+      <div class="md-labs-notice">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="md-labs-notice__icon">
+          <path d="M13 2v2h1v6l2.29 3.29L16 14v2H8v-2l-.29-.71L10 10V4h1V2H13zm-2 2v6.5L8.5 14h7L13 10.5V4h-2z" fill="currentColor"/>
+        </svg>
+        This project is part of pgEdge Labs and is under active development. APIs and features may change without notice.
+      </div>
+    {% endif %}
+  {% endfor %}
+
   {# Third-party documentation notice #}
   {% set third_party_docsets = config.extra.third_party_docsets or [] %}
   {% for docset_slug in third_party_docsets %}

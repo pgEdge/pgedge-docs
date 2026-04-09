@@ -471,10 +471,6 @@ hide:
         <span class="ext-desc">Query performance monitoring with histogram aggregation</span>
       </li>
       <li>
-        <a href="pg-semantic-cache/"><strong>pg_semantic_cache</strong></a>
-        <span class="ext-desc">Semantic similarity caching for PostgreSQL</span>
-      </li>
-      <li>
         <a href="pgaudit/"><strong>pgAudit</strong></a>
         <span class="ext-desc">Detailed session and object audit logging for PostgreSQL</span>
       </li>
@@ -545,6 +541,49 @@ hide:
       </li>
     </ul>
   </div>
+</div>
+
+<!-- Labs -->
+<div class="section-header">
+  <h2>Labs</h2>
+  <p>Experimental projects under active development. APIs and features may change without notice.</p>
+</div>
+
+<div class="cards-grid">
+
+  <!-- Semantic Cache -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>Semantic Cache (<a href="https://github.com/pgEdge/pg_semantic_cache">pg_semantic_cache</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">Semantic similarity caching for PostgreSQL.</p>
+    <a href="pg-semantic-cache/" class="card-link">View Documentation →</a>
+  </div>
+
+  <!-- Safe Session -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>Safe Session (<a href="https://github.com/pgEdge/pgedge-safesession">pgedge-safesession</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">Session-level safety guardrails for PostgreSQL.</p>
+    <a href="pgedge-safesession/" class="card-link">View Documentation →</a>
+  </div>
+
+  <!-- MCP Bridge -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>MCP Bridge (<a href="https://github.com/pgEdge/pgedge-mcp-bridge">pgedge-mcp-bridge</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">HTTP/SSE transport proxy for stdio-only MCP servers, with OAuth and token-based authentication.</p>
+    <a href="pgedge-mcp-bridge/" class="card-link">View Documentation →</a>
+  </div>
+
 </div>
 
 <!-- Footer -->

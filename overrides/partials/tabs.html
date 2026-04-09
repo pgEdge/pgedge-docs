@@ -78,6 +78,11 @@
       {% if 'Tools' in nav_categories %}
         {{ dropdown_menu('Tools', nav_categories['Tools'], 'tools') }}
       {% endif %}
+
+      {# Labs dropdown #}
+      {% if 'pgEdge Labs' in nav_categories %}
+        {{ dropdown_menu('Labs', nav_categories['pgEdge Labs'], 'pgedge-labs') }}
+      {% endif %}
     </ul>
   </div>
 </nav>
