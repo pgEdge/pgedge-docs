@@ -1,7 +1,9 @@
 # Supported Extensions
 
-pgEdge Cloud databases include pre-installed PostgreSQL extensions
-ready to activate. For instructions on enabling extensions, see
+pgEdge Cloud databases include pre-installed PostgreSQL
+extensions. The tables below list extensions you can activate
+today and extensions coming in a future update. For
+instructions on enabling extensions, see
 [Using Postgres Extensions](extensions.md).
 
 ## pgEdge and Community Extensions
@@ -26,8 +28,10 @@ in `CREATE EXTENSION` statements:
 !!! note
 
     PostGIS includes additional sub-extensions available via
-    `CREATE EXTENSION`: postgis_raster, postgis_sfcgal,
-    postgis_tiger_geocoder, and postgis_topology.
+    `CREATE EXTENSION`: address_standardizer,
+    address_standardizer_data_us, postgis_raster,
+    postgis_sfcgal, postgis_tiger_geocoder, and
+    postgis_topology.
 
 ## PostgreSQL Contrib Modules
 
@@ -37,8 +41,6 @@ contrib extensions:
 
 | Extension | Version | Description |
 |-----------|---------|-------------|
-| address_standardizer | 3.5.5 | Parse addresses into constituent elements |
-| address_standardizer_data_us | 3.5.5 | Address standardizer US dataset |
 | amcheck | 1.5 | Verify relation integrity |
 | autoinc | 1.0 | Autoincrementing fields |
 | bloom | 1.0 | Bloom filter index access method |
