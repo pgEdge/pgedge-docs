@@ -95,6 +95,16 @@ The Overview tab also displays the current [VPC Associations](vpc_assoc.md):
 
 ![The cluster's VPC associations ](../images/overview_vpc_assoc.png)
 
+Select the `+ Add VPC Association` button to add a new association.
+
+**Network Ingress**
+
+The Overview tab also displays the current [VPC Associations](vpc_assoc.md):
+
+![Accessing a public ingress](../cloud/images/ingress_list.png)
+
+Select the `+ Add Ingress` button to define a new ingress.
+
 
 ### Reviewing Cluster Metrics
 

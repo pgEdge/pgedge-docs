@@ -55,8 +55,32 @@ Use the `Services` section to add an [MCP server](https://docs.pgedge.com/pgedge
 
 ![Selecting database services](../images/create_db_services.png)
 
-Select the button labeled + MCP Server to add MCP server details for your database; for more information about adding or managing a service in the cloud, see [Adding pgEdge AI Tookit Functionality(../services.md)].
+Select the button labeled `+ MCP Server` to add MCP server details for your database; for more information about adding or managing a service in the cloud, see [Adding pgEdge AI Tookit Functionality(../services.md)].
 
+Select the Add MCP Server button to access the Add MCP Server popup and define an MCP server, and optionally enable an associated LLM.
+
+![Adding an MCP Server](../cloud/images/add_mcp_server.png)
+
+Use fields on the `Add MCP Server` popup to describe the server and optionally, the LLM:
+
+* Click the `Select Host` field to select the node that the MCP server will be provisioned on; you can deploy the MCP server on each node of your cluster, but each MCP server deployment must be individually defined.
+
+* Use the `API Token` field to provide the string used to authenticate with your MCP server; this is a user-created value.
+
+* Slide the `LLM Enabled?` toggle switch to enable the LLM detail fields.
+
+* Use the LLM Provider drop-down to select your AI provider; currently, Cloud supports the following AI providers:
+
+    * Anthropic AI (Claude)
+    * OpenAI (ChatGPT)
+    * Ollama
+
+* Enter the model name of the LLM provider; this field is not validated, but must match the name of an available model.  For example, the following models are supported:
+
+    * claude-sonnet-4-6
+    * gpt-4o
+    * llama3.1
+  
 After making your selections, click `Create Database` to initialize a
 Postgres database and start replicating data between the nodes in the
 cluster. Your new database is added to the list of databases in the left pane
