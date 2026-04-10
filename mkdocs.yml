@@ -296,20 +296,20 @@ extra:
         url: radar/
       - hr: true
       - heading: "Community Tools"
-      - title: pgAdmin 4
-        url: pgadmin-4/
-      - title: PgBouncer
-        url: pgbouncer/
-      - title: pgBackRest
-        url: pgbackrest/
-      - title: PostgREST
-        url: postgrest/
-      - title: psycopg2
-        url: psycopg2/
       - title: CloudNativePG
         url: cloudnativepg/
       - title: Patroni
         url: patroni/
+      - title: pgAdmin 4
+        url: pgadmin-4/
+      - title: pgBackRest
+        url: pgbackrest/
+      - title: PgBouncer
+        url: pgbouncer/
+      - title: PostgREST
+        url: postgrest/
+      - title: psycopg2
+        url: psycopg2/
     pgEdge Labs:
       - title: Semantic Cache (pg_semantic_cache)
         url: pg-semantic-cache/

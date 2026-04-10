@@ -520,16 +520,24 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">Community Tools</li>
       <li>
+        <a href="cloudnativepg/"><strong>CloudNativePG</strong></a>
+        <span class="ext-desc">Kubernetes operator for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="patroni/"><strong>Patroni</strong></a>
+        <span class="ext-desc">High availability template for PostgreSQL</span>
+      </li>
+      <li>
         <a href="pgadmin-4/"><strong>pgAdmin 4</strong></a>
         <span class="ext-desc">Web-based administration and management tool for PostgreSQL</span>
       </li>
       <li>
-        <a href="pgbouncer/"><strong>PgBouncer</strong></a>
-        <span class="ext-desc">Lightweight connection pooler for PostgreSQL</span>
-      </li>
-      <li>
         <a href="pgbackrest/"><strong>pgBackRest</strong></a>
         <span class="ext-desc">Reliable PostgreSQL backup and restore</span>
+      </li>
+      <li>
+        <a href="pgbouncer/"><strong>PgBouncer</strong></a>
+        <span class="ext-desc">Lightweight connection pooler for PostgreSQL</span>
       </li>
       <li>
         <a href="postgrest/"><strong>PostgREST</strong></a>
