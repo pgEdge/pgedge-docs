@@ -110,7 +110,7 @@ the Claude client.
 
 If your cluster was created as a private cluster (without a public-facing
 IP address), you need to create a public ingress for connections to the
-MCP server. 
+MCP server.
 
 To access a list of available ingresses or to create a public ingress,
 navigate to the `Services` page via the link under the database name in
@@ -119,8 +119,9 @@ the navigation panel.
 ![Connecting to an MCP server](../cloud/images/connect_to_mcp.png)
 
 Select the `Connect to Ingress` button. If no healthy ingresses exist
-for the current cluster, the `Connect to Ingress` popup opens; use the 
-`Go to Cluster Settings` button to edit the cluster and create an ingress.
+for the current cluster, the `Connect to Ingress` popup opens; use the
+`Go to Cluster Settings` button to edit the cluster and create an
+ingress.
 
 ![Accessing a public ingress](../cloud/images/connect_to_ingress.png)
 
@@ -134,5 +135,5 @@ configure the ingress:
   connections will be managed with a connection pooler and load
   balancer.
 
-After providing ingress details, select the `+ Create Ingress` button to create
-the ingress and add it to the list of ingresses.
+After providing ingress details, select the `+ Create Ingress` button
+to create the ingress and add it to the list of ingresses.
