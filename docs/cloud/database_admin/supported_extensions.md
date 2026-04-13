@@ -1,4 +1,4 @@
-# Supported Extensions
+# Using Extensions with Cloud
 
 pgEdge Cloud databases include pre-installed PostgreSQL extensions.
 Before using an extension, you must
