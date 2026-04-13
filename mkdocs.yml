@@ -509,8 +509,7 @@ nav:
       - Reviewing Database Metrics: cloud/database_admin/metrics.md
       - Viewing Log Files: cloud/database_admin/logs.md
       - Reviewing Backup Details: cloud/database_admin/backup_details.md
-      - Using Postgres Extensions: cloud/database_admin/extensions.md
-      - Supported Extensions: cloud/database_admin/supported_extensions.md
+      - Using Extensions with Cloud: cloud/database_admin/supported_extensions.md
     - Connecting to a Database:
       - Connecting to your Database or Cluster: cloud/connecting/index.md
       - Connecting with SSH: cloud/connecting/ssh.md
