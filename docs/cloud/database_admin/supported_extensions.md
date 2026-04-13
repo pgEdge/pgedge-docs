@@ -46,25 +46,24 @@ available in pgEdge Cloud. Extension names match the name used in
 | [pg_tokenizer](https://github.com/tensorchord/pg_tokenizer.rs) | 0.1.1 | Text tokenization for search and AI workloads |
 | [pgmq](https://github.com/pgmq/pgmq) | 1.8.0 | Lightweight message queue built on PostgreSQL |
 | [postgis](https://postgis.net/) | 3.5.5 | Geospatial data types, functions, and indexing |
+| [address_standardizer](https://postgis.net/docs/manual-3.5/Address_Standardizer.html) | 3.5.5 | Parses addresses into constituent elements (for PostGIS) |
+| [address_standardizer_data_us](https://postgis.net/docs/manual-3.5/Address_Standardizer.html) | 3.5.5 | US dataset for the address standardizer (for PostGIS) |
+| [postgis_raster](https://postgis.net/docs/manual-3.5/RT_reference.html) | 3.5.5 | Raster data types and functions for PostGIS |
+| [postgis_sfcgal](https://postgis.net/docs/manual-3.5/reference.html#reference_sfcgal) | 3.5.5 | SFCGAL-based 3D geometry functions for PostGIS |
+| [postgis_tiger_geocoder](https://postgis.net/docs/manual-3.5/Extras.html#Tiger_Geocoder) | 3.5.5 | US TIGER data geocoder and reverse geocoder |
+| [postgis_topology](https://postgis.net/docs/manual-3.5/Topology.html) | 3.5.5 | Topological data types and functions for PostGIS |
 | [snowflake](https://github.com/pgEdge/snowflake) | 2.4 | Distributed unique ID generation |
 | [spock](https://github.com/pgEdge/spock) | 5.0.6 | Multi-master logical replication |
 | [system_stats](https://github.com/EnterpriseDB/system_stats) | 3.0 | System-level performance statistics |
 | [vchord_bm25](https://github.com/tensorchord/VectorChord-bm25) | 0.2.2 | BM25 ranking for full-text vector search |
 | [vector](https://github.com/pgvector/pgvector) | 0.8.1 | Vector similarity search for AI embeddings |
 
-!!! note
-
-    PostGIS includes additional extensions available via
-    `CREATE EXTENSION`: address_standardizer,
-    address_standardizer_data_us, postgis_raster,
-    postgis_sfcgal, postgis_tiger_geocoder, and
-    postgis_topology.
 
 ## PostgreSQL Contrib Modules
 
-pgEdge Cloud databases also include the standard PostgreSQL contrib
-modules. The following table describes the available contrib
-extensions:
+pgEdge Cloud databases also include the standard PostgreSQL contrib modules.
+The following table describes the available contrib modules and includes
+links for more information:
 
 | Extension | Version | Description |
 |-----------|---------|-------------|
