@@ -12,7 +12,7 @@ information about the selected cluster:
 
 * The cluster name.
 * The length of time since the last cluster update.
-* The preferred connection type (`Public` or `Private`); this indicates
+* The cluster connection type (`Public` or `Private`); this indicates
   if the cluster nodes are in a public subnet or not.
 * The `Cluster ID` associated with the cluster.
 * The name of the cloud provider account on which the cluster resides;
@@ -43,7 +43,8 @@ information about the state of your cluster:
   about the selected database.
 * Select the [`Metrics`](#reviewing-cluster-metrics) tab to view details
   about cluster resource use.
-* Select the `Logs` tab to review cluster log files.
+* Select the [`Logs`](#reviewing-cluster-log-files) tab to review cluster
+  log files.
 
 ### The Overview Tab
 
@@ -71,39 +72,35 @@ to select a node to review information that node:
 * The `UUID` is a unique identifier for cluster resources outside of
   the cloud provider console; use the UUID when making API calls.
 
-**Cluster Nodes Map**
-
 When the `Overview` tab is selected, a map displays the locations of
 the cluster's nodes. Hover over a mapped node to display the name and
 city in which the node resides.
 
 ![The cluster console Map tab](../images/cluster_map_tab.png)
 
-**Review Firewall Configuration**
-
-The `Overview` tab displays the currently defined [Firewall Rules]
-(firewall.md).
+The `Overview` tab also displays the currently defined
+[Firewall Rules](firewall.md).
 
 ![The cluster's firewall rules](../images/overview_firewall_rule.png)
 
 Select the `Manage Firewall Rules` button to open a dialog that allows you to
 [modify or create rules](firewall.md) for the cluster.
 
-**VPC Associations**
-
-The Overview tab also displays the current [VPC Associations](vpc_assoc.md):
+The Overview tab also displays the current
+[VPC Associations](vpc_assoc.md):
 
 ![The cluster's VPC associations ](../images/overview_vpc_assoc.png)
 
 Select the `+ Add VPC Association` button to add a new association.
 
-**Network Ingress**
-
-The Overview tab also displays the current [VPC Associations](vpc_assoc.md):
+The Overview tab also displays the current
+[VPC Associations](vpc_assoc.md):
 
 ![Accessing a public ingress](../cloud/images/ingress_list.png)
 
-Select the `+ Add Ingress` button to define a new ingress.
+Select the `+ Add Ingress` button to
+[create a public ingress](../services.md#creating-a-public-ingress)
+for a cluster without a public-facing IP address.
 
 
 ### Reviewing Cluster Metrics
@@ -124,8 +121,7 @@ specify the length of time displayed by each graph.
 Select a point on a graph to display information about the graphed event
 that occurred on your cluster:
 
-![A point-in-time selected in the cluster metrics graph]
-(../images/cluster_metrics_PIT.png)
+![A point-in-time in the cluster metrics graph](../images/cluster_metrics_PIT.png)
 
 The graphs display metrics about:
 
@@ -137,6 +133,9 @@ The graphs display metrics about:
 | Running Processes | The number of running processes |
 | Network Receive | The amount of data received by the instance |
 | Network Send | The amount of data transmitted from the instance |
+
+
+### Reviewing Cluster Log Files
 
 Select the `Logs` tab to review log files for the cluster.
 
@@ -174,13 +173,15 @@ Use controls in the table header to sort or search the selected log file:
 
 ![Searching the cluster log](../images/cluster_log_message.png)
 
-## pgEdge Distributed PostgreSQL: Cloud Edition Resources
+## Cluster Administration Links
 
 Use the links at the end of the navigation pane to access pgEdge
 Distributed PostgreSQL: Cloud Edition resources:
 
+* To manage account details, select the [`Settings`](../settings.md) link.
+* Select the [`Team Management`](../teams.md) link to manage account
+  membership.
 * For an invitation to the pgEdge Discord server, select the
   `Community` link.
-* To review the documentation, select the `Docs` link.
-* To manage account details, select the `Settings` link.
-* Select the `Team Management` link to manage account membership.
+* To review the documentation, select the [`Docs`](https://docs.pgedge.com/)
+  link.
