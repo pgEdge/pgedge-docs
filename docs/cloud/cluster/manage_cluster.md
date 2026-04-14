@@ -93,10 +93,9 @@ The Overview tab also displays the current
 
 Select the `+ Add VPC Association` button to add a new association.
 
-The Overview tab also displays the current
-[VPC Associations](vpc_assoc.md):
+The Overview tab also displays a list of the current public ingresses:
 
-![Accessing a public ingress](../cloud/images/ingress_list.png)
+![Accessing a public ingress](../images/ingress_list.png)
 
 Select the `+ Add Ingress` button to
 [create a public ingress](../services.md#creating-a-public-ingress)
