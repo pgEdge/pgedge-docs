@@ -161,6 +161,7 @@ extra:
     - pg-semantic-cache
     - pgedge-safesession
     - pgedge-mcp-bridge
+    - pgedge-ai-dba-workbench/
     - radar
     - postgresql
     - pg-cron
@@ -243,6 +244,8 @@ extra:
         url: pgedge-docloader/
       - title: pgEdge Vectorizer
         url: pgedge-vectorizer/
+      - title: pgEdge AI DBA Workbench
+        url: pgedge-ai-dba-workbench/
       - hr: true
       - heading: "Community Components"
       - title: pg_tokenizer
@@ -606,6 +609,10 @@ nav:
   - pgEdge Postgres MCP Server:
     - v1.0.0: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=main'
+
+  - pgEdge AI DBA Workbench:
+    - v1.0.0-preview-for-Jen: '!import https://github.com/pgEdge/pgedge-ai-dba-workbench?branch=main'
+    - Development: '!import https://github.com/pgEdge/pgedge-ai-dba-workbench?branch=main'
 
   - pgEdge Anonymizer:
     - v1.0.0-beta2: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=v1.0.0-beta2'
