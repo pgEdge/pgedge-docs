@@ -133,7 +133,7 @@ def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str,
     if repo_path.exists():
         print(f"  Updating existing repo: {repo_dir}")
         # Fetch and checkout
-        result = run_as_user(['git', 'fetch', '--all', '--tags'], user, cwd=repo_dir)
+        result = run_as_user(['git', 'fetch', '--all', '--tags', '--force'], user, cwd=repo_dir)
         if result.returncode != 0:
             print(f"  Warning: git fetch failed", file=sys.stderr)
             return False
@@ -146,7 +146,7 @@ def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str,
             print(f"  Error: git clone failed", file=sys.stderr)
             return False
         # Fetch all refs for checkout
-        result = run_as_user(['git', 'fetch', '--all', '--tags'], user, cwd=repo_dir)
+        result = run_as_user(['git', 'fetch', '--all', '--tags', '--force'], user, cwd=repo_dir)
         if result.returncode != 0:
             print(f"  Error: git fetch failed after clone", file=sys.stderr)
             return False
