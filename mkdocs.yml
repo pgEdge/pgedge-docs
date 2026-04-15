@@ -161,7 +161,7 @@ extra:
     - pg-semantic-cache
     - pgedge-safesession
     - pgedge-mcp-bridge
-    - pgedge-ai-dba-workbench/
+    - pgedge-ai-dba-workbench
     - radar
     - postgresql
     - pg-cron
