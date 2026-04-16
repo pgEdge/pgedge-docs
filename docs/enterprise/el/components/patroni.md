@@ -11,8 +11,10 @@ Patroni relies on etcd to coordinate which node holds the primary role
 and to store configuration data shared across all cluster nodes.
 
 Before installing and configuring Patroni and etcd in a pgEdge Enterprise
-Postgres cluster, you need to install and initialize the Postgres
-database; the configuration steps require the location of the `data` directory.
+Postgres cluster, you need to 
+[install and initialize](installing.md#installing-pgedge-enterprise-postgres-and-initializing-a-database) 
+the Postgres database; the configuration steps require the location of the 
+`data` directory.
 
 ## Installing Patroni and etcd
 
