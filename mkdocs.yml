@@ -412,6 +412,9 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE:
+    - v1.7.0: '!import https://github.com/pgEdge/ace.git?branch=v1.7.0'
+    - v1.6.0: '!import https://github.com/pgEdge/ace.git?branch=v1.6.0'
+    - v1.5.5: '!import https://github.com/pgEdge/ace.git?branch=v1.5.5'
     - v1.5.4: '!import https://github.com/pgEdge/ace.git?branch=v1.5.4'
     - v1.5.3: '!import https://github.com/pgEdge/ace.git?branch=v1.5.3'
     - v1.5.2: '!import https://github.com/pgEdge/ace.git?branch=v1.5.2'
@@ -430,6 +433,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
   - Spock v5:
+    - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5.0.6'
     - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
     - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
@@ -451,26 +455,21 @@ nav:
   # Each version is imported separately to enable version navigation
   # Latest version first, older versions next, development (main branch) last
   - pgEdge Postgres MCP Server:
-    - v1.0.0-beta3: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=v1.0.0-beta3'
-    - v1.0.0-beta2: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=v1.0.0-beta2-docs'
-    - v1.0.0-beta1: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=v1.0.0-beta1'
+    - v1.0.0: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=main'
 
   - pgEdge Anonymizer:
-    - v1.0.0-beta2: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=v1.0.0-beta2'
-    - v1.0.0-beta1: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=v1.0.0-beta1'
+    - v1.0.0: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=main'
 
   - pgEdge Docloader:
-    - v1.0.0-beta1: '!import https://github.com/pgEdge/pgedge-docloader?branch=v1.0.0-beta1'
+    - v1.0.0: '!import https://github.com/pgEdge/pgedge-docloader?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-docloader?branch=main'
 
   - pgEdge RAG Server:
-    - v1.0.0-beta2: '!import https://github.com/pgEdge/pgedge-rag-server?branch=v1.0.0-beta2'
-    - v1.0.0-beta1: '!import https://github.com/pgEdge/pgedge-rag-server?branch=v1.0.0-beta1'
+    - v1.0.0: '!import https://github.com/pgEdge/pgedge-rag-server?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-rag-server?branch=main'
 
   - pgEdge Vectorizer:
-    - v1.0-beta2: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0-beta2'
-    - v1.0-beta1: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0-beta1'
+    - v1.0: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0'
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
