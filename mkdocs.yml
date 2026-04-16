@@ -611,7 +611,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=main'
 
   - pgEdge AI DBA Workbench:
-    - v1.0.0-preview-for-Jen: '!import https://github.com/pgEdge/pgedge-ai-dba-workbench?branch=main'
+    - REVIEW: '!import https://github.com/pgEdge/pgedge-ai-dba-workbench?branch=ai_wkbench_doc_review'
     - Development: '!import https://github.com/pgEdge/pgedge-ai-dba-workbench?branch=main'
 
   - pgEdge Anonymizer:
