@@ -350,7 +350,6 @@ nav:
         - Installing Supporting Components: enterprise/debian/components/components.md
         - Configuring Patroni: enterprise/debian/components/patroni.md
         - Configuring PgBouncer: enterprise/debian/components/pgbouncer.md
-      - Installing Supporting Components: enterprise/debian/components.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
       - Upgrading Spock: enterprise/debian/upgrading-spock.md
       - Creating an Offline Repo: enterprise/debian/offline.md
