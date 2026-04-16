@@ -1,7 +1,7 @@
 # Using pgBouncer with pgEdge Enterprise Postgres
 
 PgBouncer is a lightweight connection pooler designed to work with Postgres. Before installing and configuring PgBouncer in a pgEdge Enterprise Postgres cluster, 
-[install and initialize](../installing.md#installing-pgedge-enterprise-postgres-and-initializing-a-database) 
+[install and initialize](../installing.md#installing-pgedge-enterprise-postgres-and-controlling-the-cluster) 
 the Postgres database.
 
 Then, you can install PgBouncer from the `pgedge` repository with the command:

@@ -12,38 +12,29 @@ and to store configuration data shared across all cluster nodes.
 
 Before installing and configuring Patroni and etcd in a pgEdge Enterprise
 Postgres cluster, you need to 
-[install and initialize](../installing.md#installing-pgedge-enterprise-postgres-and-initializing-a-database) 
+[install and initialize](../installing.md#installing-pgedge-enterprise-postgres-and-controlling-the-cluster) 
 the Postgres database; the configuration steps require the location of the 
 `data` directory.
 
 ## Installing Patroni and etcd
 
-Use the following steps to install Patroni and etcd on a RHEL-based platform.
+Use the following steps to install Patroni and etcd on a Debian-based
+platform.
 
-1. Review the platform-specific prerequisites for RHEL-based platforms
-   at [docs.pgedge.com](https://docs.pgedge.com/enterprise/el/configure-repo/).
-
-2. Install the required version of pgEdge Enterprise Postgres by
-   following the instructions at
-   [docs.pgedge.com](https://docs.pgedge.com/enterprise/el/installing/).
-
-3. Install the required Patroni and etcd packages with the following
-   command:
+1. Install the required Patroni and etcd packages with the following command:
 
     ```bash
-     sudo dnf install pgedge-patroni pgedge-patroni-aws \
-     pgedge-patroni-consul pgedge-consul pgedge-patroni-etcd \
-     pgedge-python3-etcd pgedge-patroni-zookeeper pgedge-etcd
-     ```
+    sudo apt-get install pgedge-patroni pgedge-etcd
+    ```
 
-4. Verify the installed Patroni version with the following command:
+3. Verify the installed Patroni version with the following command:
 
     ```bash
     /usr/bin/patroni --version
     ```
 
-5. Confirm that Python can import the Patroni module with the
-   following command:
+4. Confirm that Python can import the Patroni module with the following
+    command:
 
     ```bash
     python3.12 -c "import patroni; print('OK')"
@@ -88,15 +79,19 @@ following steps to configure and start the etcd service.
 
 Use the following steps to configure and start the Patroni service.
 
-1. Create the Patroni configuration directory and assign ownership to
-   the `postgres` user:
+1. Copy the Patroni configuration template and set the required
+    ownership and permissions. For details about available configuration
+    options, see the
+    [Patroni documentation](https://patroni.readthedocs.io/en/latest/):
 
     ```bash
-    sudo mkdir -p /etc/patroni
-    sudo chown postgres:postgres /etc/patroni
+    sudo cp /etc/patroni/config.yml.in /etc/patroni/config.yml
+    sudo chown postgres:postgres /etc/patroni/config.yml
+    sudo chmod 600 /etc/patroni/config.yml
     ```
 
-2. Create the PostgreSQL data directory and set the required permissions:
+2. Create the PostgreSQL `data` directory and set the required
+    permissions:
 
     ```bash
     sudo mkdir -p /var/lib/pgsql/17/data
@@ -105,29 +100,14 @@ Use the following steps to configure and start the Patroni service.
     ```
 
 3. Stop and disable the PostgreSQL service. Patroni manages PostgreSQL
-   directly and must not share control with systemd:
+    directly and must not share control with systemd:
 
     ```bash
     sudo systemctl stop postgresql-17
     sudo systemctl disable postgresql-17
     ```
 
-4. Create the Patroni configuration file. For details about available
-   configuration options, see the
-   [Patroni documentation](https://patroni.readthedocs.io/en/latest/):
-
-    ```bash
-    sudo -u postgres vi /etc/patroni/patroni.yml
-    ```
-
-5. Set the correct ownership and permissions on the configuration file:
-
-    ```bash
-    sudo chown postgres:postgres /etc/patroni/patroni.yml
-    sudo chmod 600 /etc/patroni/patroni.yml
-    ```
-
-6. Enable and start the Patroni service using the following commands:
+4. Enable and start the Patroni service using the following commands:
 
     ```bash
     sudo systemctl enable patroni
