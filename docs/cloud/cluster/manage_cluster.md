@@ -43,8 +43,7 @@ information about the state of your cluster:
   about the selected database.
 * Select the [`Metrics`](#reviewing-cluster-metrics) tab to view details
   about cluster resource use.
-* Select the [`Logs`](#reviewing-cluster-log-files) tab to review cluster
-  log files.
+* Select the `Logs` tab to review cluster log files.
 
 ### The Overview Tab
 
@@ -82,16 +81,19 @@ city in which the node resides.
 
 **Review Firewall Configuration**
 
-The `Overview` tab also displays the currently defined [Firewall Rules]
+The `Overview` tab displays the currently defined [Firewall Rules]
 (firewall.md).
 
-![The cluster console Map tab](../images/overview_firewall_rule.png)
+![The cluster's firewall rules](../images/overview_firewall_rule.png)
+
+Select the `Manage Firewall Rules` button to open a dialog that allows you to
+[modify or create rules](firewall.md) for the cluster.
 
 **VPC Associations**
 
 The Overview tab also displays the current [VPC Associations](vpc_assoc.md):
 
-![The cluster console Map tab](../images/overview_vpc_assoc.png)
+![The cluster's VPC associations ](../images/overview_vpc_assoc.png)
 
 
 ### Reviewing Cluster Metrics

@@ -4,19 +4,22 @@ site_url: https://docs.pgedge.com
 extra_css:
   - stylesheets/extra.css
   - stylesheets/chat.css
+  - stylesheets/package-catalog.css
   # Highlight.js for dynamic code highlighting in chat
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css
 
 extra_javascript:
   # Pulled from control-plane repo for install page
   # Note: Must update version when control-plane latest version changes
-  - /control-plane/v0-6/scripts/generate-stack.js
+  - /control-plane/v0-7/scripts/generate-stack.js
   - javascripts/tabs-dropdown.js
   - javascripts/org-stars.js
   - javascripts/version-selector.js
+  - javascripts/pagefind-search.js
   # Highlight.js for dynamic code highlighting in chat (must load before chat.js)
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js
   - javascripts/chat.js
+  - enterprise/js/package-catalog.js
 
 hooks:
   - hooks/versioned_redirects.py
@@ -33,7 +36,8 @@ markdown_extensions:
       alternate_style: true
 
 plugins:
-  - search
+  - search:
+      enabled: false
   - multirepo:
       cleanup: true
       keep_docs_dir: false
@@ -47,6 +51,34 @@ plugins:
         # Redirect old pgedge-containers URLs to new pgedge-container URLs
         pgedge-containers/index.md: pgedge-container/index.md
         pgedge-containers/helm.md: pgedge-container/helm.md
+
+        # Legacy /platform/ paths that moved or were restructured
+        platform/advanced/snowflake.md: snowflake/index.md
+        platform/advanced/ace.md: platform/ace/index.md
+        platform/advanced/autoddl.md: platform/managing/autoddl.md
+        platform/advanced/exception.md: platform/managing/exception.md
+        platform/autoddl.md: platform/managing/autoddl.md
+        platform/exception.md: platform/managing/exception.md
+        platform/lolor.md: lolor/index.md
+        platform/snowflake.md: snowflake/index.md
+        platform/managing.md: platform/managing/guc_values.md
+        platform/modify.md: platform/modify/spock_sync.md
+        platform/monitoring.md: platform/monitoring/find_info.md
+        platform/troubleshooting/troubleshooting.md: platform/troubleshooting.md
+        platform/troubleshooting/logging.md: platform/troubleshooting.md
+
+        # Legacy /cloud/ paths that moved
+        cloud/cl_release_notes.md: cloud/index.md
+        cloud/getting_started.md: cloud/getting_started/getting_started.md
+        cloud/getting_started/de_getting_started.md: cloud/getting_started/getting_started.md
+        cloud/database_admin.md: cloud/database/index.md
+        cloud/database_admin/integrations.md: cloud/database/index.md
+        cloud/database_admin/table_mgmt.md: cloud/database/index.md
+        cloud/mod_cluster.md: cloud/mod_cluster/actions.md
+        cloud/prerequisites.md: cloud/prerequisites/ssh_key.md
+        cloud/backup/backup_store.md: cloud/cluster/backup_store.md
+        cloud/connecting/https.md: cloud/connecting/index.md
+
         # Versioned documentation root redirects
         # Each product root redirects to the latest version
         # (The actual redirect is handled by docs/<product>/index.md files)
@@ -126,63 +158,176 @@ extra:
     - pgedge-loadgen
     - pgedge-rag-server
     - pgedge-vectorizer
+    - pg-semantic-cache
+    - pgedge-safesession
+    - pgedge-mcp-bridge
     - radar
+    - postgresql
+    - pg-cron
+    - pg-stat-monitor
+    - pg-tokenizer
+    - pg-vectorize
+    - pgadmin-4
+    - pgaudit
+    - pgbackrest
+    - pgbouncer
+    - pgmq
+    - pgvector
+    - pldebugger
+    - postgis
+    - postgrest
+    - psycopg2
+    - system-stats
+    - vchord-bm25
+    - cloudnativepg
+    - patroni
 
-  # Navigation dropdown categories - maps nav item titles to dropdown menus
-  # Use simple string for auto-detected URLs, or {title: url} for explicit URLs
+  # pgEdge Labs - shows a notice that content is experimental/under active development
+  labs_docsets:
+    - pg-semantic-cache
+    - pgedge-safesession
+    - pgedge-mcp-bridge
+
+  # Third-party documentation - shows a notice that content is not maintained by pgEdge
+  third_party_docsets:
+    - postgresql
+    - pg-cron
+    - pg-stat-monitor
+    - pg-tokenizer
+    - pg-vectorize
+    - pgadmin-4
+    - pgaudit
+    - pgbackrest
+    - pgbouncer
+    - pgmq
+    - pgvector
+    - pldebugger
+    - postgis
+    - postgrest
+    - psycopg2
+    - system-stats
+    - vchord-bm25
+    - cloudnativepg
+    - patroni
+
+  # Navigation dropdown categories
+  # Supported item types:
+  #   - title/url: clickable link
+  #   - heading: non-clickable sub-heading label
+  #   - hr: horizontal rule divider
   nav_categories:
-    Products:
-      - pgEdge Cloud
-      - title: pgEdge Container
-        url: pgedge-container/
-      - pgEdge Distributed Postgres
-      - pgEdge Enterprise Postgres
-    AI Toolkit:
-      - title: pgEdge Postgres MCP Server
-        url: pgedge-postgres-mcp-server/
-      - title: pgEdge Anonymizer
-        url: pgedge-anonymizer/
-      - title: pgEdge RAG Server
-        url: pgedge-rag-server/
-      - title: pgEdge Docloader
-        url: pgedge-docloader/
-      - title: pgEdge Vectorizer
-        url: pgedge-vectorizer/
-    Extensions:
-      - title: lolor
-        url: lolor/
-      - title: pgEdge Vectorizer
-        url: pgedge-vectorizer/
-      - title: Snowflake
-        url: snowflake/
-      - title: Spock v5
-        url: spock-v5/
-    Tools:
-      - title: ACE
-        url: ace/
+    Deployment:
+      - heading: "VM / Bare Metal"
       - title: Control Plane
         url: control-plane/
-      - title: pgEdge Helm
-        url: pgedge-helm/
-      - title: pgEdge Anonymizer
-        url: pgedge-anonymizer/
-      - title: pgEdge Docloader
-        url: pgedge-docloader/
-      - title: pgEdge Loadgen
-        url: pgedge-loadgen/
+      - title: Enterprise Repository
+        url: enterprise/
+      - title: Ansible
+        url: ansible/
+      - hr: true
+      - title: Containers
+        url: pgedge-container/
+      - hr: true
+      - title: pgEdge Cloud
+        url: cloud/
+    AI Toolkit:
+      - title: Overview
+        url: ai-toolkit/
+      - hr: true
+      - heading: "pgEdge Components"
       - title: pgEdge Postgres MCP Server
         url: pgedge-postgres-mcp-server/
       - title: pgEdge RAG Server
         url: pgedge-rag-server/
+      - title: pgEdge Docloader
+        url: pgedge-docloader/
+      - title: pgEdge Vectorizer
+        url: pgedge-vectorizer/
+      - hr: true
+      - heading: "Community Components"
+      - title: pg_tokenizer
+        url: pg-tokenizer/
+      - title: pg_vectorize
+        url: pg-vectorize/
+      - title: pgVector
+        url: pgvector/
+      - title: vchord_bm25
+        url: vchord-bm25/
+    Database:
+      - title: PostgreSQL
+        url: postgresql/
+      - hr: true
+      - heading: "pgEdge Extensions"
+      - title: Spock v5
+        url: spock-v5/
+      - title: LOLOR
+        url: lolor/
+      - title: Snowflake
+        url: snowflake/
+      - title: pgEdge Vectorizer
+        url: pgedge-vectorizer/
+      - hr: true
+      - heading: "Community Extensions"
+      - title: pg_cron
+        url: pg-cron/
+      - title: pg_stat_monitor
+        url: pg-stat-monitor/
+      - title: pgAudit
+        url: pgaudit/
+      - title: pgmq
+        url: pgmq/
+      - title: pgVector
+        url: pgvector/
+      - title: pldebugger
+        url: pldebugger/
+      - title: PostGIS
+        url: postgis/
+      - title: system_stats
+        url: system-stats/
+    Tools:
+      - heading: "pgEdge Tools"
+      - title: ACE
+        url: ace/
+      - title: pgEdge Anonymizer
+        url: pgedge-anonymizer/
+      - title: pgEdge Loadgen
+        url: pgedge-loadgen/
       - title: Radar
         url: radar/
+      - hr: true
+      - heading: "Community Tools"
+      - title: CloudNativePG
+        url: cloudnativepg/
+      - title: Patroni
+        url: patroni/
+      - title: pgAdmin 4
+        url: pgadmin-4/
+      - title: pgBackRest
+        url: pgbackrest/
+      - title: PgBouncer
+        url: pgbouncer/
+      - title: PostgREST
+        url: postgrest/
+      - title: psycopg2
+        url: psycopg2/
+    pgEdge Labs:
+      - title: Semantic Cache (pg_semantic_cache)
+        url: pg-semantic-cache/
+      - title: Safe Session (pgedge-safesession)
+        url: pgedge-safesession/
+      - title: MCP Bridge (pgedge-mcp-bridge)
+        url: pgedge-mcp-bridge/
 
-copyright: Copyright &copy; 2023 - 2026, pgEdge, Inc –
+copyright: Copyright &copy; 2023 - 2026, pgEdge, Inc. Third-party documentation is copyright of its respective authors –
   <a href="#__consent">Change cookie settings</a>
 repo_url: https://github.com/pgEdge
 
 nav:
   - Welcome: index.md
+
+  - AI Toolkit: ai-toolkit/index.md
+
+  - Ansible: '!import https://github.com/pgEdge/pgedge-ansible.git?branch=add_docs'
 
   - pgEdge Enterprise Postgres:
     - Enterprise Edition: enterprise/index.md
@@ -343,7 +488,7 @@ nav:
 
   - pgEdge Cloud:
     - Cloud Edition - Overview: cloud/index.md
-    - Getting Started with pgEdge Cloud: cloud/getting_started/ee_getting_started.md
+    - Getting Started with pgEdge Cloud: cloud/getting_started/getting_started.md
     - Prerequisites:
       - Adding an SSH Key: cloud/prerequisites/ssh_key.md
       - Linking and Managing your Cloud Provider Accounts:
@@ -372,7 +517,7 @@ nav:
       - Reviewing Database Metrics: cloud/database_admin/metrics.md
       - Viewing Log Files: cloud/database_admin/logs.md
       - Reviewing Backup Details: cloud/database_admin/backup_details.md
-      - Using Postgres Extensions: cloud/database_admin/extensions.md
+      - Using Extensions with Cloud: cloud/database_admin/supported_extensions.md
     - Connecting to a Database:
       - Connecting to your Database or Cluster: cloud/connecting/index.md
       - Connecting with SSH: cloud/connecting/ssh.md
@@ -412,6 +557,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE:
+    - v1.7.1: '!import https://github.com/pgEdge/ace.git?branch=v1.7.1'
     - v1.7.0: '!import https://github.com/pgEdge/ace.git?branch=v1.7.0'
     - v1.6.0: '!import https://github.com/pgEdge/ace.git?branch=v1.6.0'
     - v1.5.5: '!import https://github.com/pgEdge/ace.git?branch=v1.5.5'
@@ -439,10 +585,13 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
 
   - Control Plane:
+    - v0.7: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.7.0'
     - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.2-docs'
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
-  - Radar: 
+  - Radar:
+    - v0.3.0: '!import https://github.com/pgEdge/radar?branch=v0.3.0'
+    - v0.2.3: '!import https://github.com/pgEdge/radar?branch=v0.2.3'
     - v0.2.2: '!import https://github.com/pgEdge/radar?branch=v0.2.2'
     - v0.1.0: '!import https://github.com/pgEdge/radar?branch=v0.1.0'
     - Development: '!import https://github.com/pgEdge/radar?branch=main'
@@ -473,3 +622,106 @@ nav:
   - pgEdge Vectorizer:
     - v1.0: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0'
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
+
+  # --- pgEdge Labs ---
+  - pg-semantic-cache:
+    - v0.1.0-beta4: '!import https://github.com/pgEdge/pg_semantic_cache?branch=v0.1.0-beta4'
+    - Development: '!import https://github.com/pgEdge/pg_semantic_cache?branch=main'
+
+  - pgedge-safesession:
+    - Development: '!import https://github.com/pgEdge/pgedge-safesession?branch=main'
+
+  - pgedge-mcp-bridge:
+    - v1.0.0-alpha5: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=v1.0.0-alpha5'
+    - Development: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=main'
+
+  - PostgreSQL:
+    - v18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg18'
+    - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
+    - v16: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg16'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg19'
+
+  # Community Extensions (from 3rd-party-docs repo)
+  - pgvector:
+    - v0.8.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector081'
+    - v0.8.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector080'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectormaster'
+
+  - postgis:
+    - v3.6.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgis362'
+    - v3.5.5: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgis355'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgismaster'
+
+  - pgAudit:
+    - v18.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit180'
+    - v17.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit171'
+    - v16.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit161'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgauditmaster'
+
+  # AI Toolkit - Community Extensions (from 3rd-party-docs repo)
+  - pg-tokenizer:
+    - v0.1.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizer011'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizermaster'
+
+  - pg-vectorize:
+    - v0.26.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0260'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorizemaster'
+
+  - vchord-bm25:
+    - v0.3.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=vchordbm25030'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=vchordbm25master'
+
+  # Community Extensions - Database (from 3rd-party-docs repo)
+  - pg-cron:
+    - v1.6.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcron167'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcronmaster'
+
+  - pgmq:
+    - v1.11.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1110'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmqmaster'
+
+  - pg-stat-monitor:
+    - v2.3.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor231'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitormaster'
+
+  - pldebugger:
+    - v1.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebugger19'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebuggermaster'
+
+  - system-stats:
+    - v3.2.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstats321'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstatsmaster'
+
+  # Community Tools (from 3rd-party-docs repo)
+  - pgAdmin 4:
+    - v9.13: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin913'
+    - v9.12: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin912'
+    - v9.11: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin911'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadminmaster'
+
+  - PgBouncer:
+    - v1.25: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncer125'
+    - v1.24: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncer124'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncermaster'
+
+  - postgrest:
+    - v14.5: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest145'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrestmaster'
+
+  - psycopg2:
+    - v2.9.10: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2910'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2master'
+
+  - pgBackRest:
+    - v2.58.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest258'
+    - v2.57.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest257'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrestmaster'
+
+  - CloudNativePG:
+    - v1.29: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpg129'
+    - v1.28: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpg128'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpgmaster'
+
+  - Patroni:
+    - v4.1.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni411'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patronimaster'
