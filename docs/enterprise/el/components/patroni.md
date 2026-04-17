@@ -24,13 +24,9 @@ Use the following steps to install Patroni and etcd on a RHEL-based platform.
    at [docs.pgedge.com](https://docs.pgedge.com/enterprise/el/configure-repo/).
 
 2. Install pgEdge Enterprise Postgres; you'll find instructions at
-   [docs.pgedge.com](https://docs.pgedge.com/enterprise/el/installing/).
-
-!!! note
-
-    After installing pgEdge Enterprise Postgres, you can skip manual cluster
-    initialization and postmaster startup.  Patroni will perform both steps
-    while bootstrapping.
+   [docs.pgedge.com](https://docs.pgedge.com/enterprise/el/installing/). After installing pgEdge Enterprise Postgres, you can skip manual cluster
+   initialization and postmaster startup.  Patroni will perform both steps
+   while bootstrapping.
 
 3. Install the required Patroni and etcd packages with the following
    command:
@@ -41,13 +37,13 @@ Use the following steps to install Patroni and etcd on a RHEL-based platform.
      pgedge-python3-etcd pgedge-patroni-zookeeper pgedge-etcd
      ```
 
-3. Verify the installed Patroni version with the following command:
+4. Verify the installed Patroni version with the following command:
 
     ```bash
     /usr/bin/patroni --version
     ```
 
-3. Confirm that Python can import the Patroni module with the
+5. Confirm that Python can import the Patroni module with the
    following command:
 
     ```bash
@@ -101,11 +97,9 @@ Use the following steps to configure and start the Patroni service.
     sudo chown postgres:postgres /etc/patroni
     ```
 
-2. Ensure the PostgreSQL `data` directory is empty. Patroni runs `initdb`
-   during bootstrap and requires an empty data directory. 
-   
-   If the directory *does not* exist, use the following commands to create it
-   with the correct ownership and permissions:
+2. Ensure the PostgreSQL `data` directory is empty; Patroni uses the
+   directory when it runs `initdb` (during bootstrapping). If the directory
+   *does not* exist, use the following commands to create it with the correct ownership and permissions:
 
     ```bash
     sudo mkdir -p /var/lib/pgsql/18/data
@@ -113,9 +107,9 @@ Use the following steps to configure and start the Patroni service.
     sudo chmod 700 /var/lib/pgsql/18/data
     ```
 
-   If the directory already exists and contains data from a previous
-   PostgreSQL installation, back up any important data and then remove
-   the contents of the `data` directory:
+    If the directory already exists and contains data from a previous
+    PostgreSQL installation, back up any important data and then remove
+    the contents of the `data` directory:
 
     ```bash
     sudo rm -rf /var/lib/pgsql/18/data/*

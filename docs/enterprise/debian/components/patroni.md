@@ -91,9 +91,9 @@ Use the following steps to configure and start the Patroni service.
 2. Ensure the Postgres `data` directory is empty. Patroni runs `initdb`
    during bootstrap and requires an empty `data` directory.
 
-   If the directory exists and contains data from a previous
-   Postgres installation, stop the service, back up any important
-   data, and then remove the contents of the `data` directory:
+    If the directory exists and contains data from a previous
+    Postgres installation, stop the service, back up any important
+    data, and then remove the contents of the `data` directory:
 
     ```bash
     sudo systemctl stop postgresql
