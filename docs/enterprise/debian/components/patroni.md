@@ -12,9 +12,7 @@ and to store configuration data shared across all cluster nodes.
 
 Before installing and configuring Patroni and etcd in a pgEdge Enterprise
 Postgres cluster, you need to 
-[install and initialize](../installing.md#installing-pgedge-enterprise-postgres-and-controlling-the-cluster) 
-the Postgres database; the configuration steps require the location of the 
-`data` directory.
+[install pgEdge Enterprise Postgres](../installing.md#installing-pgedge-enterprise-postgres-and-controlling-the-cluster).
 
 ## Installing Patroni and etcd
 
@@ -90,24 +88,20 @@ Use the following steps to configure and start the Patroni service.
     sudo chmod 600 /etc/patroni/config.yml
     ```
 
-2. Create the PostgreSQL `data` directory and set the required
-    permissions:
+2. Ensure the Postgres `data` directory is empty. Patroni runs `initdb`
+   during bootstrap and requires an empty `data` directory.
+
+   If the directory exists and contains data from a previous
+   Postgres installation, stop the service, back up any important
+   data, and then remove the contents of the `data` directory:
 
     ```bash
-    sudo mkdir -p /var/lib/pgsql/17/data
-    sudo chown -R postgres:postgres /var/lib/pgsql/17
-    sudo chmod 700 /var/lib/pgsql/17/data
+    sudo systemctl stop postgresql
+    sudo systemctl disable postgresql
+    sudo rm -rf /var/lib/postgresql/18/main
     ```
 
-3. Stop and disable the PostgreSQL service. Patroni manages PostgreSQL
-    directly and must not share control with systemd:
-
-    ```bash
-    sudo systemctl stop postgresql-17
-    sudo systemctl disable postgresql-17
-    ```
-
-4. Enable and start the Patroni service using the following commands:
+3. Enable and start the Patroni service using the following commands:
 
     ```bash
     sudo systemctl enable patroni
