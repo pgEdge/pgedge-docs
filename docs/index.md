@@ -34,10 +34,10 @@ hide:
   margin: 0 auto;
 }
 
-/* Cards Grid - 4 columns */
+/* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.25rem;
   margin: 1rem 0;
 }
