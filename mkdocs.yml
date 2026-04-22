@@ -148,6 +148,7 @@ extra:
   versioned_docsets:
     - pgedge-helm
     - ace
+    - ai-dba-workbench
     - lolor
     - snowflake
     - spock-v5
@@ -235,6 +236,8 @@ extra:
         url: ai-toolkit/
       - hr: true
       - heading: "pgEdge Components"
+      - title: AI DBA Workbench
+        url: ai-dba-workbench/
       - title: pgEdge Postgres MCP Server
         url: pgedge-postgres-mcp-server/
       - title: pgEdge RAG Server
@@ -286,6 +289,8 @@ extra:
         url: system-stats/
     Tools:
       - heading: "pgEdge Tools"
+      - title: AI DBA Workbench
+        url: ai-dba-workbench/
       - title: ACE
         url: ace/
       - title: pgEdge Anonymizer
@@ -628,6 +633,10 @@ nav:
   - pgEdge Vectorizer:
     - v1.0: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=v1.0'
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
+
+  - AI DBA Workbench:
+    - v1.0.0-beta1: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=v1.0.0-beta1'
+    - Development: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=main'
 
   # --- pgEdge Labs ---
   - pg-semantic-cache:
