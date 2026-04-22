@@ -10,6 +10,12 @@
 #
 # Usage: Run 'sudo load-docs' to process all sources
 #
+# Source list is aligned with pgEdge/pgedge-postgres-mcp NLA-KB builder
+# canonical list (examples/pgedge-nla-kb-builder.yaml, maintained by
+# Muhammad Aqeel). Versioning strategy differs: Ellie uses latest-only
+# per product for RAG retrieval quality; NLA-KB pins multiple versions
+# for version-aware lookup.
+#
 # =============================================================================
 
 # Directory for storing downloaded/cloned documentation
@@ -58,7 +64,7 @@ columns:
 
 sources:
   # -------------------------------------------------------------------------
-  # PostgreSQL Core Documentation
+  # PostgreSQL Core Documentation (upstream — raw SGML)
   # -------------------------------------------------------------------------
   # tag_prefix pins to major version; version is fixed since tag format
   # (REL_18_1) doesn't map cleanly to a display version.
@@ -83,8 +89,22 @@ sources:
     product: "PostgreSQL"
     version: "16"
 
+  - git_url: "https://github.com/postgres/postgres.git"
+    git_tag: "latest"
+    tag_prefix: "REL_15_"
+    doc_path: "doc/src/sgml/*.sgml"
+    product: "PostgreSQL"
+    version: "15"
+
+  - git_url: "https://github.com/postgres/postgres.git"
+    git_tag: "latest"
+    tag_prefix: "REL_14_"
+    doc_path: "doc/src/sgml/*.sgml"
+    product: "PostgreSQL"
+    version: "14"
+
   # -------------------------------------------------------------------------
-  # pgEdge Products Documentation
+  # pgEdge Docs Site (in-repo sections)
   # -------------------------------------------------------------------------
   - git_url: "https://github.com/pgEdge/pgedge-docs.git"
     git_branch: "main"
@@ -102,6 +122,36 @@ sources:
     git_branch: "main"
     doc_path: "docs/enterprise/**/*.md"
     product: "pgEdge Enterprise"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
+    git_branch: "main"
+    doc_path: "docs/ai-toolkit/**/*.md"
+    product: "pgEdge AI Toolkit"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
+    git_branch: "main"
+    doc_path: "docs/kubernetes/**/*.md"
+    product: "pgEdge Kubernetes"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
+    git_branch: "main"
+    doc_path: "docs/postgresql/**/*.md"
+    product: "pgEdge PostgreSQL"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
+    git_branch: "main"
+    doc_path: "docs/container-images/**/*.md"
+    product: "pgEdge Container Images"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
+    git_branch: "main"
+    doc_path: "docs/pgedge-container/**/*.md"
+    product: "pgEdge Container"
     version: ""
 
   # -------------------------------------------------------------------------
@@ -264,61 +314,175 @@ sources:
     product: "pgEdge Helm"
     version: ""
 
-  # -------------------------------------------------------------------------
-  # PostgreSQL Tools
-  # -------------------------------------------------------------------------
-  - git_url: "https://github.com/pgadmin-org/pgadmin4.git"
-    git_tag: "latest"
-    tag_prefix: "REL-"
-    doc_path: "docs/en_US/**/*.rst"
-    product: "pgAdmin 4"
-    version: ""
-
-  - git_url: "https://github.com/pgbouncer/pgbouncer.git"
-    git_tag: "latest"
-    tag_prefix: "pgbouncer_"
-    doc_path: "doc/*.md"
-    product: "PgBouncer"
-    version: ""
-
-  - git_url: "https://github.com/pgbackrest/pgbackrest.git"
-    git_tag: "latest"
-    tag_prefix: "release/"
-    doc_path: "doc/xml/**/*.xml"
-    product: "pgBackRest"
-    version: ""
-
-  # -------------------------------------------------------------------------
-  # PostgreSQL Extensions
-  # -------------------------------------------------------------------------
-  - git_url: "https://github.com/postgis/postgis.git"
-    git_tag: "latest"
-    tag_prefix: "3."
-    doc_path: "doc/**/*.xml"
-    product: "PostGIS"
-    version: ""
-
-  - git_url: "https://github.com/pgvector/pgvector.git"
+  - git_url: "https://github.com/pgEdge/ai-dba-workbench.git"
     git_tag: "latest"
     tag_prefix: "v"
-    doc_path: "*.md"
+    doc_path: "README.md"
+    product: "pgEdge AI DBA Workbench"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/ai-dba-workbench.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge AI DBA Workbench"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/radar.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "README.md"
+    product: "pgEdge Radar"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/radar.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge Radar"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-loadgen.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "README.md"
+    product: "pgEdge Load Generator"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-loadgen.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge Load Generator"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pg_semantic_cache.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "README.md"
+    product: "pg_semantic_cache"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pg_semantic_cache.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pg_semantic_cache"
+    version: ""
+
+  # -------------------------------------------------------------------------
+  # 3rd-Party Tools and Extensions (via pgEdge/3rd-party-docs MKDocs branches)
+  # -------------------------------------------------------------------------
+  # Branch names encode product+version; one most-recent released branch
+  # per product. Switch to newer branch when next version lands upstream.
+  #
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgadmin913"
+    doc_path: "docs/**/*.md"
+    product: "pgAdmin 4"
+    version: "9.13"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgbouncer125"
+    doc_path: "docs/**/*.md"
+    product: "PgBouncer"
+    version: "1.25.1"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgbackrest258"
+    doc_path: "docs/**/*.md"
+    product: "pgBackRest"
+    version: "2.58.0"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "postgis362"
+    doc_path: "docs/**/*.md"
+    product: "PostGIS"
+    version: "3.6.2"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgvector081"
+    doc_path: "docs/**/*.md"
     product: "pgvector"
-    version: ""
+    version: "0.8.1"
 
-  - git_url: "https://github.com/pgaudit/pgaudit.git"
-    git_tag: "latest"
-    doc_path: "*.md"
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgaudit180"
+    doc_path: "docs/**/*.md"
     product: "pgAudit"
-    version: ""
+    version: "18.0"
 
-  # -------------------------------------------------------------------------
-  # PostgreSQL Client Libraries
-  # -------------------------------------------------------------------------
-  - git_url: "https://github.com/psycopg/psycopg2.git"
-    git_tag: "latest"
-    doc_path: "doc/src/**/*.rst"
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "psycopg2910"
+    doc_path: "docs/**/*.md"
     product: "psycopg2"
-    version: ""
+    version: "2.9.10"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "postgrest145"
+    doc_path: "docs/**/*.md"
+    product: "PostgREST"
+    version: "14.5"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "patroni411"
+    doc_path: "docs/**/*.md"
+    product: "patroni"
+    version: "4.1.1"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "cnpg129"
+    doc_path: "docs/**/*.md"
+    product: "CloudNativePG"
+    version: "1.29"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgcron167"
+    doc_path: "docs/**/*.md"
+    product: "pg_cron"
+    version: "1.6.7"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgmq1110"
+    doc_path: "docs/**/*.md"
+    product: "pgmq"
+    version: "1.11.0"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgtokenizer011"
+    doc_path: "docs/**/*.md"
+    product: "pg_tokenizer"
+    version: "0.1.1"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgvectorize0260"
+    doc_path: "docs/**/*.md"
+    product: "pg_vectorize"
+    version: "0.26.0"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pgstatmonitor231"
+    doc_path: "docs/**/*.md"
+    product: "pg_stat_monitor"
+    version: "2.3.1"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "pldebugger19"
+    doc_path: "docs/**/*.md"
+    product: "pldebugger"
+    version: "1.9"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "vchordbm25030"
+    doc_path: "docs/**/*.md"
+    product: "VectorChord-bm25"
+    version: "0.3.0"
+
+  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
+    git_branch: "systemstats321"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge System Stats"
+    version: "3.2.1"
 
 # =============================================================================
 # Notes
