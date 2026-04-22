@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 4/22/2026
+* pgEdge AI DBA Workbench 1.0.0-beta1 release for all supported platforms
+* Component updates: PostgREST 14.10
+
 ## 4/07/2026
 * pgEdge Anonymizer 1.0.0 GA release for all supported platforms
 * pgEdge RAG Server 1.0.0 GA release for all supported platforms
