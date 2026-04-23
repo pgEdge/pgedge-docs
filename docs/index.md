@@ -34,10 +34,10 @@ hide:
   margin: 0 auto;
 }
 
-/* Cards Grid - 3 columns */
+/* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.25rem;
   margin: 1rem 0;
 }
@@ -224,6 +224,44 @@ hide:
   border-bottom: 1px solid var(--md-default-fg-color--lightest);
 }
 
+/* Featured card - gradient glow for new/highlighted cards */
+.card-featured {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.15),
+              0 0 40px rgba(0, 188, 212, 0.08);
+}
+
+[data-md-color-scheme="slate"] .card-featured {
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.25),
+              0 0 40px rgba(0, 188, 212, 0.12);
+}
+
+.card-featured:hover {
+  box-shadow: 0 0 24px rgba(0, 188, 212, 0.25),
+              0 0 48px rgba(0, 188, 212, 0.12);
+}
+
+[data-md-color-scheme="slate"] .card-featured:hover {
+  box-shadow: 0 0 24px rgba(0, 188, 212, 0.35),
+              0 0 48px rgba(0, 188, 212, 0.18);
+}
+
+/* NEW chip badge */
+.chip-new {
+  display: inline-block;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--md-accent-fg-color);
+  color: white;
+  padding: 0.1rem 0.4rem;
+  border-radius: 9999px;
+  vertical-align: middle;
+  margin-left: 0.4rem;
+  line-height: 1.4;
+}
+
 </style>
 
 <!-- Hero Section -->
@@ -302,6 +340,27 @@ hide:
 </div>
 
 <div class="cards-grid">
+
+  <!-- AI DBA Workbench -->
+  <div class="card card-featured">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>AI DBA Workbench <span class="chip-new">NEW</span></h3>
+        <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+          <path d="M6.5 5.5v2" />
+          <path d="M17.5 5.5v2" />
+          <path d="M6.5 16.5v2" />
+          <path d="M17.5 16.5v2" />
+        </svg>
+      </div>
+    </div>
+    <p class="card-description">PostgreSQL estate monitoring and troubleshooting with optional AI assistance.</p>
+    <a href="ai-dba-workbench/" class="card-link">View Documentation →</a>
+  </div>
 
   <!-- MCP Server -->
   <div class="card">
@@ -399,6 +458,10 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">pgEdge Components</li>
       <li>
+        <a href="ai-dba-workbench/"><strong>AI DBA Workbench</strong> <span class="chip-new">NEW</span></a>
+        <span class="ext-desc">PostgreSQL estate monitoring and troubleshooting with optional AI assistance</span>
+      </li>
+      <li>
         <a href="pgedge-postgres-mcp-server/"><strong>MCP Server</strong></a>
         <span class="ext-desc">Connect LLMs and AI agents directly to PostgreSQL via the Model Context Protocol</span>
       </li>
@@ -471,10 +534,6 @@ hide:
         <span class="ext-desc">Query performance monitoring with histogram aggregation</span>
       </li>
       <li>
-        <a href="pg-semantic-cache/"><strong>pg_semantic_cache</strong></a>
-        <span class="ext-desc">Semantic similarity caching for PostgreSQL</span>
-      </li>
-      <li>
         <a href="pgaudit/"><strong>pgAudit</strong></a>
         <span class="ext-desc">Detailed session and object audit logging for PostgreSQL</span>
       </li>
@@ -506,6 +565,10 @@ hide:
     <ul class="extension-list">
       <li class="ext-subheading">pgEdge Tools</li>
       <li>
+        <a href="ai-dba-workbench/"><strong>AI DBA Workbench</strong> <span class="chip-new">NEW</span></a>
+        <span class="ext-desc">PostgreSQL estate monitoring and troubleshooting with optional AI assistance</span>
+      </li>
+      <li>
         <a href="ace/"><strong>ACE</strong></a>
         <span class="ext-desc">Automated data integrity verification and repair across replicated cluster nodes</span>
       </li>
@@ -524,16 +587,24 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">Community Tools</li>
       <li>
+        <a href="cloudnativepg/"><strong>CloudNativePG</strong></a>
+        <span class="ext-desc">Kubernetes operator for PostgreSQL</span>
+      </li>
+      <li>
+        <a href="patroni/"><strong>Patroni</strong></a>
+        <span class="ext-desc">High availability template for PostgreSQL</span>
+      </li>
+      <li>
         <a href="pgadmin-4/"><strong>pgAdmin 4</strong></a>
         <span class="ext-desc">Web-based administration and management tool for PostgreSQL</span>
       </li>
       <li>
-        <a href="pgbouncer/"><strong>PgBouncer</strong></a>
-        <span class="ext-desc">Lightweight connection pooler for PostgreSQL</span>
-      </li>
-      <li>
         <a href="pgbackrest/"><strong>pgBackRest</strong></a>
         <span class="ext-desc">Reliable PostgreSQL backup and restore</span>
+      </li>
+      <li>
+        <a href="pgbouncer/"><strong>PgBouncer</strong></a>
+        <span class="ext-desc">Lightweight connection pooler for PostgreSQL</span>
       </li>
       <li>
         <a href="postgrest/"><strong>PostgREST</strong></a>
@@ -545,6 +616,49 @@ hide:
       </li>
     </ul>
   </div>
+</div>
+
+<!-- Labs -->
+<div class="section-header">
+  <h2>Labs</h2>
+  <p>Experimental projects under active development. APIs and features may change without notice.</p>
+</div>
+
+<div class="cards-grid">
+
+  <!-- Semantic Cache -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>Semantic Cache (<a href="https://github.com/pgEdge/pg_semantic_cache">pg_semantic_cache</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">Semantic similarity caching for PostgreSQL.</p>
+    <a href="pg-semantic-cache/" class="card-link">View Documentation →</a>
+  </div>
+
+  <!-- Safe Session -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>Safe Session (<a href="https://github.com/pgEdge/pgedge-safesession">pgedge-safesession</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">Session-level safety guardrails for PostgreSQL.</p>
+    <a href="pgedge-safesession/" class="card-link">View Documentation →</a>
+  </div>
+
+  <!-- MCP Bridge -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>MCP Bridge (<a href="https://github.com/pgEdge/pgedge-mcp-bridge">pgedge-mcp-bridge</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">HTTP/SSE transport proxy for stdio-only MCP servers, with OAuth and token-based authentication.</p>
+    <a href="pgedge-mcp-bridge/" class="card-link">View Documentation →</a>
+  </div>
+
 </div>
 
 <!-- Footer -->

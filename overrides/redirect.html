@@ -27,6 +27,14 @@
               {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ (child.title | lower | replace('.', '-') | replace(' ', '-')) ~ '/' -%}
             {%- endif -%}
           {%- endfor -%}
+          {#- Fallback: if only Development exists, redirect there -#}
+          {%- if not ns.redirect_url -%}
+            {%- for child in nav_item.children -%}
+              {%- if not ns.redirect_url -%}
+                {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ (child.title | lower | replace('.', '-') | replace(' ', '-')) ~ '/' -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
     {%- endif -%}

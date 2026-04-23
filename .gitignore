@@ -9,6 +9,7 @@ temp_dir/*
 # Auto-generated redirect files for versioned docsets
 # These are created by hooks/versioned_redirects.py at build time
 docs/ace/index.md
+docs/ai-dba-workbench/index.md
 docs/control-plane/index.md
 docs/lolor/index.md
 docs/pgedge-anonymizer/index.md
