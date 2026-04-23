@@ -558,10 +558,10 @@ nav:
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
   - Spock v5:
-    - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5.0.7'
+    - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
     - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
-    - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
+    - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
 
   - Control Plane:
     - v0.7: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.7.0'
