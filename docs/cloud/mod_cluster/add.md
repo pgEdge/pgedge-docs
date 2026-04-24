@@ -12,7 +12,7 @@ navigation panel, and then open the `Actions` menu.
 To add a node to an existing cluster, select the cluster name in the
 navigation panel, open the `Actions` menu, and select `Add Nodes`.
 
-![Cluster Overview](../images/add_nodes.png)
+![Adding a node to a cluster](../images/add_nodes.png)
 
 When the `Add Node` dialog opens, provide details the new node(s): 
 
@@ -22,15 +22,28 @@ When the `Add Node` dialog opens, provide details the new node(s):
 * Accept the `Default` configuration to use server-assigned network
   addresses or select `Manual` to assign specific addresses for your new
   node(s).
-* Modify the deployment details for the new node as needed. The values
-  shown in the `Network Settings` section and instance details reflect the
-  values used for the other nodes in the cluster.
 
-Select the `Add Nodes` button to deploy your new nodes and add them to
-your cluster. The cluster will be placed in modification status until the
-addition is complete; when the update finished, you will be able to access
-the new node using the SSH configuration defined during the initial cluster
-creation.
+![Specifying node details](../images/add_node_details.png)
+
+The lower half of the dialog manages node details. The values shown in the
+reflect the values used for the other nodes in the cluster.
+
+* Network addresses for the new node(s) are assigned for consistency and are
+  not modifiable.
+* The `Instance Type` field displays the value selected for the other nodes
+  in your cluster; use the selector to choose an alternative configuration. 
+  If you are adding more than one node in a single update, the same 
+  configuration will be applied to both nodes.
+* The `Volume Size` field displays the data volume size of the other nodes in
+  your cluster; use the selector to choose an alternative size. If you are
+  adding more than one node in a single update, the same size will be applied
+  to both nodes.
+
+After specifying your preferences, select the `Add Nodes` button to deploy
+your new nodes and add them to your cluster. The cluster will be placed in
+modification status until the addition is complete; when the update finished,
+you will be able to access the new node using the SSH configuration defined
+during the initial cluster creation.
 
 !!! tip
 
@@ -53,7 +66,7 @@ re-established, new transactions can be written to the database. To review
 recommended workflows to bring the node up to date with a full dataset
 visit [here](#restoring-data-to-a-database-on-a-new-cluster-node).
 
-![Cluster Overview](../images/actions_database.png)
+![Adding a database](../images/actions_database.png)
 
 The `Add Database... to Cluster Nodes` dialog opens.
 
