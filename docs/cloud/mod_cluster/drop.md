@@ -15,17 +15,17 @@ of a cluster in the navigation panel and select `Remove Nodes` from the
 
 ![Remove a Node](../images/actions_cluster.png)
 
-When the `Remove Nodes` dialog opens, click a node on the map or click
-the `X` in an availability zone name in the `Regions` field to remove
-the node from the specified region. To remove the node and reconfigure
+When the `Remove Nodes` dialog opens, click a node(s) on the map or click
+the `X` in an availability zone name in the `Regions` section to remove
+a node from the specified region. To remove the node and reconfigure
 the cluster, enter the cluster name in the confirmation field and click
 `Apply Changes`.
 
 ![Remove a Node](../images/remove_nodes.png)
 
-You may only remove a single node at a time. When working with a
-multi-node cluster with replication enabled, the cluster cannot drop
-below two nodes.
+When working with a multi-node cluster with replication enabled, the cluster
+cannot drop below two nodes.
+
 
 ## Removing a Database from a Node
 
@@ -68,16 +68,17 @@ the upper-right corner and choose `Delete Cluster`.
 
 ![Deleting a Cluster](../images/delete_cluster.png)
 
-The `Delete Cluster` dialog prompts you to confirm the deletion. Enter
-the cluster name and press `Delete Cluster` to confirm.
+If the cluster contains databases, use the `Force Delete` slider to confirm
+that you wish to delete the cluster, and all cluster resources currently
+deployed; this will remove all databases, DNS records, and CloudWatch alarms.
+
+To delete the cluster, enter the cluster name to confirm and press `Delete 
+Cluster` (or `Force Delete Cluster`) to confirm.
 
 ![Confirm deleting a cluster](../images/confirm_delete_cluster.png)
 
 !!! Note
 
-    If the cluster has databases, you must
-    [delete the databases](https://docs.pgedge.com/cloud/mod_cluster/drop#deleting-a-database)
-    before deleting the cluster. A popup alerts you if you attempt to
-    delete a cluster that still hosts databases.
+    A popup alerts you if you attempt to delete a cluster that still hosts databases without selecting the `Force Delete` option.
 
 ![Cluster has databases](../images/cluster_has_databases.png)

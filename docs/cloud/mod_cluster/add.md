@@ -54,81 +54,29 @@ during the initial cluster creation.
 
 To add a database to a cluster node, select the database name in the
 navigation panel, open the `Actions` menu, and select `Add to Nodes`. Note
-that new cluster node must be 
-[added to the cluster](#adding-a-node-to-a-cluster) before you can add a 
-database to the node. The node to which you are adding the database must
-be a member of the cluster on which the database was created.
+that node must be 
+[an operational member of the cluster](#adding-a-node-to-a-cluster)
+before you can add a database to the node. The node to which you are adding
+the database must be a member of the cluster on which the database was
+created.
 
-When you add a database to a new node, the database is empty. You will
-need to restore existing schemas and data to the database, and if AutoDDL
-is not enabled, start replication on the node. Once replication has been
-re-established, new transactions can be written to the database. To review
-recommended workflows to bring the node up to date with a full dataset
-visit [here](#restoring-data-to-a-database-on-a-new-cluster-node).
+When you add a database to a node, Cloud uses 
+[Spock's Zodan functionality](https://docs.pgedge.com/spock-v5/v5-0-6/modify/zodan/)
+to copy the existing data to the new node. Automatic DDL replication is
+enabled as the node joins the cluster.
 
 ![Adding a database](../images/actions_database.png)
 
-The `Add Database... to Cluster Nodes` dialog opens.
+The `Add Database... to Cluster Nodes` dialog opens.a
 
 ![Cluster Overview](../images/add_db_to_nodes.png)
 
-On the map, nodes labeled with a node name (like `n1`, `n2`, or `n3`)
-and connected by a dotted line are currently replicating the selected
-database between themselves. Nodes that are not attached to other nodes by
-a dotted line, or are unlabeled are not part of the cluster for the
-selected database. To select a node(s) for updating, click in the `Select
-regions` field to access a list of available nodes on which the database
-does not currently reside, or click a node(s) on the map.
+On the map, nodes connected by a dotted line are currently replicating
+the selected database amongst themselves. Nodes that are not attached to
+other nodes by a dotted line are currently not hosting the selected database.
+To select a node(s) for updating, click in the `Regions` field to access a
+list of available nodes on which the database does not currently reside, or
+click a node(s) on the map.
 
 After selecting the node(s), click the `Add Nodes` button to start the
 modification process.
-
-When you add a database to a new cluster node, the process places the new
-node into the `Nearest Node` DNS. If your application uses this
-connection, you should plan downtime accordingly until data can be aligned
-and restored on all nodes, or you should set your application to only read
-data from a pre-existing node during the data restoration process.
-
-
-## Restoring Data to a Database on a New Cluster Node
-
-Adding a database to a new cluster node does not manage the transfer of
-existing data to the database. The new node is added to the replication
-configuration for the database, but you must restore existing data to the
-new database node through a separate workflow.
-
-We recommended that you stop write transactions to the database while you
-are restoring data to align the nodes across the cluster. If write
-transactions are enabled, it is possible for data to not reach other nodes
-depending on the restoration strategy. This must currently be enforced by
-your application.
-
-The steps you use to restore data to your new database/node combination
-will depend on if your nodes are running with AutoDDL enabled.
-
-* If your nodes are running with AutoDDL enabled, you can use the Cloud
-  [Restore Database](https://docs.pgedge.com/cloud/backup/restore) option
-  to restore a data backup from another node. You can perform a restore
-  specifically to just the new node, or restore to all nodes to ensure a
-  complete/refreshed alignment of datasets. Your chosen strategy should
-  take into account your spock subscription and data residency
-  requirements.
-
-If you are using the graphical `Restore Database` interface to restore
-your database, the existing nodes will restart during the setup process for
-the new node in order to re-establish replication. This will cause a brief
-downtime on these nodes.
-
-* If your nodes are not running with AutoDDL enabled, you can restore the
-  data manually with an external tool [like pg_dump](
-  https://www.postgresql.org/docs/current/app-pgdump.html).
-  Then, you'll need to use the Cloud [Start Replication](
-  https://docs.pgedge.com/cloud/database/manage_db#the-start-replication-pane)
-  button to align the new node with the existing database nodes.
-
-!!! note
-
-    If you are using pgBackRest to restore data from another node in your
-    Backup Stores, pgBackRest will re-establish Spock replication sets
-    using the restored data, automatically re-establishing replication as
-    it was at the time of the backup.
