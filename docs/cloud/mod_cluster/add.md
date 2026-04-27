@@ -22,14 +22,8 @@ When the `Add Node` dialog opens, provide details the new node(s):
 * Accept the `Default` configuration to use server-assigned network
   addresses or select `Manual` to assign specific addresses for your new
   node(s).
-
-![Specifying node details](../images/add_node_details.png)
-
-The lower half of the dialog manages node details. The values shown in the
-reflect the values used for the other nodes in the cluster.
-
-* Network addresses for the new node(s) are assigned for consistency and are
-  not modifiable.
+* Network addresses for the new node(s) are assigned for consistency with the
+  rest of your cluster, and are not modifiable.
 * The `Instance Type` field displays the value selected for the other nodes
   in your cluster; use the selector to choose an alternative configuration. 
   If you are adding more than one node in a single update, the same 
