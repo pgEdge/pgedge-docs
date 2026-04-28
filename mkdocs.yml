@@ -568,6 +568,10 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE:
+    - v1.9.0: '!import https://github.com/pgEdge/ace.git?branch=v1.9.0'
+    - v1.8.1: '!import https://github.com/pgEdge/ace.git?branch=v1.8.1'
+    - v1.8.0: '!import https://github.com/pgEdge/ace.git?branch=v1.8.0'
+    - v1.7.2: '!import https://github.com/pgEdge/ace.git?branch=v1.7.2'
     - v1.7.1: '!import https://github.com/pgEdge/ace.git?branch=v1.7.1'
     - v1.7.0: '!import https://github.com/pgEdge/ace.git?branch=v1.7.0'
     - v1.6.0: '!import https://github.com/pgEdge/ace.git?branch=v1.6.0'
@@ -601,6 +605,8 @@ nav:
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
   - Radar:
+    - v0.4.1: '!import https://github.com/pgEdge/radar?branch=v0.4.1'
+    - v0.4.0: '!import https://github.com/pgEdge/radar?branch=v0.4.0'
     - v0.3.0: '!import https://github.com/pgEdge/radar?branch=v0.3.0'
     - v0.2.3: '!import https://github.com/pgEdge/radar?branch=v0.2.3'
     - v0.2.2: '!import https://github.com/pgEdge/radar?branch=v0.2.2'
@@ -720,6 +726,11 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncermaster'
 
   - postgrest:
+#   - v14.10: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest1410'
+    - v14.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest149'
+    - v14.8: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest148'
+    - v14.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest147'
+    - v14.6: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest146'
     - v14.5: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest145'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrestmaster'
 
