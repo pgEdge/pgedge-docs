@@ -728,10 +728,10 @@ nav:
 
   - postgrest:
 #   - v14.10: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest1410'
-    - v14.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest149'
-    - v14.8: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest148'
-    - v14.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest147'
-    - v14.6: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest146'
+#   - v14.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest149'
+#   - v14.8: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest148'
+#   - v14.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest147'
+#   - v14.6: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest146'
     - v14.5: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest145'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrestmaster'
 
