@@ -35,5 +35,8 @@ Test: Use this file to deploy changes to branches that do not require a change t
 01/23/2026 - Deploying Spock/ACE updates.
 01/26/2025 - Retrying deployment
 02/27/2026 - Publish update.
+02/02/2026 - Publish Spock docs.
+02/03/2026 - Spock update - out to team for review.
+04/15/2026 - Fresh copy.
 04/01/2026 - Deployment issue with pgEdge labs build.
-04/22/2026 - Retry Cloudflare deployment.
+04/24/2026 - Redeploy main/development docs for Spock.
