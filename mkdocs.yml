@@ -594,6 +594,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
   - Spock v5:
+    - vtemp: '!import https://github.com/pgEdge/spock.git?branch=issue_435_gsg_update'
     - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
     - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
@@ -664,12 +665,15 @@ nav:
 
   # Community Extensions (from 3rd-party-docs repo)
   - pgvector:
+    - v0.8.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector082'
     - v0.8.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector081'
     - v0.8.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector080'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectormaster'
 
   - postgis:
+    - v3.6.3: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgis363'
     - v3.6.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgis362'
+    - v3.5.6: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgis356'
     - v3.5.5: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgis355'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgismaster'
 
@@ -685,6 +689,8 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizermaster'
 
   - pg-vectorize:
+    - v0.26.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0262'
+    - v0.26.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0261'
     - v0.26.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0260'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorizemaster'
 
@@ -698,6 +704,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcronmaster'
 
   - pgmq:
+    - v1.11.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1111'
     - v1.11.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1110'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmqmaster'
 
@@ -710,11 +717,13 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebuggermaster'
 
   - system-stats:
+    - v4.0.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstats400'
     - v3.2.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstats321'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstatsmaster'
 
   # Community Tools (from 3rd-party-docs repo)
   - pgAdmin 4:
+    - v9.14: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin914'
     - v9.13: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin913'
     - v9.12: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin912'
     - v9.11: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin911'
@@ -722,11 +731,12 @@ nav:
 
   - PgBouncer:
     - v1.25: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncer125'
+    - v1.241: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncer1241'
     - v1.24: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncer124'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncermaster'
 
   - postgrest:
-#   - v14.10: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest1410'
+    - v14.10: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest1410'
     - v14.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest149'
     - v14.8: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest148'
     - v14.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest147'
@@ -735,6 +745,8 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrestmaster'
 
   - psycopg2:
+    - v2.9.12: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2912'
+    - v2.9.11: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2911'    
     - v2.9.10: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2910'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2master'
 
@@ -749,5 +761,6 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpgmaster'
 
   - Patroni:
+    - v4.1.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni412'
     - v4.1.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni411'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patronimaster'
