@@ -59,7 +59,7 @@ Select the button labeled `+ MCP Server` to add MCP server details for your data
 
 Select the Add MCP Server button to access the Add MCP Server popup and define an MCP server, and optionally enable an associated LLM.
 
-![Adding an MCP Server](../cloud/images/add_mcp_server.png)
+![Adding an MCP Server](../images/add_mcp_server.png)
 
 Use fields on the `Add MCP Server` popup to describe the server and optionally, the LLM:
 

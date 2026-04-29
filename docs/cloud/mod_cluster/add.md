@@ -61,7 +61,7 @@ enabled as the node joins the cluster.
 
 ![Adding a database](../images/actions_database.png)
 
-The `Add Database... to Cluster Nodes` dialog opens.a
+The `Add Database... to Cluster Nodes` dialog opens as shown below:
 
 ![Cluster Overview](../images/add_db_to_nodes.png)
 

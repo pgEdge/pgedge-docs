@@ -15,7 +15,7 @@ of a cluster in the navigation panel and select `Remove Nodes` from the
 
 ![Remove a Node](../images/actions_cluster.png)
 
-When the `Remove Nodes` dialog opens, click a node(s) on the map or click
+When the `Remove Nodes` dialog opens, click a node on the map or click
 the `X` in an availability zone name in the `Regions` section to remove
 a node from the specified region. To remove the node and reconfigure
 the cluster, enter the cluster name in the confirmation field and click
@@ -23,8 +23,11 @@ the cluster, enter the cluster name in the confirmation field and click
 
 ![Remove a Node](../images/remove_nodes.png)
 
-When working with a multi-node cluster with replication enabled, the cluster
-cannot drop below two nodes.
+!!! hint
+
+    You may only remove a single node at a time.  When working with a
+    multi-node cluster with replication enabled, the cluster cannot drop
+    below two nodes.
 
 
 ## Removing a Database from a Node
@@ -77,8 +80,7 @@ Cluster` (or `Force Delete Cluster`) to confirm.
 
 ![Confirm deleting a cluster](../images/confirm_delete_cluster.png)
 
-!!! Note
-
-    A popup alerts you if you attempt to delete a cluster that still hosts databases without selecting the `Force Delete` option.
+Cloud will alert you if you attempt to delete a cluster that still hosts
+databases without selecting the `Force Delete` option.
 
 ![Cluster has databases](../images/cluster_has_databases.png)
