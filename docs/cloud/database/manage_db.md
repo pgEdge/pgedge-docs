@@ -89,7 +89,9 @@ access the password associated with one of the identities (`app`,
 
 ![Password management options](../images/password.png)
 
-Then, use options in the `Password` field to manage the password
+### Password Management
+
+You can use options in the `Password` field to manage the password
 assigned to the `app` user:
 
 * Select `show` to display the password in unobscured form; select `hide`
