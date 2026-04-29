@@ -178,7 +178,7 @@ pipelines:
 
     rag_llm:
       provider: "anthropic"
-      model: "claude-sonnet-4-20250514"
+      model: "claude-sonnet-4-6"
 
     # Retrieval settings
     token_budget: 8000  # Maximum tokens for context
