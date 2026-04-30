@@ -521,7 +521,7 @@ nav:
       - Reviewing Backup Details: cloud/backup/backups.md
       - Backing up your Database: cloud/backup/backup_providers.md
       - Restoring from Backup: cloud/backup/restore.md
-    - Reviewing Console Tasks: cloud/tasks.md
+    - Reviewing the Activity Log: cloud/tasks.md
     - Migrating to pgEdge Distributed Postgres (Cloud Edition):
       - Overview - Using a Backup to Migrate into a Distributed Database: cloud/migration/index.md
       - Taking a Backup: cloud/migration/backup.md

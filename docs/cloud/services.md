@@ -2,10 +2,10 @@
 
 pgEdge Cloud databases can be deployed with an installed and configured
 MCP server, ready for connections. After deployment, use the `Services`
-page to open the `Add MCP Server` popup to add AI functionality to an
+dialog to open the `Add MCP Server` popup to add AI functionality to an
 existing cluster or to manage defined functionality.
 
-![The Services page](../cloud/images/services.png)
+![The Services dialog](../cloud/images/services.png)
 
 Select the `Add MCP Server` button to access the `Add MCP Server` popup
 and define an MCP server, and optionally enable an associated LLM.
@@ -19,10 +19,9 @@ and, optionally, the LLM:
   will be provisioned on. You can deploy the MCP server on each node of
   your cluster, but each MCP server deployment must be individually defined.
 
-- Use the `API Token` field to provide the string used to authenticate
-  with your MCP server; this is a user-created value.
-
 - Slide the `LLM Enabled?` toggle switch to enable the LLM detail fields.
+
+![Enabling LLM](../cloud/images/mcp_llm_enabled.png)
 
 - Use the `LLM Provider` drop-down to select your AI provider. pgEdge
   Cloud currently supports the following AI providers:
@@ -31,103 +30,70 @@ and, optionally, the LLM:
     - OpenAI (ChatGPT)
     - Ollama
 
-- Enter the model name of the LLM provider. This field is not validated,
-  but must match the name of an available model. For example, the
-  following models are supported:
+- Use the Model field to provide the model name for the LLM provider. This
+  field is not validated, but must match the name of an available model. For
+  example:
 
     - claude-sonnet-4-6
     - gpt-4o
     - llama3.1
 
+- If prompted, use the `API Token` field to provide the string used to
+  authenticate with your MCP server; this is a user-created value required by
+  Anthropic and OpenAI.
 
-## Connecting a Client to the MCP Server
+When you've defined the MCP server (with optional LLM functionality), select
+the `+ Add MCP Server` button to update your database.
+
+When the deployment is complete, details about the MCP server deployment are
+displayed in the Services dialog.
+
+![The updated Services dialog](../cloud/images/services_mcp_deployed.png)
+
+### Connecting a Client to the MCP Server
 
 The steps you use to connect a client to the MCP server vary by client
-and platform. The example below uses the pgEdge Postgres MCP Server and
-connects to the Claude Desktop application on a Mac. Consult your
-client's documentation for detailed instructions.
+and platform. The Services dialog displays connection details for several
+popular clients under the `Connect to MCP Clients` label:
 
-![Connecting to Claude Desktop](../cloud/images/claude_desktop.png)
+![Connecting to an MCP server](../cloud/images/connect_to_mcp.png)
 
-After installing the Claude Desktop client, open the Claude Settings
-dialog (`Claude` --> `Settings`). Select `Developer` to configure a
-local MCP server:
+Select a tab to view and copy connection details for the client you wish to
+use.  Choose from:
 
-![Select Developer](../cloud/images/claude_select_developer.png)
-
-Select the `Edit Config` button to open a file browser window, then
-open the `claude_desktop_config.json` configuration file.
-
-![Accessing the Claude Configuration File](../cloud/images/claude_mcp_config.png)
-
-When the configuration file opens, add your connection details to the
-`mcpServers` section:
-
-```json
-{
-  "preferences": {
-    "coworkWebSearchEnabled": true,
-    "ccdScheduledTasksEnabled": true,
-    "sidebarMode": "chat",
-    "coworkScheduledTasksEnabled": true
-  },
-  "mcpServers": {
-    "pgedge-appdb": {
-      "command": "/Users/sdouglas/.nvm/versions/node/v20.19.4/bin/npx",
-      "args": [
-        "mcp-remote",
-        "connection_string_to_mcp_server",
-        "--transport",
-        "sse",
-        "--allow-http",
-        "--header",
-        "Authorization: authentication_string"
-      ]
-    }
-  }
-}
-```
-
-Replace the following placeholders with your actual values:
-
-- Replace `connection_string_to_mcp_server` with your database
-  connection string. To connect to a private cluster, create a
-  [public ingress](#creating-a-public-ingress) for the connection.
-- Replace `authentication_string` with the authentication string
-  provided in the API token field.
-
-
-!!! note
-
-    After updating the configuration file with details about your MCP
-    server, restart the Claude client for the changes to take effect.
-
-After restarting the Claude client, you can query your database from
-the Claude client.
+* [Claude Code](https://code.claude.com/docs/en/overview)
+* [Cursor](https://cursor.com/en-US/docs)
+* [OpenAI Codex](https://openai.com/codex/)
+* [Replit](https://docs.replit.com/getting-started/intro-replit)
 
 
 ## Creating a Public Ingress
 
 If your cluster was created as a private cluster (without a public-facing
-IP address), you need to create a public ingress for connections to the
-MCP server.
+IP address), you will need to use a public ingress for connections to the
+MCP server. Select the `Connect to Ingress` button to review available
+ingresses or to create a new ingress: 
 
-To access a list of available ingresses or to create a public ingress,
-navigate to the `Services` page via the link under the database name in
-the navigation panel.
+![Accessing a public ingress](../cloud/images/connect_to_ingress.png)
 
-![Connecting to an MCP server](../cloud/images/connect_to_mcp.png)
-
-Select the `Connect to Ingress` button. If no healthy ingresses exist
+If no healthy ingresses exist
 for the current cluster, the `Connect to Ingress` popup opens; use the
 `Go to Cluster Settings` button to edit the cluster and create an
 ingress.
 
-![Accessing a public ingress](../cloud/images/connect_to_ingress.png)
+![Adding an ingress](../cloud/images/no_ingresses.png)
 
-When the cluster dialog opens, scroll to the `Network Ingresses` section
-and select the `+ Add Ingress` button. Use the following fields to
-configure the ingress:
+To navigate to the cluster's dialog and create an ingress, select the
+`Go to Cluster Settings` button. Once on the cluster dialog, scroll down to
+the page end, and select `+ Add Ingress`:
+
+![Adding an ingress](../cloud/images/add_ingress.png)
+
+The `Create Ingress` popup opens: 
+
+![Creating an ingress](../cloud/images/create_ingress.png)
+
+Use the following fields to configure the ingress:
 
 - Provide a name for the ingress in the `Name` field.
 - Use the `Region` drop-down to select the region the ingress will use
@@ -137,3 +103,17 @@ configure the ingress:
 
 After providing ingress details, select the `+ Create Ingress` button
 to create the ingress and add it to the list of ingresses.
+
+Once created, the ingress will be added to the list of available ingresses: 
+
+![Creating an ingress](../cloud/images/available_ingress.png)
+
+To delete an ingress, select the delete icon on the ingress information pane.
+
+![Deleting an ingress](../cloud/images/delete_ingress.png)
+
+When prompted, confirm the deletion.
+
+![Confirm the deletion](../cloud/images/confirm_delete_ingress.png)
+
+A popup confirms that the ingress is being deleted.
