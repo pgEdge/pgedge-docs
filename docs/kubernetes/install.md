@@ -18,11 +18,13 @@ pgEdge currently distributes the following CloudNativePG operator versions:
 
 | Manifest Version | Helm Chart Version | Upstream Release           |
 | ---------------- | ------------------ | -------------------------- |
-| v1.28.1          | 0.27.1             | [CloudNativePG v1.28.1][1] |
-| v1.27.3          | 0.26.3             | [CloudNativePG v1.27.3][2] |
+| v1.29.0          | 0.28.0             | [CloudNativePG v1.29.0][1] |
+| v1.28.2          | 0.27.1             | [CloudNativePG v1.28.2][2] |
+| v1.27.4          | 0.26.1             | [CloudNativePG v1.27.4][3] |
 
-[1]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.28.1
-[2]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.27.3
+[1]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.29.0
+[2]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.28.2
+[3]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.27.4
 
 You can install CloudNativePG using Helm (recommended), Kubernetes manifests, or
 using the GitHub Release artifacts.
@@ -60,7 +62,7 @@ To install a specific version of the operator:
 helm install cnpg pgedge/cloudnative-pg \
   --namespace cnpg-system \
   --create-namespace \
-  --version 0.27.1
+  --version 0.28.0
 ```
 
 ### Using Manifests
@@ -69,7 +71,7 @@ For a quick installation without Helm, apply the manifest directly:
 
 ```bash
 kubectl apply --server-side -f \
-  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.28.1/cnpg-1.28.1.yaml
+  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.29.0/cnpg-1.29.0.yaml
 ```
 
 This installs the operator in the `cnpg-system` namespace.
@@ -80,8 +82,8 @@ Alternatively, download charts directly from
 [GitHub Releases](https://github.com/pgEdge/pgedge-cnpg-dist/releases):
 
 ```bash
-curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/latest/download/cloudnative-pg-0.27.1.tgz
-helm install cnpg cloudnative-pg-0.27.1.tgz \
+curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/latest/download/cloudnative-pg-0.28.0.tgz
+helm install cnpg cloudnative-pg-0.28.0.tgz \
   --namespace cnpg-system \
   --create-namespace
 ```
@@ -164,12 +166,12 @@ helm install cnpg pgedge/cloudnative-pg \
 
 ## Next Steps
 
-- [Create your first PostgreSQL cluster](https://cloudnative-pg.io/docs/1.28/quickstart/)
-- [Configure backups](https://cloudnative-pg.io/docs/1.28/backup/)
-- [Set up monitoring](https://cloudnative-pg.io/docs/1.28/monitoring/)
+- [Create your first PostgreSQL cluster](https://cloudnative-pg.io/docs/1.29/quickstart/)
+- [Configure backups](https://cloudnative-pg.io/docs/1.29/backup/)
+- [Set up monitoring](https://cloudnative-pg.io/docs/1.29/monitoring/)
 
 ## Resources
 
 - [pgEdge Enterprise Postgres for Kubernetes GitHub Repository](https://github.com/pgEdge/pgedge-cnpg-dist)
 - [pgEdge Krew Index](https://github.com/pgEdge/krew-index)
-- [CloudNativePG Installation Docs](https://cloudnative-pg.io/docs/1.28/installation_upgrade/)
+- [CloudNativePG Installation Docs](https://cloudnative-pg.io/docs/1.29/installation_upgrade/)

@@ -36,10 +36,11 @@ by** the CloudNativePG project or the Cloud Native Computing Foundation.
 
 ### CloudNativePG and Kubernetes Versions
 
-| CNPG Version | Kubernetes 1.31 | Kubernetes 1.32 | Kubernetes 1.33 | Kubernetes 1.34 |
-| ------------ | --------------- | --------------- | --------------- | --------------- |
-| 1.28.1       | -               | Yes             | Yes             | Yes             |
-| 1.27.3       | Yes             | Yes             | Yes             | -               |
+| CNPG Version | Kubernetes 1.31 | Kubernetes 1.32 | Kubernetes 1.33 | Kubernetes 1.34 | Kubernetes 1.35 |
+| ------------ | --------------- | --------------- | --------------- | --------------- | --------------- |
+| 1.29.0       | -               | -               | Yes             | Yes             | Yes             |
+| 1.28.2       | -               | Yes             | Yes             | Yes             | -               |
+| 1.27.4       | Yes             | Yes             | Yes             | -               | -               |
 
 ### PostgreSQL Versions
 
