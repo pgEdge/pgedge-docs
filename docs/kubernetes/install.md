@@ -82,7 +82,7 @@ Alternatively, download charts directly from
 [GitHub Releases](https://github.com/pgEdge/pgedge-cnpg-dist/releases):
 
 ```bash
-curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/latest/download/cloudnative-pg-0.28.0.tgz
+curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/download/cloudnative-pg-v0.28.0/cloudnative-pg-0.28.0.tgz
 helm install cnpg cloudnative-pg-0.28.0.tgz \
   --namespace cnpg-system \
   --create-namespace
