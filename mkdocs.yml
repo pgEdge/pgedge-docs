@@ -160,6 +160,7 @@ extra:
     - pgedge-rag-server
     - pgedge-vectorizer
     - pg-semantic-cache
+    - pg-healthcheck
     - pgedge-safesession
     - pgedge-mcp-bridge
     - radar
@@ -186,6 +187,7 @@ extra:
   # pgEdge Labs - shows a notice that content is experimental/under active development
   labs_docsets:
     - pg-semantic-cache
+    - pg-healthcheck
     - pgedge-safesession
     - pgedge-mcp-bridge
 
@@ -318,6 +320,8 @@ extra:
     pgEdge Labs:
       - title: Semantic Cache (pg_semantic_cache)
         url: pg-semantic-cache/
+      - title: Postgres Healthcheck (pg-healthcheck)
+        url: pg-healthcheck/
       - title: Safe Session (pgedge-safesession)
         url: pgedge-safesession/
       - title: MCP Bridge (pgedge-mcp-bridge)
@@ -649,6 +653,10 @@ nav:
   - pg-semantic-cache:
     - v0.1.0-beta4: '!import https://github.com/pgEdge/pg_semantic_cache?branch=v0.1.0-beta4'
     - Development: '!import https://github.com/pgEdge/pg_semantic_cache?branch=main'
+
+  - pg-healthcheck:
+    - v1.1.0: '!import https://github.com/pgEdge/pg-healthcheck?branch=v1.1.0'
+    - Development: '!import https://github.com/pgEdge/pg-healthcheck?branch=main'
 
   - pgedge-safesession:
     - Development: '!import https://github.com/pgEdge/pgedge-safesession?branch=main'
