@@ -1,5 +1,8 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 5/05/2026
+* Component updates: Spock 5.0.7
+
 ## 4/22/2026
 * pgEdge AI DBA Workbench 1.0.0-beta1 release for all supported platforms
 * Component updates: PostgREST 14.10
