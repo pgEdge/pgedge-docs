@@ -11,7 +11,7 @@ extra_css:
 extra_javascript:
   # Pulled from control-plane repo for install page
   # Note: Must update version when control-plane latest version changes
-  - /control-plane/v0-7/scripts/generate-stack.js
+  - /control-plane/v0-8/scripts/generate-stack.js
   - javascripts/tabs-dropdown.js
   - javascripts/org-stars.js
   - javascripts/version-selector.js
@@ -601,6 +601,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
 
   - Control Plane:
+    - v0.8: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.8.0'
     - v0.7: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.7.0'
     - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.2-docs'
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
