@@ -1,5 +1,10 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 5/07/2026
+* pgEdge Active Consistency Engine (ACE) 2.0.0 (First PEP release)
+* Component updates: Patroni 4.1.3, pgAdmin 9.14
+* pgEdge radar 0.4.1 (First PEP release)
+  
 ## 5/05/2026
 * Component updates: Spock 5.0.7
 
