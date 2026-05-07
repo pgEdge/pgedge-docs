@@ -8,9 +8,6 @@ nodes.
 
 ## Installing ACE
 
-This section describes installation and the files the package installs
-on RHEL-based platforms.
-
 ACE supports RHEL, CentOS, and Rocky Linux versions 9 and 10. Use the
 following command to install ACE:
 
