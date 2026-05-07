@@ -366,7 +366,7 @@ nav:
     - Enterprise Postgres Release Notes: enterprise/pep_rel_notes.md
 
   - pgEdge Distributed Postgres:
-    - CLI Overview: platform/index.md
+    - Deprecated Functionality: platform/index.md
     - Prerequisites - Preparing your System:
       - Supported Operating Systems: platform/prerequisites/platforms.md
       - Preparing your System for the CLI: platform/prerequisites/index.md

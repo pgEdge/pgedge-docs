@@ -1,6 +1,6 @@
-# pgEdge Distributed Postgres (VM Edition)
+# pgEdge Distributed Postgres (CLI) - Deprecated
 
-pgEdge Distributed Postgres (VM Edition) includes a command line interface (CLI) that simplifies creation and management of a multi-master distributed pgEdge Postgres cluster in your own data center or cloud account.
+pgEdge Distributed Postgres (the CLI) includes a command line interface (CLI) that simplifies creation and management of a multi-master distributed pgEdge Postgres cluster in your own data center or cloud account.
 
 !!! note
 
