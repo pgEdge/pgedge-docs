@@ -8,9 +8,6 @@ nodes.
 
 ## Installing ACE
 
-This section describes installation and the files the package installs
-on Debian-based platforms.
-
 ACE supports Debian 11 (Bullseye), Debian 12 (Bookworm), Debian 13
 (Trixie), Ubuntu 22.04 (Jammy), and Ubuntu 24.04 (Noble). Use the
 following command to install ACE:
