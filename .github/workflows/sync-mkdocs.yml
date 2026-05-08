@@ -1,0 +1,400 @@
+name: Sync mkdocs.yml from SSOT
+
+# Detects versioned nav entries missing from mkdocs.yml relative to
+# pgedge-doc-sources/sources.yaml (pgedge-docs scope), then opens a PR
+# with the generated fix.
+
+on:
+  workflow_dispatch:
+  #schedule:
+  #  - cron: '0 6 * * 1'   # Weekly — Monday 06:00 UTC
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-mkdocs:
+    runs-on: ubuntu-latest
+    env:
+      MKDOCS_FILE: mkdocs.yml
+      BASE_BRANCH: main
+      FIX_BRANCH: auto/sync-mkdocs
+      SSOT_URL: https://raw.githubusercontent.com/pgEdge/pgedge-doc-sources/main/sources.yaml
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PGEDGE_BUILDER_TOKEN }}
+          fetch-depth: 0
+
+      - name: Fetch SSOT
+        env:
+          SSOT_TOKEN: ${{ secrets.PGEDGE_BUILDER_TOKEN }}
+        run: |
+          if [ -z "${SSOT_TOKEN}" ]; then
+            echo "::error::PGEDGE_BUILDER_TOKEN secret is not set"
+            exit 1
+          fi
+          curl -sSf \
+            -H "Authorization: token ${SSOT_TOKEN}" \
+            "$SSOT_URL" -o /tmp/sources.yaml
+          pip install pyyaml -q
+
+      - name: Detect drift and generate fix
+        id: drift
+        run: |
+          python3 << 'PYEOF'
+          import yaml, re, sys, os
+          from collections import defaultdict
+
+          MKDOCS_FILE = os.environ['MKDOCS_FILE']
+
+          # ── Helpers ───────────────────────────────────────────────────────
+
+          def normalize_url(url):
+              url = re.sub(r'^git@github\.com:([^/]+)/', r'https://github.com/\1/', url)
+              url = url.rstrip('/')
+              if not url.endswith('.git'):
+                  url += '.git'
+              return url.rstrip('/')
+
+          def version_key(v):
+              parts = re.split(r'[.\-]', str(v))
+              result = []
+              for p in parts:
+                  try:
+                      result.append((0, int(p)))
+                  except ValueError:
+                      result.append((1, p.lower()))
+              return result
+
+          def for_pgedge_docs(e):
+              t = e.get('tools')
+              return t is None or 'pgedge-docs' in t
+
+          def get_import_info(entry):
+              """Return (git_url, ref) for the expected mkdocs !import URL."""
+              kb_src    = entry.get('kb_git_source')
+              kb_branch = entry.get('kb_branch')
+              kb_tag    = entry.get('kb_tag')
+              upstream  = entry['upstream_git_source']
+              up_tag    = entry.get('upstream_tag')
+              up_branch = entry.get('upstream_branch')
+              if kb_src and kb_branch:
+                  return kb_src, kb_branch
+              if kb_src and kb_tag:
+                  return kb_src, kb_tag
+              if up_tag:
+                  return upstream, up_tag
+              if up_branch:
+                  return upstream, up_branch
+              return None, None
+
+          # ── Load inputs ───────────────────────────────────────────────────
+
+          with open('/tmp/sources.yaml') as f:
+              ssot = yaml.safe_load(f)
+
+          with open(MKDOCS_FILE) as f:
+              mkdocs_text = f.read()
+
+          # ── Build maps of what is already in mkdocs.yml ──────────────────
+          # url_ref_map:   normalized_base_url → set of branch/tag refs present
+          # url_label_map: normalized_base_url → set of version labels (e.g. "v0.7")
+
+          import_re = re.compile(r"'!import (https?://[^?'\s]+)\?branch=([^'\s]+)'")
+          label_re  = re.compile(r"(?m)^    - (v[\d][^:]*): '!import (https?://[^?'\s]+)\?branch=")
+          url_ref_map   = {}
+          url_label_map = {}
+          for m in import_re.finditer(mkdocs_text):
+              nu  = normalize_url(m.group(1))
+              ref = m.group(2)
+              url_ref_map.setdefault(nu, set()).add(ref)
+          for m in label_re.finditer(mkdocs_text):
+              label = m.group(1)
+              nu    = normalize_url(m.group(2))
+              url_label_map.setdefault(nu, set()).add(label)
+
+          # SSH URL check
+          ssh_urls = bool(re.search(r"'!import git@github\.com:", mkdocs_text))
+
+          def label_covers_version(label, version):
+              """True if label (e.g. 'v0.7') already covers version (e.g. '0.7.0')."""
+              lv = label.lstrip('v').split('.')
+              vv = str(version).split('.')
+              return vv[:len(lv)] == lv[:len(vv)]
+
+          # ── Compare SSOT against mkdocs.yml ──────────────────────────────
+
+          missing_entries = []  # product has a block; this version is absent
+          new_products    = []  # no nav block exists yet — requires manual placement
+
+          for entry in ssot['sources']:
+              if not for_pgedge_docs(entry):
+                  continue
+              version = entry.get('version', '')
+              if not version or version == 'dev':
+                  continue  # skip living/dev sources
+              git_url, ref = get_import_info(entry)
+              if not git_url or not ref:
+                  continue
+
+              nu = normalize_url(git_url)
+              if ref in url_ref_map.get(nu, set()):
+                  continue  # already present
+
+              # Skip if this version is already covered by a shortened label
+              # (e.g. mkdocs has 'v0.7' which covers sources.yaml version '0.7.0')
+              if any(label_covers_version(lbl, version)
+                     for lbl in url_label_map.get(nu, set())):
+                  continue
+
+              if nu not in url_ref_map:
+                  new_products.append(entry)
+              else:
+                  missing_entries.append({
+                      'entry'  : entry,
+                      'git_url': git_url,
+                      'ref'    : ref,
+                      'nu'     : nu,
+                      'version': version,
+                      'label'  : f"v{version}",
+                  })
+
+          # ── Build drift report ────────────────────────────────────────────
+
+          lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
+          clean = not missing_entries and not new_products and not ssh_urls
+
+          if ssh_urls:
+              lines += ['### SSH URLs detected in mkdocs.yml\n',
+                        '  SSH `git@github.com:` import URLs should use HTTPS.\n', '']
+
+          if missing_entries:
+              lines += ['### Missing from mkdocs.yml nav (in SSOT, absent here)\n']
+              for item in missing_entries:
+                  e = item['entry']
+                  lines.append(
+                      f"  - **MISSING** `{e['id']}` ({e['name']} {e.get('version', '')}) "
+                      f"— label `{item['label']}` → "
+                      f"`{item['git_url']}?branch={item['ref']}`"
+                  )
+              lines.append('')
+
+          if new_products:
+              lines += ['### New products — no nav block exists (manual placement required)\n']
+              for e in new_products:
+                  git_url, ref = get_import_info(e)
+                  lines.append(
+                      f"  - **NEW PRODUCT** `{e['id']}` ({e['name']}) "
+                      f"— `{git_url}?branch={ref}`"
+                  )
+              lines.append('')
+
+          if clean:
+              lines.append('**No drift detected.** `mkdocs.yml` nav is in sync with SSOT.')
+          else:
+              lines += ['---',
+                        f'*{len(missing_entries)} missing, '
+                        f'{len(new_products)} new product(s)*']
+
+          report = '\n'.join(lines) + '\n'
+          with open('/tmp/drift-report.md', 'w') as f:
+              f.write(report)
+          print(report)
+
+          actionable = bool(missing_entries or ssh_urls)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+              fh.write(f'actionable={"true" if actionable else "false"}\n')
+              fh.write(f'clean={"true" if clean else "false"}\n')
+
+          if not actionable:
+              sys.exit(0)
+
+          # ── Generate fixed mkdocs.yml ─────────────────────────────────────
+
+          fixed = mkdocs_text
+
+          # Fix SSH URLs in-place
+          fixed = re.sub(
+              r"'!import git@github\.com:([^/]+)/",
+              r"'!import https://github.com/\1/",
+              fixed
+          )
+
+          def find_block(text, nu, ref=None):
+              """Return (block_start, block_end) of the nav block for this URL.
+              When multiple sections share the same repo URL (e.g. 3rd-party-docs),
+              picks the block whose existing refs share the longest prefix with ref."""
+              base = nu.rstrip('/')
+              if base.endswith('.git'):
+                  base = base[:-4]
+              pat = re.compile(
+                  r"'!import " + re.escape(base) + r"(?:\.git)?\?branch=",
+                  re.IGNORECASE
+              )
+              all_matches = list(pat.finditer(text))
+              if not all_matches:
+                  return None, None
+
+              def block_bounds(m):
+                  before  = text[:m.start()]
+                  headers = list(re.finditer(r'(?m)^  - \S', before))
+                  if not headers:
+                      return None, None
+                  block_start = headers[-1].start()
+                  after   = text[block_start:]
+                  sibling = re.search(r'\n  - \S', after[3:])
+                  block_end = block_start + 3 + sibling.start() if sibling else len(text)
+                  return block_start, block_end
+
+              if not ref or len(all_matches) == 1:
+                  return block_bounds(all_matches[0])
+
+              # Multiple blocks share this URL — pick the one whose existing
+              # refs share the longest common prefix with the new ref.
+              def prefix_score(m):
+                  bs, be = block_bounds(m)
+                  if bs is None:
+                      return 0
+                  block_refs = re.findall(r"branch=([^'\s]+)", text[bs:be])
+                  if not block_refs:
+                      return 0
+                  return max(len(os.path.commonprefix([ref, r])) for r in block_refs)
+
+              best = max(all_matches, key=prefix_score)
+              return block_bounds(best)
+
+          def insert_version(text, nu, label, git_url, ref):
+              """Insert a versioned nav entry into the right block in sorted order."""
+              block_start, block_end = find_block(text, nu, ref)
+              if block_start is None:
+                  return text
+
+              block    = text[block_start:block_end]
+              new_line = f"    - {label}: '!import {git_url}?branch={ref}'"
+              new_ver  = version_key(label.lstrip('v'))
+
+              # Find existing version entries (e.g. "    - v1.9.0: '!import ...")
+              entry_re = re.compile(r'(?m)^    - v([\d][^:]*): ')
+              entries  = list(entry_re.finditer(block))
+
+              # Insert before the first existing entry with a lower version
+              insert_before = None
+              for e in entries:
+                  if version_key(e.group(1)) < new_ver:
+                      insert_before = block_start + e.start()
+                      break
+
+              if insert_before is not None:
+                  return text[:insert_before] + new_line + '\n' + text[insert_before:]
+
+              # New version is lowest — insert before Development or at block end
+              dev_m = re.search(r'(?m)^    - Development:', block)
+              if dev_m:
+                  ins = block_start + dev_m.start()
+              elif entries:
+                  last     = entries[-1]
+                  line_end = block.index('\n', last.start()) + 1
+                  ins      = block_start + line_end
+              else:
+                  ins = block_end
+              return text[:ins] + new_line + '\n' + text[ins:]
+
+          # Group missing entries by URL; process highest version first within
+          # each group so subsequent insertions find the correct position.
+          by_url = defaultdict(list)
+          for item in missing_entries:
+              by_url[item['nu']].append(item)
+          for nu in by_url:
+              by_url[nu].sort(key=lambda x: version_key(x['version']), reverse=True)
+
+          for nu, items in by_url.items():
+              for item in items:
+                  fixed = insert_version(
+                      fixed, nu, item['label'], item['git_url'], item['ref']
+                  )
+
+          with open(MKDOCS_FILE, 'w') as f:
+              f.write(fixed)
+          PYEOF
+
+      # ── Push fix branch ───────────────────────────────────────────────────
+      - name: Push fix branch
+        id: push
+        if: steps.drift.outputs.actionable == 'true'
+        env:
+          GIT_AUTHOR_NAME: pgEdge Builder
+          GIT_AUTHOR_EMAIL: builder@pgedge.com
+          GIT_COMMITTER_NAME: pgEdge Builder
+          GIT_COMMITTER_EMAIL: builder@pgedge.com
+        run: |
+          cp "$MKDOCS_FILE" /tmp/mkdocs_generated.yml
+          git stash
+          git fetch origin "$BASE_BRANCH"
+          git fetch origin "$FIX_BRANCH" 2>/dev/null || true
+
+          if git rev-parse --verify "origin/$FIX_BRANCH" &>/dev/null; then
+            EXISTING=$(git show "origin/$FIX_BRANCH:$MKDOCS_FILE" 2>/dev/null || echo "")
+            GENERATED=$(cat /tmp/mkdocs_generated.yml)
+            if [ "$EXISTING" = "$GENERATED" ]; then
+              echo "Fix branch already contains identical changes — skipping push to preserve PR approvals."
+              echo "pushed=false"       >> "$GITHUB_OUTPUT"
+              echo "branch_ready=true"  >> "$GITHUB_OUTPUT"
+              echo "fix_branch=$FIX_BRANCH"   >> "$GITHUB_OUTPUT"
+              echo "base_branch=$BASE_BRANCH" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          git checkout -B "$FIX_BRANCH" "origin/$BASE_BRANCH"
+          cp /tmp/mkdocs_generated.yml "$MKDOCS_FILE"
+          git add "$MKDOCS_FILE"
+          git commit -m "auto: sync mkdocs.yml nav from SSOT [skip ci]"
+          git push --force-with-lease origin "$FIX_BRANCH"
+          echo "pushed=true"          >> "$GITHUB_OUTPUT"
+          echo "branch_ready=true"    >> "$GITHUB_OUTPUT"
+          echo "fix_branch=$FIX_BRANCH"   >> "$GITHUB_OUTPUT"
+          echo "base_branch=$BASE_BRANCH" >> "$GITHUB_OUTPUT"
+
+      # ── Open or update PR ─────────────────────────────────────────────────
+      - name: Create or update PR
+        if: steps.push.outputs.pushed == 'true' || steps.push.outputs.branch_ready == 'true'
+        uses: actions/github-script@v7
+        env:
+          PUSHED:      ${{ steps.push.outputs.pushed }}
+          FIX_BRANCH:  ${{ steps.push.outputs.fix_branch }}
+          BASE_BRANCH: ${{ steps.push.outputs.base_branch }}
+        with:
+          github-token: ${{ secrets.PGEDGE_BUILDER_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            const head   = process.env.FIX_BRANCH;
+            const base   = process.env.BASE_BRANCH;
+            const pushed = process.env.PUSHED === 'true';
+
+            const report = require('fs').readFileSync('/tmp/drift-report.md', 'utf8');
+            const body   = `${report}\n\n---\n_Generated by [sync-mkdocs](../../actions/workflows/sync-mkdocs.yml)_`;
+
+            const { data: prs } = await github.rest.pulls.list({
+              owner, repo, head: `${owner}:${head}`, base, state: 'open'
+            });
+
+            if (prs.length > 0) {
+              const prNumber = prs[0].number;
+              if (pushed) {
+                await github.rest.pulls.update({ owner, repo, pull_number: prNumber, body });
+                console.log(`Updated PR #${prNumber}`);
+              } else {
+                console.log(`PR #${prNumber} open and branch unchanged — no update needed`);
+              }
+            } else {
+              const { data: pr } = await github.rest.pulls.create({
+                owner, repo,
+                title: 'auto: sync mkdocs.yml nav from SSOT',
+                head, base, body,
+                draft: false,
+              });
+              console.log(`Created PR #${pr.number}`);
+            }
