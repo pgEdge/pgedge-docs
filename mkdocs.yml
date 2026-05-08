@@ -771,6 +771,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpgmaster'
 
   - Patroni:
+    - v4.1.3: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni413'
     - v4.1.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni412'
     - v4.1.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni411'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patronimaster'
