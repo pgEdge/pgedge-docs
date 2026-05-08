@@ -78,16 +78,16 @@ jobs:
               kb_src    = entry.get('kb_git_source')
               kb_branch = entry.get('kb_branch')
               kb_tag    = entry.get('kb_tag')
-              upstream  = entry['upstream_git_source']
+              upstream  = entry.get('upstream_git_source')
               up_tag    = entry.get('upstream_tag')
               up_branch = entry.get('upstream_branch')
               if kb_src and kb_branch:
                   return kb_src, kb_branch
               if kb_src and kb_tag:
                   return kb_src, kb_tag
-              if up_tag:
+              if upstream and up_tag:
                   return upstream, up_tag
-              if up_branch:
+              if upstream and up_branch:
                   return upstream, up_branch
               return None, None
 
