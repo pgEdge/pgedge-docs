@@ -1,0 +1,91 @@
+# Packages to exclude from the discovery diff.
+# One pattern per line. Shell glob patterns supported.
+# Lines starting with # are comments. Blank lines ignored.
+
+# Repo config package
+pgedge-release
+
+# Development and debug packages
+pgedge-postgresql*-devel
+pgedge-postgresql*-debuginfo
+pgedge-postgresql*-debugsource
+pgedge-*-debuginfo
+pgedge-*-debugsource
+pgedge-*-dbgsym
+
+# LLVM JIT compilation packages
+pgedge-*-llvmjit
+
+# Server/lib packages (dependencies, not user-facing products)
+pgedge-postgresql*-server
+pgedge-postgresql*-libs
+pgedge-postgresql*-libs-oauth
+pgedge-postgresql*-contrib
+pgedge-postgresql*-docs
+pgedge-postgresql*-test
+pgedge-postgresql*-ecpg*
+
+# DEB JIT packages
+pgedge-postgresql-*-jit*
+
+# Meta-packages (the enterprise bundles themselves)
+pgedge-enterprise-*
+
+# DEB transitional and meta-packages
+pgedge-postgresql
+pgedge-postgresql-all
+pgedge-postgresql-client
+pgedge-postgresql-client-common
+pgedge-postgresql-common*
+pgedge-postgresql-doc*
+pgedge-postgresql-server-dev-*
+pgedge-postgresql-postgis*
+
+# PostGIS sub-packages (client, devel, docs, gui, utils, scripts)
+pgedge-postgis35*-*
+pgedge-postgis
+pgedge-postgis-doc
+pgedge-postgresql-*-postgis-3-scripts
+
+# Shared library dependencies (PostGIS/GIS stack)
+pgedge-CGAL*
+pgedge-gdal311*
+pgedge-geos313*
+pgedge-libgeotiff17*
+pgedge-libpq5*
+pgedge-librttopo*
+pgedge-libspatialite50*
+pgedge-ogdi41*
+pgedge-proj96*
+pgedge-SFCGAL*
+
+# Python library packages (dependencies, not products)
+pgedge-python-psycopg2-doc
+pgedge-python3-psycopg2-tests
+pgedge-python3.12-*
+pgedge-python3-etcd
+pgedge-python3-ydiff
+
+# pgAdmin4 sub-packages (main pgedge-pgadmin4 is already in catalog)
+pgedge-pgadmin4-desktop
+pgedge-pgadmin4-server
+pgedge-pgadmin4-web
+
+# pgBackRest doc sub-package
+pgedge-pgbackrest-doc
+
+# HA infrastructure dependencies (not user-facing products)
+pgedge-consul
+pgedge-etcd
+pgedge-py-consul
+
+# Patroni sub-packages (backend-specific components)
+pgedge-patroni-aws
+pgedge-patroni-consul
+pgedge-patroni-etcd
+pgedge-patroni-zookeeper
+
+# Bare DEB PostgreSQL base packages (server deps, not user-facing)
+pgedge-postgresql-16
+pgedge-postgresql-17
+pgedge-postgresql-18

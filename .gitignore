@@ -45,3 +45,4 @@ docs/vchord-bm25/index.md
 ansible/.pgedge-docs-vault-pass
 .vscode/settings.json
 .superpowers/
+scripts/output/

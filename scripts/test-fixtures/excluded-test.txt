@@ -1,0 +1,4 @@
+# Test exclusion patterns
+pgedge-release
+pgedge-postgresql*-devel
+pgedge-*-debuginfo

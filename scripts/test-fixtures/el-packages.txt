@@ -1,0 +1,15 @@
+pgedge-spock50_16
+pgedge-spock50_17
+pgedge-spock50_18
+pgedge-snowflake_16
+pgedge-snowflake_17
+pgedge-snowflake_18
+pgedge-pgadmin4
+pgedge-pgbackrest
+pgedge-radar
+pgedge-newext_16
+pgedge-newext_17
+pgedge-newext_18
+pgedge-postgresql18-devel
+pgedge-postgresql17-devel
+pgedge-spock50-debuginfo

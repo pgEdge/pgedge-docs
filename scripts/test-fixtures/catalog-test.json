@@ -1,0 +1,77 @@
+{
+  "_maintainer_note": "Test fixture for self-test.",
+  "meta_packages": [
+    {
+      "id": "full",
+      "label": "All (Recommended)",
+      "description": "Test full meta-package",
+      "rpm_pattern": "test-enterprise-all_{ver}",
+      "deb_pattern": "test-enterprise-all-{ver}",
+      "pg_versions": ["16", "17", "18"]
+    },
+    {
+      "id": "minimal",
+      "label": "Postgres (Minimal)",
+      "description": "Test minimal meta-package",
+      "rpm_pattern": "test-enterprise-postgres_{ver}",
+      "deb_pattern": "test-enterprise-postgres-{ver}",
+      "pg_versions": ["16", "17", "18"]
+    }
+  ],
+  "categories": [
+    {
+      "name": "Core",
+      "packages": [
+        {
+          "name": "Spock",
+          "description": "Multi-master replication",
+          "rpm_name": "pgedge-spock50_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-spock50",
+          "pg_versions": ["16", "17", "18"],
+          "included_in": ["full", "minimal"]
+        },
+        {
+          "name": "Snowflake",
+          "description": "Distributed sequence IDs",
+          "rpm_name": "pgedge-snowflake_{ver}",
+          "deb_name": "pgedge-postgresql-{ver}-snowflake",
+          "pg_versions": ["16", "17", "18"],
+          "included_in": ["full", "minimal"]
+        }
+      ]
+    },
+    {
+      "name": "Management Tools",
+      "packages": [
+        {
+          "name": "pgAdmin 4",
+          "description": "Web admin interface",
+          "rpm_name": "pgedge-pgadmin4",
+          "deb_name": "pgedge-pgadmin4",
+          "pg_versions": ["all"],
+          "included_in": ["full"]
+        },
+        {
+          "name": "pgBackRest",
+          "description": "Backup and restore",
+          "rpm_name": "pgedge-pgbackrest",
+          "deb_name": "pgedge-pgbackrest",
+          "pg_versions": ["all"],
+          "included_in": ["full"]
+        },
+        {
+          "name": "Gone Package",
+          "description": "This was removed from the repo",
+          "rpm_name": "pgedge-gone-pkg",
+          "deb_name": "pgedge-gone-pkg",
+          "pg_versions": ["all"],
+          "included_in": []
+        }
+      ]
+    }
+  ],
+  "pg_versions": ["16", "17", "18"],
+  "default_platform": "rhel9",
+  "default_arch": "x86_64",
+  "default_pg_version": "18"
+}

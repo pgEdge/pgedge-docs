@@ -1,0 +1,9 @@
+=== full ===
+pgedge-spock50_18
+pgedge-snowflake_18
+pgedge-pgadmin4
+pgedge-pgbackrest
+pgedge-radar
+=== minimal ===
+pgedge-spock50_18
+pgedge-snowflake_18

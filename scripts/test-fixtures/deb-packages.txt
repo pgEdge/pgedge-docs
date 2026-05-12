@@ -1,0 +1,12 @@
+pgedge-postgresql-16-spock50
+pgedge-postgresql-17-spock50
+pgedge-postgresql-18-spock50
+pgedge-postgresql-16-snowflake
+pgedge-postgresql-17-snowflake
+pgedge-postgresql-18-snowflake
+pgedge-pgadmin4
+pgedge-pgbackrest
+pgedge-radar
+pgedge-postgresql-16-newext
+pgedge-postgresql-17-newext
+pgedge-postgresql-18-newext
