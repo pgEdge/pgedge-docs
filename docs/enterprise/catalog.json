@@ -101,6 +101,16 @@
             "full",
             "minimal"
           ]
+        },
+        {
+          "name": "ACE",
+          "description": "Active consistency engine for multi-master replication clusters",
+          "rpm_name": "pgedge-ace",
+          "deb_name": "pgedge-ace",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
         }
       ]
     },
@@ -461,6 +471,71 @@
           "description": "Python-PostgreSQL database adapter",
           "rpm_name": "pgedge-python3-psycopg2",
           "deb_name": "pgedge-python3-psycopg2",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        },
+        {
+          "name": "Radar",
+          "description": "Agentless diagnostic data collection for PostgreSQL and system metrics",
+          "rpm_name": "pgedge-radar",
+          "deb_name": "pgedge-radar",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        },
+        {
+          "name": "Patroni",
+          "description": "High availability and automatic failover for PostgreSQL",
+          "rpm_name": "pgedge-patroni",
+          "deb_name": "pgedge-patroni",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        }
+      ]
+    },
+    {
+      "name": "AI DBA Workbench",
+      "packages": [
+        {
+          "name": "AI DBA Server",
+          "description": "Backend server for AI-powered database monitoring and management",
+          "rpm_name": "pgedge-ai-dba-server",
+          "deb_name": "pgedge-ai-dba-server",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        },
+        {
+          "name": "AI DBA Collector",
+          "description": "Metrics and diagnostics collector for PostgreSQL instances",
+          "rpm_name": "pgedge-ai-dba-collector",
+          "deb_name": "pgedge-ai-dba-collector",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        },
+        {
+          "name": "AI DBA Alerter",
+          "description": "Anomaly detection and alerting for PostgreSQL clusters",
+          "rpm_name": "pgedge-ai-dba-alerter",
+          "deb_name": "pgedge-ai-dba-alerter",
+          "pg_versions": [
+            "all"
+          ],
+          "included_in": []
+        },
+        {
+          "name": "AI DBA Client",
+          "description": "Web-based client interface for the AI DBA Workbench",
+          "rpm_name": "pgedge-ai-dba-client",
+          "deb_name": "pgedge-ai-dba-client",
           "pg_versions": [
             "all"
           ],
