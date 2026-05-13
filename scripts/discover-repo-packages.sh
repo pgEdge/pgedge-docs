@@ -52,7 +52,8 @@ load_exclusions() {
     [[ -f "$file" ]] || return 0
     while IFS= read -r line; do
         line="${line%%#*}"
-        line="${line// /}"
+        line="${line#"${line%%[![:space:]]*}"}"
+        line="${line%"${line##*[![:space:]]}"}"
         [[ -z "$line" ]] && continue
         EXCLUSION_PATTERNS+=("$line")
     done < "$file"
@@ -203,7 +204,7 @@ pkg_in_metapkg() {
     local pkg="$1"
     local -n arr="$2"
     for dep in "${arr[@]}"; do
-        if [[ "$dep" == "$pkg" || "$dep" == *"$pkg"* ]]; then
+        if [[ "$dep" == "$pkg" ]]; then
             return 0
         fi
     done
