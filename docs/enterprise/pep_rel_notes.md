@@ -2,17 +2,17 @@
 
 ## 5/14/2026
 
-* PG Version update: pgEdge Enterprise Postgres 16.14
+* Postgres version update: pgEdge Enterprise Postgres 16.14
 
     * pgedge-enterprise-postgres 16.14
     * pgedge-enterprise-all 16.14
 
-* PG Version update: pgEdge Enterprise Postgres 17.10
+* Postgres version update: pgEdge Enterprise Postgres 17.10
 
     * pgedge-enterprise-postgres 17.10
     * pgedge-enterprise-all 17.10
 
-* PG Version update: pgEdge Enterprise Postgres 18.4
+* Postgres version update: pgEdge Enterprise Postgres 18.4
 
     * pgedge-enterprise-postgres 18.4
     * pgedge-enterprise-all 18.4
