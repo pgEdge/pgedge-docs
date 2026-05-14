@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 5/14/2026
+* pgEdge Enterprise Postgres versions 16.14, 17.10, and 18.4
+* pgEdge Meta Packages (pgedge-enterprise-postgres and pgedge-enterprise-all, versions 16.14, 17.10, 18.4)
+
 ## 5/07/2026
 * pgEdge Active Consistency Engine (ACE) 2.0.0 (First PEP release)
 * Component updates: Patroni 4.1.3, pgAdmin 9.14
