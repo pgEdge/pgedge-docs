@@ -17,8 +17,8 @@
     * pgedge-enterprise-postgres 18.4
     * pgedge-enterprise-all 18.4
 
-* Component update: pgEdge libpq 18.4 (RPMs only)
-* Component update: pgEdge PostgreSQL Common 290 (debs only)
+* Component update: libpq 18.4
+* Component update: Common 290 (debs only)
 
 
 ## 5/07/2026
