@@ -1,5 +1,26 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 5/14/2026
+
+* PG Version update: pgEdge Enterprise Postgres 16.14
+
+    * pgedge-enterprise-postgres 16.14
+    * pgedge-enterprise-all 16.14
+
+* PG Version update: pgEdge Enterprise Postgres 17.10
+
+    * pgedge-enterprise-postgres 17.10
+    * pgedge-enterprise-all 17.10
+
+* PG Version update: pgEdge Enterprise Postgres 18.4
+
+    * pgedge-enterprise-postgres 18.4
+    * pgedge-enterprise-all 18.4
+
+* Component update: pgEdge libpq 18.4 (RPMs only)
+* Component update: pgEdge PostgreSQL Common 290 (debs only)
+
+
 ## 5/07/2026
 * pgEdge Active Consistency Engine (ACE) 2.0.0 (First PEP release)
 * Component updates: Patroni 4.1.3, pgAdmin 9.14
