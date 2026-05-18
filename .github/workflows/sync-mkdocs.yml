@@ -103,7 +103,7 @@ jobs:
           # url_ref_map:   normalized_base_url → set of branch/tag refs present
           # url_label_map: normalized_base_url → set of version labels (e.g. "v0.7")
 
-          import_re = re.compile(r"'!import (https?://[^?'\s]+)\?branch=([^'\s]+)'")
+          import_re = re.compile(r"(?m)^\s*-[^#\n]*'!import (https?://[^?'\s]+)\?branch=([^'\s]+)'")
           label_re  = re.compile(r"(?m)^    - (v[\d][^:]*): '!import (https?://[^?'\s]+)\?branch=")
           url_ref_map   = {}
           url_label_map = {}
@@ -267,7 +267,9 @@ jobs:
               return block_bounds(best)
 
           def insert_version(text, nu, label, git_url, ref):
-              """Insert a versioned nav entry into the right block in sorted order."""
+              """Insert a versioned nav entry into the right block in sorted order.
+              If a commented-out line for the same URL+ref already exists in the
+              block, uncomment it in place instead of inserting a duplicate."""
               block_start, block_end = find_block(text, nu, ref)
               if block_start is None:
                   return text
@@ -275,6 +277,18 @@ jobs:
               block    = text[block_start:block_end]
               new_line = f"    - {label}: '!import {git_url}?branch={ref}'"
               new_ver  = version_key(label.lstrip('v'))
+
+              base_url = git_url[:-4] if git_url.endswith('.git') else git_url
+              commented_re = re.compile(
+                  r"(?m)^[ \t]*#[ \t]*-[ \t]+" + re.escape(label)
+                  + r":[ \t]+'!import " + re.escape(base_url)
+                  + r"(?:\.git)?\?branch=" + re.escape(ref) + r"'[ \t]*$"
+              )
+              m = commented_re.search(block)
+              if m:
+                  ls = block_start + m.start()
+                  le = block_start + m.end()
+                  return text[:ls] + new_line + text[le:]
 
               # Find existing version entries (e.g. "    - v1.9.0: '!import ...")
               entry_re = re.compile(r'(?m)^    - v([\d][^:]*): ')
