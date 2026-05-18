@@ -103,7 +103,7 @@ jobs:
           # url_ref_map:   normalized_base_url → set of branch/tag refs present
           # url_label_map: normalized_base_url → set of version labels (e.g. "v0.7")
 
-          import_re = re.compile(r"'!import (https?://[^?'\s]+)\?branch=([^'\s]+)'")
+          import_re = re.compile(r"(?m)^\s*-[^#\n]*'!import (https?://[^?'\s]+)\?branch=([^'\s]+)'")
           label_re  = re.compile(r"(?m)^    - (v[\d][^:]*): '!import (https?://[^?'\s]+)\?branch=")
           url_ref_map   = {}
           url_label_map = {}
