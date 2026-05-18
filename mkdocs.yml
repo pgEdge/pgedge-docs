@@ -603,6 +603,8 @@ nav:
   - Spock v5:
 #   - v5.0.8: '!import https://github.com/pgEdge/spock.git?branch=v5.0.8'
 #    - v5.0.7: '!import https://github.com/pgEdge/spock.git?branch=v5.0.7'
+    - v5.0.8: '!import https://github.com/pgEdge/spock.git?branch=v5.0.8'
+    - v5.0.7: '!import https://github.com/pgEdge/spock.git?branch=v5.0.7'
     - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5.0.6-doc-2'
     - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
