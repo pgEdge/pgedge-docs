@@ -280,7 +280,7 @@ jobs:
 
               base_url = git_url[:-4] if git_url.endswith('.git') else git_url
               commented_re = re.compile(
-                  r"(?m)^#[ \t]*-[ \t]+" + re.escape(label)
+                  r"(?m)^[ \t]*#[ \t]*-[ \t]+" + re.escape(label)
                   + r":[ \t]+'!import " + re.escape(base_url)
                   + r"(?:\.git)?\?branch=" + re.escape(ref) + r"'[ \t]*$"
               )
