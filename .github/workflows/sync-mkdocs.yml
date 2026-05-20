@@ -100,13 +100,15 @@ jobs:
               mkdocs_text = f.read()
 
           # ── Build maps of what is already in mkdocs.yml ──────────────────
-          # url_ref_map:   normalized_base_url → set of branch/tag refs present
-          # url_label_map: normalized_base_url → set of version labels (e.g. "v0.7")
+          # url_ref_map:       normalized_base_url → set of branch/tag refs present
+          # url_label_map:     normalized_base_url → set of version labels (e.g. "v0.7")
+          # url_label_to_ref:  (normalized_base_url, label) → ref under that label
 
           import_re = re.compile(r"(?m)^\s*-[^#\n]*'!import (https?://[^?'\s]+)\?branch=([^'\s]+)'")
-          label_re  = re.compile(r"(?m)^    - (v[\d][^:]*): '!import (https?://[^?'\s]+)\?branch=")
-          url_ref_map   = {}
-          url_label_map = {}
+          label_re  = re.compile(r"(?m)^    - (v[\d][^:]*): '!import (https?://[^?'\s]+)\?branch=([^'\s]+)'")
+          url_ref_map      = {}
+          url_label_map    = {}
+          url_label_to_ref = {}
           for m in import_re.finditer(mkdocs_text):
               nu  = normalize_url(m.group(1))
               ref = m.group(2)
@@ -114,7 +116,9 @@ jobs:
           for m in label_re.finditer(mkdocs_text):
               label = m.group(1)
               nu    = normalize_url(m.group(2))
+              ref   = m.group(3)
               url_label_map.setdefault(nu, set()).add(label)
+              url_label_to_ref[(nu, label)] = ref
 
           # SSH URL check
           ssh_urls = bool(re.search(r"'!import git@github\.com:", mkdocs_text))
@@ -125,10 +129,19 @@ jobs:
               vv = str(version).split('.')
               return vv[:len(lv)] == lv[:len(vv)]
 
+          STANDARD_REF_RE = re.compile(r'^(release/)?v?\d+(\.\d+)*$')
+
+          def is_standard_ref(ref):
+              """True for plain version tags/branches like v0.8.1 or release/v0.8.1.
+              Excludes decorated refs like 'v0.6.2-docs' or 'fix-for-1.5.1-docs'
+              that maintainers chose intentionally for docs reasons."""
+              return bool(STANDARD_REF_RE.match(ref or ''))
+
           # ── Compare SSOT against mkdocs.yml ──────────────────────────────
 
           missing_entries = []  # product has a block; this version is absent
           new_products    = []  # no nav block exists yet — requires manual placement
+          ref_updates     = []  # label exists but its ref is stale (e.g. v0.8 → release/v0.8.1)
 
           for entry in ssot['sources']:
               if not for_pgedge_docs(entry):
@@ -144,10 +157,29 @@ jobs:
               if ref in url_ref_map.get(nu, set()):
                   continue  # already present
 
-              # Skip if this version is already covered by a shortened label
-              # (e.g. mkdocs has 'v0.7' which covers sources.yaml version '0.7.0')
-              if any(label_covers_version(lbl, version)
-                     for lbl in url_label_map.get(nu, set())):
+              # If a shortened label covers this version (e.g. 'v0.8' covers '0.8.1'),
+              # check whether its ref is up to date. If not, queue a ref update.
+              # Only flagged when both refs follow a standard version pattern —
+              # decorated refs like 'v0.6.2-docs' are treated as intentional.
+              covering_label = next(
+                  (lbl for lbl in url_label_map.get(nu, set())
+                   if label_covers_version(lbl, version)),
+                  None,
+              )
+              if covering_label:
+                  existing_ref = url_label_to_ref.get((nu, covering_label))
+                  if (existing_ref != ref
+                          and is_standard_ref(existing_ref)
+                          and is_standard_ref(ref)):
+                      ref_updates.append({
+                          'entry'  : entry,
+                          'git_url': git_url,
+                          'nu'     : nu,
+                          'label'  : covering_label,
+                          'old_ref': existing_ref,
+                          'new_ref': ref,
+                          'version': version,
+                      })
                   continue
 
               if nu not in url_ref_map:
@@ -165,11 +197,21 @@ jobs:
           # ── Build drift report ────────────────────────────────────────────
 
           lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
-          clean = not missing_entries and not new_products and not ssh_urls
+          clean = not missing_entries and not new_products and not ssh_urls and not ref_updates
 
           if ssh_urls:
               lines += ['### SSH URLs detected in mkdocs.yml\n',
                         '  SSH `git@github.com:` import URLs should use HTTPS.\n', '']
+
+          if ref_updates:
+              lines += ['### Ref updates (label exists; ref bumped in-place)\n']
+              for item in ref_updates:
+                  e = item['entry']
+                  lines.append(
+                      f"  - **UPDATE** `{e['id']}` ({e['name']} {e.get('version', '')}) "
+                      f"— label `{item['label']}`: `{item['old_ref']}` → `{item['new_ref']}`"
+                  )
+              lines.append('')
 
           if missing_entries:
               lines += ['### Missing from mkdocs.yml nav (in SSOT, absent here)\n']
@@ -196,7 +238,8 @@ jobs:
               lines.append('**No drift detected.** `mkdocs.yml` nav is in sync with SSOT.')
           else:
               lines += ['---',
-                        f'*{len(missing_entries)} missing, '
+                        f'*{len(ref_updates)} ref update(s), '
+                        f'{len(missing_entries)} missing, '
                         f'{len(new_products)} new product(s)*']
 
           report = '\n'.join(lines) + '\n'
@@ -204,7 +247,7 @@ jobs:
               f.write(report)
           print(report)
 
-          actionable = bool(missing_entries or ssh_urls)
+          actionable = bool(missing_entries or ssh_urls or ref_updates)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
               fh.write(f'actionable={"true" if actionable else "false"}\n')
               fh.write(f'clean={"true" if clean else "false"}\n')
@@ -222,6 +265,21 @@ jobs:
               r"'!import https://github.com/\1/",
               fixed
           )
+
+          # Apply in-place ref updates (e.g. v0.8 label: release/v0.8.0 → release/v0.8.1)
+          for item in ref_updates:
+              # Match the exact line for this (label, url, old_ref) — URL pattern
+              # is tolerant of optional ".git" suffix so we match what's in mkdocs.
+              base = item['nu'].rstrip('/')
+              if base.endswith('.git'):
+                  base = base[:-4]
+              fixed = re.sub(
+                  rf"(    - {re.escape(item['label'])}: '!import )"
+                  rf"({re.escape(base)}(?:\.git)?)"
+                  rf"\?branch={re.escape(item['old_ref'])}'",
+                  rf"\g<1>\g<2>?branch={item['new_ref']}'",
+                  fixed
+              )
 
           def find_block(text, nu, ref=None):
               """Return (block_start, block_end) of the nav block for this URL.
