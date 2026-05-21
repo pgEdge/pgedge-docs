@@ -74,21 +74,26 @@ jobs:
               return t is None or 'pgedge-docs' in t
 
           def get_import_info(entry):
-              """Return (git_url, ref) for the expected mkdocs !import URL."""
+              """Return (git_url, ref) for the expected mkdocs !import URL.
+
+              pgedge-docs is driven by the upstream_* fields (kb_* exist
+              primarily for kb-builder). Within upstream_*, prefer
+              upstream_branch when set — a maintained release branch can
+              receive doc backports that an immutable tag would miss."""
+              upstream  = entry.get('upstream_git_source')
+              up_branch = entry.get('upstream_branch')
+              up_tag    = entry.get('upstream_tag')
               kb_src    = entry.get('kb_git_source')
               kb_branch = entry.get('kb_branch')
               kb_tag    = entry.get('kb_tag')
-              upstream  = entry.get('upstream_git_source')
-              up_tag    = entry.get('upstream_tag')
-              up_branch = entry.get('upstream_branch')
+              if upstream and up_branch:
+                  return upstream, up_branch
+              if upstream and up_tag:
+                  return upstream, up_tag
               if kb_src and kb_branch:
                   return kb_src, kb_branch
               if kb_src and kb_tag:
                   return kb_src, kb_tag
-              if upstream and up_tag:
-                  return upstream, up_tag
-              if upstream and up_branch:
-                  return upstream, up_branch
               return None, None
 
           # ── Load inputs ───────────────────────────────────────────────────
@@ -185,19 +190,66 @@ jobs:
               if nu not in url_ref_map:
                   new_products.append(entry)
               else:
+                  # Mirror the existing label convention for this URL block:
+                  # control-plane uses `v0.8` (2 components), spock uses
+                  # `v5.0.6` (3). Pick the most common component count among
+                  # existing labels; fall back to the full version.
+                  existing = url_label_map.get(nu, set())
+                  if existing:
+                      counts = [len(lbl.lstrip('v').split('.')) for lbl in existing]
+                      target_count = max(set(counts), key=counts.count)
+                      parts = str(version).split('.')
+                      label = 'v' + '.'.join(parts[:target_count])
+                  else:
+                      label = f"v{version}"
                   missing_entries.append({
                       'entry'  : entry,
                       'git_url': git_url,
                       'ref'    : ref,
                       'nu'     : nu,
                       'version': version,
-                      'label'  : f"v{version}",
+                      'label'  : label,
                   })
+
+          # ── Special-cased: control-plane asset path version bump ─────────
+          # mkdocs.yml hardcodes `/control-plane/vN-M/scripts/generate-stack.js`
+          # which must follow control-plane's latest major.minor in SSOT.
+          cp_path_re = re.compile(
+              r"(/control-plane/)v(\d+)-(\d+)(/scripts/generate-stack\.js)"
+          )
+          cp_path_update = None
+          cp_match = cp_path_re.search(mkdocs_text)
+          if cp_match:
+              current_cp = f"v{cp_match.group(2)}-{cp_match.group(3)}"
+              cp_versions = [
+                  e.get('version', '')
+                  for e in ssot['sources']
+                  if for_pgedge_docs(e)
+                  and 'control-plane' in (
+                      str(e.get('kb_git_source', ''))
+                      + str(e.get('upstream_git_source', ''))
+                  )
+                  and e.get('version') and e.get('version') != 'dev'
+              ]
+              if cp_versions:
+                  latest_cp = max(cp_versions, key=version_key)
+                  parts = latest_cp.split('.')
+                  target_cp = (
+                      f"v{parts[0]}-{parts[1]}" if len(parts) >= 2
+                      else f"v{parts[0]}"
+                  )
+                  if current_cp != target_cp:
+                      cp_path_update = {
+                          'old': current_cp,
+                          'new': target_cp,
+                          'version': latest_cp,
+                      }
 
           # ── Build drift report ────────────────────────────────────────────
 
           lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
-          clean = not missing_entries and not new_products and not ssh_urls and not ref_updates
+          clean = (not missing_entries and not new_products and not ssh_urls
+                   and not ref_updates and not cp_path_update)
 
           if ssh_urls:
               lines += ['### SSH URLs detected in mkdocs.yml\n',
@@ -234,6 +286,12 @@ jobs:
                   )
               lines.append('')
 
+          if cp_path_update:
+              lines += ['### Asset path version bump\n',
+                        f"  - `/control-plane/{cp_path_update['old']}/scripts/generate-stack.js`"
+                        f" → `/control-plane/{cp_path_update['new']}/scripts/generate-stack.js`"
+                        f" (SSOT latest: {cp_path_update['version']})", '']
+
           if clean:
               lines.append('**No drift detected.** `mkdocs.yml` nav is in sync with SSOT.')
           else:
@@ -247,7 +305,7 @@ jobs:
               f.write(report)
           print(report)
 
-          actionable = bool(missing_entries or ssh_urls or ref_updates)
+          actionable = bool(missing_entries or ssh_urls or ref_updates or cp_path_update)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
               fh.write(f'actionable={"true" if actionable else "false"}\n')
               fh.write(f'clean={"true" if clean else "false"}\n')
@@ -265,6 +323,13 @@ jobs:
               r"'!import https://github.com/\1/",
               fixed
           )
+
+          # Bump control-plane asset path to latest major.minor from SSOT
+          if cp_path_update:
+              fixed = cp_path_re.sub(
+                  rf"\g<1>{cp_path_update['new']}\g<4>",
+                  fixed
+              )
 
           # Apply in-place ref updates (e.g. v0.8 label: release/v0.8.0 → release/v0.8.1)
           for item in ref_updates:
