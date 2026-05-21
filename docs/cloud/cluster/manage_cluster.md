@@ -1,6 +1,6 @@
 # Managing a Cluster
 
-Use the pgEdge Cloud console to review cluster information. Highlight the
+Use the pgEdge Cloud console to review cluster information. Select the
 name of a cluster in the `Clusters` menu to access the console for that
 cluster.
 
@@ -86,7 +86,7 @@ The `Overview` tab also displays the currently defined
 Select the `Manage Firewall Rules` button to open a dialog to
 [modify or create rules](firewall.md) for the cluster.
 
-The `Overview` tab also displays the current [VPC Associations](vpc_assoc.md):
+The `Overview` tab also displays the current [VPC Associations](vpc_assoc.md).
 
 ![The cluster's VPC associations](../images/overview_vpc_assoc.png)
 
@@ -119,7 +119,7 @@ The following table describes the available graphs:
 | CPU | The percentage of CPU used by the database |
 | Memory Usage | Memory used (in MB) |
 | Disk Usage | The amount of disk space used (in GB) |
-| Running Processes | The number of running processes |overview
+| Running Processes | The number of running processes |
 | Network Receive | The amount of data received by the instance |
 | Network Send | The amount of data transmitted from the instance |
 

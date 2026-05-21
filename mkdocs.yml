@@ -482,12 +482,12 @@ nav:
     - Cloud Edition - Overview: cloud/index.md
     - Getting Started with pgEdge Cloud: cloud/getting_started/getting_started.md
     - Prerequisites:
-      - Adding an SSH Key: cloud/prerequisites/ssh_key.md
       - Linking and Managing your Cloud Provider Accounts:
         - Managing Cloud Provider Accounts: cloud/prerequisites/cloud_accounts/index.md
         - Linking an AWS Account: cloud/prerequisites/cloud_accounts/link_to_AWS.md
         - Linking an Azure Account: cloud/prerequisites/cloud_accounts/link_to_Azure.md
         - Linking a Google Account: cloud/prerequisites/cloud_accounts/link_to_Google.md
+      - Adding an SSH Key: cloud/prerequisites/ssh_key.md
     - Cluster Management:
       - Reviewing your Cloud Clusters: cloud/cluster/index.md
       - Creating a Cluster: cloud/cluster/create_cluster.md
@@ -500,6 +500,7 @@ nav:
       - Reviewing your Databases: cloud/database/index.md
       - Creating a Database: cloud/database/create_db.md
       - Managing a Database: cloud/database/manage_db.md
+      - Adding an MCP or RAG Server: cloud/services.md
     - Modifying a Database or a Cluster:
       - Using the Actions Menu: cloud/mod_cluster/actions.md
       - Adding a Database or Cluster Node: cloud/mod_cluster/add.md
@@ -516,7 +517,6 @@ nav:
       - Connecting with pgAdmin: cloud/connecting/pgadmin.md
       - Connecting a Custom Client: cloud/connecting/custom_client.md
       - Best Practices for Managing Connections: cloud/connecting/best_practices.md
-    - Adding pgEdge AI Toolkit Functionality: cloud/services.md
     - Managing Database Backups:
       - Reviewing Backup Details: cloud/backup/backups.md
       - Backing up your Database: cloud/backup/backup_providers.md

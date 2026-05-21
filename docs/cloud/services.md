@@ -7,6 +7,8 @@ existing cluster or to manage defined functionality.
 
 ![The Services dialog](../cloud/images/services.png)
 
+## Adding an MCP Server
+
 Select the `Add MCP Server` button to access the `Add MCP Server` popup
 and define an MCP server, and optionally enable an associated LLM.
 
@@ -15,32 +17,19 @@ and define an MCP server, and optionally enable an associated LLM.
 Use the fields on the `Add MCP Server` popup to describe the server
 and, optionally, the LLM:
 
-- Click the `Select Host` field to select the node that the MCP server
-  will be provisioned on. You can deploy the MCP server on each node of
-  your cluster, but each MCP server deployment must be individually defined.
+* Use the `Select Host` field to select the cluster host on which this MCP server will be provisioned and run.
 
-- Slide the `LLM Enabled?` toggle switch to enable the LLM detail fields.
+* Use the `Target Nodes` field to optionally select the database nodes this MCP server connects to, in priority order. Defaults to all nodes.
 
-![Enabling LLM](../cloud/images/mcp_llm_enabled.png)
+* Use the `Allow Writes?` toggle to optionally grant the MCP service read-write access (INSERT / UPDATE / DELETE) via the `query_database` tool. Note that allowing read-write access could potentially expose your data to unexpected or unwanted modifications.
 
-- Use the `LLM Provider` drop-down to select your AI provider. pgEdge
-  Cloud currently supports the following AI providers:
+* Use the `LLM Enabled?` toggle to optionally enable an LLM to generate embeddings for the database. Enabling this activates the `generate_embedding` tool on the MCP server and requires LLM provider credentials. To enable an LLM, provide the following information:
 
-    - Anthropic AI (Claude)
-    - OpenAI (ChatGPT)
-    - Ollama
+    * Use the `Embedding Provider` field to select the provider used by the `generate_embedding` tool on the MCP server.
 
-- Use the Model field to provide the model name for the LLM provider. This
-  field is not validated, but must match the name of an available model. For
-  example:
+    * Use the `Embedding Model` field to specify the model identifier used by the `generate_embedding` tool (e.g. `text-embedding-3-small`, `voyage-3`).
 
-    - claude-sonnet-4-6
-    - gpt-4o
-    - llama3.1
-
-- If prompted, use the `API Token` field to provide the string used to
-  authenticate with your MCP server; this is a user-created value required by
-  Anthropic and OpenAI.
+    * Use the `Embedding API Key` field to enter the API key for the selected embedding provider. This key is stored encrypted server-side.
 
 When you've defined the MCP server (with optional LLM functionality), select
 the `+ Add MCP Server` button to update your database.
@@ -67,53 +56,31 @@ use.  Choose from:
 * [Replit](https://docs.replit.com/getting-started/intro-replit)
 
 
-## Creating a Public Ingress
+## Adding a RAG Server
 
-If your cluster was created as a private cluster (without a public-facing
-IP address), you will need to use a public ingress for connections to the
-MCP server. Select the `Connect to Ingress` button to review available
-ingresses or to create a new ingress: 
+Select the `Add RAG Server` button to access the `Add RAG Server` popup
+and define an MCP server, and optionally enable an associated LLM.
 
-![Accessing a public ingress](../cloud/images/connect_to_ingress.png)
+![Adding an MCP Server](../cloud/images/add_rag_server.png)
 
-If no healthy ingresses exist
-for the current cluster, the `Connect to Ingress` popup opens; use the
-`Go to Cluster Settings` button to edit the cluster and create an
-ingress.
+Use the fields on the `Add MCP Server` popup to describe the server:
 
-![Adding an ingress](../cloud/images/no_ingresses.png)
+* Use the `Select Host` field to select the cluster host on which this RAG server service will be provisioned and run.
 
-To navigate to the cluster's dialog and create an ingress, select the
-`Go to Cluster Settings` button. Once on the cluster dialog, scroll down to
-the page end, and select `+ Add Ingress`:
+* Use the `Default Token Budget` field to set the maximum number of context tokens (500–128,000) the LLM can process per request.
 
-![Adding an ingress](../cloud/images/add_ingress.png)
+* Use the `Default Top N` field to set the number of results retrieved from the vector store before they are trimmed to fit within the token budget.
 
-The `Create Ingress` popup opens: 
+* Use the `Default Embedding LLM Provider` field to select the provider whose model will generate vector embeddings for queries and documents during retrieval.
 
-![Creating an ingress](../cloud/images/create_ingress.png)
+* Use the `Default Embedding LLM Model` field to specify the embedding model to use. This must match the model used to generate any pre-existing embeddings in your dataset.
 
-Use the following fields to configure the ingress:
+* Use the `Default Embedding LLM API Key` field to enter the API key for authenticating with the selected embedding provider.
 
-- Provide a name for the ingress in the `Name` field.
-- Use the `Region` drop-down to select the region the ingress will use
-  for connections. If you have multiple nodes in the selected region,
-  connections will be managed with a connection pooler and load
-  balancer.
+* Use the `Default Completion LLM Provider` field to select the provider whose model will be used for answer generation after relevant documents are retrieved.
 
-After providing ingress details, select the `+ Create Ingress` button
-to create the ingress and add it to the list of ingresses.
+* Use the `Default Completion LLM Model` field to specify the model used for answer generation. You can select a suggested model or enter your own.
 
-Once created, the ingress will be added to the list of available ingresses: 
+* Use the `Default Completion LLM API Key` field to enter the API key for authenticating with the selected completion provider.
 
-![Creating an ingress](../cloud/images/available_ingress.png)
-
-To delete an ingress, select the delete icon on the ingress information pane.
-
-![Deleting an ingress](../cloud/images/delete_ingress.png)
-
-When prompted, confirm the deletion.
-
-![Confirm the deletion](../cloud/images/confirm_delete_ingress.png)
-
-A popup confirms that the ingress is being deleted.
+* Use the `Add Pipelines` field to define one or more named pipelines, each with its own document tables and the option to override the default settings above. Each pipeline is accessible via `/v1/pipelines/<name>/search`.
