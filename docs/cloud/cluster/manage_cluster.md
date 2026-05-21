@@ -16,16 +16,16 @@ information about the selected cluster:
   whether the cluster nodes are in a public subnet.
 - The `Cluster ID` associated with the cluster.
 - The name of the cloud provider account on which the cluster resides;
-  click the account name to navigate to the details page for the account.
+  select the account name to navigate to the details page for the account.
 - User-defined [resource tags](resource_tag.md) associated with the cluster.
 
 The cluster header also displays a set of informational panes that show
 the state of the cluster at a glance:
 
-- the total node count.
-- the number of healthy nodes.
-- the number of unhealthy nodes.
-- the number of unresponsive nodes.
+- The total node count.
+- The number of healthy nodes.
+- The number of unhealthy nodes.
+- The number of unresponsive nodes.
 
 
 ## The Cluster Information Tabs
@@ -33,17 +33,17 @@ the state of the cluster at a glance:
 ![Cluster Overview](../images/cluster_overview.png)
 
 The tabbed browser on the `Cluster` tab provides quick access to
-information about the state of your cluster:
+information about the state of the cluster:
 
 - Select the [`Overview`](#the-overview-tab) tab to view information
   about the cluster and the databases currently deployed on the cluster.
-  Detailed information about the cluster nodes displays below. Click an
+  Detailed information about the cluster nodes displays below. Select an
   icon in the `Database` pane to navigate to detailed information about
   the selected database.
-- Select the [`Metrics`](#reviewing-cluster-metrics) tab to view
-  details about cluster resource use.
-- Select the [`Logs`](#reviewing-cluster-log-files) tab to review
-  cluster log files.
+- Select the [`Metrics`](#reviewing-cluster-metrics) tab to view details
+  about cluster resource use.
+- Select the [`Logs`](#reviewing-cluster-log-files) tab to review cluster
+  log files.
 
 ### The Overview Tab
 
@@ -82,8 +82,8 @@ The `Overview` tab also displays the currently defined
 
 ![The cluster's firewall rules](../images/overview_firewall_rule.png)
 
-Select the `Manage Firewall Rules` button to open a dialog that allows
-you to [modify or create rules](firewall.md) for the cluster.
+Select the `Manage Firewall Rules` button to open a dialog to
+[modify or create rules](firewall.md) for the cluster.
 
 The `Overview` tab also displays the current [VPC Associations](vpc_assoc.md):
 
@@ -109,14 +109,13 @@ the cluster.
 
 Select from the tabs across the top to review graphs containing:
 
-- metrics for all nodes in your cluster.
-- metrics for a specific node in your cluster.
+- Metrics for all nodes in the cluster.
+- Metrics for a specific node in the cluster.
 
-The drop-down at the top of the `Metrics` pane allows you to specify
-the length of time displayed by each graph.
+The drop-down at the top of the `Metrics` pane specifies the length of
+time displayed by each graph.
 
-Select a point on a graph to display information about the graphed
-event that occurred on your cluster:
+Select a point on a graph to display information about the graphed event:
 
 ![A point-in-time in the cluster metrics graph](../images/cluster_metrics_PIT.png)
 
@@ -138,15 +137,14 @@ Select the `Logs` tab to review log files for the cluster.
 
 ![The cluster log files](../images/cluster_log_details.png)
 
-Use the tabs across the top to select the nodes for which you want to
-review log files. Then select one of the following log types:
+Use the tabs across the top to select the nodes for which to review log
+files, then select one of the following log types:
 
-- `System logs` to review the system commands performed to manage your
+- `System logs` reviews the system commands performed to manage the
   cluster.
-- `Docker logs` to review the Docker-specific commands executed to
-  manage the container in which your cluster is running.
-- `SSH logs` to review details about SSH connections made to your
-  cluster.
+- `Docker logs` reviews the Docker-specific commands executed to manage
+  the container in which the cluster is running.
+- `SSH logs` reviews details about SSH connections made to the cluster.
 
 Use the `Auto refresh`/`Manual refresh` drop-down to specify whether
 log entries update automatically (`Auto refresh`) or pause updating
@@ -157,22 +155,23 @@ Use the controls in the table header to sort or search the selected log file:
 
 - Select a column heading to sort alphabetically by the column value;
   select a second time to reverse the sort order.
-- Click the filter icon to the right of the `Level` heading to select a
-  status from the drop-down; all rows assigned the selected status will
-  be filtered to the top of the result set.
+- Select the filter icon to the right of the `Level` heading to choose
+  a status from the drop-down; all rows assigned the selected status
+  are filtered to the top of the result set.
 
 ![Filtering the cluster log](../images/cluster_log_filter.png)
 
 - Use the search box to the right of the `Message` label to enter a
-  search string; the search term will be highlighted in the log file
-  entries. Use the navigation arrows to move to the next or previous
-  occurrence of the search term.
+  search string; the search term is highlighted in the log file entries.
+  Use the navigation arrows to move to the next or previous occurrence
+  of the search term.
 
 ![Searching the cluster log](../images/cluster_log_message.png)
 
 ## Cluster Administration Links
 
-Use the links at the end of the navigation pane to access pgEdge Cloud resources:
+Use the links at the end of the navigation pane to access pgEdge Cloud
+resources:
 
 - To manage account details, select the [`Settings`](../settings.md) link.
 - Select the [`Team Management`](../teams.md) link to manage account membership.
