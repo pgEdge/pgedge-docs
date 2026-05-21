@@ -62,10 +62,11 @@ browser to select a node and review information about that node:
 
 - The `Availability Zone` lists the provider region in which the node
   is deployed.
-- Use the `External IP Address` when making SSH connections to the node.
+- Use the `External IP Address` when making connections to the node from a
+  public address.
 - Use the `Internal IP Address` when configuring VPN connections to the
   node.
-- The `Instance Type` and `Volume Size` fields provide node size information.
+- The `Instance Type` and `Volume Size` details provide node size information.
 - The `Instance ID` identifies the node and associated resources in the
   cloud provider console.
 - The `UUID` is a unique identifier for cluster resources outside of
@@ -75,7 +76,7 @@ When the `Overview` tab is selected, a map displays the locations of
 the cluster nodes. Hover over a mapped node to display the name and
 city in which the node resides.
 
-![The cluster console Map tab](../images/cluster_map_tab.png)
+![The cluster console Map tab](../images/overview_cluster_map.png)
 
 The `Overview` tab also displays the currently defined
 [Firewall Rules](firewall.md).
@@ -90,14 +91,6 @@ The `Overview` tab also displays the current [VPC Associations](vpc_assoc.md):
 ![The cluster's VPC associations](../images/overview_vpc_assoc.png)
 
 Select the `+ Add VPC Association` button to add a new association.
-
-The `Overview` tab also displays a list of the current public ingresses:
-
-![Accessing a public ingress](../images/ingress_list.png)
-
-Select the `+ Add Ingress` button to
-[create a public ingress](../services.md#creating-a-public-ingress)
-for a cluster without a public-facing IP address.
 
 
 ### Reviewing Cluster Metrics
@@ -126,7 +119,7 @@ The following table describes the available graphs:
 | CPU | The percentage of CPU used by the database |
 | Memory Usage | Memory used (in MB) |
 | Disk Usage | The amount of disk space used (in GB) |
-| Running Processes | The number of running processes |
+| Running Processes | The number of running processes |overview
 | Network Receive | The amount of data received by the instance |
 | Network Send | The amount of data transmitted from the instance |
 
