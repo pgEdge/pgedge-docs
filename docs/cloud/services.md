@@ -10,77 +10,106 @@ existing cluster or to manage defined functionality.
 ## Adding an MCP Server
 
 Select the `Add MCP Server` button to access the `Add MCP Server` popup
-and define an MCP server, and optionally enable an associated LLM.
+to define an MCP server and optionally enable an LLM.
 
 ![Adding an MCP Server](../cloud/images/add_mcp_server.png)
 
 Use the fields on the `Add MCP Server` popup to describe the server
 and, optionally, the LLM:
 
-* Use the `Select Host` field to select the cluster host on which this MCP server will be provisioned and run.
+- Use the `Select Host` field to select the cluster host on which this
+  MCP server will be provisioned and run.
 
-* Use the `Target Nodes` field to optionally select the database nodes this MCP server connects to, in priority order. Defaults to all nodes.
+- Use the `Target Nodes` field to optionally select the database nodes
+  this MCP server connects to, in priority order. Defaults to all nodes.
 
-* Use the `Allow Writes?` toggle to optionally grant the MCP service read-write access (INSERT / UPDATE / DELETE) via the `query_database` tool. Note that allowing read-write access could potentially expose your data to unexpected or unwanted modifications.
+- Use the `Allow Writes?` toggle to optionally grant the MCP service
+  read-write access (INSERT / UPDATE / DELETE) via the `query_database`
+  tool. Note that allowing read-write access could potentially expose
+  data to unexpected or unwanted modifications.
 
-* Use the `LLM Enabled?` toggle to optionally enable an LLM to generate embeddings for the database. Enabling this activates the `generate_embedding` tool on the MCP server and requires LLM provider credentials. To enable an LLM, provide the following information:
+- Use the `LLM Enabled?` toggle to optionally enable an LLM to generate
+  embeddings for the database. Enabling this activates the
+  `generate_embedding` tool on the MCP server and requires LLM provider
+  credentials. To enable an LLM, provide the following information:
 
-    * Use the `Embedding Provider` field to select the provider used by the `generate_embedding` tool on the MCP server.
+    - Use the `Embedding Provider` field to select the provider used by
+      the `generate_embedding` tool on the MCP server.
 
-    * Use the `Embedding Model` field to specify the model identifier used by the `generate_embedding` tool (e.g. `text-embedding-3-small`, `voyage-3`).
+    - Use the `Embedding Model` field to specify the model identifier
+      used by the `generate_embedding` tool (e.g.
+      `text-embedding-3-small`, `voyage-3`).
 
-    * Use the `Embedding API Key` field to enter the API key for the selected embedding provider. This key is stored encrypted server-side.
+    - Use the `Embedding API Key` field to enter the API key for the
+      selected embedding provider. This key is stored encrypted
+      server-side.
 
-When you've defined the MCP server (with optional LLM functionality), select
-the `+ Add MCP Server` button to update your database.
+When the MCP server has been defined (with optional LLM functionality),
+select the `+ Add MCP Server` button to update the database.
 
-When the deployment is complete, details about the MCP server deployment are
-displayed in the Services dialog.
+The Services dialog displays the MCP server deployment details when
+the deployment is complete.
 
 ![The updated Services dialog](../cloud/images/services_mcp_deployed.png)
 
 ### Connecting a Client to the MCP Server
 
-The steps you use to connect a client to the MCP server vary by client
+The steps for connecting a client to the MCP server vary by client
 and platform. The Services dialog displays connection details for several
 popular clients under the `Connect to MCP Clients` label:
 
 ![Connecting to an MCP server](../cloud/images/connect_to_mcp.png)
 
-Select a tab to view and copy connection details for the client you wish to
-use.  Choose from:
+Select a tab to view and copy connection details for the selected client.
+Choose from:
 
-* [Claude Code](https://code.claude.com/docs/en/overview)
-* [Cursor](https://cursor.com/en-US/docs)
-* [OpenAI Codex](https://openai.com/codex/)
-* [Replit](https://docs.replit.com/getting-started/intro-replit)
+- [Claude Code](https://code.claude.com/docs/en/overview)
+- [Cursor](https://cursor.com/en-US/docs)
+- [OpenAI Codex](https://openai.com/codex/)
+- [Replit](https://docs.replit.com/getting-started/intro-replit)
 
 
 ## Adding a RAG Server
 
 Select the `Add RAG Server` button to access the `Add RAG Server` popup
-and define an MCP server, and optionally enable an associated LLM.
+to define a RAG server and optionally enable an associated LLM.
 
 ![Adding an MCP Server](../cloud/images/add_rag_server.png)
 
-Use the fields on the `Add MCP Server` popup to describe the server:
+Use the fields on the `Add RAG Server` popup to describe the server:
 
-* Use the `Select Host` field to select the cluster host on which this RAG server service will be provisioned and run.
+- Use the `Select Host` field to select the cluster host on which this
+  RAG server service will be provisioned and run.
 
-* Use the `Default Token Budget` field to set the maximum number of context tokens (500–128,000) the LLM can process per request.
+- Use the `Default Token Budget` field to set the maximum number of
+  context tokens (500–128,000) the LLM can process per request.
 
-* Use the `Default Top N` field to set the number of results retrieved from the vector store before they are trimmed to fit within the token budget.
+- Use the `Default Top N` field to set the number of results retrieved
+  from the vector store before they are trimmed to fit within the token
+  budget.
 
-* Use the `Default Embedding LLM Provider` field to select the provider whose model will generate vector embeddings for queries and documents during retrieval.
+- Use the `Default Embedding LLM Provider` field to select the provider
+  whose model will generate vector embeddings for queries and documents
+  during retrieval.
 
-* Use the `Default Embedding LLM Model` field to specify the embedding model to use. This must match the model used to generate any pre-existing embeddings in your dataset.
+- Use the `Default Embedding LLM Model` field to specify the embedding
+  model to use. This must match the model used to generate any
+  pre-existing embeddings in the dataset.
 
-* Use the `Default Embedding LLM API Key` field to enter the API key for authenticating with the selected embedding provider.
+- Use the `Default Embedding LLM API Key` field to enter the API key
+  for authenticating with the selected embedding provider.
 
-* Use the `Default Completion LLM Provider` field to select the provider whose model will be used for answer generation after relevant documents are retrieved.
+- Use the `Default Completion LLM Provider` field to select the provider
+  whose model will be used for answer generation after relevant documents
+  are retrieved.
 
-* Use the `Default Completion LLM Model` field to specify the model used for answer generation. You can select a suggested model or enter your own.
+- Use the `Default Completion LLM Model` field to specify the model used
+  for answer generation. Select a suggested model or enter a custom one.
 
-* Use the `Default Completion LLM API Key` field to enter the API key for authenticating with the selected completion provider.
+- Use the `Default Completion LLM API Key` field to enter the API key
+  for authenticating with the selected completion provider.
 
-* Use the `Add Pipelines` field to define one or more named pipelines, each with its own document tables and the option to override the default settings above. Each pipeline is accessible via `/v1/pipelines/<name>/search`.
+- Use the `Add Pipelines` field to define one or more named pipelines,
+  each with its own document tables and the option to override the
+  default settings above. Each pipeline is accessible via
+  `/v1/pipelines/<name>/search`.

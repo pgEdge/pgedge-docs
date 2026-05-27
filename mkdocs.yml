@@ -500,16 +500,23 @@ nav:
       - Reviewing your Databases: cloud/database/index.md
       - Creating a Database: cloud/database/create_db.md
       - Managing a Database: cloud/database/manage_db.md
-      - Adding an MCP or RAG Server: cloud/services.md
-    - Modifying a Database or a Cluster:
+    - Services - Adding an MCP or RAG Server: cloud/services.md
+    - Metrics - Reviewing Database Activity: cloud/database_admin/metrics.md
+    - Logs - Viewing Log Files: cloud/database_admin/logs.md
+    - Backups - Reviewing Backup Details: cloud/database_admin/backup_details.md
+    - Managing Database Backups:
+      - Reviewing Backup Details: cloud/backup/backups.md
+      - Backing up your Database: cloud/backup/backup_providers.md
+      - Restoring from Backup: cloud/backup/restore.md
+    - Database and Cluster Administration:
       - Using the Actions Menu: cloud/mod_cluster/actions.md
       - Adding a Database or Cluster Node: cloud/mod_cluster/add.md
       - Dropping a Database, Node, or Cluster: cloud/mod_cluster/drop.md
-    - Database Administration:
-      - Reviewing Database Metrics: cloud/database_admin/metrics.md
-      - Viewing Log Files: cloud/database_admin/logs.md
-      - Reviewing Backup Details: cloud/database_admin/backup_details.md
       - Using Postgres Extensions: cloud/database_admin/supported_extensions.md
+    - Migrating to pgEdge Distributed Postgres (Cloud Edition):
+      - Overview - Using a Backup to Migrate into a Distributed Database: cloud/migration/index.md
+      - Taking a Backup: cloud/migration/backup.md
+      - Restoring from Backup: cloud/migration/restore.md
     - Connecting to a Database:
       - Connecting to your Database or Cluster: cloud/connecting/index.md
       - Connecting with SSH: cloud/connecting/ssh.md
@@ -517,15 +524,7 @@ nav:
       - Connecting with pgAdmin: cloud/connecting/pgadmin.md
       - Connecting a Custom Client: cloud/connecting/custom_client.md
       - Best Practices for Managing Connections: cloud/connecting/best_practices.md
-    - Managing Database Backups:
-      - Reviewing Backup Details: cloud/backup/backups.md
-      - Backing up your Database: cloud/backup/backup_providers.md
-      - Restoring from Backup: cloud/backup/restore.md
     - Reviewing the Activity Log: cloud/tasks.md
-    - Migrating to pgEdge Distributed Postgres (Cloud Edition):
-      - Overview - Using a Backup to Migrate into a Distributed Database: cloud/migration/index.md
-      - Taking a Backup: cloud/migration/backup.md
-      - Restoring from Backup:  cloud/migration/restore.md
     - Settings: cloud/settings.md
     - Team Resources: cloud/teams.md
     - Troubleshooting: cloud/troubleshooting.md

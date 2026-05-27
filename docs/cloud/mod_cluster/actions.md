@@ -13,7 +13,7 @@ Select from the options listed to:
 * Update [Backup Stores](../cluster/backup_store.md).
 * Update [Firewall Rules](../cluster/firewall.md).
 * Manage [VPC Associations](../cluster/vpc_assoc.md).
-* [Add an Ingress](../services.md#creating-a-public-ingress) to a private cluster.
+* [Add an Ingress](../services.md) to a private cluster.
 * [Manage Tags](../cluster/resource_tag.md).
 * [Delete a cluster](drop.md#deleting-a-cluster).
 
