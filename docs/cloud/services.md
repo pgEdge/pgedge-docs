@@ -9,7 +9,7 @@ existing cluster or to manage defined functionality.
 
 ## Adding an MCP Server
 
-Select the `Add MCP Server` button to access the `Add MCP Server` popup
+Select the `+ Add MCP Server` button to access the `Add MCP Server` popup
 to define an MCP server and optionally enable an LLM.
 
 ![Adding an MCP Server](../cloud/images/add_mcp_server.png)
@@ -24,13 +24,14 @@ and, optionally, the LLM:
   this MCP server connects to, in priority order. Defaults to all nodes.
 
 - Use the `Allow Writes?` toggle to optionally grant the MCP service
-  read-write access (INSERT / UPDATE / DELETE) via the `query_database`
+  read-write access (INSERT / UPDATE / DELETE) via the 
+  [`query_database`](https://docs.pgedge.com/pgedge-postgres-mcp-server/v1-0-0/developers/mcp-protocol/#tools)
   tool. Note that allowing read-write access could potentially expose
   data to unexpected or unwanted modifications.
 
 - Use the `LLM Enabled?` toggle to optionally enable an LLM to generate
-  embeddings for the database. Enabling this activates the
-  `generate_embedding` tool on the MCP server and requires LLM provider
+  embeddings for the database. When the toggle is `on`, Cloud activates the
+  `generate_embedding` tool on the MCP server and requests LLM provider
   credentials. To enable an LLM, provide the following information:
 
     - Use the `Embedding Provider` field to select the provider used by
@@ -45,10 +46,9 @@ and, optionally, the LLM:
       server-side.
 
 When the MCP server has been defined (with optional LLM functionality),
-select the `+ Add MCP Server` button to update the database.
-
-The Services dialog displays the MCP server deployment details when
-the deployment is complete.
+select the `+ Add MCP Server` button to update the database.  The `Services`
+dialog displays the MCP server deployment details when the deployment is
+complete.
 
 ![The updated Services dialog](../cloud/images/services_mcp_deployed.png)
 
@@ -74,7 +74,7 @@ Choose from:
 Select the `Add RAG Server` button to access the `Add RAG Server` popup
 to define a RAG server and optionally enable an associated LLM.
 
-![Adding an MCP Server](../cloud/images/add_rag_server.png)
+![Adding a RAG Server](../cloud/images/add_rag_server.png)
 
 Use the fields on the `Add RAG Server` popup to describe the server:
 
@@ -109,7 +109,21 @@ Use the fields on the `Add RAG Server` popup to describe the server:
 - Use the `Default Completion LLM API Key` field to enter the API key
   for authenticating with the selected completion provider.
 
-- Use the `Add Pipelines` field to define one or more named pipelines,
-  each with its own document tables and the option to override the
-  default settings above. Each pipeline is accessible via
-  `/v1/pipelines/<name>/search`.
+Expand the `Add Pipelines` field to define one or more named pipelines.
+For information about pipelines, see the
+[pgEdge RAG Server documentation](https://docs.pgedge.com/pgedge-rag-server/v1-0-0/configuration/#specifying-properties-in-the-pipeline-section).
+Each pipeline specifies one or more 
+[tables](https://docs.pgedge.com/pgedge-rag-server/v1-0-0/configuration/#table-properties)
+and their associated columns and vector columns.
+
+![Adding a RAG Pipeline](../cloud/images/add_rag_pipeline.png)
+
+Use the:
+
+* `+ Add Table` button to access fields to define additional tables.
+* `+ Add Pipeline` button to access fields to define additional pipelines and
+  associated tables.
+
+When you're finished defining the RAG server, select the `+ Add RAG Server`
+button.  The `Services` dialog displays the RAG server deployment details when
+the deployment is complete.

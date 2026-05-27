@@ -500,10 +500,10 @@ nav:
       - Reviewing your Databases: cloud/database/index.md
       - Creating a Database: cloud/database/create_db.md
       - Managing a Database: cloud/database/manage_db.md
-    - Services - Adding an MCP or RAG Server: cloud/services.md
-    - Metrics - Reviewing Database Activity: cloud/database_admin/metrics.md
-    - Logs - Viewing Log Files: cloud/database_admin/logs.md
-    - Backups - Reviewing Backup Details: cloud/database_admin/backup_details.md
+    - Services: cloud/services.md
+    - Metrics: cloud/database_admin/metrics.md
+    - Logs: cloud/database_admin/logs.md
+    - Backups: cloud/database_admin/backup_details.md
     - Managing Database Backups:
       - Reviewing Backup Details: cloud/backup/backups.md
       - Backing up your Database: cloud/backup/backup_providers.md
