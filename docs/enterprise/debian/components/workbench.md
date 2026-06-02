@@ -1,11 +1,11 @@
 # Installing the AI DBA Workbench with DEB Packages
 
 This guide walks you through installing and configuring the pgEdge AI DBA
-Workbench on a Linux system using DEB packages. The installation covers
-PostgreSQL 18, the Workbench components, and the Nginx web client.
+Workbench on a Linux system using DEB packages. In our example, we'll be
+installating PostgreSQL 18, the Workbench components, and the Nginx web
+client.
 
-
-Before you start, ensure:
+Before starting, ensure:
 
 - The target host runs a compatible x86_64 (amd64) or arm64 operating system
   on Linux.
@@ -19,10 +19,10 @@ Before you start, ensure:
 
 Before installing the Workbench, you need to install and enable the `pgedge`
 repository.  For detailed instructions for all of the supported platforms,
-see the [pgEdge documentation](https://docs.pgedge.com/enterprise/).
+see the [documentation](../configure-repo.md).
 
-In the following example, the `apt` command adds the `pgedge` repository
-and installs the PostgreSQL 18 package:
+In the following example, we use the `apt` command to add the `pgedge`
+repository and installs the PostgreSQL 18 package:
 
 ```bash
 sudo apt install -y curl
@@ -35,9 +35,9 @@ sudo apt update
 sudo apt install -y pgedge-enterprise-postgres_18
 ```
 
-On Debian, the PostgreSQL package automatically initializes the data
-directory. In the following example, the `systemctl` command starts and
-enables the service:
+On Debian, the PostgreSQL package automatically initializes the `data`
+directory. When the installation completes, we can use the `systemctl` command
+to start and enable the service:
 
 ```bash
 systemctl start postgresql@18-main.service
