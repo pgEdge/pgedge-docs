@@ -398,8 +398,7 @@ In the following example, the `ai-dba-server` command creates an admin
 user in the `/var/lib/pgedge/ai-dba-server/` directory:
 
 ```bash
-/usr/bin/ai-dba-server -add-user -username admin \
-    -data-dir /var/lib/pgedge/ai-dba-server/
+sudo runuser -u pgedge -- /usr/bin/ai-dba-server -config /etc/pgedge/ai-dba-server.yaml -data-dir /var/lib/pgedge/ai-dba-server -add-user -username admin
 ```
 
 The command prompts for a password and optional details; the following
@@ -425,8 +424,7 @@ Next, use the `ai-dba-server` command to create an API token
 for the `admin` user:
 
 ```bash
-/usr/bin/ai-dba-server -add-token \
-    -data-dir /var/lib/pgedge/ai-dba-server/
+sudo runuser -u pgedge -- /usr/bin/ai-dba-server -add-token -data-dir /var/lib/pgedge/ai-dba-server/
 ```
 
 The command prompts for the token owner's name and optional settings;
