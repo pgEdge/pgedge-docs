@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 5/29/2026
+
+* pgEdge AI DBA Workbench 1.0.0-beta3 release for all supported platforms
+
 ## 5/14/2026
 
 * Postgres version update: pgEdge Enterprise Postgres 16.14
