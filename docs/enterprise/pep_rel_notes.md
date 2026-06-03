@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 6/02/2026
+
+* pgEdge Enterprise Postgres packages 16.14-2, 17.10-2, and 18.4-2 released for RHEL: Rebuild triggered by RHEL AppStream repositories updating to a newer major version of the LLVM Toolset (llvm-21.1.8)
+
 ## 5/29/2026
 
 * pgEdge AI DBA Workbench 1.0.0-beta3 release for all supported platforms
