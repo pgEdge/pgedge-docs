@@ -2,7 +2,7 @@
 
 This guide walks you through installing and configuring the pgEdge AI DBA
 Workbench on a Linux system using DEB packages. In our example, we'll be
-installating PostgreSQL 18, the Workbench components, and the Nginx web
+installing PostgreSQL 18, the Workbench components, and the Nginx web
 client.
 
 Before starting, ensure:
@@ -607,8 +607,14 @@ GRANT USAGE, SELECT ON SEQUENCE notification_channels_id_seq
     TO dba_alerter;
 
 -- notification_history: Track notifications
-GRANT SELECT, INSERT, UPDATE, DELETE ON alert_acknowledgments
-    TO dba_alerter;
+GRANT SELECT, INSERT, UPDATE, DELETE ON alert_acknowledgments TO dba_alerter;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE notification_history TO dba_alerter;
+GRANT USAGE, SELECT ON SEQUENCE notification_history_id_seq TO dba_alerter;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE notification_reminder_state TO dba_alerter;
+GRANT USAGE, SELECT ON SEQUENCE notification_reminder_state_id_seq TO dba_alerter;
+
 ```
 
 ### Configuring the YAML File
