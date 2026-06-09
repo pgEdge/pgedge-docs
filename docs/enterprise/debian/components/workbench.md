@@ -539,6 +539,7 @@ GRANT SELECT ON TABLE probe_configs TO dba_alerter;
 GRANT SELECT ON TABLE notification_channel_overrides TO dba_alerter;
 GRANT SELECT ON TABLE alert_acknowledgments TO dba_alerter;
 GRANT SELECT ON TABLE blackouts TO dba_alerter;
+GRANT SELECT ON TABLE email_recipients TO dba_alerter;
 
 -- ============================================
 -- PUBLIC SCHEMA - Read/Write tables
