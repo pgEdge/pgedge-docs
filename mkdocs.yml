@@ -647,7 +647,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
 
   - AI DBA Workbench:
-    - DRAFT: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=doc_review'
+    - DRAFT: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=v1.0.0-rc1'
     - v1.0.0-beta1: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=v1.0.0-beta1'
     - Development: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=main'
 
