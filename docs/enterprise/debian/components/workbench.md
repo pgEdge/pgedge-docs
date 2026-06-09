@@ -7,8 +7,8 @@ client.
 
 Before starting, ensure:
 
-- The target host runs a compatible x86_64 (amd64) or arm64 operating system
-  on Linux.
+- The target host runs a compatible x86_64 (amd64) or arm64 operating
+  system on Linux.
 - You have `root` or `sudo` access on the target system.
 - Your native package manager is available and the host has internet
   access.
@@ -17,12 +17,12 @@ Before starting, ensure:
 
 ## Installing and Configuring Postgres
 
-Before installing the Workbench, you need to install and enable the `pgedge`
-repository.  For detailed instructions for all of the supported platforms,
+Before installing the Workbench, install and enable the `pgedge` repository.
+For detailed instructions for each supported platform,
 see the [documentation](../configure-repo.md).
 
 In the following example, we use the `apt` command to add the `pgedge`
-repository and installs the PostgreSQL 18 package:
+repository and install the PostgreSQL 18 package:
 
 ```bash
 sudo apt install -y curl
@@ -44,20 +44,37 @@ systemctl start postgresql@18-main.service
 systemctl enable postgresql@18-main.service
 ```
 
-After initializing Postgres, connect to the server and modify the postgres
-role, adding a password. In the following example, the `psql` command
-connects to the database:
+### Modifying the Database User and Creating the Datastore Database
+
+Use a PostgreSQL client to create a database for the datastore; the
+collector, server, and alerter share this database. Use the
+[`psql`](https://www.postgresql.org/docs/18/app-psql.html) client
+to connect to the PostgreSQL server:
 
 ```bash
-sudo -u postgres psql -U postgres -p 5432
+sudo -u postgres psql
 ```
 
-In the following example, the `psql` command opens a session as the
-`postgres` user; the `ALTER ROLE` statement sets the password:
+Alter the `postgres` role to make it a login role with a password:
 
 ```sql
-ALTER ROLE postgres PASSWORD '1safepassword!';
+ALTER ROLE postgres LOGIN PASSWORD '1safepassword';
 ```
+
+Then, create the datastore database. In the following example, the
+`CREATE DATABASE` statement creates the `ai_workbench` database:
+
+```sql
+CREATE DATABASE ai_workbench;
+```
+
+The collector creates the required schema tables automatically on the
+first startup.
+
+!!! hint
+
+    You can use `\q` to exit the `psql` client session and return to the
+    terminal window.
 
 
 ## Installing the Workbench Packages
@@ -91,28 +108,18 @@ Do you want to continue? [Y/n]
 When prompted, press `Enter` or type `y` to install the packages.
 
 
-### Creating the Workbench Database
-
-In the following example, the `createdb` command creates the `ai_workbench`
-database as the `postgres` OS user:
-
-```bash
-su - postgres
-createdb ai_workbench
-```
-
 ## Configuring the Collector
 
 The collector gathers Postgres metrics and writes them to the
-`ai_workbench` database. The steps that follow cover each configuration
-task:
+`ai_workbench` database. The steps that follow detail each configuration
+task; we will:
 
-- The first step creates the required database role.
-- The second step configures the YAML file.
-- The third step creates the secret file.
-- The fourth step starts the service.
+- create the `dba_collector` role.
+- configure the Collector's YAML file.
+- create the secret file.
+- start the service.
 
-### Creating a Database Role
+### Creating the dba_collector Role
 
 In the following example, SQL statements connect to the `ai_workbench`
 database, create the `dba_collector` role, and grant the permissions that
@@ -150,7 +157,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA metrics
     GRANT ALL ON TABLES TO dba_collector;
 ```
 
-### Configuring the YAML File
+### Updating the Collector's YAML File
 
 In the following example, the `vi` command opens the collector
 configuration file at `/etc/pgedge/ai-dba-collector.yaml`:
@@ -175,7 +182,7 @@ sslmode: disable
 password: 1safepassword!
 ```
 
-### Creating a Secret File
+### Creating a Secret File and starting the Collector
 
 In the following example, `openssl` generates a random secret and writes
 it to `/etc/pgedge/ai-dba-collector.secret`; the `chmod` and `chown`
@@ -187,73 +194,25 @@ chmod 600 /etc/pgedge/ai-dba-collector.secret
 chown pgedge:pgedge /etc/pgedge/ai-dba-collector.secret
 ```
 
-In the following example, the `systemctl` command starts the collector
-service:
+Then, use the `systemctl` command to start the Collector service:
 
 ```bash
 systemctl start pgedge-ai-dba-collector.service
 ```
 
-### Verifying the Installation
-
-After the collector starts, connect to the `ai_workbench` database and run
-`\dt metrics.*` to confirm that the metrics tables have been created. The
-following sample output shows the expected tables:
-
-```bash
-\dt metrics.*
-                               List of tables
- Schema  |             Name             |       Type        |     Owner
----------+------------------------------+-------------------+---------------
- metrics | pg_connectivity              | partitioned table | dba_collector
- metrics | pg_database                  | partitioned table | dba_collector
- metrics | pg_extension                 | partitioned table | dba_collector
- metrics | pg_hba_file_rules            | partitioned table | dba_collector
- metrics | pg_ident_file_mappings       | partitioned table | dba_collector
- metrics | pg_node_role                 | partitioned table | dba_collector
- metrics | pg_replication_slots         | partitioned table | dba_collector
- metrics | pg_server_info               | partitioned table | dba_collector
- metrics | pg_settings                  | partitioned table | dba_collector
- metrics | pg_stat_activity             | partitioned table | dba_collector
- metrics | pg_stat_all_indexes          | partitioned table | dba_collector
- metrics | pg_stat_all_tables           | partitioned table | dba_collector
- metrics | pg_stat_checkpointer         | partitioned table | dba_collector
- metrics | pg_stat_connection_security  | partitioned table | dba_collector
- metrics | pg_stat_database             | partitioned table | dba_collector
- metrics | pg_stat_database_conflicts   | partitioned table | dba_collector
- metrics | pg_stat_io                   | partitioned table | dba_collector
- metrics | pg_stat_recovery_prefetch    | partitioned table | dba_collector
- metrics | pg_stat_replication          | partitioned table | dba_collector
- metrics | pg_stat_statements           | partitioned table | dba_collector
- metrics | pg_stat_subscription         | partitioned table | dba_collector
- metrics | pg_stat_user_functions       | partitioned table | dba_collector
- metrics | pg_stat_wal                  | partitioned table | dba_collector
- metrics | pg_statio_all_sequences      | partitioned table | dba_collector
- metrics | pg_sys_cpu_info              | partitioned table | dba_collector
- metrics | pg_sys_cpu_memory_by_process | partitioned table | dba_collector
- metrics | pg_sys_cpu_usage_info        | partitioned table | dba_collector
- metrics | pg_sys_disk_info             | partitioned table | dba_collector
- metrics | pg_sys_io_analysis_info      | partitioned table | dba_collector
- metrics | pg_sys_load_avg_info         | partitioned table | dba_collector
- metrics | pg_sys_memory_info           | partitioned table | dba_collector
- metrics | pg_sys_network_info          | partitioned table | dba_collector
- metrics | pg_sys_os_info               | partitioned table | dba_collector
- metrics | pg_sys_process_info          | partitioned table | dba_collector
-(34 rows)
-```
 
 ## Configuring the Server
 
 The MCP server provides the API layer for the Workbench. The steps that
-follow cover each configuration task:
+follow detail each configuration task; we will:
 
-- The first step creates the required database role.
-- The second step configures the YAML file.
-- The third step creates the secret file.
-- The fourth step creates an admin user and token.
-- The fifth step starts the service.
+- create the `dba_server` database role.
+- configure the server's YAML file.
+- create the secret file.
+- create an admin user and token.
+- start the service.    
 
-### Creating a Database Role
+### Creating the dba_server Role
 
 In the following example, SQL statements connect to the `ai_workbench`
 database, create the `dba_server` role, and grant the permissions that the
@@ -339,7 +298,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON alert_acknowledgments
     TO dba_server;
 ```
 
-### Configuring the YAML File
+### Configuring the Server's YAML File
 
 In the following example, the `vi` command opens the server configuration
 file at `/etc/pgedge/ai-dba-server.yaml`:
@@ -348,42 +307,61 @@ file at `/etc/pgedge/ai-dba-server.yaml`:
 vi /etc/pgedge/ai-dba-server.yaml
 ```
 
-In the following example, the configuration file sets the required
-database connection values:
+Use properties in the configuration file to set the datastore
+connection values for the server:
 
 ```yaml
-database:
-  # Database host
-  # Default: localhost
-  host: "localhost"
+datastore:
+    host: localhost
+    database: ai_workbench
+    username: dba_server
+    port: 5432
+    password: "1safepassword!"
+```
 
-  # Database port
-  # Default: 5432
-  port: 5432
+If you are running the Workbench on an internal network, you also need to
+modify the `allow_internal_networks` property, setting it to `true`:
 
-  # Database name
-  # Default: postgres
-  database: "ai_workbench"
+```yaml
+allow_internal_networks: true
+```
 
-  # Database user
-  # Required - there is no default
-  user: "dba_server"
+The DBA Workbench server requires an AI provider for chat, query
+analysis, anomaly classification, and embedding generation. The following
+property examples use OpenAI as the provider.
 
-  # Database password
-  # If not set, will use .pgpass file automatically
-  password: "1safepassword!"
+Replace the provider, model, and api_key_file values in the server
+configuration files with the corresponding settings for your chosen
+provider. For Ollama, no API key is required — set ollama_url to your
+local Ollama instance URL instead.
 
-  # SSL mode: disable, require, verify-ca, verify-full
-  # Default: prefer
-  sslmode: "disable"
+```yaml
+# ── LLM (Ellie chat + Query/Chart analysis) ───────────────────────────────
+llm:
+  provider: openai
+  model: gpt-4o
+  openai_api_key_file: /etc/pgedge/secrets/openai-api-key
 
-  allow_internal_networks: true
+# ── Embedding (generate_embedding tool) ───────────────────────────────────
+embedding:
+  enabled: true
+  provider: openai
+  model: text-embedding-3-small
+  openai_api_key_file: /etc/pgedge/secrets/openai-api-key
+
+# ── Knowledgebase (similarity search in Ellie) ────────────────────────────
+knowledgebase:
+  enabled: true
+  database_path: /usr/share/pgedge/pgedge-ai-kb/kb.db
+  embedding_provider: openai
+  embedding_model: text-embedding-3-small
+  embedding_openai_api_key_file: /etc/pgedge/secrets/openai-api-key
 ```
 
 ### Creating a Secret File
 
-The MCP server uses the same shared secret as the collector. In the
-following example, the `cp` command copies the collector secret to the
+In our example, the MCP server uses the same shared secret as the collector.
+Use the following `cp` command to copy the collector secret to the
 server secret path; `chown` and `chmod` secure the file:
 
 ```bash
@@ -392,23 +370,33 @@ chown pgedge:pgedge /etc/pgedge/ai-dba-server.secret
 chmod 600 /etc/pgedge/ai-dba-server.secret
 ```
 
-### Creating an Admin User and Token
+### Creating the admin User and SQLite Database
 
-In the following example, the `ai-dba-server` command creates an admin
-user in the `/var/lib/pgedge/ai-dba-server/` directory:
+The Workbench uses a SQLite database to store authentication and management
+details. In the following example, the `mkdir`, `chown`, and
+`ai-dba-server` commands create the directory and add a user; the
+`-data-dir` flag places the `auth.db` authentication database in
+`/var/lib/ai-workbench/data`:
 
 ```bash
-sudo runuser -u pgedge -- /usr/bin/ai-dba-server -config /etc/pgedge/ai-dba-server.yaml -data-dir /var/lib/pgedge/ai-dba-server -add-user -username admin
+sudo mkdir -p /var/lib/ai-workbench/data
+sudo chown -R $USER:$USER /var/lib/ai-workbench/data
+/opt/ai-workbench/ai-dba-server \
+    -add-user -username admin \
+    -data-dir /var/lib/ai-workbench/data
 ```
 
-The command prompts for a password and optional details; the following
-sample output shows a successful user creation:
+The command prompts for a password and optional user details; the password
+must include at least one capital letter, one digit, and one special
+character:
 
 ```bash
+/opt/ai-workbench/ai-dba-server -add-user -username admin -data-dir /var/lib/ai-workbench/data
+Auth store: /var/lib/ai-workbench/data/auth.db
 Enter password:
 Confirm password:
-Enter full name (optional):
-Enter email address (optional):
+Enter full name (optional): admin
+Enter email address (optional): admin@pgedge.com
 Enter notes for this user (optional):
 
 ======================================================================
@@ -416,9 +404,32 @@ User created successfully!
 ======================================================================
 
 Username:  admin
+Full Name: admin
+Email:    admin@pgedge.com
 Status:   Enabled
 ======================================================================
 ```
+
+Then, grant superuser status to the admin account. In the following
+example, the `-set-superuser` flag promotes the `admin` user to
+superuser:
+
+```bash
+/opt/ai-workbench/ai-dba-server \
+    -set-superuser -username admin \
+    -data-dir /var/lib/ai-workbench/data
+```
+
+The command confirms the change; for example:
+
+```bash
+User 'admin' is now a superuser
+```
+
+!!! note
+
+    Without superuser privileges, you are allowed to connect to the
+    Workbench, but you will not be able to add servers for monitoring.
 
 Next, use the `ai-dba-server` command to create an API token
 for the `admin` user:
@@ -448,26 +459,10 @@ Expires: Never
 ```
 
 !!! important
-    Save this token securely; it will not be shown again. You will use it in
-    API requests with the header `Authorization: Bearer <token>`.
+    Save this token securely; it will not be shown again. You will use it
+    in API requests with the header `Authorization: Bearer <token>`.
 
-### Granting Superuser Privileges
-
-In the following example, the `ai-dba-server` command grants superuser
-privileges to the `admin` user:
-
-```bash
-/usr/bin/ai-dba-server -set-superuser -username admin \
-    -data-dir /var/lib/pgedge/ai-dba-server/
-```
-
-The following sample output confirms the privilege change:
-
-```bash
-User 'admin' is now a superuser
-```
-
-### Fixing the auth.db Ownership
+### Updating the auth.db File Ownership
 
 The `auth.db` file must be owned by the `pgedge` user before the service
 starts. In the following example, the `chown` command corrects the
@@ -499,43 +494,15 @@ Then, use the following command to start the MCP server service:
 systemctl start pgedge-ai-dba-server.service
 ```
 
-### Server Management Tables
-
-The MCP server requires the following tables in the `ai_workbench` database
-for configuration and management:
-
-- The `connections` table stores registered database connection definitions.
-- The `probe_configs` table stores probe configuration records.
-- The `alert_rules` table stores alert rule definitions.
-- The `alert_thresholds` table stores threshold values for alert rules.
-- The `clusters` table stores cluster definitions.
-- The `cluster_groups` table stores cluster group definitions.
-- The `cluster_node_relationships` table maps cluster topology and node
-  membership.
-- The `blackout_schedules` table stores scheduled maintenance window
-  definitions.
-- The `blackouts` table tracks active blackout periods.
-- The `notification_channels` table stores notification channel
-  configurations.
-- The `email_recipients` table stores email recipient addresses for alerts.
-- The `connection_notification_channels` table maps connections to their
-  notification channels.
-- The `notification_channel_overrides` table stores per-connection channel
-  override settings.
-- The `correlation_groups` table stores metric correlation group definitions.
-- The `metric_definitions` table stores metadata describing each metric.
-- The `conversations` table stores chat conversation history.
-- The `chat_memories` table stores chat memory and context for the AI
-  assistant.
 
 ## Configuring the Alerter
 
 The alerter monitors metrics and generates alerts based on configured rules.
-The following steps cover each configuration task:
+The steps that follow detail each configuration task; we will:
 
-- The first step creates the required database role.
-- The second step configures the YAML file.
-- The third step starts the service.
+- create the dba_alerter database role.
+- configure the Alerter's YAML file.
+- start the service.
 
 ### Creating a Database Role
 
@@ -615,7 +582,7 @@ GRANT USAGE, SELECT ON SEQUENCE notification_reminder_state_id_seq TO dba_alerte
 
 ```
 
-### Configuring the YAML File
+### Configuring the Alerter's YAML File
 
 In the following example, the `vi` command opens the alerter configuration
 file for editing:
@@ -624,7 +591,7 @@ file for editing:
 vi /etc/pgedge/ai-dba-alerter.yaml
 ```
 
-In the following example, the configuration file sets the datastore
+Use properties in the configuration file to set the datastore
 connection values for the alerter:
 
 ```yaml
@@ -636,29 +603,43 @@ datastore:
     password: "1safepassword!"
 ```
 
-In the following example, the `systemctl` command starts the alerter
-service:
+The Workbench Alerter requires an AI provider for chat, query
+analysis, anomaly classification, and embedding generation. The following
+property examples use OpenAI as the provider.
+
+Replace the provider, model, and api_key_file values in the alerter
+configuration files with the corresponding settings for your chosen
+provider. For Ollama, no API key is required — set `ollama_url` to your
+local Ollama instance URL instead.
+
+```yaml
+# ── LLM (Ellie chat + Query/Chart analysis) ───────────────────────────────
+llm:
+  provider: openai
+  model: gpt-4o
+  openai_api_key_file: /etc/pgedge/secrets/openai-api-key
+
+# ── Embedding (generate_embedding tool) ───────────────────────────────────
+embedding:
+  enabled: true
+  provider: openai
+  model: text-embedding-3-small
+  openai_api_key_file: /etc/pgedge/secrets/openai-api-key
+
+# ── Knowledgebase (similarity search in Ellie) ────────────────────────────
+knowledgebase:
+  enabled: true
+  database_path: /usr/share/pgedge/pgedge-ai-kb/kb.db
+  embedding_provider: openai
+  embedding_model: text-embedding-3-small
+  embedding_openai_api_key_file: /etc/pgedge/secrets/openai-api-key
+```
+
+Then, use the `systemctl` command to start the alerter service:
 
 ```bash
 systemctl start pgedge-ai-dba-alerter.service
 ```
-
-### Alerter Runtime Tables
-
-The alerter uses the following tables in the `ai_workbench` database for
-runtime alert and notification data:
-
-- The `alerts` table stores generated alert instances.
-- The `alert_acknowledgments` table stores alert acknowledgment records.
-- The `notification_history` table logs notification delivery attempts.
-- The `notification_reminder_state` table tracks reminder state for
-  unresolved alerts.
-- The `alerter_settings` table stores alerter runtime configuration.
-- The `metric_baselines` table stores calculated baseline values for
-  metrics.
-- The `anomaly_candidates` table stores detected anomaly candidate records.
-- The `anomaly_embeddings` table stores embeddings used for anomaly
-  detection.
 
 ## Starting the Web Client
 
@@ -669,5 +650,21 @@ example, the `systemctl` command starts the Nginx service:
 systemctl start nginx.service
 ```
 
-After Nginx starts, access the web console at `http://localhost:8444/`.
+After Nginx starts, access the web console at `http://localhost:8444/`;
+provide authentication details when the Workbench opens.
+
+![Log in to the AI DBA Workbench](../images/workbench_login.png)
+
+After logging in, select the `+` next to the DATABASE SERVERS heading
+in the left navigation panel. The Workbench adds a new server definition
+entry.
+
+![Adding a server definition](../images/add_server.png)
+
+For detailed information about using the Workbench, see the
+[User Guide](https://docs.pgedge.com/ai-dba-workbench/v1-0-0-beta3/user-guide/).
+
+
+
+
 
