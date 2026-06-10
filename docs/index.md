@@ -126,6 +126,38 @@ hide:
   text-decoration: underline;
 }
 
+/* Labs Section Header */
+.labs-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.labs-header .labs-logo-light,
+.labs-header .labs-logo-dark {
+  height: 52px;
+  width: auto;
+}
+
+[data-md-color-scheme="default"] .labs-header .labs-logo-dark { display: none; }
+[data-md-color-scheme="default"] .labs-header .labs-logo-light { display: block; }
+[data-md-color-scheme="slate"] .labs-header .labs-logo-light { display: none; }
+[data-md-color-scheme="slate"] .labs-header .labs-logo-dark { display: block; }
+
+.labs-header p {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.labs-divider {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #3e92ba, #9e3e97, #f47820);
+  margin-bottom: 1.5rem;
+}
+
 /* Section Headers */
 .section-header {
   margin: 1.5rem 0 1rem 0;
@@ -619,10 +651,12 @@ hide:
 </div>
 
 <!-- Labs -->
-<div class="section-header">
-  <h2>Labs</h2>
+<div class="labs-header">
+  <img src="img/pgEdgeLabs_icon_color.svg" alt="pgEdge Labs" class="labs-logo-light">
+  <img src="img/pgEdgeLabs_icon_white_color.svg" alt="pgEdge Labs" class="labs-logo-dark">
   <p>Experimental projects under active development. APIs and features may change without notice.</p>
 </div>
+<div class="labs-divider"></div>
 
 <div class="cards-grid">
 
