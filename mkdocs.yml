@@ -346,10 +346,10 @@ nav:
       - Installing Postgres: enterprise/el/installing.md
       - Supporting Components:
         - Installing Supporting Components: enterprise/el/components/components.md
-        - Configuring pgEdge AI DBA Workbench: enterprise/el/components/workbench.md
-        - Configuring ACE: enterprise/el/components/ace.md
-        - Configuring Patroni: enterprise/el/components/patroni.md
-        - Configuring PgBouncer: enterprise/el/components/pgbouncer.md
+        - Installing and Configuring pgEdge AI DBA Workbench: enterprise/el/components/workbench.md
+        - Installing and Configuring ACE: enterprise/el/components/ace.md
+        - Installing and Configuring Patroni: enterprise/el/components/patroni.md
+        - Installing and Configuring PgBouncer: enterprise/el/components/pgbouncer.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
@@ -359,10 +359,10 @@ nav:
       - Installing Postgres: enterprise/debian/installing.md
       - Supporting Components:
         - Installing Supporting Components: enterprise/debian/components/components.md
-        - Configuring pgEdge AI DBA Workbench: enterprise/debian/components/workbench.md
-        - Configuring ACE: enterprise/debian/components/ace.md
-        - Configuring Patroni: enterprise/debian/components/patroni.md
-        - Configuring PgBouncer: enterprise/debian/components/pgbouncer.md
+        - Installing and Configuring pgEdge AI DBA Workbench: enterprise/debian/components/workbench.md
+        - Installing and Configuring ACE: enterprise/debian/components/ace.md
+        - Installing and Configuring Patroni: enterprise/debian/components/patroni.md
+        - Installing and Configuring PgBouncer: enterprise/debian/components/pgbouncer.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
       - Upgrading Spock: enterprise/debian/upgrading-spock.md
       - Creating an Offline Repo: enterprise/debian/offline.md
