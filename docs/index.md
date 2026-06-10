@@ -671,6 +671,17 @@ hide:
     <a href="pg-semantic-cache/" class="card-link">View Documentation →</a>
   </div>
 
+  <!-- Postgres Healthcheck -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>Postgres Healthcheck (<a href="https://github.com/pgEdge/pg-healthcheck">pg-healthcheck</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">Comprehensive health monitoring for PostgreSQL instances.</p>
+    <a href="pg-healthcheck/" class="card-link">View Documentation →</a>
+  </div>
+
   <!-- Safe Session -->
   <div class="card">
     <div class="card-header">
