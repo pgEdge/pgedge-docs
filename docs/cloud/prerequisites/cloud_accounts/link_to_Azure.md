@@ -31,10 +31,7 @@ To register a resource provider, navigate to: `All services` -->
 Depending on your Cloud node locations and Azure Instance Type selection, you
 may need to request Quota Increases under `All services` --> `Quotas` -->
 `Compute` to ensure that virtual machines can be successfully created in each
-location. In addition, you must accept the image terms for the virtual
-machine image used by Cloud via the Azure CLI:
-
-`az vm image terms accept --urn erockyenterprisesoftwarefoundationinc1653071250513:rockylinux-9:rockylinux-9:9.1.20230215`
+location.
 
 To link an Azure account with your Cloud account, select the `Cloud Accounts`
 heading in the left navigation pane and then the `+ Link Cloud Account`

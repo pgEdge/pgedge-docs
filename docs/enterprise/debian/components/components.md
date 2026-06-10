@@ -29,6 +29,7 @@ matches your copy of Postgres.
 | [pgEdge DocLoader](https://docs.pgedge.com/pgedge-docloader/) | pgedge-docloader | Document loading utility |
 | [pgEdge RAG Server](https://docs.pgedge.com/pgedge-rag-server/) | pgedge-rag-server | Retrieval-Augmented Generation server |
 | [pgEdge Vectorizer](https://docs.pgedge.com/pgedge-vectorizer/) | pgedge-vectorizer_XX | Vector embedding generation |
+| [ACE](ace.md) | pgedge-ace | Active Consistency Engine for cluster data validation |
 | [Lolor](https://docs.pgedge.com/lolor/blob/main/README.md) | pgedge-lolor_XX | Logical-logical replication |
 | [pgAdmin](https://www.pgadmin.org/docs/) | pgedge-pgadmin4; pgedge-pgadmin4-desktop; pgedge-pgadmin4-server; pgedge-pgadmin4-web | Web-based database management tool |
 | [pgaudit](https://github.com/pgaudit/pgaudit/blob/main/README.md) | pgedge-pgaudit_XX | Session and object audit logging |
