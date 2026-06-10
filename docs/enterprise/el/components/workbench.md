@@ -1,4 +1,4 @@
-# Installing the AI DBA Workbench with RPM Packages
+# Installing and Configuring the AI DBA Workbench
 
 This guide walks you through installing and configuring the pgEdge AI DBA
 Workbench on a Linux system using RPM packages. The installation covers

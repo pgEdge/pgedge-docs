@@ -1,4 +1,4 @@
-# Installing the AI DBA Workbench with DEB Packages
+# Installing and Configuring the AI DBA Workbench
 
 This guide walks you through installing and configuring the pgEdge AI DBA
 Workbench on a Linux system using DEB packages. In our example, we'll be
