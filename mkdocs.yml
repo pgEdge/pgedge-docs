@@ -186,6 +186,7 @@ extra:
 
   # pgEdge Labs - shows a notice that content is experimental/under active development
   labs_docsets:
+    - coldfront
     - pg-semantic-cache
     - pg-healthcheck
     - pgedge-safesession
@@ -303,6 +304,8 @@ extra:
         url: radar/
       - hr: true
       - heading: "Community Tools"
+      - title: ColdFront
+        url: coldfront/
       - title: CloudNativePG
         url: cloudnativepg/
       - title: Patroni
@@ -736,6 +739,9 @@ nav:
     - v4.0.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstats400'
     - v3.2.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstats321'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstatsmaster'
+
+  # Community Tools
+  - ColdFront: coldfront/index.md
 
   # Community Tools (from 3rd-party-docs repo)
   - pgAdmin 4:
