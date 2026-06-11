@@ -125,6 +125,27 @@ jobs:
               url_label_map.setdefault(nu, set()).add(label)
               url_label_to_ref[(nu, label)] = ref
 
+          # ── Build the expected set from SSOT ──────────────────────────────
+          # expected_refs[nu]:     normalized_base_url → set of refs SSOT still produces
+          # expected_versions[nu]: normalized_base_url → set of versions SSOT still lists
+          # Used to detect entries that linger in mkdocs.yml after being removed
+          # from SSOT. One repo URL (3rd-party-docs.git) hosts many products via
+          # different branches, so the ref is the real identity here.
+          expected_refs     = defaultdict(set)
+          expected_versions = defaultdict(set)
+          for entry in ssot['sources']:
+              if not for_pgedge_docs(entry):
+                  continue
+              version = entry.get('version', '')
+              if not version or version == 'dev':
+                  continue
+              git_url, ref = get_import_info(entry)
+              if not git_url or not ref:
+                  continue
+              nu = normalize_url(git_url)
+              expected_refs[nu].add(ref)
+              expected_versions[nu].add(str(version))
+
           # SSH URL check
           ssh_urls = bool(re.search(r"'!import git@github\.com:", mkdocs_text))
 
@@ -245,11 +266,37 @@ jobs:
                           'version': latest_cp,
                       }
 
+          # ── Stale entries: present in mkdocs.yml, removed from SSOT ───────
+          # A versioned nav line is pruned only when BOTH hold:
+          #   (a) its ref is no longer produced by any SSOT entry for that URL, and
+          #   (b) no remaining SSOT version for that URL covers its label.
+          # (b) protects intentionally-decorated refs (e.g. 'v5.0.6-doc-2',
+          # 'fix-for-1.5.1-docs') whose version is still in SSOT. URLs that
+          # SSOT does not manage at all are left untouched, as are Development/
+          # main lines (no version label → not matched by label_re).
+          stale_entries = []
+          for m in label_re.finditer(mkdocs_text):
+              s_label = m.group(1)
+              s_nu    = normalize_url(m.group(2))
+              s_ref   = m.group(3)
+              if s_nu not in expected_refs:
+                  continue  # URL not driven by SSOT — leave alone
+              if s_ref in expected_refs[s_nu]:
+                  continue  # ref still present in SSOT
+              if any(label_covers_version(s_label, v) for v in expected_versions[s_nu]):
+                  continue  # version still in SSOT under a different/decorated ref
+              stale_entries.append({
+                  'label'  : s_label,
+                  'nu'     : s_nu,
+                  'ref'    : s_ref,
+                  'git_url': m.group(2),
+              })
+
           # ── Build drift report ────────────────────────────────────────────
 
           lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
           clean = (not missing_entries and not new_products and not ssh_urls
-                   and not ref_updates and not cp_path_update)
+                   and not ref_updates and not cp_path_update and not stale_entries)
 
           if ssh_urls:
               lines += ['### SSH URLs detected in mkdocs.yml\n',
@@ -286,6 +333,15 @@ jobs:
                   )
               lines.append('')
 
+          if stale_entries:
+              lines += ['### Stale entries (in mkdocs.yml, removed from SSOT)\n']
+              for item in stale_entries:
+                  lines.append(
+                      f"  - **REMOVE** label `{item['label']}` → "
+                      f"`{item['git_url']}?branch={item['ref']}`"
+                  )
+              lines.append('')
+
           if cp_path_update:
               lines += ['### Asset path version bump\n',
                         f"  - `/control-plane/{cp_path_update['old']}/scripts/generate-stack.js`"
@@ -298,6 +354,7 @@ jobs:
               lines += ['---',
                         f'*{len(ref_updates)} ref update(s), '
                         f'{len(missing_entries)} missing, '
+                        f'{len(stale_entries)} stale, '
                         f'{len(new_products)} new product(s)*']
 
           report = '\n'.join(lines) + '\n'
@@ -305,7 +362,8 @@ jobs:
               f.write(report)
           print(report)
 
-          actionable = bool(missing_entries or ssh_urls or ref_updates or cp_path_update)
+          actionable = bool(missing_entries or ssh_urls or ref_updates
+                            or cp_path_update or stale_entries)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
               fh.write(f'actionable={"true" if actionable else "false"}\n')
               fh.write(f'clean={"true" if clean else "false"}\n')
@@ -452,6 +510,22 @@ jobs:
                   fixed = insert_version(
                       fixed, nu, item['label'], item['git_url'], item['ref']
                   )
+
+          # Remove stale entries (whole physical line, including its newline).
+          # Match on (label, base-url, ref) so only the exact drifted line goes.
+          for item in stale_entries:
+              base = item['nu'].rstrip('/')
+              if base.endswith('.git'):
+                  base = base[:-4]
+              fixed = re.sub(
+                  r"(?m)^[ \t]*-[ \t]+" + re.escape(item['label'])
+                  + r":[ \t]+'!import " + re.escape(base)
+                  + r"(?:\.git)?\?branch=" + re.escape(item['ref'])
+                  + r"'[^\n]*\n",
+                  '',
+                  fixed,
+                  count=1,
+              )
 
           with open(MKDOCS_FILE, 'w') as f:
               f.write(fixed)
