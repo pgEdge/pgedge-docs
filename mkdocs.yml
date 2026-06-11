@@ -669,7 +669,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-safesession?branch=main'
 
   - pgedge-mcp-bridge:
-    - v1.0.0-alpha5: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=v1.0.0-alpha5'
+    - v1.0.0-alpha6: '!import https://github.com/pgEdge/pgedge-mcp-bridge.git?branch=v1.0.0-alpha6'
     - Development: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=main'
 
   - PostgreSQL:
