@@ -284,24 +284,32 @@ jobs:
                       }
 
           # ── Stale entries: present in mkdocs.yml, removed from SSOT ───────
-          # A versioned nav line is pruned only when BOTH hold:
+          # SSOT is the single source of truth: every versioned nav line must be
+          # backed by an SSOT entry. A line is pruned when BOTH hold:
           #   (a) its ref is no longer produced by any SSOT entry for that URL, and
-          #   (b) no remaining SSOT version for that URL covers its label.
+          #   (b) no remaining SSOT version for that URL — whose number is embedded
+          #       in this line's ref — covers its label.
           # (b) protects intentionally-decorated refs (e.g. 'v5.0.6-doc-2',
-          # 'fix-for-1.5.1-docs') whose version is still in SSOT. URLs that
-          # SSOT does not manage at all are left untouched, as are Development/
-          # main lines (no version label → not matched by label_re).
+          # 'fix-for-1.5.1-docs', 'v0.1.0-docs') whose version is still in SSOT: the
+          # decorated ref always contains the dotted version. Requiring that match
+          # scopes the check to the right product, so it does NOT misfire on the
+          # shared 3rd-party-docs.git URL where many products collide on a major
+          # number (e.g. PostgreSQL 'pg18' must not be shielded by pgAudit '18.0' —
+          # 'pg18' does not contain '18.0'). This also prunes full-product removals:
+          # when every version of a product leaves SSOT its URL drops out of
+          # expected_refs entirely, so all its versioned lines are stale.
+          # Development/main lines carry no version label, so label_re never matches
+          # them and they are always preserved.
           stale_entries = []
           for m in label_re.finditer(mkdocs_text):
               s_label = m.group(1)
               s_nu    = normalize_url(m.group(2))
               s_ref   = m.group(3)
-              if s_nu not in expected_refs:
-                  continue  # URL not driven by SSOT — leave alone
-              if s_ref in expected_refs[s_nu]:
+              if s_ref in expected_refs.get(s_nu, set()):
                   continue  # ref still present in SSOT
-              if any(label_covers_version(s_label, v) for v in expected_versions[s_nu]):
-                  continue  # version still in SSOT under a different/decorated ref
+              if any(str(v) in s_ref and label_covers_version(s_label, v)
+                     for v in expected_versions.get(s_nu, set())):
+                  continue  # version still in SSOT under a decorated ref for THIS product
               stale_entries.append({
                   'label'  : s_label,
                   'nu'     : s_nu,
