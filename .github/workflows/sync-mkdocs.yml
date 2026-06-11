@@ -300,8 +300,26 @@ jobs:
           # expected_refs entirely, so all its versioned lines are stale.
           # Development/main lines carry no version label, so label_re never matches
           # them and they are always preserved.
+          #
+          # Caveat on the version-in-ref guard: it protects decorated refs that
+          # embed the dotted version (the real cases: v5.0.6-doc-2, v0.1.0-docs,
+          # fix-for-1.5.1-docs). A 3rd-party-docs ref that omits the version
+          # (e.g. 'pgvector082') is identified solely by its exact ref, so a
+          # *rename* that keeps the version would prune the old line — acceptable,
+          # since 3rd-party-docs adds are already manual and renaming a kb_branch
+          # is a manual op. Relaxing this would reintroduce the cross-product
+          # collision (PostgreSQL 'pg18' shielded by pgAudit '18.0').
+          #
+          # Scan an SSH→HTTPS-normalized view so a stale line still using
+          # git@github.com: is detected here; otherwise the SSH fix below would
+          # rewrite it to HTTPS and let the stale entry slip through unpruned.
+          mkdocs_scan = re.sub(
+              r"'!import git@github\.com:([^/]+)/",
+              r"'!import https://github.com/\1/",
+              mkdocs_text,
+          )
           stale_entries = []
-          for m in label_re.finditer(mkdocs_text):
+          for m in label_re.finditer(mkdocs_scan):
               s_label = m.group(1)
               s_nu    = normalize_url(m.group(2))
               s_ref   = m.group(3)
