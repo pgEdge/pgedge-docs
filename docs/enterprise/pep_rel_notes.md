@@ -1,5 +1,12 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 6/11/2026
+
+* pgEdge AI DBA Workbench 1.0.0 GA
+* pgEdge AI KB 1.0.0
+* pgEdge Patroni 4.1.3-2 (with pgEdge Json Logger 4.1.0 dependency required for Control Plane)
+
+
 ## 6/02/2026
 
 * pgEdge Enterprise Postgres packages 16.14-2, 17.10-2, and 18.4-2 released for RHEL: Rebuild triggered by RHEL AppStream repositories updating to a newer major version of the LLVM Toolset (llvm-21.1.8)
