@@ -700,7 +700,7 @@ hide:
         <h3>MCP Bridge (<a href="https://github.com/pgEdge/pgedge-mcp-bridge">pgedge-mcp-bridge</a>)</h3>
       </div>
     </div>
-    <p class="card-description">HTTP/SSE transport proxy for stdio-only MCP servers, with OAuth and token-based authentication.</p>
+    <p class="card-description">Bidirectional MCP transport proxy bridging HTTP/SSE and stdio, with OAuth and token-based authentication.</p>
     <a href="pgedge-mcp-bridge/" class="card-link">View Documentation →</a>
   </div>
 
