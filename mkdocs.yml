@@ -571,6 +571,7 @@ nav:
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed
   - pgEdge Helm:
+    - v1.0: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v1.0.0'
     - v0.2: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.2.0'
     - v0.1: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.1.0-docs'
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
