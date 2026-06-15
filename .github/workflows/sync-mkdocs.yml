@@ -605,7 +605,7 @@ jobs:
           git checkout -B "$FIX_BRANCH" "origin/$BASE_BRANCH"
           cp /tmp/mkdocs_generated.yml "$MKDOCS_FILE"
           git add "$MKDOCS_FILE"
-          git commit -m "auto: sync mkdocs.yml nav from SSOT [skip ci]"
+          git commit -m "auto: sync mkdocs.yml nav from SSOT"
           git push --force-with-lease origin "$FIX_BRANCH"
           echo "pushed=true"          >> "$GITHUB_OUTPUT"
           echo "branch_ready=true"    >> "$GITHUB_OUTPUT"
