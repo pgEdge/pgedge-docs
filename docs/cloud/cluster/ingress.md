@@ -2,8 +2,8 @@
 
 When you create a private Cloud cluster, you restrict access to only those
 users on your local network.  You can define an ingress for users not on your
-network that exposes the services for use.  To add a network ingress, select
-`Add Ingress` from the
+network that exposes the services for use.  To add a network ingress to your
+cluster, select `Add Ingress` from the
 [`Actions`](https://pgedge-docs-sandbox.pages.dev/cloud/mod_cluster/actions)
 drop-down menu.
 

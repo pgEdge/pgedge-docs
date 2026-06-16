@@ -496,6 +496,7 @@ nav:
       - Managing Firewall Rules: cloud/cluster/firewall.md
       - Using Resource Tags: cloud/cluster/resource_tag.md
       - Managing VPC Associations: cloud/cluster/vpc_assoc.md
+      - Adding an Ingress to a Private Cluster: cloud/cluster/ingress.md
     - Database Management:
       - Reviewing your Databases: cloud/database/index.md
       - Creating a Database: cloud/database/create_db.md
