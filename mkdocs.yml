@@ -147,6 +147,7 @@ extra:
   # Convention: first version = latest, "Development" = unstable/main branch
   versioned_docsets:
     - pgedge-helm
+    - coldfront
     - ace
     - ai-dba-workbench
     - lolor
@@ -263,6 +264,8 @@ extra:
         url: postgresql/
       - hr: true
       - heading: "pgEdge Extensions"
+      - title: ColdFront
+        url: coldfront/
       - title: Spock v5
         url: spock-v5/
       - title: LOLOR
@@ -602,6 +605,10 @@ nav:
   - Snowflake:
     - v2.4: '!import https://github.com/pgEdge/snowflake.git?branch=v2.4'
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
+
+  - ColdFront:
+    - v1.0.0-beta1: '!import https://github.com/pgEdge/coldfront.git?branch=v1.0.0-beta1'
+    - Development: '!import https://github.com/pgEdge/coldfront.git?branch=main'
 
   - Spock v5:
     - v5.0.9: '!import https://github.com/pgEdge/spock.git?branch=v5.0.9'
