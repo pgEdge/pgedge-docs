@@ -540,6 +540,10 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">pgEdge Extensions</li>
       <li>
+        <a href="coldfront/"><strong>ColdFront</strong> <span class="chip-new">NEW</span></a>
+        <span class="ext-desc">Transparent data tiering that archives cold data to Apache Iceberg whilst keeping it readable and writable through standard SQL</span>
+      </li>
+      <li>
         <a href="spock-v5/"><strong>Spock</strong></a>
         <span class="ext-desc">Multi-master logical replication with conflict resolution for globally distributed clusters</span>
       </li>
