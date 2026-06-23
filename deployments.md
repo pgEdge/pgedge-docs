@@ -39,12 +39,4 @@ Test: Use this file to deploy changes to branches that do not require a change t
 02/03/2026 - Spock update - out to team for review.
 04/15/2026 - Fresh copy.
 04/01/2026 - Deployment issue with pgEdge labs build.
-04/24/2026 - Redeploy main/development docs for Spock.
-04/28/2026 - Deploy getting_started update.
-04/28/1026 - kick off build.
-04/29/2026 - Build spock 5.0.6 doc updates.
-05/05/2026 - Add pg-healthcheck to to mkdocs.yml to publish
-05/07/2026 - publish pg-healthcheck - test
-05/07/2026 - publish AI Workbench
-05/20/2026 - kick off AI Workbench build
-06/03/2026 - kick off AI Workbench update again
+04/14/2026 - Cloud updates.

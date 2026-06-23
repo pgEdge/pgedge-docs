@@ -13,6 +13,7 @@ Select from the options listed to:
 * Update [Backup Stores](../cluster/backup_store.md).
 * Update [Firewall Rules](../cluster/firewall.md).
 * Manage [VPC Associations](../cluster/vpc_assoc.md).
+* [Add an Ingress](../cluster/ingress.md.md) to a private cluster.
 * [Manage Tags](../cluster/resource_tag.md).
 * [Delete a cluster](drop.md#deleting-a-cluster).
 
@@ -26,5 +27,5 @@ Select from the options listed to:
 * [Restore the Database](../backup/restore.md) from backup.
 * [Add the database](add.md#adding-a-database-to-a-cluster-node) to another node.
 * [Remove the database](drop.md#removing-a-database-from-a-node) from a node.
-* [Edit the Display Name](modify.md#changing-the-display-name-of-a-database) of the database.
+* [Edit the Display Name](../database/manage_db.md#changing-the-display-name-of-a-database) of the database.
 * [Delete the database](drop.md#deleting-a-database).
