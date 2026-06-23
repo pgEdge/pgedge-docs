@@ -7,6 +7,14 @@ or to manage defined functionality.
 
 ![The Services dialog](../cloud/images/services.png)
 
+!!! note
+
+    If your Cloud cluster resides on a private network, you can expose a port
+    for connections by [creating a public ingress](../cloud/cluster/ingress.md).
+    An ingress into a private network is used only for services (like AI 
+    tools), and does not accept Postgres database connections.
+    
+
 ## Adding an MCP Server
 
 Select the `+ Add MCP Server` button to access the `Add MCP Server` popup to
@@ -166,15 +174,8 @@ Markdown, and reStructuredText into a `documents` table:
 pgedge-docloader --config docloader.yml
 ```
 
-Then, use
-[pgEdge Vectorizer](https://docs.pgedge.com/pgedge-vectorizer/v1-0/)
-to chunk your documents and generate vector embeddings via your chosen
-embedding provider (OpenAI, Voyage AI, or Ollama). Vectorizer runs as a
-background worker inside PostgreSQL — no manual intervention is needed after
-the initial configuration.
-
-Once data is loaded and embedded, you can query your pipeline via the REST
-API. For example:
+Once data is loaded, you can query your pipeline via the REST API. For
+example:
 
 ```bash
 curl -X POST https://<your-rag-server-url>/v1/pipelines/my-docs/search \

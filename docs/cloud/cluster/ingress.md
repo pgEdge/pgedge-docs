@@ -2,8 +2,14 @@
 
 When you create a private Cloud cluster, you restrict access to only those
 users on your local network.  You can define an ingress for users not on your
-network that exposes the services for use.  To add a network ingress to your
-cluster, select `Add Ingress` from the
+network that exposes AI Tooling for use.
+
+!!! note
+
+    An ingress into a private network is used only for services (like AI 
+    tools), and does not accept Postgres database connections.
+
+To add a network ingress to your cluster, select `Add Ingress` from the
 [`Actions`](https://pgedge-docs-sandbox.pages.dev/cloud/mod_cluster/actions)
 drop-down menu.
 
@@ -21,3 +27,7 @@ After completing the dialog, select the `+ Create Ingress` icon to create the
 defined ingress.
 
 ![The Ingress displayed on the Cluster dialog](../images/new_ingress.png)
+
+Defined ingresses are displayed on the Cluster dialog:
+
+![A list of ingresses on the Cluster dialog](../images/ingress_list.png)
