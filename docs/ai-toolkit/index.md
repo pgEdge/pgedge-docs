@@ -25,6 +25,14 @@ The pgEdge AI Toolkit consists of the following components.
 
 ### pgEdge Components
 
+**[AI DBA Workbench](../ai-dba-workbench/index.md)** is an AI-powered
+environment for monitoring, managing, and troubleshooting PostgreSQL
+systems. It combines a data collector, alert monitoring, and web
+dashboard with optional AI assistance — supporting both cloud-connected
+LLMs (Claude, OpenAI, Gemini) and locally hosted models (Ollama) for
+air-gapped environments. It connects to PostgreSQL instances via the
+pgEdge Postgres MCP Server for AI-driven database analysis.
+
 **[pgEdge Postgres MCP Server](../pgedge-postgres-mcp-server/index.md)** gives AI
 agents secure, structured access to PostgreSQL through the Model Context
 Protocol. It exposes tools for schema inspection, SQL execution, similarity

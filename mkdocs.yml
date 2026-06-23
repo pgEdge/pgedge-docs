@@ -11,7 +11,7 @@ extra_css:
 extra_javascript:
   # Pulled from control-plane repo for install page
   # Note: Must update version when control-plane latest version changes
-  - /control-plane/v0-7/scripts/generate-stack.js
+  - /control-plane/v0-8/scripts/generate-stack.js
   - javascripts/tabs-dropdown.js
   - javascripts/org-stars.js
   - javascripts/version-selector.js
@@ -147,7 +147,9 @@ extra:
   # Convention: first version = latest, "Development" = unstable/main branch
   versioned_docsets:
     - pgedge-helm
+    - coldfront
     - ace
+    - ai-dba-workbench
     - lolor
     - snowflake
     - spock-v5
@@ -159,6 +161,7 @@ extra:
     - pgedge-rag-server
     - pgedge-vectorizer
     - pg-semantic-cache
+    - pg-healthcheck
     - pgedge-safesession
     - pgedge-mcp-bridge
     - radar
@@ -179,10 +182,13 @@ extra:
     - psycopg2
     - system-stats
     - vchord-bm25
+    - cloudnativepg
+    - patroni
 
   # pgEdge Labs - shows a notice that content is experimental/under active development
   labs_docsets:
     - pg-semantic-cache
+    - pg-healthcheck
     - pgedge-safesession
     - pgedge-mcp-bridge
 
@@ -205,6 +211,8 @@ extra:
     - psycopg2
     - system-stats
     - vchord-bm25
+    - cloudnativepg
+    - patroni
 
   # Navigation dropdown categories
   # Supported item types:
@@ -231,6 +239,8 @@ extra:
         url: ai-toolkit/
       - hr: true
       - heading: "pgEdge Components"
+      - title: AI DBA Workbench
+        url: ai-dba-workbench/
       - title: pgEdge Postgres MCP Server
         url: pgedge-postgres-mcp-server/
       - title: pgEdge RAG Server
@@ -254,6 +264,8 @@ extra:
         url: postgresql/
       - hr: true
       - heading: "pgEdge Extensions"
+      - title: ColdFront
+        url: coldfront/
       - title: Spock v5
         url: spock-v5/
       - title: LOLOR
@@ -282,6 +294,8 @@ extra:
         url: system-stats/
     Tools:
       - heading: "pgEdge Tools"
+      - title: AI DBA Workbench
+        url: ai-dba-workbench/
       - title: ACE
         url: ace/
       - title: pgEdge Anonymizer
@@ -292,12 +306,16 @@ extra:
         url: radar/
       - hr: true
       - heading: "Community Tools"
+      - title: CloudNativePG
+        url: cloudnativepg/
+      - title: Patroni
+        url: patroni/
       - title: pgAdmin 4
         url: pgadmin-4/
-      - title: PgBouncer
-        url: pgbouncer/
       - title: pgBackRest
         url: pgbackrest/
+      - title: PgBouncer
+        url: pgbouncer/
       - title: PostgREST
         url: postgrest/
       - title: psycopg2
@@ -305,6 +323,8 @@ extra:
     pgEdge Labs:
       - title: Semantic Cache (pg_semantic_cache)
         url: pg-semantic-cache/
+      - title: Postgres Healthcheck (pg-healthcheck)
+        url: pg-healthcheck/
       - title: Safe Session (pgedge-safesession)
         url: pgedge-safesession/
       - title: MCP Bridge (pgedge-mcp-bridge)
@@ -319,7 +339,7 @@ nav:
 
   - AI Toolkit: ai-toolkit/index.md
 
-  - Ansible: ansible/index.md
+  - Ansible: '!import https://github.com/pgEdge/pgedge-ansible.git?branch=add_docs'
 
   - pgEdge Enterprise Postgres:
     - Enterprise Edition: enterprise/index.md
@@ -327,7 +347,12 @@ nav:
       - Enterprise Linux Version Support: enterprise/el/index.md
       - Getting Started - Configuring the Repository: enterprise/el/configure-repo.md
       - Installing Postgres: enterprise/el/installing.md
-      - Installing Supporting Components: enterprise/el/components.md
+      - Supporting Components:
+        - Installing Supporting Components: enterprise/el/components/components.md
+        - Installing and Configuring pgEdge AI DBA Workbench: enterprise/el/components/workbench.md
+        - Installing and Configuring ACE: enterprise/el/components/ace.md
+        - Installing and Configuring Patroni: enterprise/el/components/patroni.md
+        - Installing and Configuring PgBouncer: enterprise/el/components/pgbouncer.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
@@ -335,7 +360,12 @@ nav:
       - Debian & Ubuntu Version Support: enterprise/debian/index.md
       - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
       - Installing Postgres: enterprise/debian/installing.md
-      - Installing Supporting Components: enterprise/debian/components.md
+      - Supporting Components:
+        - Installing Supporting Components: enterprise/debian/components/components.md
+        - Installing and Configuring pgEdge AI DBA Workbench: enterprise/debian/components/workbench.md
+        - Installing and Configuring ACE: enterprise/debian/components/ace.md
+        - Installing and Configuring Patroni: enterprise/debian/components/patroni.md
+        - Installing and Configuring PgBouncer: enterprise/debian/components/pgbouncer.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
       - Upgrading Spock: enterprise/debian/upgrading-spock.md
       - Creating an Offline Repo: enterprise/debian/offline.md
@@ -343,7 +373,7 @@ nav:
     - Enterprise Postgres Release Notes: enterprise/pep_rel_notes.md
 
   - pgEdge Distributed Postgres:
-    - CLI Overview: platform/index.md
+    - Deprecated Functionality: platform/index.md
     - Prerequisites - Preparing your System:
       - Supported Operating Systems: platform/prerequisites/platforms.md
       - Preparing your System for the CLI: platform/prerequisites/index.md
@@ -544,11 +574,13 @@ nav:
   # Pinned to latest release - this should be updated when a new release is cut
   # Macro variables under extra also need to be updated, if changed
   - pgEdge Helm:
+    - v1.0: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v1.0.0'
     - v0.2: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.2.0'
     - v0.1: '!import https://github.com/pgEdge/pgedge-helm.git?branch=v0.1.0-docs'
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE:
+    - v2.0.0: '!import https://github.com/pgEdge/ace.git?branch=v2.0.0'
     - v1.9.0: '!import https://github.com/pgEdge/ace.git?branch=v1.9.0'
     - v1.8.1: '!import https://github.com/pgEdge/ace.git?branch=v1.8.1'
     - v1.8.0: '!import https://github.com/pgEdge/ace.git?branch=v1.8.0'
@@ -574,13 +606,21 @@ nav:
     - v2.4: '!import https://github.com/pgEdge/snowflake.git?branch=v2.4'
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
+  - ColdFront:
+    - v1.0.0-beta1: '!import https://github.com/pgEdge/coldfront.git?branch=v1.0.0-beta1'
+    - Development: '!import https://github.com/pgEdge/coldfront.git?branch=main'
+
   - Spock v5:
-    - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5.0.6_doc_update'
+    - v5.0.9: '!import https://github.com/pgEdge/spock.git?branch=v5.0.9'
+    - v5.0.8: '!import https://github.com/pgEdge/spock.git?branch=v5.0.8'
+#    - v5.0.7: '!import https://github.com/pgEdge/spock.git?branch=v5.0.7'
+    - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5.0.6-doc-2'
     - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
     - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
 
   - Control Plane:
+    - v0.8: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.8.1'
     - v0.7: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.7.0'
     - v0.6: '!import https://github.com/pgEdge/control-plane.git?branch=v0.6.2-docs'
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
@@ -622,7 +662,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
 
   - AI DBA Workbench:
-    - v1.0.0-beta1: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=v1.0.0-beta1'
+    - v1.0.0: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=main'
 
   # --- pgEdge Labs ---
@@ -630,11 +670,15 @@ nav:
     - v0.1.0-beta4: '!import https://github.com/pgEdge/pg_semantic_cache?branch=v0.1.0-beta4'
     - Development: '!import https://github.com/pgEdge/pg_semantic_cache?branch=main'
 
+  - pg-healthcheck:
+    - v1.1.0: '!import https://github.com/pgEdge/pg-healthcheck?branch=v1.1.0'
+    - Development: '!import https://github.com/pgEdge/pg-healthcheck?branch=main'
+
   - pgedge-safesession:
     - Development: '!import https://github.com/pgEdge/pgedge-safesession?branch=main'
 
   - pgedge-mcp-bridge:
-    - v1.0.0-alpha5: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=v1.0.0-alpha5'
+    - v1.0.0-alpha6: '!import https://github.com/pgEdge/pgedge-mcp-bridge.git?branch=v1.0.0-alpha6'
     - Development: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=main'
 
   - PostgreSQL:
@@ -741,6 +785,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpgmaster'
 
   - Patroni:
+    - v4.1.3: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni413'
     - v4.1.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni412'
     - v4.1.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patroni411'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=patronimaster'

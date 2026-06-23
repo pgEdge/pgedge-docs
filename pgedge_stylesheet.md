@@ -21,11 +21,9 @@ pgEdge Anonymizer
 pgEdge RAG Server
 pgEdge Docloader
 
-Exceptions are:
+The Control Plane should have 'the' in front of the name.
 
-the Control Plane
-
-Lines in each .md file should be as long as possible, while wrapping content at 79 characters. Hyperlinks and table columns should not be split by wrapping.
+Lines in each .md file should be as long as possible, while wrapping content at 79 characters. Hyperlinks and table columns should not be split by wrapping.  Wrap the prose as close to 79 chars as possible, without breaking hyperlinks and table rows across multiple rows.
 
 Replace em-dashes with regular dashes (hyphens).
 

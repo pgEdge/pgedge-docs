@@ -60,9 +60,14 @@ Select from the pgEdge images listed below for your containerized deployments.
 | `ghcr.io/pgedge/nla-web` | Natural Language Agent web UI | [pgEdge/pgedge-postgres-mcp](https://github.com/pgEdge/pgedge-postgres-mcp) |
 | `ghcr.io/pgedge/nla-cli` | Natural Language Agent command-line client | [pgEdge/pgedge-postgres-mcp](https://github.com/pgEdge/pgedge-postgres-mcp) |
 | `ghcr.io/pgedge/rag-server` | RAG (Retrieval-Augmented Generation) server | [pgEdge/pgedge-rag-server](https://github.com/pgEdge/pgedge-rag-server) |
+| `ghcr.io/pgedge/ai-dba-server` | pgEdge AI DBA Workbench server | [pgEdge/ai-dba-workbench](https://github.com/pgEdge/ai-dba-workbench) |
+| `ghcr.io/pgedge/ai-dba-client` | pgEdge AI DBA Workbench client | [pgEdge/ai-dba-workbench](https://github.com/pgEdge/ai-dba-workbench) |
+| `ghcr.io/pgedge/ai-dba-collector` | pgEdge AI DBA Workbench metrics collector | [pgEdge/ai-dba-workbench](https://github.com/pgEdge/ai-dba-workbench) |
+| `ghcr.io/pgedge/ai-dba-alerter` | pgEdge AI DBA Workbench alerting service | [pgEdge/ai-dba-workbench](https://github.com/pgEdge/ai-dba-workbench) |
 
 ### Tools
 
 | Image | Description | Source |
 |-------|-------------|--------|
 | `ghcr.io/pgedge/ace` | Active Consistency Engine for distributed PostgreSQL | [pgEdge/ace](https://github.com/pgEdge/ace) |
+| `ghcr.io/pgedge/postgrest` | RESTful API server for PostgreSQL | [pgEdge/postgrest-images](https://github.com/pgEdge/postgrest-images) |

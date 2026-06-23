@@ -1,5 +1,51 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 6/02/2026
+
+* pgEdge Enterprise Postgres packages 16.14-2, 17.10-2, and 18.4-2 released for RHEL: Rebuild triggered by RHEL AppStream repositories updating to a newer major version of the LLVM Toolset (llvm-21.1.8)
+
+## 5/29/2026
+
+* pgEdge AI DBA Workbench 1.0.0-beta3 release for all supported platforms
+
+## 5/14/2026
+
+* Postgres version update: pgEdge Enterprise Postgres 16.14
+
+    * pgedge-enterprise-postgres 16.14
+    * pgedge-enterprise-all 16.14
+
+* Postgres version update: pgEdge Enterprise Postgres 17.10
+
+    * pgedge-enterprise-postgres 17.10
+    * pgedge-enterprise-all 17.10
+
+* Postgres version update: pgEdge Enterprise Postgres 18.4
+
+    * pgedge-enterprise-postgres 18.4
+    * pgedge-enterprise-all 18.4
+
+* Component update: libpq 18.4
+* Component update: Common 290 (debs only)
+
+
+## 5/07/2026
+* pgEdge Active Consistency Engine (ACE) 2.0.0 (First PEP release)
+* Component updates: Patroni 4.1.3, pgAdmin 9.14
+* pgEdge radar 0.4.1 (First PEP release)
+  
+## 5/05/2026
+* Component updates: Spock 5.0.7
+
+## 4/22/2026
+* pgEdge AI DBA Workbench 1.0.0-beta1 release for all supported platforms
+* Component updates: PostgREST 14.10
+
+## 4/07/2026
+* pgEdge Anonymizer 1.0.0 GA release for all supported platforms
+* pgEdge RAG Server 1.0.0 GA release for all supported platforms
+* Patroni 4.1.0 & etcd 3.6.8 initial release for all supported platforms
+
 ## 3/31/2026
 * Component updates: pgBackRest 2.58.0, pgAdmin 9.13
 * pgEdge Postgres MCP Server and Natural Language Agent 1.0.0 (GA)
