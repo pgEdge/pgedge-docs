@@ -1,6 +1,6 @@
 # pgEdge Enterprise Postgres Release Notes
 
-## 30/06/2026
+## 06/30/2026
 * Component updates: Spock 5.0.10, Snowflake 2.5.0
 * Supautils 3.2.2 first release
 
