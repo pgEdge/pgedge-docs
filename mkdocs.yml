@@ -603,6 +603,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/lolor.git?branch=main'
 
   - Snowflake:
+    - v2.5: '!import https://github.com/pgEdge/snowflake.git?branch=v2.5.0'
     - v2.4: '!import https://github.com/pgEdge/snowflake.git?branch=v2.4'
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
@@ -611,6 +612,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/coldfront.git?branch=main'
 
   - Spock v5:
+    - v5.0.10: '!import https://github.com/pgEdge/spock.git?branch=v5.0.10'
     - v5.0.9: '!import https://github.com/pgEdge/spock.git?branch=v5.0.9'
     - v5.0.8: '!import https://github.com/pgEdge/spock.git?branch=v5.0.8'
 #    - v5.0.7: '!import https://github.com/pgEdge/spock.git?branch=v5.0.7'
