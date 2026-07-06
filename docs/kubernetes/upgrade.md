@@ -13,9 +13,9 @@ Upgrading CloudNativePG involves two steps:
 
 ## Before You Upgrade
 
-!!! warning 
+!!! warning "Review Release Notes"
 
-    "Review Release Notes" Always review the
+    Always review the
     [CloudNativePG release notes](https://cloudnative-pg.io/releases/) before
     upgrading. Some versions may have specific requirements or breaking changes.
 
@@ -43,7 +43,7 @@ To upgrade to a specific version:
 ```bash
 helm upgrade cnpg pgedge/cloudnative-pg \
   --namespace cnpg-system \
-  --version 0.28.0
+  --version 0.28.3
 ```
 
 ### Using Manifests
@@ -52,7 +52,7 @@ Apply the new manifest version:
 
 ```bash
 kubectl apply --server-side -f \
-  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.29.0/cnpg-1.29.0.yaml
+  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.29.1/cnpg-1.29.1.yaml
 ```
 
 ## PostgreSQL Cluster Updates
@@ -92,8 +92,8 @@ helm upgrade cnpg pgedge/cloudnative-pg \
 ## Version Compatibility
 
 CloudNativePG follows semantic versioning. Compatibility is guaranteed within
-the same minor series (patch releases only). Minor-level upgrades (e.g., 1.26 →
-1.27) can introduce behavior or breaking changes. pgEdge recommends upgrading
+the same minor series (patch releases only). Minor-level upgrades (e.g., 1.28 →
+1.29) can introduce behavior or breaking changes. pgEdge recommends upgrading
 sequentially through each minor version rather than skipping releases. Always
 review the release notes and intermediate minor upgrade instructions before
 upgrading.
@@ -128,7 +128,7 @@ Apply the previous manifest version:
 
 ```bash
 kubectl apply --server-side -f \
-  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.28.2/cnpg-1.28.2.yaml
+  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.28.3/cnpg-1.28.3.yaml
 ```
 
 ## Resources

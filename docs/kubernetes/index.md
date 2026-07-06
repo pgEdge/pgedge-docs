@@ -23,8 +23,10 @@ pgEdge distributes CloudNativePG with configurations optimized for pgEdge
 Enterprise Postgres images, and validates compatibility through automated
 testing.
 
-!!! note This distribution is **not affiliated with, endorsed by, or sponsored
-by** the CloudNativePG project or the Cloud Native Computing Foundation.
+!!! note
+
+    This distribution is **not affiliated with, endorsed by, or sponsored by**
+    the CloudNativePG project or the Cloud Native Computing Foundation.
 
 ## Getting Started
 
@@ -36,11 +38,10 @@ by** the CloudNativePG project or the Cloud Native Computing Foundation.
 
 ### CloudNativePG and Kubernetes Versions
 
-| CNPG Version | Kubernetes 1.31 | Kubernetes 1.32 | Kubernetes 1.33 | Kubernetes 1.34 | Kubernetes 1.35 |
-| ------------ | --------------- | --------------- | --------------- | --------------- | --------------- |
-| 1.29.0       | -               | -               | Yes             | Yes             | Yes             |
-| 1.28.2       | -               | Yes             | Yes             | Yes             | -               |
-| 1.27.4       | Yes             | Yes             | Yes             | -               | -               |
+| CNPG Version | Kubernetes 1.32 | Kubernetes 1.33 | Kubernetes 1.34 | Kubernetes 1.35 |
+| ------------ | --------------- | --------------- | --------------- | --------------- |
+| 1.29.1       | -               | Yes             | Yes             | Yes             |
+| 1.28.3       | Yes             | Yes             | Yes             | -               |
 
 ### PostgreSQL Versions
 
