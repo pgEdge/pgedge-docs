@@ -48,8 +48,8 @@ Select from the pgEdge images listed below for your containerized deployments.
 | Image | Description | Source |
 |-------|-------------|--------|
 | `ghcr.io/pgedge/cloudnative-pg` | CloudNativePG operator for Kubernetes deployments | [pgEdge/pgedge-cnpg-dist](https://github.com/pgEdge/pgedge-cnpg-dist) |
+| `ghcr.io/pgedge/plugin-barman-cloud` | Barman Cloud backup plugin | [pgEdge/pgedge-cnpg-dist](https://github.com/pgEdge/pgedge-cnpg-dist) |
 | `ghcr.io/pgedge/plugin-barman-cloud-sidecar` | Barman Cloud backup sidecar | [pgEdge/pgedge-cnpg-dist](https://github.com/pgEdge/pgedge-cnpg-dist) |
-| `ghcr.io/pgedge/plugin-barman-cloud-plugin` | Barman Cloud backup plugin | [pgEdge/pgedge-cnpg-dist](https://github.com/pgEdge/pgedge-cnpg-dist) |
 | `ghcr.io/pgedge/pgedge-helm-utils` | pgEdge Helm utility image containing spock configuration scripts | [pgEdge/pgedge-helm](https://github.com/pgEdge/pgedge-helm) |
 
 ### AI Toolkit
