@@ -152,7 +152,7 @@ extra:
     - ai-dba-workbench
     - lolor
     - snowflake
-    - spock-v5
+    - spock
     - control-plane
     - pgedge-postgres-mcp-server
     - pgedge-anonymizer
@@ -268,8 +268,8 @@ extra:
       - heading: "pgEdge Extensions"
       - title: ColdFront
         url: coldfront/
-      - title: Spock v5
-        url: spock-v5/
+      - title: Spock
+        url: spock/
       - title: LOLOR
         url: lolor/
       - title: Snowflake
