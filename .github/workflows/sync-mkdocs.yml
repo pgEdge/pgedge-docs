@@ -79,13 +79,31 @@ jobs:
               pgedge-docs is driven by the upstream_* fields (kb_* exist
               primarily for kb-builder). Within upstream_*, prefer
               upstream_branch when set — a maintained release branch can
-              receive doc backports that an immutable tag would miss."""
+              receive doc backports that an immutable tag would miss.
+
+              EXCEPTION: products published through the shared 3rd-party-docs
+              repo are imported into mkdocs.yml from the kb side
+              (3rd-party-docs.git?branch=<kb_branch>), NOT their upstream
+              canonical repo. Those entries carry BOTH sides — upstream_* so
+              kb-builder can build from the canonical source, and kb_* naming
+              the 3rd-party-docs branch mkdocs actually imports. Prefer the kb
+              side for them; otherwise the expected URL (e.g.
+              cloudnative-pg.git) never matches what mkdocs.yml imports and
+              every version is misfiled as a brand-new product."""
               upstream  = entry.get('upstream_git_source')
               up_branch = entry.get('upstream_branch')
               up_tag    = entry.get('upstream_tag')
               kb_src    = entry.get('kb_git_source')
               kb_branch = entry.get('kb_branch')
               kb_tag    = entry.get('kb_tag')
+              tools     = entry.get('tools') or []
+              is_third_party = ('3rd-party-docs' in tools
+                                or (kb_src and '3rd-party-docs' in kb_src))
+              if is_third_party and kb_src:
+                  if kb_branch:
+                      return kb_src, kb_branch
+                  if kb_tag:
+                      return kb_src, kb_tag
               if upstream and up_branch:
                   return upstream, up_branch
               if upstream and up_tag:
@@ -225,7 +243,24 @@ jobs:
                       })
                   continue
 
-              if nu not in url_ref_map:
+              # Deciding "new version of an existing product" vs "brand-new
+              # product" is normally a URL check (nu not in url_ref_map). But
+              # every 3rd-party-docs product shares ONE repo URL, so that URL
+              # is always present and the check can't tell them apart. There,
+              # identity is the non-numeric prefix of the branch (cnpg130 ->
+              # cnpg, barmancloud013 -> barmancloud): a version belongs to an
+              # existing block only if some other ref shares that prefix;
+              # otherwise it is a new product needing manual nav placement.
+              if '3rd-party-docs' in nu:
+                  prefix = re.sub(r'[\d._-]+$', '', ref)
+                  has_block = bool(prefix) and any(
+                      r != ref and r.startswith(prefix)
+                      for r in url_ref_map.get(nu, set())
+                  )
+              else:
+                  has_block = nu in url_ref_map
+
+              if not has_block:
                   new_products.append(entry)
               else:
                   # Mirror the existing label convention for this URL block:
