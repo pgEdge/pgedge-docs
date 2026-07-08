@@ -623,6 +623,10 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">Community Tools</li>
       <li>
+        <a href="barman-cloud-plugin/"><strong>Barman Cloud Plugin</strong></a>
+        <span class="ext-desc">Object storage backup and recovery for CloudNativePG</span>
+      </li>
+      <li>
         <a href="cloudnativepg/"><strong>CloudNativePG</strong></a>
         <span class="ext-desc">Kubernetes operator for PostgreSQL</span>
       </li>
