@@ -787,6 +787,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrestmaster'
 
   - CloudNativePG:
+    - v1.30: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpg130'
     - v1.29: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpg129'
     - v1.28: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpg128'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=cnpgmaster'
