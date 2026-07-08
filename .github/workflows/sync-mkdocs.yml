@@ -79,13 +79,31 @@ jobs:
               pgedge-docs is driven by the upstream_* fields (kb_* exist
               primarily for kb-builder). Within upstream_*, prefer
               upstream_branch when set — a maintained release branch can
-              receive doc backports that an immutable tag would miss."""
+              receive doc backports that an immutable tag would miss.
+
+              EXCEPTION: products published through the shared 3rd-party-docs
+              repo are imported into mkdocs.yml from the kb side
+              (3rd-party-docs.git?branch=<kb_branch>), NOT their upstream
+              canonical repo. Those entries carry BOTH sides — upstream_* so
+              kb-builder can build from the canonical source, and kb_* naming
+              the 3rd-party-docs branch mkdocs actually imports. Prefer the kb
+              side for them; otherwise the expected URL (e.g.
+              cloudnative-pg.git) never matches what mkdocs.yml imports and
+              every version is misfiled as a brand-new product."""
               upstream  = entry.get('upstream_git_source')
               up_branch = entry.get('upstream_branch')
               up_tag    = entry.get('upstream_tag')
               kb_src    = entry.get('kb_git_source')
               kb_branch = entry.get('kb_branch')
               kb_tag    = entry.get('kb_tag')
+              tools     = entry.get('tools') or []
+              is_third_party = ('3rd-party-docs' in tools
+                                or (kb_src and '3rd-party-docs' in kb_src))
+              if is_third_party and kb_src:
+                  if kb_branch:
+                      return kb_src, kb_branch
+                  if kb_tag:
+                      return kb_src, kb_tag
               if upstream and up_branch:
                   return upstream, up_branch
               if upstream and up_tag:
@@ -180,6 +198,27 @@ jobs:
               that maintainers chose intentionally for docs reasons."""
               return bool(STANDARD_REF_RE.match(ref or ''))
 
+          # ── Product identity for shared 3rd-party-docs refs ───────────────
+          # Every 3rd-party-docs product shares ONE repo URL, so "is this an
+          # existing product or a brand-new one?" cannot be answered by the
+          # URL. Identity comes from SSOT metadata (the human 'name'): all
+          # versions of a product carry the same name and their own kb branch.
+          # Mapping name → its kb branches lets us ask "does any OTHER version
+          # of THIS product already appear in mkdocs.yml?" without resorting to
+          # a fragile branch-string prefix (which would fold pg18 → 'pg' and
+          # collide with pgvector/pgaudit/etc.).
+          product_kb_refs = defaultdict(set)  # name → set of kb branch/tag refs
+          for e in ssot['sources']:
+              if not for_pgedge_docs(e):
+                  continue
+              kb = e.get('kb_git_source')
+              if not kb or '3rd-party-docs' not in kb:
+                  continue
+              if e.get('kb_branch'):
+                  product_kb_refs[e.get('name')].add(e['kb_branch'])
+              if e.get('kb_tag'):
+                  product_kb_refs[e.get('name')].add(e['kb_tag'])
+
           # ── Compare SSOT against mkdocs.yml ──────────────────────────────
 
           missing_entries = []  # product has a block; this version is absent
@@ -225,7 +264,26 @@ jobs:
                       })
                   continue
 
-              if nu not in url_ref_map:
+              # Deciding "new version of an existing product" vs "brand-new
+              # product" is normally a URL check (nu not in url_ref_map). But
+              # every 3rd-party-docs product shares ONE repo URL, so that URL
+              # is always present and the check can't tell them apart. There,
+              # identity comes from SSOT metadata: this product has an existing
+              # block only if some OTHER version of it (a sibling kb branch
+              # under the same 'name') already appears in mkdocs.yml. Matching
+              # exact sibling branches — not a string prefix — avoids folding
+              # pg18 → 'pg' and colliding with unrelated pg* products.
+              if '3rd-party-docs' in nu:
+                  present = url_ref_map.get(nu, set())
+                  has_block = any(
+                      r in present
+                      for r in product_kb_refs.get(entry.get('name'), set())
+                      if r != ref
+                  )
+              else:
+                  has_block = nu in url_ref_map
+
+              if not has_block:
                   new_products.append(entry)
               else:
                   # Mirror the existing label convention for this URL block:
