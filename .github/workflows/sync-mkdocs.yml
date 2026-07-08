@@ -198,6 +198,27 @@ jobs:
               that maintainers chose intentionally for docs reasons."""
               return bool(STANDARD_REF_RE.match(ref or ''))
 
+          # ── Product identity for shared 3rd-party-docs refs ───────────────
+          # Every 3rd-party-docs product shares ONE repo URL, so "is this an
+          # existing product or a brand-new one?" cannot be answered by the
+          # URL. Identity comes from SSOT metadata (the human 'name'): all
+          # versions of a product carry the same name and their own kb branch.
+          # Mapping name → its kb branches lets us ask "does any OTHER version
+          # of THIS product already appear in mkdocs.yml?" without resorting to
+          # a fragile branch-string prefix (which would fold pg18 → 'pg' and
+          # collide with pgvector/pgaudit/etc.).
+          product_kb_refs = defaultdict(set)  # name → set of kb branch/tag refs
+          for e in ssot['sources']:
+              if not for_pgedge_docs(e):
+                  continue
+              kb = e.get('kb_git_source')
+              if not kb or '3rd-party-docs' not in kb:
+                  continue
+              if e.get('kb_branch'):
+                  product_kb_refs[e.get('name')].add(e['kb_branch'])
+              if e.get('kb_tag'):
+                  product_kb_refs[e.get('name')].add(e['kb_tag'])
+
           # ── Compare SSOT against mkdocs.yml ──────────────────────────────
 
           missing_entries = []  # product has a block; this version is absent
@@ -247,15 +268,17 @@ jobs:
               # product" is normally a URL check (nu not in url_ref_map). But
               # every 3rd-party-docs product shares ONE repo URL, so that URL
               # is always present and the check can't tell them apart. There,
-              # identity is the non-numeric prefix of the branch (cnpg130 ->
-              # cnpg, barmancloud013 -> barmancloud): a version belongs to an
-              # existing block only if some other ref shares that prefix;
-              # otherwise it is a new product needing manual nav placement.
+              # identity comes from SSOT metadata: this product has an existing
+              # block only if some OTHER version of it (a sibling kb branch
+              # under the same 'name') already appears in mkdocs.yml. Matching
+              # exact sibling branches — not a string prefix — avoids folding
+              # pg18 → 'pg' and colliding with unrelated pg* products.
               if '3rd-party-docs' in nu:
-                  prefix = re.sub(r'[\d._-]+$', '', ref)
-                  has_block = bool(prefix) and any(
-                      r != ref and r.startswith(prefix)
-                      for r in url_ref_map.get(nu, set())
+                  present = url_ref_map.get(nu, set())
+                  has_block = any(
+                      r in present
+                      for r in product_kb_refs.get(entry.get('name'), set())
+                      if r != ref
                   )
               else:
                   has_block = nu in url_ref_map
