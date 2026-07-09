@@ -50,6 +50,21 @@ jobs:
 
           MKDOCS_FILE = os.environ['MKDOCS_FILE']
 
+          # ── Config: products with per-major nav sections ──────────────────
+          # Products whose docs are split into one nav section PER MAJOR
+          # version (e.g. "Spock v5", "Spock v6"), all sharing a single repo
+          # URL. For these, the repo URL cannot distinguish majors, so a new
+          # major must open its OWN section rather than being auto-sorted into
+          # an existing major's block. Such a version is reported as a NEW
+          # SECTION for manual placement instead.
+          #
+          # Keyed by the nav section-header base name — the header text BEFORE
+          # the version token ("Spock" matches "Spock v5" / "Spock v6"). Only
+          # products listed here are treated this way; every other product
+          # keeps the default one-section-per-repo behavior. To onboard a
+          # future major-split product, add its header base name here.
+          MAJOR_SPLIT_PRODUCTS = {'Spock'}
+
           # ── Helpers ───────────────────────────────────────────────────────
 
           def normalize_url(url):
@@ -143,6 +158,29 @@ jobs:
               url_label_map.setdefault(nu, set()).add(label)
               url_label_to_ref[(nu, label)] = ref
 
+          # url_header_majors: normalized_base_url → set of major numbers named
+          # in the SECTION HEADERS hosting that URL, but ONLY for products in
+          # MAJOR_SPLIT_PRODUCTS. Every other product is left out of this map
+          # entirely, so it keeps the default one-section-per-repo behavior
+          # even if its header happens to contain a version-like token. A
+          # header like "Spock v5" contributes major "5" under base "Spock".
+          header_re       = re.compile(r'(?m)^  - (.+?):\s*$')
+          header_major_re = re.compile(r'\bv(\d+)\b', re.IGNORECASE)
+          headers = [(m.start(), m.group(1)) for m in header_re.finditer(mkdocs_text)]
+          url_header_majors = defaultdict(set)
+          for m in import_re.finditer(mkdocs_text):
+              nu = normalize_url(m.group(1))
+              preceding = [lbl for pos, lbl in headers if pos < m.start()]
+              if not preceding:
+                  continue
+              label = preceding[-1]
+              maj = header_major_re.search(label)
+              if not maj:
+                  continue
+              base = label[:maj.start()].strip()
+              if base in MAJOR_SPLIT_PRODUCTS:
+                  url_header_majors[nu].add(maj.group(1))
+
           # ── Build the expected set from SSOT ──────────────────────────────
           # expected_refs[nu]:     normalized_base_url → set of refs SSOT still produces
           # expected_versions[nu]: normalized_base_url → set of versions SSOT still lists
@@ -223,6 +261,7 @@ jobs:
 
           missing_entries = []  # product has a block; this version is absent
           new_products    = []  # no nav block exists yet — requires manual placement
+          new_sections    = []  # product exists but this MAJOR needs its own section
           ref_updates     = []  # label exists but its ref is stale (e.g. v0.8 → release/v0.8.1)
 
           for entry in ssot['sources']:
@@ -262,6 +301,23 @@ jobs:
                           'new_ref': ref,
                           'version': version,
                       })
+                  continue
+
+              # Honor version-scoped section headers (e.g. "Spock v5"): when a
+              # URL's sections are split by major and none of them names this
+              # version's major, it needs a brand-new section. Report it for
+              # manual placement instead of sorting it into an existing major's
+              # block (where 6.0.0-beta would land atop the v5.x entries).
+              version_major = str(version).split('.')[0].lstrip('v')
+              header_majors = url_header_majors.get(nu, set())
+              if header_majors and version_major not in header_majors:
+                  new_sections.append({
+                      'entry'  : entry,
+                      'git_url': git_url,
+                      'ref'    : ref,
+                      'version': version,
+                      'major'  : version_major,
+                  })
                   continue
 
               # Deciding "new version of an existing product" vs "brand-new
@@ -397,7 +453,8 @@ jobs:
 
           lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
           clean = (not missing_entries and not new_products and not ssh_urls
-                   and not ref_updates and not cp_path_update and not stale_entries)
+                   and not ref_updates and not cp_path_update and not stale_entries
+                   and not new_sections)
 
           if ssh_urls:
               lines += ['### SSH URLs detected in mkdocs.yml\n',
@@ -434,6 +491,17 @@ jobs:
                   )
               lines.append('')
 
+          if new_sections:
+              lines += ['### New major sections — product exists, this major needs its own section (manual placement required)\n']
+              for item in new_sections:
+                  e = item['entry']
+                  lines.append(
+                      f"  - **NEW SECTION** `{e['id']}` ({e['name']} {e.get('version', '')}) "
+                      f"— major v{item['major']} has no matching section → "
+                      f"`{item['git_url']}?branch={item['ref']}`"
+                  )
+              lines.append('')
+
           if stale_entries:
               lines += ['### Stale entries (in mkdocs.yml, removed from SSOT)\n']
               for item in stale_entries:
@@ -456,7 +524,8 @@ jobs:
                         f'*{len(ref_updates)} ref update(s), '
                         f'{len(missing_entries)} missing, '
                         f'{len(stale_entries)} stale, '
-                        f'{len(new_products)} new product(s)*']
+                        f'{len(new_products)} new product(s), '
+                        f'{len(new_sections)} new section(s)*']
 
           report = '\n'.join(lines) + '\n'
           with open('/tmp/drift-report.md', 'w') as f:
