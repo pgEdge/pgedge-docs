@@ -152,6 +152,7 @@ extra:
     - ai-dba-workbench
     - lolor
     - snowflake
+    - spock-v6
     - spock-v5
     - control-plane
     - pgedge-postgres-mcp-server
@@ -268,6 +269,8 @@ extra:
       - heading: "pgEdge Extensions"
       - title: ColdFront
         url: coldfront/
+      - title: Spock v6
+        url: spock-v6/
       - title: Spock v5
         url: spock-v5/
       - title: LOLOR
@@ -615,6 +618,10 @@ nav:
     - v1.0.0-beta1: '!import https://github.com/pgEdge/coldfront.git?branch=v1.0.0-beta1'
     - Development: '!import https://github.com/pgEdge/coldfront.git?branch=main'
 
+  - Spock v6:
+    - v6.0.0-beta: '!import https://github.com/pgEdge/spock.git?branch=v6.0.0-beta.1'
+    - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
+
   - Spock v5:
     - v5.0.10: '!import https://github.com/pgEdge/spock.git?branch=v5.0.10'
     - v5.0.9: '!import https://github.com/pgEdge/spock.git?branch=v5.0.9'
@@ -623,7 +630,7 @@ nav:
     - v5.0.6: '!import https://github.com/pgEdge/spock.git?branch=v5.0.6-doc-2'
     - v5.0.5: '!import https://github.com/pgEdge/spock.git?branch=v5.0.5'
     - v5.0.4: '!import https://github.com/pgEdge/spock.git?branch=v5.0.4'
-    - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
+    - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
 
   - Control Plane:
     - v0.9: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.9.0'
