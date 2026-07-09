@@ -616,6 +616,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/coldfront.git?branch=main'
 
   - Spock v5:
+    - v6.0.0-beta: '!import https://github.com/pgEdge/spock.git?branch=v6.0.0-beta.1'
     - v5.0.10: '!import https://github.com/pgEdge/spock.git?branch=v5.0.10'
     - v5.0.9: '!import https://github.com/pgEdge/spock.git?branch=v5.0.9'
     - v5.0.8: '!import https://github.com/pgEdge/spock.git?branch=v5.0.8'
