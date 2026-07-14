@@ -33,15 +33,24 @@ testing.
 - [Installation](install.md) - Install the CloudNativePG operator and kubectl
   plugin
 - [Upgrading](upgrade.md) - Upgrade the operator and PostgreSQL clusters
+- [CloudNativePG documentation](https://docs.pgedge.com/cloudnativepg/) -
+  pgEdge's distribution of the CloudNativePG operator reference docs
+- [Barman Cloud plugin documentation](https://docs.pgedge.com/barman-cloud-plugin/) -
+  backup and restore for CloudNativePG clusters
 
 ## Version Support Matrix
 
 ### CloudNativePG and Kubernetes Versions
 
-| CNPG Version | Kubernetes 1.32 | Kubernetes 1.33 | Kubernetes 1.34 | Kubernetes 1.35 |
+| CNPG Version | Kubernetes 1.33 | Kubernetes 1.34 | Kubernetes 1.35 | Kubernetes 1.36 |
 | ------------ | --------------- | --------------- | --------------- | --------------- |
-| 1.29.1       | -               | Yes             | Yes             | Yes             |
-| 1.28.3       | Yes             | Yes             | Yes             | -               |
+| 1.30.0       | -               | Yes             | Yes             | Yes             |
+| 1.29.1       | Yes             | Yes             | Yes             | -               |
+
+These versions align with the
+[CloudNativePG supported releases](https://docs.pgedge.com/cloudnativepg/supported_releases/).
+Older minor versions (1.28 and earlier) have reached end of life upstream and
+are no longer supported; upgrade to a supported version.
 
 ### PostgreSQL Versions
 
@@ -67,4 +76,6 @@ For support inquiries, contact [support@pgedge.com](mailto:support@pgedge.com).
 
 ## Resources
 
+- [CloudNativePG documentation](https://docs.pgedge.com/cloudnativepg/)
+- [Barman Cloud plugin documentation](https://docs.pgedge.com/barman-cloud-plugin/)
 - [GitHub Repository](https://github.com/pgEdge/pgedge-cnpg-dist)

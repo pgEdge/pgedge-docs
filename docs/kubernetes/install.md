@@ -18,11 +18,11 @@ pgEdge currently distributes the following CloudNativePG operator versions:
 
 | Manifest Version | Helm Chart Version | Upstream Release           |
 | ---------------- | ------------------ | -------------------------- |
-| v1.29.1          | 0.28.3             | [CloudNativePG v1.29.1][1] |
-| v1.28.3          | 0.27.1             | [CloudNativePG v1.28.3][2] |
+| v1.30.0          | 0.29.0             | [CloudNativePG v1.30.0][1] |
+| v1.29.1          | 0.28.3             | [CloudNativePG v1.29.1][2] |
 
-[1]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.29.1
-[2]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.28.3
+[1]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.30.0
+[2]: https://github.com/cloudnative-pg/cloudnative-pg/releases/tag/v1.29.1
 
 You can install CloudNativePG using Helm (recommended), Kubernetes manifests, or
 using the GitHub Release artifacts.
@@ -60,7 +60,7 @@ To install a specific version of the operator:
 helm install cnpg pgedge/cloudnative-pg \
   --namespace cnpg-system \
   --create-namespace \
-  --version 0.28.3
+  --version 0.29.0
 ```
 
 ### Using Manifests
@@ -69,7 +69,7 @@ For a quick installation without Helm, apply the manifest directly:
 
 ```bash
 kubectl apply --server-side -f \
-  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.29.1/cnpg-1.29.1.yaml
+  https://raw.githubusercontent.com/pgEdge/pgedge-cnpg-dist/main/manifests/cloudnative-pg/v1.30.0/cnpg-1.30.0.yaml
 ```
 
 This installs the operator in the `cnpg-system` namespace.
@@ -80,8 +80,8 @@ Alternatively, download charts directly from
 [GitHub Releases](https://github.com/pgEdge/pgedge-cnpg-dist/releases):
 
 ```bash
-curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/download/cloudnative-pg-v0.28.3/cloudnative-pg-0.28.3.tgz
-helm install cnpg cloudnative-pg-0.28.3.tgz \
+curl -LO https://github.com/pgEdge/pgedge-cnpg-dist/releases/download/cloudnative-pg-v0.29.0/cloudnative-pg-0.29.0.tgz
+helm install cnpg cloudnative-pg-0.29.0.tgz \
   --namespace cnpg-system \
   --create-namespace
 ```
@@ -163,8 +163,8 @@ Verify the deployment:
 kubectl rollout status deployment -n cnpg-system barman-cloud
 ```
 
-For configuration and cluster wiring, see the
-[upstream plugin documentation](https://cloudnative-pg.io/plugin-barman-cloud/docs/intro/).
+For configuration and cluster wiring, see the pgEdge
+[Barman Cloud plugin documentation](https://docs.pgedge.com/barman-cloud-plugin/).
 
 ## Installing the kubectl Plugin
 
@@ -210,7 +210,7 @@ kubectl cnpg backup my-cluster
 ```
 
 For complete plugin documentation, see the
-[CloudNativePG kubectl Plugin docs](https://cloudnative-pg.io/documentation/current/kubectl-plugin/).
+[CloudNativePG kubectl Plugin docs](https://docs.pgedge.com/cloudnativepg/kubectl-plugin/).
 
 ## High Availability
 
@@ -229,12 +229,14 @@ helm install cnpg pgedge/cloudnative-pg \
 
 ## Next Steps
 
-- [Create your first PostgreSQL cluster](https://cloudnative-pg.io/docs/1.29/quickstart/)
-- [Configure backups](https://cloudnative-pg.io/docs/1.29/backup/)
-- [Set up monitoring](https://cloudnative-pg.io/docs/1.29/monitoring/)
+- [Create your first PostgreSQL cluster](https://docs.pgedge.com/cloudnativepg/quickstart/)
+- [Configure backups](https://docs.pgedge.com/cloudnativepg/backup/)
+- [Set up monitoring](https://docs.pgedge.com/cloudnativepg/monitoring/)
 
 ## Resources
 
+- [pgEdge CloudNativePG documentation](https://docs.pgedge.com/cloudnativepg/)
+- [pgEdge Barman Cloud plugin documentation](https://docs.pgedge.com/barman-cloud-plugin/)
 - [pgEdge Enterprise Postgres for Kubernetes GitHub Repository](https://github.com/pgEdge/pgedge-cnpg-dist)
 - [pgEdge Krew Index](https://github.com/pgEdge/krew-index)
-- [CloudNativePG Installation Docs](https://cloudnative-pg.io/docs/1.29/installation_upgrade/)
+- [CloudNativePG Installation Docs](https://docs.pgedge.com/cloudnativepg/installation_upgrade/)
