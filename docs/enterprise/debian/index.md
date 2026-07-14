@@ -8,6 +8,8 @@ Ubuntu
 
   * Ubuntu 24.04 LTS (AMD & ARM)
 
+  * Ubuntu 26.04 LTS (AMD & ARM)
+
 Debian
 
   * Debian 11 (AMD & ARM)
