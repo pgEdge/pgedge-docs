@@ -642,3 +642,10 @@
     color: #1e1e1e !important;
 }
 
+/* Let wide reference tables keep their natural column widths and
+   scroll horizontally instead of wrapping every cell's content. */
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+    white-space: nowrap;
+}
+

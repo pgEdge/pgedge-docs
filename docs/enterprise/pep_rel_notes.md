@@ -1,5 +1,17 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 07/21/2026
+* Component updates: ACE 2.1.0
+
+
+## 07/14/2026
+* Ubuntu 24.04 (AMD & ARM) support for all supported pgEdge Enterprise Postgres packages.
+
+
+## 07/09/2026
+* Spock 6.0.0 beta 1 release. 
+
+
 ## 06/30/2026
 * Component updates: Spock 5.0.10, Snowflake 2.5.0
 * Supautils 3.2.2 first release
