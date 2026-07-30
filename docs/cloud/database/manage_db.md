@@ -26,6 +26,16 @@ The database header tells you:
 * The Postgres database version.
 * The version of the Spock extension in use by the database.
 
+### Changing the Display Name of a Database
+
+To change the name of a database that is displayed in the navigation pane, highlight the database name and select `Edit Display Name` from the `Actions` menu.
+
+![pgEdge Database Console](../images/actions_database.png)
+
+When the `Change Display Name` popup opens, enter the new database name in the `Display Name` field and select `Apply`.
+
+![pgEdge Database Console](../images/edit_display_name.png)
+
 
 ## The Get Started Pane
 
@@ -79,7 +89,9 @@ access the password associated with one of the identities (`app`,
 
 ![Password management options](../images/password.png)
 
-Then, use options in the `Password` field to manage the password
+### Password Management
+
+You can use options in the `Password` field to manage the password
 assigned to the `app` user:
 
 * Select `show` to display the password in unobscured form; select `hide`

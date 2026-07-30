@@ -1,9 +1,43 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 07/21/2026
+* Component updates: ACE 2.1.0
+
+
+## 07/14/2026
+* Ubuntu 24.04 (AMD & ARM) support for all supported pgEdge Enterprise Postgres packages.
+
+
+## 07/09/2026
+* Spock 6.0.0 beta 1 release. 
+
+
+## 06/30/2026
+* Component updates: Spock 5.0.10, Snowflake 2.5.0
+* Supautils 3.2.2 first release
+
+  
+## 12/06/2026
+* Component updates: Spock 5.0.9
+
+## 11/06/2026
+
+* pgEdge AI DBA Workbench 1.0.0 GA
+* pgEdge AI KB 1.0.0
+* pgEdge Patroni 4.1.3-2 (with pgEdge Json Logger 4.1.0 dependency required for Control Plane)
+
+
+## 2/06/2026
+
+* pgEdge Enterprise Postgres packages 16.14-2, 17.10-2, and 18.4-2 released for RHEL: Rebuild triggered by RHEL AppStream repositories updating to a newer major version of the LLVM Toolset (llvm-21.1.8)
+
 ## 5/29/2026
 
 * pgEdge AI DBA Workbench 1.0.0-beta3 release for all supported platforms
 
+## 5/15/2026
+* Component updates: Spock 5.0.8
+* 
 ## 5/14/2026
 
 * Postgres version update: pgEdge Enterprise Postgres 16.14
@@ -29,9 +63,6 @@
 * pgEdge Active Consistency Engine (ACE) 2.0.0 (First PEP release)
 * Component updates: Patroni 4.1.3, pgAdmin 9.14
 * pgEdge radar 0.4.1 (First PEP release)
-  
-## 5/05/2026
-* Component updates: Spock 5.0.7
 
 ## 4/22/2026
 * pgEdge AI DBA Workbench 1.0.0-beta1 release for all supported platforms

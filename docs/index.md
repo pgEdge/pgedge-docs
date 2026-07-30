@@ -126,6 +126,38 @@ hide:
   text-decoration: underline;
 }
 
+/* Labs Section Header */
+.labs-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.labs-header .labs-logo-light,
+.labs-header .labs-logo-dark {
+  height: 52px;
+  width: auto;
+}
+
+[data-md-color-scheme="default"] .labs-header .labs-logo-dark { display: none; }
+[data-md-color-scheme="default"] .labs-header .labs-logo-light { display: block; }
+[data-md-color-scheme="slate"] .labs-header .labs-logo-light { display: none; }
+[data-md-color-scheme="slate"] .labs-header .labs-logo-dark { display: block; }
+
+.labs-header p {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.labs-divider {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #3e92ba, #9e3e97, #f47820);
+  margin-bottom: 1.5rem;
+}
+
 /* Section Headers */
 .section-header {
   margin: 1.5rem 0 1rem 0;
@@ -508,6 +540,10 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">pgEdge Extensions</li>
       <li>
+        <a href="coldfront/"><strong>ColdFront</strong> <span class="chip-new">NEW</span></a>
+        <span class="ext-desc">Transparent data tiering that archives cold data to Apache Iceberg whilst keeping it readable and writable through standard SQL</span>
+      </li>
+      <li>
         <a href="spock-v5/"><strong>Spock</strong></a>
         <span class="ext-desc">Multi-master logical replication with conflict resolution for globally distributed clusters</span>
       </li>
@@ -587,6 +623,10 @@ hide:
       <li class="ext-divider"></li>
       <li class="ext-subheading">Community Tools</li>
       <li>
+        <a href="barman-cloud-plugin/"><strong>Barman Cloud Plugin</strong></a>
+        <span class="ext-desc">Object storage backup and recovery for CloudNativePG</span>
+      </li>
+      <li>
         <a href="cloudnativepg/"><strong>CloudNativePG</strong></a>
         <span class="ext-desc">Kubernetes operator for PostgreSQL</span>
       </li>
@@ -619,10 +659,12 @@ hide:
 </div>
 
 <!-- Labs -->
-<div class="section-header">
-  <h2>Labs</h2>
+<div class="labs-header">
+  <img src="img/pgEdgeLabs_icon_color.svg" alt="pgEdge Labs" class="labs-logo-light">
+  <img src="img/pgEdgeLabs_icon_white_color.svg" alt="pgEdge Labs" class="labs-logo-dark">
   <p>Experimental projects under active development. APIs and features may change without notice.</p>
 </div>
+<div class="labs-divider"></div>
 
 <div class="cards-grid">
 
@@ -635,6 +677,17 @@ hide:
     </div>
     <p class="card-description">Semantic similarity caching for PostgreSQL.</p>
     <a href="pg-semantic-cache/" class="card-link">View Documentation →</a>
+  </div>
+
+  <!-- Postgres Healthcheck -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>Postgres Healthcheck (<a href="https://github.com/pgEdge/pg-healthcheck">pg-healthcheck</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">Comprehensive health monitoring for PostgreSQL instances.</p>
+    <a href="pg-healthcheck/" class="card-link">View Documentation →</a>
   </div>
 
   <!-- Safe Session -->
@@ -655,7 +708,7 @@ hide:
         <h3>MCP Bridge (<a href="https://github.com/pgEdge/pgedge-mcp-bridge">pgedge-mcp-bridge</a>)</h3>
       </div>
     </div>
-    <p class="card-description">HTTP/SSE transport proxy for stdio-only MCP servers, with OAuth and token-based authentication.</p>
+    <p class="card-description">Bidirectional MCP transport proxy bridging HTTP/SSE and stdio, with OAuth and token-based authentication.</p>
     <a href="pgedge-mcp-bridge/" class="card-link">View Documentation →</a>
   </div>
 

@@ -6,68 +6,79 @@
     you must have a
     [linked Cloud provider account](../prerequisites/cloud_accounts/index.md).
 
-To create a cluster, navigate to the `Clusters` page, and select the `+ New Cluster` button. 
-
-When the `Create New Cluster` page opens, provide a unique name for your cluster in the `Cluster Name` field.
+To create a cluster, navigate to the `Clusters` page and select the
+`+ New Cluster` button. When the `Create New Cluster` page opens,
+provide a unique name for the cluster in the `Cluster Name` field.
 
 ![Provide a cluster name](../images/unique_cluster_name.png)
 
 Use the drop-down listbox in the `Cloud Account` field to select the
 [cloud provider account](../prerequisites/cloud_accounts/index.md)
-that will be used to provision your cluster.
+used to provision the cluster.
 
 ![Select a cloud account](../images/cloud_account.png)
 
-Next, select up to 5 availability zones in any regions to which you have access from your cloud provider. To use the map for location selection, use the `Show map` toggle to enable the map.
+Select up to 5 availability zones in any regions accessible from the
+cloud provider account. Use the `Show map` toggle to enable the map
+for location selection.
 
 ![Select the regions for deployment](../images/cluster_regions.png)
 
-If using the drop-down fields to define the cluster deployment, first select the region in which you wish to deploy nodes.  Once selected, the region name is displayed in the list of selected `Regions`.
+To define the cluster deployment using the drop-down fields, first select
+the region for node deployment. The region name is displayed in the list
+of selected `Regions` after selection.
 
-Then, use the `+/-` control or the drop-down list to the right of the `Region` name to select from the supported Availability Zones for node deployment. One node will be deployed in each zone listed; you can use the `X` in the zone icon to remove a zone from the deployment list.
+Use the `+/-` control or the drop-down list to the right of the `Region`
+name to select from the supported Availability Zones for node deployment.
+One node is deployed in each listed zone; use the `X` in the zone icon
+to remove a zone from the deployment list.
 
 ![Configure Network Settings](../images/configure_network.png)
 
-Each region in which your cluster is deployed is represented by a pane in the
-`Network Settings` section; within each region, subnet details for each
-availability zone are displayed. Toggles at the top of the `Network Settings` 
-section control the display of network details:
+Each region in which the cluster is deployed is represented by a pane in
+the `Network Settings` section; within each region, subnet details for
+each availability zone are displayed. Toggles at the top of the
+`Network Settings` section control the network assignments for the
+cluster:
 
-* Use the `Configuration` toggle to accept the `Default configuration` for
-  address assignments, or move the toggle to `Manual configuration` to
-  specify custom address assignments.
+- Use the `Configuration` toggle to accept the `Default configuration`
+  for address assignments, or move the toggle to `Manual configuration`
+  to specify custom address assignments.
 
-* Use the `Network Type` toggle to specify if the connection values
-  displayed or edited should be `Public` or `Private` addresses: 
+- Use the `Network Type` toggle to specify whether the connection values
+  for the cluster use `Public` or `Private` addresses:
 
-  * `Public` network clusters will have IP addresses assigned to the nodes
-    that can be accessed from the public internet.
-  * `Private` network clusters are not accessible from the public internet.
-    Note that private network clusters are not available for Google Cloud
-    Platform users.
+  - `Public` network clusters have IP addresses assigned to each node
+    that are accessible from the public internet.
+  - `Private` network clusters are not accessible from the public
+    internet.
 
-Next, specify the vendor-specific deployment details for your cluster.
+Within each pane, the `Node Network Assignment` label lists the
+provider-assigned region, the node name (`n` followed by a number),
+and a toggle that specifies the network assignment for that node.
+
+Specify the vendor-specific deployment details for the cluster.
 
 ![Configure Cloud Environment](../images/configure_deployment.png)
 
-* Use the `Instance Type` drop-down to select the size and configuration of
-  your cluster instance type. Each node in the cluster will reside on the
-  instance type selected. The instance type is one factor in determining the
-  operating cost of your cluster. 
+- Use the `Instance Type` drop-down to select the size and configuration
+  of the cluster instance type. Each node in the cluster resides on the
+  selected instance type; the instance type is one factor in determining
+  the operating cost of the cluster.
 
-* Use the `Volume Size (GB)` field to specify the size of the data volume
-  for each node of your cluster. Volume size must be between 8 GB and 10 TB.
+- Use the `Volume Size (GB)` field to specify the size of the data volume
+  for each node of the cluster. Volume size must be between 8 GB and
+  10 TB.
 
-* Use the `SSH Key` drop-down to select a key pair from the list of your
-  [imported key pairs](../prerequisites/ssh_key.md).
-  A key pair is required to SSH to a cluster; without a key, you can connect
-  to databases you provision on the cluster, but will not be able to connect
-  with the host via SSH.
+- Use the `SSH Key` drop-down to select a key pair from the list of
+  [imported key pairs](../prerequisites/ssh_key.md). A key pair is
+  required to SSH to a cluster; without a key, connections to databases
+  provisioned on the cluster are available, but SSH connections to the
+  host are not.
 
 Optionally, select the
-[backup stores](https://docs.pgedge.com/cloud/backup/backup_store)
-that will be available to use for database backups and log file backups for
-the new cluster.
+[`Backup Stores`](https://docs.pgedge.com/cloud/backup/backup_store)
+available for database backups and log file backups for the new cluster.
 
 ![Configure your Backup Storage](../images/backup_storage_configuration.png)
 
@@ -75,95 +86,95 @@ As you define backup stores, remember that selecting backup stores near your
 cluster nodes will reduce network latency during the backup process. Use the
 drop-down field or select locations on the map to include a specific store.
 
-A [resource tag](resource_tag.md) is a user-defined key/value information
-pair that you attach to your cluster definition.  The tag is displayed under
-the cluster name on the `Clusters` page.  You can use tags to categorize your
-cloud resources or search for resources that are used for specific teams or
-applications.  For example, you may want to include a tag that specifies
-`team/ db-ops` to make it easy to identify the resources that are used by the
-`db-ops` team.
+A [`Resource Tag`](resource_tag.md) is a user-defined key/value pair
+attached to a cluster definition. The tag is displayed under the cluster
+name on the `Clusters` page. Use tags to categorize cloud resources or
+search for resources used by specific teams or applications. For example,
+a tag that specifies `team/db-ops` makes it easy to identify resources
+used by the `db-ops` team.
 
-To add a resource tag, select `Add Resource Tag`, and then specify the `Key`
-and `Value`; the terms will be displayed with a `/` used as a delimiter. 
+To add a resource tag, select `Add Resource Tag` and specify the `Key`
+and `Value`; the terms are displayed with a `/` delimiter.
 
 ![Adding a resource tag](../images/resource_tag_add.png)
 
 
-You can define a [VPC association](vpc_assoc.md) to configure VPC peering
-and (if needed) private zone routing between any defined VPCs and the pgEdge
-cluster network. Peering allows an application to connect seamlessly to any
-of the nodes across regions, allowing you to fully leverage latency routing
-and dns failover. This is currently only available for AWS.
+Define a [VPC association](vpc_assoc.md) to configure VPC peering and,
+if needed, private zone routing between any defined VPCs and the pgEdge
+cluster network. Peering allows an application to connect seamlessly to
+any node across regions, enabling latency routing and DNS failover. VPC
+associations are currently only available for AWS.
 
-Use the `VPC Associations` fields to add any defined VPCs that should have
-access to your cluster.
+Use the `VPC Associations` fields to add any defined VPCs that require
+access to the cluster.
 
 ![Define a VPC Association](../images/vpc_association.png)
 
-Use the [`Firewall Rules`](firewall.md) field to open ports on each node of
-your cluster for connections. Click the `+ Add Firewall Rule` icon to add a
-rule.
+Use the [`Firewall Rules`](firewall.md) field to open ports on each node
+of the cluster for connections. Select the `+ Add Firewall Rule` icon to
+add a rule.
 
 ![Firewall rules](../images/firewall_rules.png)
 
-* Use the `Type` drop-down to select the connection type you are defining:
+- Use the `Type` drop-down to select the connection type for the rule:
 
-    * Select `PostgreSQL` to create a connection to port `5432`; this is
-      the default port used by connecting clients that wish to query the
-      database.
-    * Select `HTTPS` to open port `443` for secure communication between
+    - Select `PostgreSQL` to create a connection to port `5432`; this is
+      the default port used by clients that query the database.
+    - Select `HTTPS` to open port `443` for secure communication between
       PostgreSQL and a web server.
-    * Select `SSH` to open port `22` for SSH connections.
+    - Select `SSH` to open port `22` for SSH connections.
 
-* Use the `Source Type` selector in the right column to specify the type of
-  connection source that is allowed to connect with this rule. You can choose
-  from the following options:
+- Use the `Source Type` selector in the right column to specify the type
+  of connection source allowed to connect with this rule. The following
+  options are available:
 
-    * An IP address, specifying a single host or CIDR block.
-    * A prefix list, specifying a managed set of CIDR blocks.
-    * A security group, specifying a set of AWS instances.
+    - An IP address, specifying a single host or CIDR block.
+    - A prefix list, specifying a managed set of CIDR blocks.
+    - A security group, specifying a set of AWS instances.
 
-* Use the `Sources` field in the left column to specify details about the
-  connection source that will be allowed access to your cluster with the rule.
+- Use the `Sources` field in the left column to specify the connection
+  source allowed access to the cluster with the rule:
 
-    * To remove a source, click the `X` in the rule's `Sources` field. 
-    * To add a source, click in the `Sources` field and select from the
-    predefined options, or type directly in the field.
+    - To remove a source, select the `X` in the rule's `Sources` field.
+    - To add a source, select the `Sources` field and choose from the
+      predefined options, or type directly in the field.
 
-* Use the `Applies To` selector to choose the node or nodes to which the
-  rule applies.
+- Use the `Applies To` selector to choose the node or nodes to which
+  the rule applies.
 
-After providing rule details, choose the `+ Add Firewall Rule`
-button to add another rule to the list of firewall rules. To remove a rule from the list, select the `X` in the upper-right corner of the rule box.
+After providing rule details, select the `+ Add Firewall Rule` button
+to add another rule to the list. To remove a rule from the list, select
+the `X` in the upper-right corner of the rule box.
 
 ![Defined firewall rules](../images/defined_firewall_rules.png)
 
 !!! note
 
-    If you do not open ports for connection, client software will be unable to connect to the OS or databases that reside on the cluster.
+    Client software cannot connect to the OS or databases on the cluster
+    if ports are not opened for connection.
 
-In the `Options` section you'll find the option to create the cluster as a
+The `Options` section provides the option to create the cluster as a
 `single-database cluster`.
 
 ![Select Additional Options](../images/select_additional_options.png)
 
-Single database clusters are beneficial because:
+Single database clusters provide the following benefits:
 
-* they allow connections to the database with an IP address (rather than by
-  domain name).
-* they allow connections to the database via DNS names and records that you
-  create outside of the pgEdge console.
-* a single-purpose, dedicated cluster guarantees that all cluster resources
-  are available for the single database.
+- A single-database cluster allows connections to the database with an IP
+  address rather than a domain name.
+- A single-database cluster allows connections via DNS names and records
+  created outside of the pgEdge console.
+- A single-purpose, dedicated cluster guarantees that all cluster
+  resources are available for the single database.
 
-When you've completed the dialog, select the `Deploy Cluster` button to
+After completing the dialog, select the `Deploy Cluster` button to
 deploy a provisioned cluster.
 
 ![The cluster is spinning up](../images/cluster_spinning_up.png)
 
-A progress bar tracks the progress as the deployment goes through each step;
-when the cluster is ready to use, it is added to the list of clusters in the
-navigation tree.
+A progress bar tracks the deployment through each step; when the cluster
+is ready to use, it is added to the list of clusters in the navigation
+tree.
 
-If you encounter any errors during cluster creation, please see the
+If errors occur during cluster creation, see the
 [Troubleshooting section](../troubleshooting.md).

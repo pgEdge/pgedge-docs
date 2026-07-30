@@ -50,6 +50,21 @@ jobs:
 
           MKDOCS_FILE = os.environ['MKDOCS_FILE']
 
+          # ── Config: products with per-major nav sections ──────────────────
+          # Products whose docs are split into one nav section PER MAJOR
+          # version (e.g. "Spock v5", "Spock v6"), all sharing a single repo
+          # URL. For these, the repo URL cannot distinguish majors, so a new
+          # major must open its OWN section rather than being auto-sorted into
+          # an existing major's block. Such a version is reported as a NEW
+          # SECTION for manual placement instead.
+          #
+          # Keyed by the nav section-header base name — the header text BEFORE
+          # the version token ("Spock" matches "Spock v5" / "Spock v6"). Only
+          # products listed here are treated this way; every other product
+          # keeps the default one-section-per-repo behavior. To onboard a
+          # future major-split product, add its header base name here.
+          MAJOR_SPLIT_PRODUCTS = {'Spock'}
+
           # ── Helpers ───────────────────────────────────────────────────────
 
           def normalize_url(url):
@@ -79,13 +94,31 @@ jobs:
               pgedge-docs is driven by the upstream_* fields (kb_* exist
               primarily for kb-builder). Within upstream_*, prefer
               upstream_branch when set — a maintained release branch can
-              receive doc backports that an immutable tag would miss."""
+              receive doc backports that an immutable tag would miss.
+
+              EXCEPTION: products published through the shared 3rd-party-docs
+              repo are imported into mkdocs.yml from the kb side
+              (3rd-party-docs.git?branch=<kb_branch>), NOT their upstream
+              canonical repo. Those entries carry BOTH sides — upstream_* so
+              kb-builder can build from the canonical source, and kb_* naming
+              the 3rd-party-docs branch mkdocs actually imports. Prefer the kb
+              side for them; otherwise the expected URL (e.g.
+              cloudnative-pg.git) never matches what mkdocs.yml imports and
+              every version is misfiled as a brand-new product."""
               upstream  = entry.get('upstream_git_source')
               up_branch = entry.get('upstream_branch')
               up_tag    = entry.get('upstream_tag')
               kb_src    = entry.get('kb_git_source')
               kb_branch = entry.get('kb_branch')
               kb_tag    = entry.get('kb_tag')
+              tools     = entry.get('tools') or []
+              is_third_party = ('3rd-party-docs' in tools
+                                or (kb_src and '3rd-party-docs' in kb_src))
+              if is_third_party and kb_src:
+                  if kb_branch:
+                      return kb_src, kb_branch
+                  if kb_tag:
+                      return kb_src, kb_tag
               if upstream and up_branch:
                   return upstream, up_branch
               if upstream and up_tag:
@@ -125,6 +158,67 @@ jobs:
               url_label_map.setdefault(nu, set()).add(label)
               url_label_to_ref[(nu, label)] = ref
 
+          # url_header_majors: normalized_base_url → set of major numbers named
+          # in the SECTION HEADERS hosting that URL, but ONLY for products in
+          # MAJOR_SPLIT_PRODUCTS. Every other product is left out of this map
+          # entirely, so it keeps the default one-section-per-repo behavior
+          # even if its header happens to contain a version-like token. A
+          # header like "Spock v5" contributes major "5" under base "Spock".
+          header_re       = re.compile(r'(?m)^  - (.+?):\s*$')
+          header_major_re = re.compile(r'\bv(\d+)\b', re.IGNORECASE)
+          headers = [(m.start(), m.group(1)) for m in header_re.finditer(mkdocs_text)]
+          url_header_majors = defaultdict(set)
+          for m in import_re.finditer(mkdocs_text):
+              nu = normalize_url(m.group(1))
+              preceding = [lbl for pos, lbl in headers if pos < m.start()]
+              if not preceding:
+                  continue
+              label = preceding[-1]
+              maj = header_major_re.search(label)
+              if not maj:
+                  continue
+              base = label[:maj.start()].strip()
+              if base in MAJOR_SPLIT_PRODUCTS:
+                  url_header_majors[nu].add(maj.group(1))
+
+          # ── Build the expected set from SSOT ──────────────────────────────
+          # expected_refs[nu]:     normalized_base_url → set of refs SSOT still produces
+          # expected_versions[nu]: normalized_base_url → set of versions SSOT still lists
+          # Used to detect entries that linger in mkdocs.yml after being removed
+          # from SSOT. One repo URL (3rd-party-docs.git) hosts many products via
+          # different branches, so the ref is the real identity here.
+          #
+          # Unlike get_import_info (which picks ONE preferred import), this records
+          # EVERY (url, ref) an entry could legitimately produce — both the
+          # upstream_* and kb_* sides. A 3rd-party-docs source carries upstream_*
+          # pointing at the canonical repo AND kb_* pointing at
+          # 3rd-party-docs.git?branch=…; mkdocs.yml imports it via the kb side, so
+          # the expected set must include both or every 3rd-party line looks stale.
+          def candidate_imports(entry):
+              pairs = []
+              up = entry.get('upstream_git_source')
+              if up:
+                  if entry.get('upstream_branch'): pairs.append((up, entry['upstream_branch']))
+                  if entry.get('upstream_tag'):    pairs.append((up, entry['upstream_tag']))
+              kb = entry.get('kb_git_source')
+              if kb:
+                  if entry.get('kb_branch'): pairs.append((kb, entry['kb_branch']))
+                  if entry.get('kb_tag'):    pairs.append((kb, entry['kb_tag']))
+              return pairs
+
+          expected_refs     = defaultdict(set)
+          expected_versions = defaultdict(set)
+          for entry in ssot['sources']:
+              if not for_pgedge_docs(entry):
+                  continue
+              version = entry.get('version', '')
+              if not version or version == 'dev':
+                  continue
+              for git_url, ref in candidate_imports(entry):
+                  nu = normalize_url(git_url)
+                  expected_refs[nu].add(ref)
+                  expected_versions[nu].add(str(version))
+
           # SSH URL check
           ssh_urls = bool(re.search(r"'!import git@github\.com:", mkdocs_text))
 
@@ -142,10 +236,32 @@ jobs:
               that maintainers chose intentionally for docs reasons."""
               return bool(STANDARD_REF_RE.match(ref or ''))
 
+          # ── Product identity for shared 3rd-party-docs refs ───────────────
+          # Every 3rd-party-docs product shares ONE repo URL, so "is this an
+          # existing product or a brand-new one?" cannot be answered by the
+          # URL. Identity comes from SSOT metadata (the human 'name'): all
+          # versions of a product carry the same name and their own kb branch.
+          # Mapping name → its kb branches lets us ask "does any OTHER version
+          # of THIS product already appear in mkdocs.yml?" without resorting to
+          # a fragile branch-string prefix (which would fold pg18 → 'pg' and
+          # collide with pgvector/pgaudit/etc.).
+          product_kb_refs = defaultdict(set)  # name → set of kb branch/tag refs
+          for e in ssot['sources']:
+              if not for_pgedge_docs(e):
+                  continue
+              kb = e.get('kb_git_source')
+              if not kb or '3rd-party-docs' not in kb:
+                  continue
+              if e.get('kb_branch'):
+                  product_kb_refs[e.get('name')].add(e['kb_branch'])
+              if e.get('kb_tag'):
+                  product_kb_refs[e.get('name')].add(e['kb_tag'])
+
           # ── Compare SSOT against mkdocs.yml ──────────────────────────────
 
           missing_entries = []  # product has a block; this version is absent
           new_products    = []  # no nav block exists yet — requires manual placement
+          new_sections    = []  # product exists but this MAJOR needs its own section
           ref_updates     = []  # label exists but its ref is stale (e.g. v0.8 → release/v0.8.1)
 
           for entry in ssot['sources']:
@@ -187,7 +303,43 @@ jobs:
                       })
                   continue
 
-              if nu not in url_ref_map:
+              # Honor version-scoped section headers (e.g. "Spock v5"): when a
+              # URL's sections are split by major and none of them names this
+              # version's major, it needs a brand-new section. Report it for
+              # manual placement instead of sorting it into an existing major's
+              # block (where 6.0.0-beta would land atop the v5.x entries).
+              version_major = str(version).split('.')[0].lstrip('v')
+              header_majors = url_header_majors.get(nu, set())
+              if header_majors and version_major not in header_majors:
+                  new_sections.append({
+                      'entry'  : entry,
+                      'git_url': git_url,
+                      'ref'    : ref,
+                      'version': version,
+                      'major'  : version_major,
+                  })
+                  continue
+
+              # Deciding "new version of an existing product" vs "brand-new
+              # product" is normally a URL check (nu not in url_ref_map). But
+              # every 3rd-party-docs product shares ONE repo URL, so that URL
+              # is always present and the check can't tell them apart. There,
+              # identity comes from SSOT metadata: this product has an existing
+              # block only if some OTHER version of it (a sibling kb branch
+              # under the same 'name') already appears in mkdocs.yml. Matching
+              # exact sibling branches — not a string prefix — avoids folding
+              # pg18 → 'pg' and colliding with unrelated pg* products.
+              if '3rd-party-docs' in nu:
+                  present = url_ref_map.get(nu, set())
+                  has_block = any(
+                      r in present
+                      for r in product_kb_refs.get(entry.get('name'), set())
+                      if r != ref
+                  )
+              else:
+                  has_block = nu in url_ref_map
+
+              if not has_block:
                   new_products.append(entry)
               else:
                   # Mirror the existing label convention for this URL block:
@@ -245,11 +397,64 @@ jobs:
                           'version': latest_cp,
                       }
 
+          # ── Stale entries: present in mkdocs.yml, removed from SSOT ───────
+          # SSOT is the single source of truth: every versioned nav line must be
+          # backed by an SSOT entry. A line is pruned when BOTH hold:
+          #   (a) its ref is no longer produced by any SSOT entry for that URL, and
+          #   (b) no remaining SSOT version for that URL — whose number is embedded
+          #       in this line's ref — covers its label.
+          # (b) protects intentionally-decorated refs (e.g. 'v5.0.6-doc-2',
+          # 'fix-for-1.5.1-docs', 'v0.1.0-docs') whose version is still in SSOT: the
+          # decorated ref always contains the dotted version. Requiring that match
+          # scopes the check to the right product, so it does NOT misfire on the
+          # shared 3rd-party-docs.git URL where many products collide on a major
+          # number (e.g. PostgreSQL 'pg18' must not be shielded by pgAudit '18.0' —
+          # 'pg18' does not contain '18.0'). This also prunes full-product removals:
+          # when every version of a product leaves SSOT its URL drops out of
+          # expected_refs entirely, so all its versioned lines are stale.
+          # Development/main lines carry no version label, so label_re never matches
+          # them and they are always preserved.
+          #
+          # Caveat on the version-in-ref guard: it protects decorated refs that
+          # embed the dotted version (the real cases: v5.0.6-doc-2, v0.1.0-docs,
+          # fix-for-1.5.1-docs). A 3rd-party-docs ref that omits the version
+          # (e.g. 'pgvector082') is identified solely by its exact ref, so a
+          # *rename* that keeps the version would prune the old line — acceptable,
+          # since 3rd-party-docs adds are already manual and renaming a kb_branch
+          # is a manual op. Relaxing this would reintroduce the cross-product
+          # collision (PostgreSQL 'pg18' shielded by pgAudit '18.0').
+          #
+          # Scan an SSH→HTTPS-normalized view so a stale line still using
+          # git@github.com: is detected here; otherwise the SSH fix below would
+          # rewrite it to HTTPS and let the stale entry slip through unpruned.
+          mkdocs_scan = re.sub(
+              r"'!import git@github\.com:([^/]+)/",
+              r"'!import https://github.com/\1/",
+              mkdocs_text,
+          )
+          stale_entries = []
+          for m in label_re.finditer(mkdocs_scan):
+              s_label = m.group(1)
+              s_nu    = normalize_url(m.group(2))
+              s_ref   = m.group(3)
+              if s_ref in expected_refs.get(s_nu, set()):
+                  continue  # ref still present in SSOT
+              if any(str(v) in s_ref and label_covers_version(s_label, v)
+                     for v in expected_versions.get(s_nu, set())):
+                  continue  # version still in SSOT under a decorated ref for THIS product
+              stale_entries.append({
+                  'label'  : s_label,
+                  'nu'     : s_nu,
+                  'ref'    : s_ref,
+                  'git_url': m.group(2),
+              })
+
           # ── Build drift report ────────────────────────────────────────────
 
           lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
           clean = (not missing_entries and not new_products and not ssh_urls
-                   and not ref_updates and not cp_path_update)
+                   and not ref_updates and not cp_path_update and not stale_entries
+                   and not new_sections)
 
           if ssh_urls:
               lines += ['### SSH URLs detected in mkdocs.yml\n',
@@ -286,6 +491,26 @@ jobs:
                   )
               lines.append('')
 
+          if new_sections:
+              lines += ['### New major sections — product exists, this major needs its own section (manual placement required)\n']
+              for item in new_sections:
+                  e = item['entry']
+                  lines.append(
+                      f"  - **NEW SECTION** `{e['id']}` ({e['name']} {e.get('version', '')}) "
+                      f"— major v{item['major']} has no matching section → "
+                      f"`{item['git_url']}?branch={item['ref']}`"
+                  )
+              lines.append('')
+
+          if stale_entries:
+              lines += ['### Stale entries (in mkdocs.yml, removed from SSOT)\n']
+              for item in stale_entries:
+                  lines.append(
+                      f"  - **REMOVE** label `{item['label']}` → "
+                      f"`{item['git_url']}?branch={item['ref']}`"
+                  )
+              lines.append('')
+
           if cp_path_update:
               lines += ['### Asset path version bump\n',
                         f"  - `/control-plane/{cp_path_update['old']}/scripts/generate-stack.js`"
@@ -298,14 +523,17 @@ jobs:
               lines += ['---',
                         f'*{len(ref_updates)} ref update(s), '
                         f'{len(missing_entries)} missing, '
-                        f'{len(new_products)} new product(s)*']
+                        f'{len(stale_entries)} stale, '
+                        f'{len(new_products)} new product(s), '
+                        f'{len(new_sections)} new section(s)*']
 
           report = '\n'.join(lines) + '\n'
           with open('/tmp/drift-report.md', 'w') as f:
               f.write(report)
           print(report)
 
-          actionable = bool(missing_entries or ssh_urls or ref_updates or cp_path_update)
+          actionable = bool(missing_entries or ssh_urls or ref_updates
+                            or cp_path_update or stale_entries)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
               fh.write(f'actionable={"true" if actionable else "false"}\n')
               fh.write(f'clean={"true" if clean else "false"}\n')
@@ -453,6 +681,22 @@ jobs:
                       fixed, nu, item['label'], item['git_url'], item['ref']
                   )
 
+          # Remove stale entries (whole physical line, including its newline).
+          # Match on (label, base-url, ref) so only the exact drifted line goes.
+          for item in stale_entries:
+              base = item['nu'].rstrip('/')
+              if base.endswith('.git'):
+                  base = base[:-4]
+              fixed = re.sub(
+                  r"(?m)^[ \t]*-[ \t]+" + re.escape(item['label'])
+                  + r":[ \t]+'!import " + re.escape(base)
+                  + r"(?:\.git)?\?branch=" + re.escape(item['ref'])
+                  + r"'[^\n]*\n",
+                  '',
+                  fixed,
+                  count=1,
+              )
+
           with open(MKDOCS_FILE, 'w') as f:
               f.write(fixed)
           PYEOF
@@ -488,7 +732,7 @@ jobs:
           git checkout -B "$FIX_BRANCH" "origin/$BASE_BRANCH"
           cp /tmp/mkdocs_generated.yml "$MKDOCS_FILE"
           git add "$MKDOCS_FILE"
-          git commit -m "auto: sync mkdocs.yml nav from SSOT [skip ci]"
+          git commit -m "auto: sync mkdocs.yml nav from SSOT"
           git push --force-with-lease origin "$FIX_BRANCH"
           echo "pushed=true"          >> "$GITHUB_OUTPUT"
           echo "branch_ready=true"    >> "$GITHUB_OUTPUT"
