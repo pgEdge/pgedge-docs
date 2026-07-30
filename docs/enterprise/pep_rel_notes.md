@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 07/21/2026
+* Component updates: ACE 2.1.0
+
+
 ## 07/14/2026
 * Ubuntu 24.04 (AMD & ARM) support for all supported pgEdge Enterprise Postgres packages.
 
