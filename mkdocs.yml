@@ -591,6 +591,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE:
+    - v2.1.1: '!import https://github.com/pgEdge/ace.git?branch=v2.1.1'
     - v2.1.0: '!import https://github.com/pgEdge/ace.git?branch=v2.1.0'
     - v2.0.0: '!import https://github.com/pgEdge/ace.git?branch=v2.0.0'
     - v1.9.0: '!import https://github.com/pgEdge/ace.git?branch=v1.9.0'
@@ -615,6 +616,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/lolor.git?branch=main'
 
   - Snowflake:
+    - v2.6: '!import https://github.com/pgEdge/snowflake.git?branch=v2.6.0'
     - v2.5: '!import https://github.com/pgEdge/snowflake.git?branch=v2.5.0'
     - v2.4: '!import https://github.com/pgEdge/snowflake.git?branch=v2.4'
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
@@ -628,6 +630,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
 
   - Spock v5:
+    - v5.0.11: '!import https://github.com/pgEdge/spock.git?branch=v5.0.11'
     - v5.0.10: '!import https://github.com/pgEdge/spock.git?branch=v5.0.10'
     - v5.0.9: '!import https://github.com/pgEdge/spock.git?branch=v5.0.9'
     - v5.0.8: '!import https://github.com/pgEdge/spock.git?branch=v5.0.8'
@@ -701,6 +704,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=main'
 
   - PostgreSQL:
+    - v19 beta: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19beta2'
     - v18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg18'
     - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
     - v16: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg16'
@@ -708,6 +712,7 @@ nav:
 
   # Community Extensions (from 3rd-party-docs repo)
   - pgvector:
+    - v0.8.5: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector085'
     - v0.8.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector082'
     - v0.8.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector081'
     - v0.8.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector080'
