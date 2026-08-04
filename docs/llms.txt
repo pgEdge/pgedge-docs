@@ -104,6 +104,7 @@ PII replacement tool for creating safe dev/test database copies.
 
 Connect with the pgEdge community and access additional support channels.
 
+- Security and vulnerability disclosure: https://docs.pgedge.com/security
 - Website: https://www.pgedge.com
 - GitHub: https://github.com/pgEdge
 - Discord: https://discord.com/invite/pgedge

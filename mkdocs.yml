@@ -348,6 +348,8 @@ repo_url: https://github.com/pgEdge
 nav:
   - Welcome: index.md
 
+  - Security: security/index.md
+
   - AI Toolkit: ai-toolkit/index.md
 
   - Ansible: '!import https://github.com/pgEdge/pgedge-ansible.git?branch=main'
