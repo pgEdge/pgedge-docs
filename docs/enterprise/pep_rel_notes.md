@@ -1,7 +1,12 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 08/06/2026
+* pgEdge Enterprise Postgres Control Plane 0.10.0 
+
+
 ## 07/21/2026
-* Component updates: ACE 2.1.0
+* Component updates: ACE 2.1.0, Postgis 3.6.4 for PG 19, Snowflake 2.6.0, Spock 5.11.0 for PG 16, 17 and 18, Pgvector 0.8.5
+* pgEdge Enterprise Postgres 19 beta2
 
 
 ## 07/14/2026
@@ -17,17 +22,17 @@
 * Supautils 3.2.2 first release
 
   
-## 12/06/2026
+## 6/12/2026
 * Component updates: Spock 5.0.9
 
-## 11/06/2026
+## 6/11/2026
 
 * pgEdge AI DBA Workbench 1.0.0 GA
 * pgEdge AI KB 1.0.0
 * pgEdge Patroni 4.1.3-2 (with pgEdge Json Logger 4.1.0 dependency required for Control Plane)
 
 
-## 2/06/2026
+## 6/2/2026
 
 * pgEdge Enterprise Postgres packages 16.14-2, 17.10-2, and 18.4-2 released for RHEL: Rebuild triggered by RHEL AppStream repositories updating to a newer major version of the LLVM Toolset (llvm-21.1.8)
 
