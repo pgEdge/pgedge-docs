@@ -8,10 +8,9 @@ or GitHub account.
 
 ![pgEdge Cloud Edition login](../images/cloud_login.png)
 
-If this is your first time logging in, you are welcomed to the free
-trial of pgEdge Cloud.
+If this is your first time logging in, you are welcomed to pgEdge Cloud.
 
-![pgEdge Cloud Edition free trial](../images/cloud_trial.png)
+![pgEdge Cloud Edition welcome message](../images/cloud_welcome.png)
 
 pgEdge Cloud uses resources provisioned on your choice of cloud
 provider; pgEdge Cloud can create and manage clusters created on the
