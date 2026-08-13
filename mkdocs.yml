@@ -649,6 +649,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
   - Radar:
+    - v0.5.1: '!import https://github.com/pgEdge/radar?branch=v0.5.1'
     - v0.4.1: '!import https://github.com/pgEdge/radar?branch=v0.4.1'
     - v0.4.0: '!import https://github.com/pgEdge/radar?branch=v0.4.0'
     - v0.3.0: '!import https://github.com/pgEdge/radar?branch=v0.3.0'
@@ -806,6 +807,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2master'
 
   - pgBackRest:
+    - v2.59.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2590'
     - v2.58.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest258'
     - v2.57.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest257'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrestmaster'
