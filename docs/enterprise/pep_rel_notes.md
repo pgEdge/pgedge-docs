@@ -1,5 +1,23 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 08/13/2026
+* Postgres version update: pgEdge Enterprise Postgres 16.15
+
+    * pgedge-enterprise-postgres 16.15
+    * pgedge-enterprise-all 16.15
+
+* Postgres version update: pgEdge Enterprise Postgres 17.11
+
+    * pgedge-enterprise-postgres 17.11
+    * pgedge-enterprise-all 17.11
+
+* Postgres version update: pgEdge Enterprise Postgres 18.6
+
+    * pgedge-enterprise-postgres 18.6
+    * pgedge-enterprise-all 18.6
+ 
+* Component updates: system_stats v4.0, pgBackRest 2.59.0, Radar 0.5.1
+      
 ## 08/06/2026
 * pgEdge Enterprise Postgres Control Plane 0.10.0 
 
