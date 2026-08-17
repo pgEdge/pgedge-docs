@@ -52,7 +52,9 @@ Before configuring local access to the repository (`pgedge`), you should ensure 
 
 If you have the PostgreSQL Global Development Group (PGDG) community repository enabled, it must be disabled before installing pgEdge packages. PGDG packages share file paths with pgEdge packages (e.g., pgBouncer, postgresql-common), which will cause installation failures:
 
+```bash
 sudo dnf config-manager --set-disabled pgdg*
+```
 
 ## Creating the Repository
 
