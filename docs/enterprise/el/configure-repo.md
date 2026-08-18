@@ -51,7 +51,7 @@ Before configuring local access to the repository (`pgedge`), you should ensure 
 ## Disable the PGDG repository (if enabled)
 
 If you have enabled the PostgreSQL Global Development Group (PGDG) community repository,
-disabled the repository before installing pgEdge packages. PGDG packages share file paths
+disable the repository before installing pgEdge packages. PGDG packages share file paths
 with pgEdge packages (e.g., pgBouncer, postgresql-common), which may cause installation
 failures:
 
