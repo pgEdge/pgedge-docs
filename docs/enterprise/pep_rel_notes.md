@@ -1,5 +1,11 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 08/20/2026
+* pgEdge Enterprise Postgres Control Plane 0.10.1
+
+## 08/17/2026
+* pgEdge ColdFront 1.0.0 beta2 
+
 ## 08/13/2026
 * Postgres version update: pgEdge Enterprise Postgres 16.15
 
