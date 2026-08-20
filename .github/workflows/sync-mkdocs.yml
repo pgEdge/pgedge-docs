@@ -236,6 +236,10 @@ jobs:
               that maintainers chose intentionally for docs reasons."""
               return bool(STANDARD_REF_RE.match(ref or ''))
 
+          def ref_version(ref):
+              """Comparable version key for a standard ref ('release/v0.10.1' → 0.10.1)."""
+              return version_key(re.sub(r'^(release/)?v?', '', ref or ''))
+
           # ── Product identity for shared 3rd-party-docs refs ───────────────
           # Every 3rd-party-docs product shares ONE repo URL, so "is this an
           # existing product or a brand-new one?" cannot be answered by the
@@ -289,9 +293,14 @@ jobs:
               )
               if covering_label:
                   existing_ref = url_label_to_ref.get((nu, covering_label))
+                  # Only ever bump FORWARD. When the SSOT keeps several
+                  # patch releases of the same minor (e.g. 0.10.1 and 0.10.0),
+                  # both collapse onto one label ('v0.10'); without this guard
+                  # the older entry rewrites the label back to its own ref.
                   if (existing_ref != ref
                           and is_standard_ref(existing_ref)
-                          and is_standard_ref(ref)):
+                          and is_standard_ref(ref)
+                          and ref_version(ref) > ref_version(existing_ref)):
                       ref_updates.append({
                           'entry'  : entry,
                           'git_url': git_url,
@@ -362,6 +371,19 @@ jobs:
                       'version': version,
                       'label'  : label,
                   })
+
+          # Collapse to ONE update per (url, label). Several SSOT entries can
+          # share a label (0.10.1 and 0.10.2 both map to 'v0.10'), and each was
+          # compared against the same pre-existing ref, so both would queue.
+          # The apply step keys its rewrite on old_ref, so only the first would
+          # land — leaving the result dependent on SSOT order. Keep the highest.
+          _best = {}
+          for _item in ref_updates:
+              _k = (_item['nu'], _item['label'])
+              if (_k not in _best
+                      or ref_version(_item['new_ref']) > ref_version(_best[_k]['new_ref'])):
+                  _best[_k] = _item
+          ref_updates = list(_best.values())
 
           # ── Special-cased: control-plane asset path version bump ─────────
           # mkdocs.yml hardcodes `/control-plane/vN-M/scripts/generate-stack.js`
