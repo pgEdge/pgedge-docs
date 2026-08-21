@@ -723,7 +723,8 @@ hide:
     <a href="https://github.com/pgEdge" style="margin: 0 0.75rem;">GitHub</a> •
     <a href="https://www.pgedge.com" style="margin: 0 0.75rem;">Website</a> •
     <a href="https://www.pgedge.com/support" style="margin: 0 0.75rem;">Support</a> •
-    <a href="https://discord.com/invite/pgedge" style="margin: 0 0.75rem;">Discord</a>
+    <a href="https://discord.com/invite/pgedge" style="margin: 0 0.75rem;">Discord</a> •
+    <a href="/security/" style="margin: 0 0.75rem;">Security</a>
   </p>
   <p style="margin-top: 1rem; font-size: 0.8rem;">
     pgEdge is built by industry veterans with decades of PostgreSQL expertise. Founded in 2022 and headquartered in Northern Virginia, pgEdge serves prominent enterprises including Bertelsmann, Qube RT, European Parliament, and multiple U.S. government agencies.
