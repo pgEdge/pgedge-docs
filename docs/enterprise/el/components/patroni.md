@@ -36,14 +36,15 @@ Use the following steps to install Patroni and etcd on a RHEL-based platform.
      pgedge-patroni-consul pgedge-consul pgedge-patroni-etcd \
      pgedge-python3-etcd pgedge-patroni-zookeeper pgedge-etcd
      ```
-
-4. Verify the installed Patroni version with the following command:
+    Note: Remove any pip-installed version of Patroni before continuing. The pgEdge RPM package conflicts with a pip installation.
+   
+5. Verify the installed Patroni version with the following command:
 
     ```bash
     /usr/bin/patroni --version
     ```
 
-5. Confirm that Python can import the Patroni module with the
+6. Confirm that Python can import the Patroni module with the
    following command:
 
     ```bash
