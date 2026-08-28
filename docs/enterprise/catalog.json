@@ -780,6 +780,25 @@
       "start_pattern": "sudo systemctl enable --now postgresql"
     }
   },
+  "ubuntu2604": {
+      "label": "Ubuntu 26.04 (Resolute Raccoon)",
+      "family": "ubuntu",
+      "version": "26.04",
+      "pkg_manager": "apt",
+      "architectures": [
+        "x86_64",
+        "aarch64"
+      ],
+      "prerequisites": [
+        "sudo apt-get update",
+        "sudo apt-get install -y curl gnupg2 lsb-release"
+      ],
+      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "install_pattern": "sudo apt-get install -y {package}",
+      "init_pattern": "sudo pg_ctlcluster {ver} main start",
+      "start_pattern": "sudo systemctl enable --now postgresql"
+    }
+  },
   "pg_versions": [
     "16",
     "17",
