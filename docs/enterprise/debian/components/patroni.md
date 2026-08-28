@@ -25,6 +25,8 @@ platform.
     sudo apt-get install pgedge-patroni pgedge-etcd
     ```
 
+   Note: Remove any pip-installed version of Patroni before continuing. The pgEdge native package may conflict with a pip installation.
+   
 3. Verify the installed Patroni version with the following command:
 
     ```bash
