@@ -703,6 +703,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pg-healthcheck?branch=main'
 
   - pgedge-safesession:
+    - v1.0: '!import https://github.com/pgEdge/pgedge-safesession.git?branch=v1.0'
     - Development: '!import https://github.com/pgEdge/pgedge-safesession?branch=main'
 
   - pgedge-mcp-bridge:
@@ -760,6 +761,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcronmaster'
 
   - pgmq:
+    - v1.12.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1120'
     - v1.11.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1111'
     - v1.11.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1110'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmqmaster'
