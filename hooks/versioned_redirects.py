@@ -29,6 +29,46 @@ LEGACY_PREFIXES = {
     'pgedge-postgres-mcp': 'pgedge-postgres-mcp-server',
 }
 
+# Versions that were retired from the nav to stay under Cloudflare Pages'
+# 20,000-file-per-deployment limit. Maps the retired version path -> the
+# nearest surviving version. Emitted as splat rules so deep links keep
+# working where the page still exists in the surviving version.
+#
+# Cloudflare Pages allows 100 dynamic (splat) rules per deployment; these
+# plus LEGACY_PREFIXES are well inside that budget.
+RETIRED_VERSIONS = {
+    'ace/v1-7-2': 'ace/v1-8-0',
+    'ace/v1-7-1': 'ace/v1-8-0',
+    'ace/v1-7-0': 'ace/v1-8-0',
+    'ace/v1-6-0': 'ace/v1-8-0',
+    'ace/v1-5-5': 'ace/v1-8-0',
+    'ace/v1-5-4': 'ace/v1-8-0',
+    'ace/v1-5-3': 'ace/v1-8-0',
+    'ace/v1-5-2': 'ace/v1-8-0',
+    'ace/v1-5-1': 'ace/v1-8-0',
+    'ace/v1-4-2': 'ace/v1-8-0',
+    'ace/v1-4-1': 'ace/v1-8-0',
+    'ace/v1-4-0': 'ace/v1-8-0',
+    'coldfront/v1-0-0-beta1': 'coldfront/v1-0-0-beta2',
+    'control-plane/v0-7': 'control-plane/v0-8',
+    'control-plane/v0-6': 'control-plane/v0-8',
+    'pgadmin-4/v9-11': 'pgadmin-4/v9-12',
+    'pgvector/v0-8-0': 'pgvector/v0-8-1',
+    'postgis/v3-5-5': 'postgis/v3-5-6',
+    'postgis/v3-6-2': 'postgis/v3-6-3',
+    'postgrest/v14-7': 'postgrest/v14-8',
+    'postgrest/v14-6': 'postgrest/v14-8',
+    'postgrest/v14-5': 'postgrest/v14-8',
+    'radar/v0-3-0': 'radar/v0-4-0',
+    'radar/v0-2-3': 'radar/v0-4-0',
+    'radar/v0-2-2': 'radar/v0-4-0',
+    'radar/v0-1-0': 'radar/v0-4-0',
+    'spock-v5/v5-0-8': 'spock-v5/v5-0-9',
+    'spock-v5/v5-0-6': 'spock-v5/v5-0-9',
+    'spock-v5/v5-0-5': 'spock-v5/v5-0-9',
+    'spock-v5/v5-0-4': 'spock-v5/v5-0-9',
+}
+
 
 def on_pre_build(config):
     """Generate redirect index.md files for each versioned docset."""
@@ -189,6 +229,11 @@ def on_post_build(config):
             )
         )
 
+    retired_rules = [
+        '/{old}/* /{new}/:splat 301'.format(old=old, new=new)
+        for old, new in RETIRED_VERSIONS.items()
+    ]
+
     if legacy_rules:
         rules.append('# Legacy prefix redirects')
         rules.extend(legacy_rules)
@@ -197,6 +242,15 @@ def on_post_build(config):
             f"Generated {len(legacy_rules)} legacy prefix redirect rules"
         )
 
+    if retired_rules:
+        rules.append('# Retired version redirects')
+        rules.extend(retired_rules)
+        rules.append('')
+        log.info(
+            f"Generated {len(retired_rules)} retired version redirect rules"
+        )
+
+    if legacy_rules or retired_rules:
         # Write the _redirects file to the site root
         redirects_path = os.path.join(site_dir, '_redirects')
 
@@ -212,7 +266,8 @@ def on_post_build(config):
                 f.write('\n')
                 f.write(existing)
 
-        log.info(f"Wrote {len(legacy_rules)} redirect rules to {redirects_path}")
+        total_rules = len(legacy_rules) + len(retired_rules)
+        log.info(f"Wrote {total_rules} redirect rules to {redirects_path}")
 
     # --- Pagefind: exclude old versions from search index ---
 
