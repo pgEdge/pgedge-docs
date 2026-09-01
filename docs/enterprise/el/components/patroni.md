@@ -16,6 +16,12 @@ Postgres (PEP) cluster, you need to
 the Postgres database; the configuration steps require the location of an
 empty `data` directory.
 
+!!! note 
+
+    Remove any pip-installed version of Patroni before continuing. The
+    pgEdge RPM package may conflict with an existing pip installation.
+
+
 ## Installing Patroni and etcd
 
 Use the following steps to install Patroni and etcd on a RHEL-based platform.
@@ -24,11 +30,12 @@ Use the following steps to install Patroni and etcd on a RHEL-based platform.
    at [docs.pgedge.com](https://docs.pgedge.com/enterprise/el/configure-repo/).
 
 2. Install pgEdge Enterprise Postgres; you'll find instructions at
-   [docs.pgedge.com](https://docs.pgedge.com/enterprise/el/installing/). After installing pgEdge Enterprise Postgres, you can skip manual cluster
+   [docs.pgedge.com](https://docs.pgedge.com/enterprise/el/installing/).
+   After installing pgEdge Enterprise Postgres, you can skip manual cluster
    initialization and postmaster startup.  Patroni will perform both steps
    while bootstrapping.
 
-3. Install the required Patroni and etcd packages with the following
+4. Install the required Patroni and etcd packages with the following
    command:
 
     ```bash
@@ -36,7 +43,6 @@ Use the following steps to install Patroni and etcd on a RHEL-based platform.
      pgedge-patroni-consul pgedge-consul pgedge-patroni-etcd \
      pgedge-python3-etcd pgedge-patroni-zookeeper pgedge-etcd
      ```
-    Note: Remove any pip-installed version of Patroni before continuing. The pgEdge RPM package conflicts with a pip installation.
    
 5. Verify the installed Patroni version with the following command:
 
@@ -100,7 +106,8 @@ Use the following steps to configure and start the Patroni service.
 
 2. Ensure the PostgreSQL `data` directory is empty; Patroni uses the
    directory when it runs `initdb` (during bootstrapping). If the directory
-   *does not* exist, use the following commands to create it with the correct ownership and permissions:
+   *does not* exist, use the following commands to create it with the
+   correct ownership and permissions:
 
     ```bash
     sudo mkdir -p /var/lib/pgsql/18/data
@@ -139,7 +146,7 @@ Use the following steps to configure and start the Patroni service.
     sudo chmod 600 /etc/patroni/patroni.yml
     ```
 
-6. Enable and start the Patroni service using the following commands:
+6. Enable and start the Patroni service with the following commands:
 
     ```bash
     sudo systemctl enable patroni
