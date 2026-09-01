@@ -189,6 +189,24 @@ def _exclude_old_versions_from_search(site_dir, versioned_docsets):
         )
 
 
+def _count_dynamic_rules(text):
+    """Count dynamic (splat/placeholder) rules in a _redirects body.
+
+    Cloudflare budgets these separately from static rules, and a
+    _redirects shipped in docs/ is appended to what this hook generates,
+    so the deployment's real total is whatever ends up in the file.
+    """
+    count = 0
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        source = line.split()[0]
+        if '*' in source or ':' in source:
+            count += 1
+    return count
+
+
 def on_post_build(config):
     """Post-build: generate _redirects and exclude old versions from search.
 
@@ -239,8 +257,9 @@ def on_post_build(config):
     # a rule whose source directory exists again would build every page of
     # that version and then hide all of them behind a 301. Drop the rule
     # rather than ship that, and log an error so the stale entry gets
-    # cleaned up. A missing target only yields a redirect to a 404, so it
-    # warns and still emits.
+    # cleaned up. A missing target is skipped too: redirecting to a path
+    # that is not in the deployment just adds a hop before the same 404,
+    # while consuming a rule from the dynamic-rule budget.
     retired_rules = []
     for old_path, new_path in RETIRED_VERSIONS.items():
         if os.path.isdir(os.path.join(site_dir, old_path)):
@@ -254,9 +273,11 @@ def on_post_build(config):
         if not os.path.isdir(os.path.join(site_dir, new_path)):
             log.warning(
                 f"RETIRED_VERSIONS points {old_path} at {new_path}, which is "
-                f"not in the built site — the redirect will land on a 404. "
-                f"Retarget it at a surviving version."
+                f"not in the built site — the redirect would only add a hop "
+                f"before the same 404. Skipping the rule; retarget it at a "
+                f"surviving version."
             )
+            continue
         retired_rules.append(
             '/{old}/* /{new}/:splat 301'.format(old=old_path, new=new_path)
         )
@@ -287,25 +308,29 @@ def on_post_build(config):
             with open(redirects_path, 'r') as f:
                 existing = f.read()
 
+        final = '\n'.join(rules)
+        if existing:
+            final += '\n' + existing
+
         with open(redirects_path, 'w') as f:
-            f.write('\n'.join(rules))
-            if existing:
-                f.write('\n')
-                f.write(existing)
+            f.write(final)
 
         # Cloudflare Pages allows 100 dynamic (splat/placeholder) rules per
         # deployment; past that the platform's answer is Bulk Redirects.
         # Every retention pass appends entries and none expire, so warn
-        # while there is still room to change approach.
-        total_rules = len(legacy_rules) + len(retired_rules)
+        # while there is still room to change approach. Count what the
+        # deployment actually ships — a _redirects from docs/ is appended
+        # here and its dynamic rules draw on the same budget.
+        generated = len(legacy_rules) + len(retired_rules)
+        dynamic = _count_dynamic_rules(final)
         log.info(
-            f"Wrote {total_rules} redirect rules to {redirects_path} "
-            f"({total_rules}/{DYNAMIC_RULE_BUDGET} of the Cloudflare Pages "
-            f"dynamic-rule budget)"
+            f"Wrote {generated} redirect rules to {redirects_path} "
+            f"({dynamic}/{DYNAMIC_RULE_BUDGET} of the Cloudflare Pages "
+            f"dynamic-rule budget in the final file)"
         )
-        if total_rules > DYNAMIC_RULE_BUDGET * 0.8:
+        if dynamic > DYNAMIC_RULE_BUDGET * 0.8:
             log.warning(
-                f"{total_rules} dynamic redirect rules is within 20% of "
+                f"{dynamic} dynamic redirect rules is within 20% of "
                 f"Cloudflare Pages' {DYNAMIC_RULE_BUDGET}-rule limit. Retire "
                 f"the oldest entries from RETIRED_VERSIONS or move them to "
                 f"the client-side handling in 404.html."
