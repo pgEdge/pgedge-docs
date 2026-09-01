@@ -552,7 +552,7 @@ hide:
         <span class="ext-desc">Large object replication for handling BLOBs across distributed PostgreSQL nodes</span>
       </li>
       <li>
-        <a href="pgedge-safesession/"><strong>SafeSession</strong></a>
+        <a href="pgedge-safesession/"><strong>SafeSession</strong> <span class="chip-new">NEW</span></a>
         <span class="ext-desc">Enforces read-only sessions for specified database roles, blocking DML, DDL and other write operations</span>
       </li>
       <li>
