@@ -14,6 +14,12 @@ Before installing and configuring Patroni and etcd in a pgEdge Enterprise
 Postgres cluster, you need to 
 [install pgEdge Enterprise Postgres](../installing.md#installing-pgedge-enterprise-postgres-and-controlling-the-cluster).
 
+!!! note
+
+    Remove any pip-installed version of Patroni before continuing. The pgEdge
+    native package may conflict with a pip installation.
+
+    
 ## Installing Patroni and etcd
 
 Use the following steps to install Patroni and etcd on a Debian-based
@@ -24,14 +30,14 @@ platform.
     ```bash
     sudo apt-get install pgedge-patroni pgedge-etcd
     ```
-
-3. Verify the installed Patroni version with the following command:
+   
+2. Verify the installed Patroni version with the following command:
 
     ```bash
     /usr/bin/patroni --version
     ```
 
-4. Confirm that Python can import the Patroni module with the following
+3. Confirm that Python can import the Patroni module with the following
     command:
 
     ```bash
