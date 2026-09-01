@@ -103,13 +103,23 @@ jobs:
               return url.rstrip('/')
 
           def version_key(v):
+              """Sort key for a version string.
+
+              A token's trailing digits are compared numerically, not as
+              text, so '19beta10' sorts above '19beta2' (plain string
+              ordering puts 'beta10' first because '1' < '2').
+              """
               parts = re.split(r'[.\-]', str(v))
               result = []
               for p in parts:
                   try:
                       result.append((0, int(p)))
                   except ValueError:
-                      result.append((1, p.lower()))
+                      m = re.match(r'^(.*?)(\d+)$', p)
+                      if m:
+                          result.append((1, m.group(1).lower(), int(m.group(2))))
+                      else:
+                          result.append((1, p.lower(), 0))
               return result
 
           def for_pgedge_docs(e):
@@ -231,13 +241,18 @@ jobs:
           # Label granularity is read back from what this product already
           # publishes, so ranking counts nav slots rather than raw releases.
 
-          ref_to_label = {ref: lbl for (nu, lbl), ref in url_label_to_ref.items()}
+          # Keyed by (url, ref): a ref like 'v1.0.0' is used by several
+          # products, so a ref-only key would let one overwrite another's
+          # label and mis-size that product's version slots.
+          ref_to_label = {(nu, ref): lbl for (nu, lbl), ref in url_label_to_ref.items()}
 
           def label_components(name, versions_by_name_entries):
               counts = []
               for e in versions_by_name_entries:
-                  _u, r = get_import_info(e)
-                  lbl = ref_to_label.get(r)
+                  u, r = get_import_info(e)
+                  if not u or not r:
+                      continue
+                  lbl = ref_to_label.get((normalize_url(u), r))
                   if lbl:
                       counts.append(len(lbl.lstrip('v').split('.')))
               return max(set(counts), key=counts.count) if counts else 3
@@ -395,7 +410,7 @@ jobs:
                       'git_url': git_url,
                       'ref'    : ref,
                       'version': version,
-                      'label'  : ref_to_label.get(ref, f"v{version}"),
+                      'label'  : ref_to_label.get((nu, ref), f"v{version}"),
                   })
                   continue
 
@@ -698,11 +713,34 @@ jobs:
               f.write(report)
           print(report)
 
+          # The report reaches a PR body only when there is something to
+          # apply. Prune candidates are report-only, so a run that finds
+          # nothing else would leave them in transient job logs. Write the
+          # report to the run summary every time, and annotate prune
+          # candidates so they are visible on the run without opening logs.
+          summary_path = os.environ.get('GITHUB_STEP_SUMMARY')
+          if summary_path:
+              with open(summary_path, 'a') as fh:
+                  fh.write(report)
+
+          if prune_candidates:
+              labels = ', '.join(
+                  f"{i['entry'].get('name')} {i['entry'].get('version')}"
+                  for i in prune_candidates
+              )
+              print(
+                  f"::warning title=Retention prune candidates::"
+                  f"{len(prune_candidates)} published version(s) are outside "
+                  f"the retention window and need a nav removal plus a "
+                  f"RETIRED_VERSIONS redirect: {labels}"
+              )
+
           actionable = bool(missing_entries or ssh_urls or ref_updates
                             or cp_path_update or stale_entries)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
               fh.write(f'actionable={"true" if actionable else "false"}\n')
               fh.write(f'clean={"true" if clean else "false"}\n')
+              fh.write(f'prune_candidates={len(prune_candidates)}\n')
 
           if not actionable:
               sys.exit(0)
