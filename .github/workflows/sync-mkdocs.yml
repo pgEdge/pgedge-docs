@@ -86,8 +86,9 @@ jobs:
           # outside the policy entirely — they are the 'Development' nav entries.
           RETENTION_DEFAULT = {'group': 'major', 'max': 3}
           RETENTION_OVERRIDES = {
-              # One nav entry per PG major, so majors — not minors — are the window.
-              'PostgreSQL': {'group': 'product', 'max': 3},
+              # One nav entry per PG major, so majors — not minors — are the
+              # window. Four, so v16 stays published once PG19 reaches GA.
+              'PostgreSQL': {'group': 'product', 'max': 4},
               # Two live lines published side by side: newest two of each
               # (3.6.4/3.6.3 with 3.5.7/3.5.6) rather than three of 3.6 alone.
               'PostGIS': {'group': 'minor', 'max': 2},
@@ -109,7 +110,7 @@ jobs:
               text, so '19beta10' sorts above '19beta2' (plain string
               ordering puts 'beta10' first because '1' < '2').
               """
-              parts = re.split(r'[.\-]', str(v))
+              parts = re.split(r'[.\-]', str(v).lstrip('vV'))
               result = []
               for p in parts:
                   try:

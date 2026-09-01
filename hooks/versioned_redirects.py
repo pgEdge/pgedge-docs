@@ -36,6 +36,8 @@ LEGACY_PREFIXES = {
 #
 # Cloudflare Pages allows 100 dynamic (splat) rules per deployment; these
 # plus LEGACY_PREFIXES are well inside that budget.
+DYNAMIC_RULE_BUDGET = 100  # Cloudflare Pages' per-deployment splat-rule limit
+
 RETIRED_VERSIONS = {
     'ace/v1-7-2': 'ace/v1-8-0',
     'ace/v1-7-1': 'ace/v1-8-0',
@@ -229,10 +231,35 @@ def on_post_build(config):
             )
         )
 
-    retired_rules = [
-        '/{old}/* /{new}/:splat 301'.format(old=old, new=new)
-        for old, new in RETIRED_VERSIONS.items()
-    ]
+    # RETIRED_VERSIONS is hand-maintained alongside manual nav edits, so
+    # verify each pair against what was actually built before emitting it.
+    #
+    # A restored source is the dangerous case: Pages evaluates _redirects
+    # before static assets (see the note in this function's docstring), so
+    # a rule whose source directory exists again would build every page of
+    # that version and then hide all of them behind a 301. Drop the rule
+    # rather than ship that, and log an error so the stale entry gets
+    # cleaned up. A missing target only yields a redirect to a 404, so it
+    # warns and still emits.
+    retired_rules = []
+    for old_path, new_path in RETIRED_VERSIONS.items():
+        if os.path.isdir(os.path.join(site_dir, old_path)):
+            log.error(
+                f"RETIRED_VERSIONS lists {old_path}, but it was built into "
+                f"the site — the redirect would make every one of its pages "
+                f"unreachable. Skipping the rule; remove the entry from "
+                f"hooks/versioned_redirects.py now that the version is back."
+            )
+            continue
+        if not os.path.isdir(os.path.join(site_dir, new_path)):
+            log.warning(
+                f"RETIRED_VERSIONS points {old_path} at {new_path}, which is "
+                f"not in the built site — the redirect will land on a 404. "
+                f"Retarget it at a surviving version."
+            )
+        retired_rules.append(
+            '/{old}/* /{new}/:splat 301'.format(old=old_path, new=new_path)
+        )
 
     if legacy_rules:
         rules.append('# Legacy prefix redirects')
@@ -266,8 +293,23 @@ def on_post_build(config):
                 f.write('\n')
                 f.write(existing)
 
+        # Cloudflare Pages allows 100 dynamic (splat/placeholder) rules per
+        # deployment; past that the platform's answer is Bulk Redirects.
+        # Every retention pass appends entries and none expire, so warn
+        # while there is still room to change approach.
         total_rules = len(legacy_rules) + len(retired_rules)
-        log.info(f"Wrote {total_rules} redirect rules to {redirects_path}")
+        log.info(
+            f"Wrote {total_rules} redirect rules to {redirects_path} "
+            f"({total_rules}/{DYNAMIC_RULE_BUDGET} of the Cloudflare Pages "
+            f"dynamic-rule budget)"
+        )
+        if total_rules > DYNAMIC_RULE_BUDGET * 0.8:
+            log.warning(
+                f"{total_rules} dynamic redirect rules is within 20% of "
+                f"Cloudflare Pages' {DYNAMIC_RULE_BUDGET}-rule limit. Retire "
+                f"the oldest entries from RETIRED_VERSIONS or move them to "
+                f"the client-side handling in 404.html."
+            )
 
     # --- Pagefind: exclude old versions from search index ---
 
