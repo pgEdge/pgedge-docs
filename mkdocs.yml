@@ -191,7 +191,6 @@ extra:
   labs_docsets:
     - pg-semantic-cache
     - pg-healthcheck
-    - pgedge-safesession
     - pgedge-mcp-bridge
 
   # Third-party documentation - shows a notice that content is not maintained by pgEdge
@@ -276,6 +275,8 @@ extra:
         url: spock-v5/
       - title: LOLOR
         url: lolor/
+      - title: SafeSession
+        url: pgedge-safesession/
       - title: Snowflake
         url: snowflake/
       - title: pgEdge Vectorizer
@@ -335,8 +336,6 @@ extra:
         url: pg-semantic-cache/
       - title: Postgres Healthcheck (pg-healthcheck)
         url: pg-healthcheck/
-      - title: Safe Session (pgedge-safesession)
-        url: pgedge-safesession/
       - title: MCP Bridge (pgedge-mcp-bridge)
         url: pgedge-mcp-bridge/
 
@@ -605,6 +604,10 @@ nav:
     - v1.2.2: '!import https://github.com/pgEdge/lolor.git?branch=v1.2.2'
     - Development: '!import https://github.com/pgEdge/lolor.git?branch=main'
 
+  - pgEdge SafeSession:
+    - v1.0: '!import https://github.com/pgEdge/pgedge-safesession.git?branch=v1.0'
+    - Development: '!import https://github.com/pgEdge/pgedge-safesession?branch=main'
+
   - Snowflake:
     - v2.6: '!import https://github.com/pgEdge/snowflake.git?branch=v2.6.0'
     - v2.5: '!import https://github.com/pgEdge/snowflake.git?branch=v2.5.0'
@@ -678,10 +681,6 @@ nav:
   - pg-healthcheck:
     - v1.1.0: '!import https://github.com/pgEdge/pg-healthcheck?branch=v1.1.0'
     - Development: '!import https://github.com/pgEdge/pg-healthcheck?branch=main'
-
-  - pgedge-safesession:
-    - v1.0: '!import https://github.com/pgEdge/pgedge-safesession.git?branch=v1.0'
-    - Development: '!import https://github.com/pgEdge/pgedge-safesession?branch=main'
 
   - pgedge-mcp-bridge:
     - v1.0.0-alpha6: '!import https://github.com/pgEdge/pgedge-mcp-bridge.git?branch=v1.0.0-alpha6'

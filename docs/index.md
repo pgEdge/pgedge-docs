@@ -552,6 +552,10 @@ hide:
         <span class="ext-desc">Large object replication for handling BLOBs across distributed PostgreSQL nodes</span>
       </li>
       <li>
+        <a href="pgedge-safesession/"><strong>SafeSession</strong></a>
+        <span class="ext-desc">Enforces read-only sessions for specified database roles, blocking DML, DDL and other write operations</span>
+      </li>
+      <li>
         <a href="snowflake/"><strong>Snowflake</strong></a>
         <span class="ext-desc">Cluster-wide unique sequence generation without node coordination</span>
       </li>
@@ -688,17 +692,6 @@ hide:
     </div>
     <p class="card-description">Comprehensive health monitoring for PostgreSQL instances.</p>
     <a href="pg-healthcheck/" class="card-link">View Documentation →</a>
-  </div>
-
-  <!-- Safe Session -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title-row">
-        <h3>Safe Session (<a href="https://github.com/pgEdge/pgedge-safesession">pgedge-safesession</a>)</h3>
-      </div>
-    </div>
-    <p class="card-description">Session-level safety guardrails for PostgreSQL.</p>
-    <a href="pgedge-safesession/" class="card-link">View Documentation →</a>
   </div>
 
   <!-- MCP Bridge -->
