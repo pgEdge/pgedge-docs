@@ -65,6 +65,35 @@ jobs:
           # future major-split product, add its header base name here.
           MAJOR_SPLIT_PRODUCTS = {'Spock'}
 
+          # ── Config: version retention policy ──────────────────────────────
+          # docs.pgedge.com deploys to Cloudflare Pages, which hard-caps a
+          # deployment at 20,000 files; publishing every SSOT version crossed
+          # that cap in Aug 2026. The nav therefore keeps a bounded window of
+          # releases per product, and this sync honors it: a version outside the
+          # window is NOT proposed for addition, and a published version that has
+          # fallen outside it is reported as a prune candidate. Pruning is never
+          # applied automatically — retiring a published version breaks URLs and
+          # needs a redirect in hooks/versioned_redirects.py (RETIRED_VERSIONS).
+          #
+          # 'group' is the line a version competes within: 'major' (1.x), 'minor'
+          # (1.2.x), or 'product' (all versions share one window). 'max' is how
+          # many nav LABELS to keep per line — labels, not raw versions, because
+          # several SSOT releases can collapse onto one label (control-plane's
+          # 0.10.1 and 0.10.0 are both 'v0.10' and occupy a single slot).
+          #
+          # Pre-releases (alpha/beta/rc) are held to the newest one per product
+          # and retire once a GA release supersedes them. Living/dev sources are
+          # outside the policy entirely — they are the 'Development' nav entries.
+          RETENTION_DEFAULT = {'group': 'major', 'max': 3}
+          RETENTION_OVERRIDES = {
+              # One nav entry per PG major, so majors — not minors — are the
+              # window. Four, so v16 stays published once PG19 reaches GA.
+              'PostgreSQL': {'group': 'product', 'max': 4},
+              # Two live lines published side by side: newest two of each
+              # (3.6.4/3.6.3 with 3.5.7/3.5.6) rather than three of 3.6 alone.
+              'PostGIS': {'group': 'minor', 'max': 2},
+          }
+
           # ── Helpers ───────────────────────────────────────────────────────
 
           def normalize_url(url):
@@ -75,13 +104,23 @@ jobs:
               return url.rstrip('/')
 
           def version_key(v):
-              parts = re.split(r'[.\-]', str(v))
+              """Sort key for a version string.
+
+              A token's trailing digits are compared numerically, not as
+              text, so '19beta10' sorts above '19beta2' (plain string
+              ordering puts 'beta10' first because '1' < '2').
+              """
+              parts = re.split(r'[.\-]', str(v).lstrip('vV'))
               result = []
               for p in parts:
                   try:
                       result.append((0, int(p)))
                   except ValueError:
-                      result.append((1, p.lower()))
+                      m = re.match(r'^(.*?)(\d+)$', p)
+                      if m:
+                          result.append((1, m.group(1).lower(), int(m.group(2))))
+                      else:
+                          result.append((1, p.lower(), 0))
               return result
 
           def for_pgedge_docs(e):
@@ -128,6 +167,23 @@ jobs:
               if kb_src and kb_tag:
                   return kb_src, kb_tag
               return None, None
+
+          def is_living(v):
+              """Living sources (master/devel) are the 'Development' nav entries."""
+              return bool(re.search(r'devel|^dev$', str(v), re.I))
+
+          def is_prerelease(v):
+              return bool(re.search(r'(alpha|beta|rc)', str(v), re.I))
+
+          def line_key(version, group):
+              if group == 'product':
+                  return '*'
+              parts = str(version).lstrip('v').split('.')
+              return '.'.join(parts[:1] if group == 'major' else parts[:2])
+
+          def label_key(version, components):
+              """Collapse a version onto the nav label that would carry it."""
+              return '.'.join(str(version).lstrip('v').split('.')[:components])
 
           # ── Load inputs ───────────────────────────────────────────────────
 
@@ -180,6 +236,67 @@ jobs:
               base = label[:maj.start()].strip()
               if base in MAJOR_SPLIT_PRODUCTS:
                   url_header_majors[nu].add(maj.group(1))
+
+          # ── Apply the retention policy ────────────────────────────────────
+          # retained: (product name, version) pairs the nav should publish.
+          # Label granularity is read back from what this product already
+          # publishes, so ranking counts nav slots rather than raw releases.
+
+          # Keyed by (url, ref): a ref like 'v1.0.0' is used by several
+          # products, so a ref-only key would let one overwrite another's
+          # label and mis-size that product's version slots.
+          ref_to_label = {(nu, ref): lbl for (nu, lbl), ref in url_label_to_ref.items()}
+
+          def label_components(name, versions_by_name_entries):
+              counts = []
+              for e in versions_by_name_entries:
+                  u, r = get_import_info(e)
+                  if not u or not r:
+                      continue
+                  lbl = ref_to_label.get((normalize_url(u), r))
+                  if lbl:
+                      counts.append(len(lbl.lstrip('v').split('.')))
+              return max(set(counts), key=counts.count) if counts else 3
+
+          entries_by_name = defaultdict(list)
+          for e in ssot['sources']:
+              if not for_pgedge_docs(e):
+                  continue
+              v = e.get('version', '')
+              if not v or v == 'dev' or is_living(v):
+                  continue
+              entries_by_name[e.get('name')].append(e)
+
+          retained = set()
+          for name, entries in entries_by_name.items():
+              cfg   = RETENTION_OVERRIDES.get(name, RETENTION_DEFAULT)
+              comps = label_components(name, entries)
+              versions = {str(e.get('version')) for e in entries}
+              ga  = [v for v in versions if not is_prerelease(v)]
+              pre = [v for v in versions if is_prerelease(v)]
+
+              # Rank by label slot: every version sharing a label shares its slot.
+              slots = defaultdict(lambda: defaultdict(list))
+              for v in ga:
+                  slots[line_key(v, cfg['group'])][label_key(v, comps)].append(v)
+              for line, by_label in slots.items():
+                  keep = sorted(by_label, key=version_key, reverse=True)[:cfg['max']]
+                  for lbl in keep:
+                      for v in by_label[lbl]:
+                          retained.add((name, v))
+
+              # Newest pre-release only, and only until a GA supersedes it.
+              if pre:
+                  newest = sorted(pre, key=version_key, reverse=True)[0]
+                  base = re.split(r'[-.]?(?:alpha|beta|rc)', newest, flags=re.I)[0]
+                  if not any(version_key(v) >= version_key(base) for v in ga):
+                      retained.add((name, newest))
+
+          def is_retained(entry):
+              v = entry.get('version', '')
+              if not v or v == 'dev' or is_living(v):
+                  return True
+              return (entry.get('name'), str(v)) in retained
 
           # ── Build the expected set from SSOT ──────────────────────────────
           # expected_refs[nu]:     normalized_base_url → set of refs SSOT still produces
@@ -266,6 +383,8 @@ jobs:
           missing_entries = []  # product has a block; this version is absent
           new_products    = []  # no nav block exists yet — requires manual placement
           new_sections    = []  # product exists but this MAJOR needs its own section
+          prune_candidates  = []  # published, but outside the retention window
+          retention_skipped = []  # in SSOT, outside the window — not proposed
           ref_updates     = []  # label exists but its ref is stale (e.g. v0.8 → release/v0.8.1)
 
           for entry in ssot['sources']:
@@ -279,6 +398,23 @@ jobs:
                   continue
 
               nu = normalize_url(git_url)
+
+              # Retention policy. Outside the window a version is never
+              # proposed for addition; if it is still published it is
+              # reported as a prune candidate for a human to action.
+              if not is_retained(entry):
+                  bucket = (prune_candidates
+                            if ref in url_ref_map.get(nu, set())
+                            else retention_skipped)
+                  bucket.append({
+                      'entry'  : entry,
+                      'git_url': git_url,
+                      'ref'    : ref,
+                      'version': version,
+                      'label'  : ref_to_label.get((nu, ref), f"v{version}"),
+                  })
+                  continue
+
               if ref in url_ref_map.get(nu, set()):
                   continue  # already present
 
@@ -476,7 +612,7 @@ jobs:
           lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
           clean = (not missing_entries and not new_products and not ssh_urls
                    and not ref_updates and not cp_path_update and not stale_entries
-                   and not new_sections)
+                   and not new_sections and not prune_candidates)
 
           if ssh_urls:
               lines += ['### SSH URLs detected in mkdocs.yml\n',
@@ -533,6 +669,28 @@ jobs:
                   )
               lines.append('')
 
+          if prune_candidates:
+              lines += ['### Prune candidates (published, outside the retention window)\n',
+                        '  Not removed automatically. Retiring one means deleting its nav\n'
+                        '  entry AND adding a redirect to `RETIRED_VERSIONS` in\n'
+                        '  `hooks/versioned_redirects.py`.\n']
+              for item in prune_candidates:
+                  e = item['entry']
+                  lines.append(
+                      f"  - **PRUNE?** `{e['id']}` ({e['name']} {e.get('version', '')}) "
+                      f"— label `{item['label']}`"
+                  )
+              lines.append('')
+
+          if retention_skipped:
+              lines += ['### Skipped by retention policy (in SSOT, intentionally not added)\n']
+              for item in retention_skipped:
+                  e = item['entry']
+                  lines.append(
+                      f"  - **SKIPPED** `{e['id']}` ({e['name']} {e.get('version', '')})"
+                  )
+              lines.append('')
+
           if cp_path_update:
               lines += ['### Asset path version bump\n',
                         f"  - `/control-plane/{cp_path_update['old']}/scripts/generate-stack.js`"
@@ -547,18 +705,43 @@ jobs:
                         f'{len(missing_entries)} missing, '
                         f'{len(stale_entries)} stale, '
                         f'{len(new_products)} new product(s), '
-                        f'{len(new_sections)} new section(s)*']
+                        f'{len(new_sections)} new section(s), '
+                        f'{len(prune_candidates)} prune candidate(s), '
+                        f'{len(retention_skipped)} skipped by retention*']
 
           report = '\n'.join(lines) + '\n'
           with open('/tmp/drift-report.md', 'w') as f:
               f.write(report)
           print(report)
 
+          # The report reaches a PR body only when there is something to
+          # apply. Prune candidates are report-only, so a run that finds
+          # nothing else would leave them in transient job logs. Write the
+          # report to the run summary every time, and annotate prune
+          # candidates so they are visible on the run without opening logs.
+          summary_path = os.environ.get('GITHUB_STEP_SUMMARY')
+          if summary_path:
+              with open(summary_path, 'a') as fh:
+                  fh.write(report)
+
+          if prune_candidates:
+              labels = ', '.join(
+                  f"{i['entry'].get('name')} {i['entry'].get('version')}"
+                  for i in prune_candidates
+              )
+              print(
+                  f"::warning title=Retention prune candidates::"
+                  f"{len(prune_candidates)} published version(s) are outside "
+                  f"the retention window and need a nav removal plus a "
+                  f"RETIRED_VERSIONS redirect: {labels}"
+              )
+
           actionable = bool(missing_entries or ssh_urls or ref_updates
                             or cp_path_update or stale_entries)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
               fh.write(f'actionable={"true" if actionable else "false"}\n')
               fh.write(f'clean={"true" if clean else "false"}\n')
+              fh.write(f'prune_candidates={len(prune_candidates)}\n')
 
           if not actionable:
               sys.exit(0)
