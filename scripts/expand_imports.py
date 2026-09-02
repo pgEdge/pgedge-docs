@@ -47,7 +47,11 @@ class Tagged:
 
 
 class Loader(yaml.SafeLoader):
-    pass
+    """For imported configs, of which only the nav is ever read."""
+
+
+class StrictLoader(yaml.SafeLoader):
+    """For mkdocs.yml, every part of which is written back out again."""
 
 
 class Dumper(yaml.SafeDumper):
@@ -62,14 +66,28 @@ def _keep_tag(loader, tag_suffix, node):
     return loader.construct_mapping(node)
 
 
+def _refuse_tagged_collection(loader, tag_suffix, node):
+    if isinstance(node, yaml.ScalarNode):
+        return Tagged(node.tag, node.value)
+    # A tagged sequence or mapping would come back out of the dumper without
+    # its tag, quietly changing the generated config. Nothing in mkdocs.yml
+    # uses one today, so refuse rather than carry that silently.
+    raise RuntimeError(
+        f"{node.tag} tags a collection at line {node.start_mark.line + 1} of "
+        f"the source config; expand_imports.py can only round-trip tagged "
+        f"scalars. Add support before using this."
+    )
+
+
 Loader.add_multi_constructor("", _keep_tag)
+StrictLoader.add_multi_constructor("", _refuse_tagged_collection)
 Dumper.add_representer(
     Tagged, lambda dumper, t: dumper.represent_scalar(t.tag, t.value)
 )
 
 
-def load_yaml(text):
-    return yaml.load(text, Loader=Loader)
+def load_yaml(text, strict=False):
+    return yaml.load(text, Loader=StrictLoader if strict else Loader)
 
 
 # --- Source fetching -------------------------------------------------------
@@ -139,11 +157,22 @@ def export_docs(git_dir, ref, target):
     except RuntimeError:
         raise RuntimeError(f"{git_dir.name} has no docs/ directory at {ref}")
 
-    subprocess.run(
-        f"git --git-dir={git_dir} archive {ref} docs "
-        f"| tar -x --strip-components=1 -C {target}",
-        shell=True, check=True,
+    archive = subprocess.Popen(
+        ["git", "--git-dir", str(git_dir), "archive", ref, "docs"],
+        stdout=subprocess.PIPE,
     )
+    extract = subprocess.Popen(
+        ["tar", "-x", "--strip-components=1", "-C", str(target)],
+        stdin=archive.stdout,
+    )
+    archive.stdout.close()  # so git sees EPIPE if tar dies first
+    extract.wait()
+    archive.wait()
+    if archive.returncode or extract.returncode:
+        raise RuntimeError(
+            f"extracting {ref}:docs/ from {git_dir.name} failed "
+            f"(git {archive.returncode}, tar {extract.returncode})"
+        )
 
     config = subprocess.run(
         ["git", "--git-dir", str(git_dir), "show", f"{ref}:mkdocs.yml"],
@@ -211,7 +240,7 @@ def main():
     args = parser.parse_args()
 
     root = Path(args.config).resolve().parent
-    config = load_yaml(Path(args.config).read_text())
+    config = load_yaml(Path(args.config).read_text(), strict=True)
     imports = list(find_imports(config.get("nav", [])))
 
     if args.dry_run:
