@@ -12,10 +12,11 @@ enclosing the import, slugified: ("Control Plane", "v0.10") becomes
 `control-plane/v0-10`. An import sitting directly at the top level of the nav
 uses its single label alone.
 
-Sources are kept as one bare mirror per repository under `--cache`, so the 128
-imports currently in mkdocs.yml resolve to 21 fetches rather than 128 clones.
-The parent `docs/` tree is copied into the staging directory rather than built
-in place, so a build never modifies the working tree.
+Sources are kept as one bare mirror per repository under `--cache`, so the nav's
+imports resolve to one fetch per distinct repository rather than one clone per
+version, which is most of the speed difference. The parent `docs/` tree is
+copied into the staging directory rather than built in place, so a build never
+modifies the working tree.
 """
 
 import argparse
@@ -29,6 +30,11 @@ from pathlib import Path
 import yaml
 
 IMPORT_RE = re.compile(r"^!import\s+(?P<url>[^?\s]+)(?:\?branch=(?P<ref>.+))?$")
+
+# Every source is a GitHub repository, and every ref is a branch or tag name.
+# See parse_import for why these are enforced rather than assumed.
+SAFE_URL_RE = re.compile(r"^https://github\.com/[\w.-]+/[\w.-]+?(?:\.git)?/?$")
+SAFE_REF_RE = re.compile(r"^[A-Za-z0-9][\w./-]*$")
 
 
 # --- YAML handling ---------------------------------------------------------
@@ -132,7 +138,7 @@ class Mirrors:
             run(["git", "--git-dir", str(dest), "fetch", "--force", "--prune",
                  "--tags", "origin", "+refs/heads/*:refs/heads/*"])
         else:
-            run(["git", "clone", "--bare", "--quiet",
+            run(["git", "clone", "--bare", "--quiet", "--",
                  url.rstrip("/").removesuffix(".git") + ".git", str(dest)])
         return dest
 
@@ -194,6 +200,28 @@ def reprefix(node, prefix):
     return node
 
 
+def parse_import(node, trail):
+    """Parse and validate one `!import` string into (url, ref).
+
+    Both values are handed to git as command arguments, so they are checked
+    against what a source can legitimately look like rather than trusted. A ref
+    beginning with `-` would otherwise be read by git as an option, and git
+    accepts URL schemes such as `ext::` that execute a command; neither is
+    reachable from a well-formed mkdocs.yml, and neither should be reachable
+    from a malformed one either.
+    """
+    match = IMPORT_RE.match(node.strip())
+    if not match:
+        raise RuntimeError(f"Unparseable import at {'/'.join(trail)}: {node}")
+
+    url, ref = match["url"], match["ref"] or "HEAD"
+    if not SAFE_URL_RE.match(url):
+        raise RuntimeError(f"Refusing import from {url!r} at {'/'.join(trail)}")
+    if not SAFE_REF_RE.match(ref):
+        raise RuntimeError(f"Refusing ref {ref!r} at {'/'.join(trail)}")
+    return url, ref
+
+
 def find_imports(node, trail=()):
     """Yield (trail, url, ref) for every !import in the nav."""
     if isinstance(node, list):
@@ -203,10 +231,7 @@ def find_imports(node, trail=()):
         for key, value in node.items():
             yield from find_imports(value, trail + (key,))
     elif isinstance(node, str) and node.startswith("!import"):
-        match = IMPORT_RE.match(node.strip())
-        if not match:
-            raise RuntimeError(f"Unparseable import at {'/'.join(trail)}: {node}")
-        yield trail, match["url"], match["ref"] or "HEAD"
+        yield (trail, *parse_import(node, trail))
 
 
 def prefix_for(trail):
