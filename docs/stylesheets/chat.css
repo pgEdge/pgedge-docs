@@ -646,6 +646,23 @@
 }
 
 /* --------------------------------------------------------------------------
+   Cookie Consent
+   Whilst Material's consent panel is showing, Ellie sits behind its overlay
+   (which uses z-index: 5), dimmed and inert, so she is neither clickable nor
+   reachable by keyboard until consent has been dismissed.
+   -------------------------------------------------------------------------- */
+.ellie-fab.ellie-consent-blocked,
+.ellie-window.ellie-consent-blocked {
+    z-index: 4;
+    pointer-events: none;
+}
+
+.ellie-fab--visible.ellie-consent-blocked,
+.ellie-window--open.ellie-consent-blocked {
+    opacity: 0.35;
+}
+
+/* --------------------------------------------------------------------------
    Responsive Adjustments
    -------------------------------------------------------------------------- */
 @media (max-width: 480px) {
