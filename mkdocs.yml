@@ -1,3 +1,5 @@
+# Source configuration. External !import entries in the nav are expanded by
+# scripts/expand_imports.py into mkdocs.gen.yml, which is what actually builds.
 site_name: pgEdge Documentation
 site_url: https://docs.pgedge.com
 
@@ -38,9 +40,6 @@ markdown_extensions:
 plugins:
   - search:
       enabled: false
-  - multirepo:
-      cleanup: true
-      keep_docs_dir: false
   - redoc-tag
   - gh-admonitions
   - redirects:

@@ -25,13 +25,12 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
           
+      # The same script Cloudflare Pages runs, so CI validates the deployment
+      # path rather than an approximation of it.
       - name: Build the docs
         run: |
           source venv/bin/activate
-          mkdocs build -v
-
-      - name: Build search index
-        run: npx -y pagefind --site site --root-selector "article.md-content__inner"
+          bash build.sh
 
       - name: Upload static docs site
         uses: actions/upload-artifact@v4

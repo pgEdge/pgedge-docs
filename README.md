@@ -3,9 +3,9 @@
 This repository contains the core pgEdge product documentation and 
 infrastructure for generating the docs website. It is based on 
 [MkDocs](https://www.mkdocs.org), using the 
-[Material theme](https://squidfunk.github.io/mkdocs-material/), along with the
-[multirepo plugin](https://github.com/jdoiro3/mkdocs-multirepo-plugin) which
-allows docs from other repositories to be merged into the site.
+[Material theme](https://squidfunk.github.io/mkdocs-material/), along with
+`scripts/expand_imports.py`, which merges docs from other repositories into the
+site.
 
 ## Build Status
 
@@ -30,21 +30,32 @@ allows docs from other repositories to be merged into the site.
     pip install -r requirements.txt
     ```
 
-4) Run the local MkDocs server for testing:
+4) Fetch the external documentation and generate the expanded configuration:
     ```bash
-    mkdocs serve
+    python3 scripts/expand_imports.py
+    Fetching 21 repositories...
+    Importing 128 versions...
+    Wrote mkdocs.gen.yml (128 imports expanded into build/docs)
+    ```
+
+    This clones each source repository listed in the `nav` section of
+    `mkdocs.yml` into `.import-cache/`, copies its documentation into
+    `build/docs/`, and writes `mkdocs.gen.yml` with every `!import` replaced by
+    the imported navigation. Re-run it whenever `mkdocs.yml` changes or you want
+    to pick up new upstream commits; the mirrors are reused between runs.
+
+5) Run the local MkDocs server for testing:
+    ```bash
+    mkdocs serve -f mkdocs.gen.yml
     INFO    -  Building documentation...
-    INFO    -  Multirepo plugin importing docs...
-    INFO    -  Cleaning site directory
-    INFO    -  Multirepo plugin is cleaning up temp_dir/
     INFO    -  Documentation built in 0.18 seconds
-    INFO    -  [14:32:14] Watching paths for changes: 'docs', 'mkdocs.yml'
+    INFO    -  [14:32:14] Watching paths for changes: 'build/docs', 'mkdocs.gen.yml'
     INFO    -  [14:32:14] Serving on http://127.0.0.1:8000/
     ```
 
 ## Adding External Versioned Docsets
 
-External documentation repositories can be imported using the multirepo plugin.
+External documentation repositories are imported by `scripts/expand_imports.py`.
 For versioned docsets (products with multiple versions), follow these steps:
 
 ### 1. Add to Navigation (`mkdocs.yml`)
@@ -90,20 +101,13 @@ extra:
         url: my-product/
 ```
 
-### 4. Add to `.gitignore`
-
-The redirect `index.md` file is auto-generated at build time by
-`hooks/versioned_redirects.py`. Add it to `.gitignore` to prevent it from being
-committed:
-
-```
-docs/my-product/index.md
-```
-
 ### How It Works
 
-- **`hooks/versioned_redirects.py`**: Generates `docs/<docset>/index.md` files
-  at build time for each entry in `versioned_docsets`
+- **`scripts/expand_imports.py`**: Fetches each `!import` source at its pinned
+  ref, copies its `docs/` tree into `build/docs/<docset>/<version>/`, splices the
+  imported repository's own nav into the parent nav, and writes `mkdocs.gen.yml`
+- **`hooks/versioned_redirects.py`**: Generates `<docset>/index.md` files in the
+  staging directory at build time for each entry in `versioned_docsets`
 - **`overrides/redirect.html`**: Template that dynamically determines the latest
   version from the nav structure and generates a JavaScript/meta refresh redirect
 - **`overrides/404.html`**: Handles legacy URLs without version numbers by
