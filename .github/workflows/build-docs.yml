@@ -25,10 +25,15 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
           
+      - name: Expand external imports
+        run: |
+          source venv/bin/activate
+          python3 scripts/expand_imports.py
+
       - name: Build the docs
         run: |
           source venv/bin/activate
-          mkdocs build -v
+          mkdocs build -f mkdocs.gen.yml -v
 
       - name: Build search index
         run: npx -y pagefind --site site --root-selector "article.md-content__inner"
