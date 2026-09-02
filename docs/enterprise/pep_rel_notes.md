@@ -1,5 +1,12 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 09/01/2026
+* Component updates: PgEdge Vectorizer 1.1
+  
+## 08/31/2026
+* Component updates: pgmq 1.12.0, psycopgy 2.9.12
+* pgEdge SafeSession v1.0 first GA release.
+  
 ## 08/20/2026
 * pgEdge Enterprise Postgres Control Plane 0.10.1
 
