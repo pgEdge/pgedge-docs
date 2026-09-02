@@ -73,7 +73,7 @@ jobs:
           # window is NOT proposed for addition, and a published version that has
           # fallen outside it is reported as a prune candidate. Pruning is never
           # applied automatically — retiring a published version breaks URLs and
-          # needs a redirect in hooks/versioned_redirects.py (RETIRED_VERSIONS).
+          # needs a redirect in scripts/postprocess_site.py (RETIRED_VERSIONS).
           #
           # 'group' is the line a version competes within: 'major' (1.x), 'minor'
           # (1.2.x), or 'product' (all versions share one window). 'max' is how
@@ -673,7 +673,7 @@ jobs:
               lines += ['### Prune candidates (published, outside the retention window)\n',
                         '  Not removed automatically. Retiring one means deleting its nav\n'
                         '  entry AND adding a redirect to `RETIRED_VERSIONS` in\n'
-                        '  `hooks/versioned_redirects.py`.\n']
+                        '  `scripts/postprocess_site.py`.\n']
               for item in prune_candidates:
                   e = item['entry']
                   lines.append(

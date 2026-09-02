@@ -251,6 +251,29 @@ def substitute(node, expanded, trail=()):
     return node
 
 
+# --- Versioned docset stubs ------------------------------------------------
+
+# Rendered by overrides/redirect.html, which resolves the latest version from
+# the nav and emits a meta refresh to it. This gives every versioned docset a
+# root URL: /ace/ lands on /ace/v2-1-1/.
+REDIRECT_STUB = """---
+template: redirect.html
+---
+"""
+
+
+def write_redirect_stubs(staging, config):
+    """Create <docset>/index.md in the staging tree for each versioned docset."""
+    written = 0
+    for docset in config.get("extra", {}).get("versioned_docsets", []):
+        index_path = staging / docset / "index.md"
+        index_path.parent.mkdir(parents=True, exist_ok=True)
+        if not index_path.exists() or index_path.read_text() != REDIRECT_STUB:
+            index_path.write_text(REDIRECT_STUB)
+            written += 1
+    return written
+
+
 # --- Main ------------------------------------------------------------------
 
 def main():
@@ -294,6 +317,9 @@ def main():
     print(f"Importing {len(imports)} versions...")
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
         expanded = dict(pool.map(fetch_one, imports))
+
+    stubs = write_redirect_stubs(staging, config)
+    print(f"Wrote {stubs} versioned docset redirect stubs")
 
     config["nav"] = substitute(config["nav"], expanded)
     config["docs_dir"] = args.staging

@@ -23,9 +23,6 @@ extra_javascript:
   - javascripts/chat.js
   - enterprise/js/package-catalog.js
 
-hooks:
-  - hooks/versioned_redirects.py
-
 markdown_extensions:
   - admonition
   - pymdownx.details

@@ -32,6 +32,10 @@ python3 scripts/expand_imports.py
 # deployment log. INFO still carries the hook's output and every warning.
 mkdocs build -f mkdocs.gen.yml
 
+# Writes _redirects and marks non-latest versions as excluded from search. Must
+# run before Pagefind, which reads those exclusions when it indexes.
+python3 scripts/postprocess_site.py
+
 # Pinned, because the file count checked below depends on what Pagefind emits,
 # and an unpinned `npx pagefind` would otherwise let an upstream release change
 # the build without a change here.
