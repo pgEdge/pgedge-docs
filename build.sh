@@ -16,16 +16,17 @@
 
 set -euo pipefail
 
-# Pages installs the requirements itself when it detects requirements.txt, so
-# this branch is skipped there and the build is unchanged. It is here so the
-# script also works from a bare local checkout.
-if ! command -v mkdocs >/dev/null 2>&1; then
-    pip install --quiet --disable-pip-version-check -r requirements.txt
-fi
-
+# Installing the requirements is deliberately not this script's job: Pages does
+# it itself on detecting requirements.txt, and locally the README covers it. A
+# conditional here would have to guess whether the pinned plugins are present,
+# not merely mkdocs itself, and would get it wrong for anyone with a different
+# mkdocs on PATH.
 mkdocs build -v
 
-npx -y pagefind --site site --root-selector "article.md-content__inner"
+# Pinned, because the file count checked below depends on what Pagefind emits,
+# and an unpinned `npx pagefind` would otherwise let an upstream release change
+# the build without a change here.
+npx -y pagefind@1.5.2 --site site --root-selector "article.md-content__inner"
 
 # --- Sanity checks --------------------------------------------------------
 
