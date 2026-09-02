@@ -21,7 +21,10 @@ set -euo pipefail
 # conditional here would have to guess whether the pinned plugins are present,
 # not merely mkdocs itself, and would get it wrong for anyone with a different
 # mkdocs on PATH.
-mkdocs build -v
+# Not -v: that is DEBUG, and it accounts for 64,712 of the 65,374 lines a build
+# produces, which buries the 36 warnings worth reading and overwhelms the Pages
+# deployment log. INFO still carries the hook's output and every warning.
+mkdocs build
 
 # Pinned, because the file count checked below depends on what Pagefind emits,
 # and an unpinned `npx pagefind` would otherwise let an upstream release change
