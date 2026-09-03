@@ -7,6 +7,7 @@
 </div>
 
 {# Build version redirect data for JavaScript #}
+{% import "partials/latest-version.html" as versions with context %}
 {% set versioned_docsets = config.extra.versioned_docsets or [] %}
 {# Pre-build the docset to version mapping #}
 {% set ns_global = namespace(docset_versions=[]) %}
@@ -14,13 +15,7 @@
   {% for nav_item in nav %}
     {% set nav_title_slug = nav_item.title | lower | replace(' ', '-') %}
     {% if nav_title_slug == docset_slug and nav_item.children %}
-      {% set ns = namespace(latest='') %}
-      {% for child in nav_item.children %}
-        {% if child.title != 'Development' and not ns.latest %}
-          {% set ns.latest = child.title | lower | replace('.', '-') | replace(' ', '-') %}
-        {% endif %}
-      {% endfor %}
-      {% set ns_global.docset_versions = ns_global.docset_versions + [(docset_slug, ns.latest)] %}
+      {% set ns_global.docset_versions = ns_global.docset_versions + [(docset_slug, versions.latest_version(nav_item))] %}
     {% endif %}
   {% endfor %}
 {% endfor %}

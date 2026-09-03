@@ -1,0 +1,32 @@
+{#-
+  Shared version-selection logic for versioned docsets.
+
+  A docset's nav lists its versions newest first, so the preference order is
+  the newest generally available release, then the newest pre-release for
+  docsets that have not shipped one yet, and finally 'Development' for docsets
+  that have nothing else at all.
+
+  Used by both redirect.html (the docset root) and 404.html (unversioned and
+  retired deep links), so that the two agree on what "latest" means.
+-#}
+
+{#- Slugify a nav title the way the built URLs do: 'v1.0.0-beta2' -> 'v1-0-0-beta2' -#}
+{%- macro version_slug(title) -%}
+{{- title | lower | replace('.', '-') | replace(' ', '-') -}}
+{%- endmacro -%}
+
+{#- Return the slug of the version a docset root should point at, or '' if it has none -#}
+{%- macro latest_version(nav_item) -%}
+{%- set ns = namespace(release='', prerelease='', development='') -%}
+{%- for child in nav_item.children -%}
+  {%- set slug = version_slug(child.title) -%}
+  {%- if slug == 'development' -%}
+    {%- if not ns.development -%}{%- set ns.development = slug -%}{%- endif -%}
+  {%- elif 'alpha' in slug or 'beta' in slug or '-rc' in slug -%}
+    {%- if not ns.prerelease -%}{%- set ns.prerelease = slug -%}{%- endif -%}
+  {%- elif not ns.release -%}
+    {%- set ns.release = slug -%}
+  {%- endif -%}
+{%- endfor -%}
+{{- ns.release or ns.prerelease or ns.development -}}
+{%- endmacro -%}

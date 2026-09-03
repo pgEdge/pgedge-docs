@@ -7,6 +7,7 @@
   This template outputs a minimal redirect page with JavaScript executing
   before any other content loads.
 #}
+{%- import "partials/latest-version.html" as versions with context -%}
 {%- set versioned_docsets = config.extra.versioned_docsets or [] -%}
 {%- set current_path = page.url | default('') -%}
 {%- set ns = namespace(redirect_url='', docset='') -%}
@@ -22,18 +23,9 @@
       {%- for nav_item in nav -%}
         {%- set nav_title_slug = nav_item.title | lower | replace(' ', '-') -%}
         {%- if nav_title_slug == docset_slug and nav_item.children -%}
-          {%- for child in nav_item.children -%}
-            {%- if child.title != 'Development' and not ns.redirect_url -%}
-              {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ (child.title | lower | replace('.', '-') | replace(' ', '-')) ~ '/' -%}
-            {%- endif -%}
-          {%- endfor -%}
-          {#- Fallback: if only Development exists, redirect there -#}
-          {%- if not ns.redirect_url -%}
-            {%- for child in nav_item.children -%}
-              {%- if not ns.redirect_url -%}
-                {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ (child.title | lower | replace('.', '-') | replace(' ', '-')) ~ '/' -%}
-              {%- endif -%}
-            {%- endfor -%}
+          {%- set latest = versions.latest_version(nav_item) -%}
+          {%- if latest -%}
+            {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ latest ~ '/' -%}
           {%- endif -%}
         {%- endif -%}
       {%- endfor -%}
