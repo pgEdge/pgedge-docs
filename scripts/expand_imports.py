@@ -253,7 +253,10 @@ def substitute(node, expanded, trail=()):
 
 # --- Versioned docset metadata ---------------------------------------------
 
-PRERELEASE_RE = re.compile(r"(alpha|beta|rc)", re.I)
+# Anchored on the left so that an ordinary word containing the letters is not
+# read as a pre-release: "source" contains "rc". Not \b, because that would
+# stop matching the digit-adjacent form upstream projects use, as in 19beta2.
+PRERELEASE_RE = re.compile(r"(?<![A-Za-z])(alpha|beta|rc)", re.I)
 
 
 def docset_versions(imports, versioned_docsets):

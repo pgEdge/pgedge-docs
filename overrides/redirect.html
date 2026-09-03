@@ -14,20 +14,27 @@
 
 {%- if page.meta.redirect_url -%}
   {%- set redirect_url = page.meta.redirect_url -%}
+  {%- set canonical = page.url -%}
 {%- elif docset in docset_latest -%}
   {%- set redirect_url = '/' ~ docset ~ '/' ~ docset_latest[docset] ~ '/' -%}
+  {%- set canonical = docset ~ '/' -%}
 {%- else -%}
+  {#- No target: emit a plain page rather than a redirect to the empty string,
+      which both the script and the meta refresh would resolve to this very
+      document, reloading it forever. -#}
   {%- set redirect_url = '' -%}
+  {%- set canonical = page.url -%}
 {%- endif -%}
 <!DOCTYPE html>
 <html>
 <head>
-<script>window.location.replace("{{ redirect_url }}" + window.location.hash);</script>
+{% if redirect_url %}<script>window.location.replace("{{ redirect_url }}" + window.location.hash);</script>
 <meta http-equiv="refresh" content="0; url={{ redirect_url }}">
+{% endif %}
 {# A versioned docset's root is canonically itself, not the version it happens
-   to point at today. A custom redirect is canonically its own URL: the old
-   template left the docset empty here and emitted a bare site root. -#}
-<link rel="canonical" href="{{ config.site_url }}{{ (docset ~ '/') if docset in docset_latest else page.url }}">
+   to point at today. A custom redirect is canonically its own URL, including
+   one that lives under a versioned docset: the frontmatter is checked first. -#}
+<link rel="canonical" href="{{ config.site_url }}{{ canonical }}">
 <meta charset="utf-8">
 <title>Redirecting...</title>
 </head>
