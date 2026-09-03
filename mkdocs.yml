@@ -24,15 +24,14 @@ extra_javascript:
   - enterprise/js/package-catalog.js
 
 markdown_extensions:
-  # This list has to be the union of what every imported source repository
-  # declares, not just what this repository's own pages need: their content is
-  # frozen at tags we cannot change, so an extension they rely on and we do not
-  # enable renders as literal text. attr_list, md_in_html and def_list are here
-  # for that reason rather than for anything in docs/.
+  # scripts/expand_imports.py appends whatever bare (unconfigured) extension an
+  # imported source relies on and this list is missing: their content is frozen
+  # at tags we cannot change, so an extension they use and we do not enable
+  # renders as literal text. See merge_markdown_extensions for the reasoning and
+  # for why a *configured* extension is reported rather than added the same way.
+  # Run `python3 scripts/expand_imports.py` and read its output to see what,
+  # if anything, is currently being added on top of this list.
   - admonition
-  - attr_list
-  - def_list
-  - md_in_html
   - pymdownx.details
   - pymdownx.superfences:
       custom_fences:

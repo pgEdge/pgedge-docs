@@ -187,6 +187,81 @@ def export_docs(git_dir, ref, target):
     return load_yaml(config.stdout) if config.returncode == 0 else {}
 
 
+# --- Markdown extension union -----------------------------------------------
+
+def _extension_shape(entry):
+    """A markdown_extensions entry as ('name', config-or-None)."""
+    if isinstance(entry, dict):
+        name = next(iter(entry))
+        return name, entry[name]
+    return entry, None
+
+
+def _normalize(value):
+    """Make a Tagged-bearing structure comparable, ignoring dict key order."""
+    if isinstance(value, Tagged):
+        return ("!tag", value.tag, value.value)
+    if isinstance(value, dict):
+        return tuple(sorted((k, _normalize(v)) for k, v in value.items()))
+    if isinstance(value, list):
+        return tuple(_normalize(v) for v in value)
+    return value
+
+
+def merge_markdown_extensions(parent_extensions, sources):
+    """Add the bare extensions imported sources rely on; report the rest.
+
+    Imported content is frozen at its tag, so an extension a source relies on
+    and this repository does not enable renders as literal text rather than
+    failing the build (this is what broke the pgEdge Labs banner on three
+    docsets: their markdown used md_in_html and attr_list, this repository
+    used neither, and the div and its contents came through unrendered).
+
+    A *bare* extension, one with no config, is safe to add on sight: enabling
+    it cannot change how any other page renders. A *configured* one is not,
+    because markdown_extensions is one global list for the whole site, so a
+    source's `toc: {permalink: true}` would turn permalinks on everywhere, not
+    just for that source's pages. Those are reported rather than merged, for a
+    human to decide whether to adopt them site-wide.
+
+    sources: iterable of (label, entries), entries being one source's own
+    markdown_extensions list and label identifying it for the report.
+    """
+    parent = dict(_extension_shape(e) for e in parent_extensions)
+
+    uses = {}
+    for label, entries in sources:
+        for entry in entries or []:
+            name, cfg = _extension_shape(entry)
+            uses.setdefault(name, []).append((label, cfg))
+
+    added, conflicts = [], []
+    for name, occurrences in sorted(uses.items()):
+        if name in parent:
+            for label, cfg in occurrences:
+                if cfg is not None and _normalize(cfg) != _normalize(parent[name]):
+                    conflicts.append((name, label, cfg, "differs from our config"))
+            continue
+        configured = [(label, cfg) for label, cfg in occurrences if cfg is not None]
+        if configured:
+            for label, cfg in configured:
+                conflicts.append((name, label, cfg, "not enabled here at all"))
+        else:
+            added.append(name)
+
+    print(f"Markdown extensions: {len(added)} added from imported sources"
+          + (f" ({', '.join(added)})" if added else ""))
+    if conflicts:
+        print(f"WARNING: {len(conflicts)} imported source(s) declare a configured "
+              f"markdown extension this repository handles differently. Their "
+              f"content still renders using our config (or none, if we lack the "
+              f"extension entirely), which may not be what they intended:")
+        for name, label, cfg, reason in conflicts:
+            print(f"  {name} ({label}): {reason} — {cfg}")
+
+    return parent_extensions + added
+
+
 # --- Nav rewriting ---------------------------------------------------------
 
 def reprefix(node, prefix):
@@ -361,11 +436,18 @@ def main():
         prefix = prefix_for(trail)
         imported = export_docs(mirrors.path_for(url), ref, staging / prefix)
         nav = imported.get("nav")
-        return trail, reprefix(nav, prefix) if nav else f"{prefix}/index.md"
+        nav_result = reprefix(nav, prefix) if nav else f"{prefix}/index.md"
+        return trail, nav_result, prefix, imported.get("markdown_extensions")
 
     print(f"Importing {len(imports)} versions...")
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
-        expanded = dict(pool.map(fetch_one, imports))
+        results = list(pool.map(fetch_one, imports))
+    expanded = {trail: nav_result for trail, nav_result, _, _ in results}
+
+    config["markdown_extensions"] = merge_markdown_extensions(
+        config.get("markdown_extensions", []),
+        [(prefix, exts) for _, _, prefix, exts in results],
+    )
 
     stubs = write_redirect_stubs(staging, config)
     print(f"Wrote {stubs} versioned docset redirect stubs")
