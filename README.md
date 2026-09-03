@@ -105,9 +105,12 @@ extra:
 
 - **`scripts/expand_imports.py`**: Fetches each `!import` source at its pinned
   ref, copies its `docs/` tree into `build/docs/<docset>/<version>/`, splices the
-  imported repository's own nav into the parent nav, and writes `mkdocs.gen.yml`
-- **`hooks/versioned_redirects.py`**: Generates `<docset>/index.md` files in the
-  staging directory at build time for each entry in `versioned_docsets`
+  imported repository's own nav into the parent nav, writes a redirect stub at
+  `<docset>/index.md` for each entry in `versioned_docsets`, and writes
+  `mkdocs.gen.yml`
+- **`scripts/postprocess_site.py`**: After the build, writes the Cloudflare
+  `_redirects` file and marks non-latest versions as excluded from the search
+  index. Runs before Pagefind, which reads those exclusions
 - **`overrides/redirect.html`**: Template that dynamically determines the latest
   version from the nav structure and generates a JavaScript/meta refresh redirect
 - **`overrides/404.html`**: Handles legacy URLs without version numbers by
