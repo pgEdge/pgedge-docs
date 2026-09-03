@@ -251,6 +251,55 @@ def substitute(node, expanded, trail=()):
     return node
 
 
+# --- Versioned docset metadata ---------------------------------------------
+
+# Anchored on the left so that an ordinary word containing the letters is not
+# read as a pre-release: "source" contains "rc". Not \b, because that would
+# stop matching the digit-adjacent form upstream projects use, as in 19beta2.
+PRERELEASE_RE = re.compile(r"(?<![A-Za-z])(alpha|beta|rc)", re.I)
+
+
+def docset_versions(imports, versioned_docsets):
+    """The versions of each docset, in nav order, with the latest one marked.
+
+    Templates used to derive this by walking the nav and slugifying titles in
+    Jinja. Doing it here instead means the version logic has one home, in a
+    language with a `sorted`, rather than being spread across two templates.
+
+    "Latest" is what a docset's root URL redirects to, what the version selector
+    badges, and what an unversioned URL falls back to in 404.html. It prefers
+    the newest stable release, falling back to the newest pre-release and then
+    to Development, so that PostgreSQL lands on v18 rather than the v19 beta
+    whilst a product whose only release is a beta still lands somewhere.
+
+    A docset's nav is required to list its versions newest first, which is the
+    convention throughout mkdocs.yml and what the README asks for when a docset
+    is added. Nothing here compares version numbers, so a docset listed out of
+    order will point at whichever matching version comes first.
+    """
+    by_docset = {}
+    for trail, _url, _ref in imports:
+        if len(trail) < 2:
+            continue
+        docset, title = slug(trail[-2]), str(trail[-1])
+        if docset not in versioned_docsets:
+            continue
+        by_docset.setdefault(docset, []).append({
+            "title": title,
+            "slug": slug(title),
+            "development": title == "Development",
+            "prerelease": bool(PRERELEASE_RE.search(title)),
+            "latest": False,
+        })
+
+    for versions in by_docset.values():
+        stable = [v for v in versions if not v["development"] and not v["prerelease"]]
+        released = [v for v in versions if not v["development"]]
+        (stable or released or versions)[0]["latest"] = True
+
+    return by_docset
+
+
 # --- Versioned docset stubs ------------------------------------------------
 
 # Rendered by overrides/redirect.html, which resolves the latest version from
@@ -320,6 +369,16 @@ def main():
 
     stubs = write_redirect_stubs(staging, config)
     print(f"Wrote {stubs} versioned docset redirect stubs")
+
+    extra = config.setdefault("extra", {})
+    extra["docset_versions"] = docset_versions(
+        imports, extra.get("versioned_docsets", [])
+    )
+    # The same answer keyed for the one question redirect.html asks.
+    extra["docset_latest"] = {
+        docset: next(v["slug"] for v in versions if v["latest"])
+        for docset, versions in extra["docset_versions"].items()
+    }
 
     config["nav"] = substitute(config["nav"], expanded)
     config["docs_dir"] = args.staging

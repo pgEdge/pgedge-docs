@@ -7,45 +7,34 @@
   This template outputs a minimal redirect page with JavaScript executing
   before any other content loads.
 #}
-{%- set versioned_docsets = config.extra.versioned_docsets or [] -%}
-{%- set current_path = page.url | default('') -%}
-{%- set ns = namespace(redirect_url='', docset='') -%}
+{#- Which version a docset root lands on is decided by
+    scripts/expand_imports.py and passed in as config.extra.docset_latest. -#}
+{%- set docset_latest = config.extra.docset_latest or {} -%}
+{%- set docset = (page.url | default('')).split('/')[0] -%}
 
-{#- Check for custom redirect_url in frontmatter first -#}
 {%- if page.meta.redirect_url -%}
-  {%- set ns.redirect_url = page.meta.redirect_url -%}
+  {%- set redirect_url = page.meta.redirect_url -%}
+  {%- set canonical = page.url -%}
+{%- elif docset in docset_latest -%}
+  {%- set redirect_url = '/' ~ docset ~ '/' ~ docset_latest[docset] ~ '/' -%}
+  {%- set canonical = docset ~ '/' -%}
 {%- else -%}
-  {#- Fall back to versioned docset redirect logic -#}
-  {%- for docset_slug in versioned_docsets -%}
-    {%- if current_path.startswith(docset_slug ~ '/') or current_path == docset_slug ~ '/' -%}
-      {%- set ns.docset = docset_slug -%}
-      {%- for nav_item in nav -%}
-        {%- set nav_title_slug = nav_item.title | lower | replace(' ', '-') -%}
-        {%- if nav_title_slug == docset_slug and nav_item.children -%}
-          {%- for child in nav_item.children -%}
-            {%- if child.title != 'Development' and not ns.redirect_url -%}
-              {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ (child.title | lower | replace('.', '-') | replace(' ', '-')) ~ '/' -%}
-            {%- endif -%}
-          {%- endfor -%}
-          {#- Fallback: if only Development exists, redirect there -#}
-          {%- if not ns.redirect_url -%}
-            {%- for child in nav_item.children -%}
-              {%- if not ns.redirect_url -%}
-                {%- set ns.redirect_url = '/' ~ docset_slug ~ '/' ~ (child.title | lower | replace('.', '-') | replace(' ', '-')) ~ '/' -%}
-              {%- endif -%}
-            {%- endfor -%}
-          {%- endif -%}
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endif -%}
-  {%- endfor -%}
+  {#- No target: emit a plain page rather than a redirect to the empty string,
+      which both the script and the meta refresh would resolve to this very
+      document, reloading it forever. -#}
+  {%- set redirect_url = '' -%}
+  {%- set canonical = page.url -%}
 {%- endif -%}
 <!DOCTYPE html>
 <html>
 <head>
-<script>window.location.replace("{{ ns.redirect_url }}" + window.location.hash);</script>
-<meta http-equiv="refresh" content="0; url={{ ns.redirect_url }}">
-<link rel="canonical" href="{{ config.site_url }}{{ ns.docset }}/">
+{% if redirect_url %}<script>window.location.replace("{{ redirect_url }}" + window.location.hash);</script>
+<meta http-equiv="refresh" content="0; url={{ redirect_url }}">
+{% endif %}
+{# A versioned docset's root is canonically itself, not the version it happens
+   to point at today. A custom redirect is canonically its own URL, including
+   one that lives under a versioned docset: the frontmatter is checked first. -#}
+<link rel="canonical" href="{{ config.site_url }}{{ canonical }}">
 <meta charset="utf-8">
 <title>Redirecting...</title>
 </head>
