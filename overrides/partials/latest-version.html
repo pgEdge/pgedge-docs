@@ -1,10 +1,17 @@
 {#-
   Shared version-selection logic for versioned docsets.
 
-  A docset's nav lists its versions newest first, so the preference order is
-  the newest generally available release, then the newest pre-release for
-  docsets that have not shipped one yet, and finally 'Development' for docsets
-  that have nothing else at all.
+  A docset's nav is required to list its versions newest first, which is the
+  convention throughout mkdocs.yml and what the README asks for when a docset
+  is added; nothing here compares version numbers, so a docset listed out of
+  order will redirect to whichever matching version comes first. Given that
+  ordering, the preference is the newest generally available release, then the
+  newest pre-release for docsets that have not shipped one yet, and finally
+  'Development' for docsets that have nothing else at all.
+
+  A version counts as a pre-release when its title contains 'alpha', 'beta' or
+  'rc'; version titles here are otherwise numeric, so those never appear
+  incidentally.
 
   Used by both redirect.html (the docset root) and 404.html (unversioned and
   retired deep links), so that the two agree on what "latest" means.
@@ -22,7 +29,7 @@
   {%- set slug = version_slug(child.title) -%}
   {%- if slug == 'development' -%}
     {%- if not ns.development -%}{%- set ns.development = slug -%}{%- endif -%}
-  {%- elif 'alpha' in slug or 'beta' in slug or '-rc' in slug -%}
+  {%- elif 'alpha' in slug or 'beta' in slug or 'rc' in slug -%}
     {%- if not ns.prerelease -%}{%- set ns.prerelease = slug -%}{%- endif -%}
   {%- elif not ns.release -%}
     {%- set ns.release = slug -%}

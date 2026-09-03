@@ -60,11 +60,12 @@ For versioned docsets (products with multiple versions), follow these steps:
 
 ### 1. Add to Navigation (`mkdocs.yml`)
 
-Add the docset to the `nav` section with version imports. The redirect target is
-the first version listed that is neither a pre-release (any version whose title
-contains "alpha", "beta" or "rc") nor "Development"; a docset that has only
-pre-releases redirects to the first of those, and one that has only
-"Development" redirects there:
+Add the docset to the `nav` section with version imports, newest first. Nothing
+in the build compares version numbers, so that ordering is what makes the
+redirect target correct: it is the first version listed that is neither a
+pre-release (any version whose title contains "alpha", "beta" or "rc") nor
+"Development", falling back to the first pre-release for a docset that has yet
+to ship a release, and to "Development" for one that has nothing else:
 
 ```yaml
 nav:
