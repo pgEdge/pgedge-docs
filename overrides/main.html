@@ -6,119 +6,76 @@
 {% endblock %}
 
 {% block content %}
-  {# Version selector for versioned documentation #}
-  {# Versions are auto-detected from nav structure #}
-  {% set versioned_docsets = config.extra.versioned_docsets or [] %}
-  {% set current_path = page.url | default('') %}
+  {# Version selector. The version list, and which of them counts as latest,
+     are worked out by scripts/expand_imports.py and passed in as
+     config.extra.docset_versions; this only renders them. #}
+  {% set docset_versions = config.extra.docset_versions or {} %}
+  {# The one engine-specific line left here: Jinja2 spells this `.split()`,
+     MiniJinja spells it `| split | list`. Everything below is data. #}
+  {% set path_parts = (page.url | default('')).split('/') %}
+  {% set docset_slug = path_parts[0] if path_parts | length > 1 else '' %}
+  {% set current_version_slug = path_parts[1] if path_parts | length > 1 else '' %}
+  {# The page's path within its version, for switching to the same page of another #}
+  {% set page_subpath = path_parts[2:] | join('/') %}
+  {% set versions = docset_versions[docset_slug] if docset_slug in docset_versions else [] %}
 
-  {# Check if current page is in a versioned docset #}
-  {% for docset_slug in versioned_docsets %}
-    {% if current_path.startswith(docset_slug ~ '/') %}
-      {% set ns = namespace(versions=[], current_title='', current_is_dev=false, current_is_latest=false) %}
-      {% set path_parts = current_path.split('/') %}
-      {% set current_version_slug = path_parts[1] if path_parts | length > 1 else '' %}
-      {# Get the page path within the version (for smart switching) #}
-      {% set page_subpath = '/'.join(path_parts[2:]) if path_parts | length > 2 else '' %}
-
-      {# Find nav section by matching slugified title to docset_slug #}
-      {% for nav_item in nav %}
-        {# Slugify the nav title: lowercase, replace spaces with dashes #}
-        {% set nav_title_slug = nav_item.title | lower | replace(' ', '-') %}
-
-        {% if nav_title_slug == docset_slug and nav_item.children %}
-          {# This nav item matches our docset - extract versions from children #}
-          {% for child in nav_item.children %}
-            {% set ver_title = child.title %}
-            {# Slugify version: lowercase, replace dots and spaces with dashes #}
-            {% set ver_slug = ver_title | lower | replace('.', '-') | replace(' ', '-') %}
-            {% set is_dev = (ver_title == 'Development') %}
-
-            {% set ns.versions = ns.versions + [{'title': ver_title, 'slug': ver_slug, 'development': is_dev}] %}
-
-            {% if ver_slug == current_version_slug %}
-              {% set ns.current_title = ver_title %}
-              {% set ns.current_is_dev = is_dev %}
+  {% if versions | length > 1 %}
+  <div class="md-version-selector" data-docset="{{ docset_slug }}" data-current-subpath="{{ page_subpath }}">
+    <div class="md-version-selector__inner">
+      <label class="md-version-selector__label">Version:</label>
+      <div class="md-version-selector__dropdown">
+        <button type="button" class="md-version-selector__toggle" aria-expanded="false" aria-haspopup="listbox">
+          <span class="md-version-selector__current">
+            {% for ver in versions %}{% if ver.slug == current_version_slug %}
+                {{ ver.title }}
+                {% if ver.latest %} (Latest){% endif %}
+                {% if ver.development %} (Unstable){% endif %}
+            {% endif %}{% endfor %}
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="md-version-selector__icon">
+            <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+          </svg>
+        </button>
+        <ul class="md-version-selector__menu" role="listbox">
+          {# Releases first #}
+          {% for ver in versions %}
+            {% if not ver.development %}
+            <li class="md-version-selector__item{% if ver.slug == current_version_slug %} md-version-selector__item--active{% endif %}" role="option">
+              <a href="{{ ('/' ~ docset_slug ~ '/' ~ ver.slug ~ '/') | url }}"
+                 class="md-version-selector__link"
+                 data-version-slug="{{ ver.slug }}"
+                 data-docset="{{ docset_slug }}">
+                {{ ver.title }}
+                {% if ver.latest %}
+                  <span class="md-version-selector__badge">Latest</span>
+                {% endif %}
+              </a>
+            </li>
             {% endif %}
           {% endfor %}
-        {% endif %}
-      {% endfor %}
-
-      {# Mark first non-development version as latest #}
-      {% set ns.found_first = false %}
-      {% for ver in ns.versions %}
-        {% if not ver.development and not ns.found_first %}
-          {% set ns.found_first = true %}
-          {% if ver.slug == current_version_slug %}
-            {% set ns.current_is_latest = true %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-
-      {# Render version selector if we have multiple versions #}
-      {% if ns.versions | length > 1 %}
-      <div class="md-version-selector" data-docset="{{ docset_slug }}" data-current-subpath="{{ page_subpath }}">
-        <div class="md-version-selector__inner">
-          <label class="md-version-selector__label">Version:</label>
-          <div class="md-version-selector__dropdown">
-            <button type="button" class="md-version-selector__toggle" aria-expanded="false" aria-haspopup="listbox">
-              <span class="md-version-selector__current">
-                {{ ns.current_title }}
-                {% if ns.current_is_latest %} (Latest){% endif %}
-                {% if ns.current_is_dev %} (Unstable){% endif %}
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="md-version-selector__icon">
-                <path d="M7 10l5 5 5-5z" fill="currentColor"/>
-              </svg>
-            </button>
-            <ul class="md-version-selector__menu" role="listbox">
-              {# First, show all non-development versions #}
-              {% set ns.first_release = true %}
-              {% for ver in ns.versions %}
-                {% if not ver.development %}
-                <li class="md-version-selector__item{% if ver.slug == current_version_slug %} md-version-selector__item--active{% endif %}" role="option">
-                  <a href="{{ ('/' ~ docset_slug ~ '/' ~ ver.slug ~ '/') | url }}"
-                     class="md-version-selector__link"
-                     data-version-slug="{{ ver.slug }}"
-                     data-docset="{{ docset_slug }}">
-                    {{ ver.title }}
-                    {% if ns.first_release %}
-                      <span class="md-version-selector__badge">Latest</span>
-                      {% set ns.first_release = false %}
-                    {% endif %}
-                  </a>
-                </li>
-                {% endif %}
-              {% endfor %}
-              {# Then show development version(s) after a divider #}
-              {% set has_dev = ns.versions | selectattr('development') | list | length > 0 %}
-              {% if has_dev %}
-              <li class="md-version-selector__item md-version-selector__item--divider" role="separator"></li>
-              {% for ver in ns.versions %}
-                {% if ver.development %}
-                <li class="md-version-selector__item{% if ver.slug == current_version_slug %} md-version-selector__item--active{% endif %}" role="option">
-                  <a href="{{ ('/' ~ docset_slug ~ '/' ~ ver.slug ~ '/') | url }}"
-                     class="md-version-selector__link md-version-selector__link--development"
-                     data-version-slug="{{ ver.slug }}"
-                     data-docset="{{ docset_slug }}">
-                    {{ ver.title }}
-                    <span class="md-version-selector__badge md-version-selector__badge--dev">Unstable</span>
-                  </a>
-                </li>
-                {% endif %}
-              {% endfor %}
-              {% endif %}
-            </ul>
-          </div>
-        </div>
+          {# Then development, after a divider #}
+          {% for ver in versions %}
+            {% if ver.development %}
+            <li class="md-version-selector__item md-version-selector__item--divider" role="separator"></li>
+            <li class="md-version-selector__item{% if ver.slug == current_version_slug %} md-version-selector__item--active{% endif %}" role="option">
+              <a href="{{ ('/' ~ docset_slug ~ '/' ~ ver.slug ~ '/') | url }}"
+                 class="md-version-selector__link md-version-selector__link--development"
+                 data-version-slug="{{ ver.slug }}"
+                 data-docset="{{ docset_slug }}">
+                {{ ver.title }}
+                <span class="md-version-selector__badge md-version-selector__badge--dev">Unstable</span>
+              </a>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
       </div>
-      {% endif %}
-    {% endif %}
-  {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 
   {# pgEdge Labs notice #}
-  {% set labs_docsets = config.extra.labs_docsets or [] %}
-  {% for docset_slug in labs_docsets %}
-    {% if current_path.startswith(docset_slug ~ '/') %}
+  {% if docset_slug in (config.extra.labs_docsets or []) %}
       <div class="md-labs-notice">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="md-labs-notice__icon">
           <path d="M13 2v2h1v6l2.29 3.29L16 14v2H8v-2l-.29-.71L10 10V4h1V2H13zm-2 2v6.5L8.5 14h7L13 10.5V4h-2z" fill="currentColor"/>
@@ -126,12 +83,9 @@
         This project is part of pgEdge Labs and is under active development. APIs and features may change without notice.
       </div>
     {% endif %}
-  {% endfor %}
 
   {# Third-party documentation notice #}
-  {% set third_party_docsets = config.extra.third_party_docsets or [] %}
-  {% for docset_slug in third_party_docsets %}
-    {% if current_path.startswith(docset_slug ~ '/') %}
+  {% if docset_slug in (config.extra.third_party_docsets or []) %}
       <div class="md-third-party-notice">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="md-third-party-notice__icon">
           <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="currentColor"/>
@@ -139,7 +93,6 @@
         This documentation is sourced from a third-party project and is not maintained by pgEdge.
       </div>
     {% endif %}
-  {% endfor %}
 
   {{ super() }}
 {% endblock %}
