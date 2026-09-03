@@ -788,9 +788,45 @@
             // Restore saved size
             this.restoreSize();
 
+            // Stay out of the way whilst the cookie consent panel is showing
+            this.watchConsent();
+
             // Track scroll position to avoid interrupting user when they scroll up
             this.elements.messages.addEventListener('scroll', () => {
                 this.userScrolledUp = !this.isNearBottom();
+            });
+        }
+
+        /**
+         * Follow Material's cookie consent panel, which is shown and hidden by
+         * toggling the `hidden` attribute on the consent element. Keying off
+         * that attribute avoids duplicating Material's own consent logic.
+         */
+        watchConsent() {
+            const consent = document.querySelector('[data-md-component="consent"]');
+            if (!consent) {
+                return;
+            }
+
+            const apply = () => this.setConsentBlocked(!consent.hidden);
+            this.consentObserver = new MutationObserver(apply);
+            this.consentObserver.observe(consent, {
+                attributes: true,
+                attributeFilter: ['hidden']
+            });
+            apply();
+        }
+
+        /**
+         * Push Ellie behind the consent overlay and make her inert, so she can
+         * be neither clicked nor tabbed to whilst consent is pending. The
+         * `inert` attribute is what removes her from the tab order; CSS alone
+         * cannot do that.
+         */
+        setConsentBlocked(blocked) {
+            [this.elements.fab, this.elements.window].forEach(el => {
+                el.classList.toggle('ellie-consent-blocked', blocked);
+                el.inert = blocked;
             });
         }
 
