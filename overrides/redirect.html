@@ -8,9 +8,14 @@
   before any other content loads.
 #}
 {#- Which version a docset root lands on is decided by
-    scripts/expand_imports.py and passed in as config.extra.docset_latest. -#}
+    scripts/expand_imports.py and passed in as config.extra.docset_latest. The
+    docset itself comes from the stub's own frontmatter, written by the same
+    script, so this template never has to parse a URL: Jinja2 and MiniJinja
+    disagree about how to split a string, and there is nothing to gain by
+    recovering a value we already knew when the stub was generated.
+    A custom redirect (frontmatter redirect_url) has no docset and needs none. -#}
 {%- set docset_latest = config.extra.docset_latest or {} -%}
-{%- set docset = (page.url | default('')).split('/')[0] -%}
+{%- set docset = page.meta.docset | default('') -%}
 
 {%- if page.meta.redirect_url -%}
   {%- set redirect_url = page.meta.redirect_url -%}

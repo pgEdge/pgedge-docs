@@ -32,7 +32,9 @@
     // docset roots redirect to, from scripts/expand_imports.py, so the two
     // cannot disagree about which version is current.
     var versionedDocsets = {
-        {% for docset, version in (config.extra.docset_latest or {}).items() %}
+        {# `| items` rather than `.items()`: both Jinja2 and MiniJinja accept the
+           filter, only Jinja2 accepts the method. #}
+        {% for docset, version in (config.extra.docset_latest or {}) | items %}
         '{{ docset }}': '{{ version }}'{% if not loop.last %},{% endif %}
         {% endfor %}
     };
