@@ -266,11 +266,16 @@ def docset_versions(imports, versioned_docsets):
     Jinja. Doing it here instead means the version logic has one home, in a
     language with a `sorted`, rather than being spread across two templates.
 
-    "Latest" is what a docset's root URL redirects to and what the version
-    selector badges. It prefers the newest stable release, falling back to the
-    newest pre-release and then to Development, so that PostgreSQL lands on v18
-    rather than the v19 beta whilst a product whose only release is a beta
-    still lands somewhere. Nav order is newest first.
+    "Latest" is what a docset's root URL redirects to, what the version selector
+    badges, and what an unversioned URL falls back to in 404.html. It prefers
+    the newest stable release, falling back to the newest pre-release and then
+    to Development, so that PostgreSQL lands on v18 rather than the v19 beta
+    whilst a product whose only release is a beta still lands somewhere.
+
+    A docset's nav is required to list its versions newest first, which is the
+    convention throughout mkdocs.yml and what the README asks for when a docset
+    is added. Nothing here compares version numbers, so a docset listed out of
+    order will point at whichever matching version comes first.
     """
     by_docset = {}
     for trail, _url, _ref in imports:
