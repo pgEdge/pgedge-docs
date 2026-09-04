@@ -22,15 +22,63 @@ set -euo pipefail
 # not merely mkdocs itself, and would get it wrong for anyone with a different
 # mkdocs on PATH.
 
+# --- Engine selection (transitional) ---------------------------------------
+#
+# ENGINE=mkdocs (default) or ENGINE=zensical. This exists only while we evaluate
+# Zensical as a replacement for Material for MkDocs, which reaches end of life on
+# 5 November 2026. It goes away when one engine wins: either ENGINE=zensical
+# becomes unconditional, or the whole block is deleted.
+#
+# Keeping both buildable from one tree is the point. Every real problem in this
+# migration has been found by building both ways and diffing, and that stops
+# being possible the moment only one engine works.
+ENGINE="${ENGINE:-mkdocs}"
+
 # The nav in mkdocs.yml carries `!import` entries that MkDocs itself does not
 # understand; this resolves them and writes mkdocs.gen.yml, which is what
 # builds. See scripts/expand_imports.py.
 python3 scripts/expand_imports.py
 
-# Not -v: that is DEBUG, and it accounts for 64,712 of the 65,374 lines a build
-# produces, which buries the 36 warnings worth reading and overwhelms the Pages
-# deployment log. INFO still carries the hook's output and every warning.
-mkdocs build -f mkdocs.gen.yml
+if [ "$ENGINE" = "zensical" ]; then
+    # overrides/main.html needs the current page's docset and version, which
+    # means splitting a string, and that is the one construct Jinja2 and
+    # MiniJinja spell irreconcilably differently: `.split('/')` against
+    # `| split('/') | list`. Rather than break the MkDocs build to suit
+    # Zensical, the substitution happens here, into a copy, for this build only.
+    # Deleting this block is part of finishing the migration.
+    rm -rf build/overrides-zensical
+    cp -r overrides build/overrides-zensical
+    python3 - <<'PY'
+from pathlib import Path
+p = Path("build/overrides-zensical/main.html")
+before = p.read_text()
+after = before.replace(
+    "(page.url | default('')).split('/')",
+    "((page.url | default('')) | split('/') | list)",
+)
+if after == before:
+    raise SystemExit("build.sh: the main.html split line changed shape; "
+                     "update the Zensical substitution in build.sh")
+p.write_text(after)
+PY
+    python3 - <<'PY'
+import re
+from pathlib import Path
+p = Path("mkdocs.gen.yml")
+text = p.read_text()
+updated, n = re.subn(r"^(\s*custom_dir:\s*).*$", r"\1build/overrides-zensical",
+                     text, count=1, flags=re.M)
+if n != 1:
+    raise SystemExit("build.sh: expected exactly one custom_dir in mkdocs.gen.yml")
+p.write_text(updated)
+PY
+    zensical build -f mkdocs.gen.yml
+else
+    # Not -v: that is DEBUG, and it accounts for 64,712 of the 65,374 lines a
+    # build produces, which buries the 36 warnings worth reading and overwhelms
+    # the Pages deployment log. INFO still carries every warning.
+    mkdocs build -f mkdocs.gen.yml
+fi
 
 # Writes _redirects and marks non-latest versions as excluded from search. Must
 # run before Pagefind, which reads those exclusions when it indexes.

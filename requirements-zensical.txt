@@ -1,0 +1,5 @@
+# Transitional: the Zensical evaluation build (ENGINE=zensical in build.sh).
+# Kept separate from requirements.txt because zensical pulls pymdown-extensions
+# 11.x, which conflicts with mkdocs-material 9.6.17 (~=10.2). The two engines
+# therefore need separate environments until one of them wins.
+zensical==0.0.59
