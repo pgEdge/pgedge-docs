@@ -640,6 +640,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
   - Radar:
+    - v0.6.2: '!import https://github.com/pgEdge/radar?branch=v0.6.2'
     - v0.5.1: '!import https://github.com/pgEdge/radar?branch=v0.5.1'
     - v0.4.1: '!import https://github.com/pgEdge/radar?branch=v0.4.1'
     - v0.4.0: '!import https://github.com/pgEdge/radar?branch=v0.4.0'
@@ -653,6 +654,7 @@ nav:
   # Each version is imported separately to enable version navigation
   # Latest version first, older versions next, development (main branch) last
   - pgEdge Postgres MCP Server:
+    - v1.1.0: '!import https://github.com/pgEdge/pgedge-postgres-mcp.git?branch=v1.1.0'
     - v1.0.0: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=main'
 
@@ -665,6 +667,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-docloader?branch=main'
 
   - pgEdge RAG Server:
+    - v2.0.0: '!import https://github.com/pgEdge/pgedge-rag-server.git?branch=v2.0.0'
     - v1.0.0: '!import https://github.com/pgEdge/pgedge-rag-server?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-rag-server?branch=main'
 
@@ -712,6 +715,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgismaster'
 
   - pgAudit:
+    - v19beta3: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit19beta3'
     - v18.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit180'
     - v17.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit171'
     - v16.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit161'
