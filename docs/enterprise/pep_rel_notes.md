@@ -1,5 +1,11 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 09/04/2026
+* pgEdge Radar 0.6.2
+* pgEdge RAG Server 2.0.0 GA
+* pgEdge Postgres MCP Server and Natural Language Agent updates 1.1.0
+* PG 19 new extensions support: pgAudit (19.0-beta3), Supautils (3.2.2), system_stats (4.0)
+
 ## 09/01/2026
 * Component updates: PgEdge Vectorizer 1.1
   
