@@ -377,11 +377,17 @@ def docset_versions(imports, versioned_docsets):
 
 # --- Versioned docset stubs ------------------------------------------------
 
-# Rendered by overrides/redirect.html, which resolves the latest version from
-# the nav and emits a meta refresh to it. This gives every versioned docset a
-# root URL: /ace/ lands on /ace/v2-1-1/.
+# Rendered by overrides/redirect.html, which looks the docset up in
+# config.extra.docset_latest and emits a meta refresh to it. This gives every
+# versioned docset a root URL: /ace/ lands on /ace/v2-1-1/.
+#
+# The docset is written into the stub rather than recovered from the page URL
+# in the template: we know it here, and parsing it back out would need string
+# handling that Jinja2 and MiniJinja spell differently, which is a portability
+# problem for no benefit.
 REDIRECT_STUB = """---
 template: redirect.html
+docset: {docset}
 ---
 """
 
@@ -392,8 +398,9 @@ def write_redirect_stubs(staging, config):
     for docset in config.get("extra", {}).get("versioned_docsets", []):
         index_path = staging / docset / "index.md"
         index_path.parent.mkdir(parents=True, exist_ok=True)
-        if not index_path.exists() or index_path.read_text() != REDIRECT_STUB:
-            index_path.write_text(REDIRECT_STUB)
+        content = REDIRECT_STUB.format(docset=docset)
+        if not index_path.exists() or index_path.read_text() != content:
+            index_path.write_text(content)
             written += 1
     return written
 
