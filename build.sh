@@ -21,23 +21,47 @@ fail() {
     exit 1
 }
 
-# Installing the requirements is deliberately not this script's job: Pages does
-# it itself on detecting requirements.txt, and locally the README covers it. A
-# conditional here would have to guess whether the pinned plugins are present,
-# not merely mkdocs itself, and would get it wrong for anyone with a different
-# mkdocs on PATH.
-
 # --- Engine selection (transitional) ---------------------------------------
 #
-# ENGINE=mkdocs (default) or ENGINE=zensical. This exists only while we evaluate
-# Zensical as a replacement for Material for MkDocs, which reaches end of life on
-# 5 November 2026. It goes away when one engine wins: either ENGINE=zensical
-# becomes unconditional, or the whole block is deleted.
+# ENGINE=zensical (the default on this branch) or ENGINE=mkdocs. This exists only
+# while we evaluate Zensical as a replacement for Material for MkDocs, which
+# reaches end of life on 5 November 2026. It goes away when one engine wins:
+# either ENGINE=zensical becomes unconditional, or the whole block is deleted.
 #
 # Keeping both buildable from one tree is the point. Every real problem in this
 # migration has been found by building both ways and diffing, and that stops
 # being possible the moment only one engine works.
-ENGINE="${ENGINE:-mkdocs}"
+#
+# The default is the branch's own choice, and deliberately so: Cloudflare Pages
+# has a single project-wide build command with no per-branch override, so this
+# script is the only place a branch can say how it wants to be built. A branch
+# that has to be previewed under a different engine should not need anyone to
+# reconfigure Pages first.
+ENGINE="${ENGINE:-zensical}"
+
+# Installing the requirements was once left to Pages, which does it itself on
+# detecting requirements.txt. That only works whilst there is one environment to
+# install: Zensical pulls pymdown-extensions 11.x and mkdocs-material 9.6.17
+# pins ~=10.2, so the two engines cannot share a virtualenv, and the engine the
+# branch actually wants has to be provisioned here rather than assumed. Pages
+# will still have installed requirements.txt by the time this runs, which is
+# exactly what ENGINE=mkdocs needs and is harmless otherwise.
+if [ "$ENGINE" = "zensical" ]; then
+    if [ ! -x .venv-zensical/bin/zensical ]; then
+        echo "build.sh: provisioning the Zensical environment"
+        python3 -m venv .venv-zensical || fail "could not create .venv-zensical"
+        .venv-zensical/bin/pip install -q --upgrade pip \
+            || fail "could not upgrade pip in .venv-zensical"
+        .venv-zensical/bin/pip install -q -r requirements-zensical.txt \
+            || fail "could not install requirements-zensical.txt"
+    fi
+    # Everything below runs from this environment, the helper scripts included:
+    # their only third-party import is PyYAML, which Zensical depends on anyway.
+    PATH="$PWD/.venv-zensical/bin:$PATH"
+    export PATH
+fi
+
+command -v "$ENGINE" >/dev/null 2>&1 || fail "$ENGINE is not on PATH"
 
 # The nav in mkdocs.yml carries `!import` entries that MkDocs itself does not
 # understand; this resolves them and writes mkdocs.gen.yml, which is what
