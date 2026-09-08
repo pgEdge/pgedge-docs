@@ -48,11 +48,18 @@
 <nav class="{{ class }}" aria-label="Tabs" data-md-component="tabs">
   <div class="md-tabs__inner md-grid">
     <ul class="md-tabs__list">
-      {# Welcome link #}
-      {% for nav_item in nav %}
+      {# Welcome link. Iterate nav.items rather than nav itself: MkDocs makes the
+         navigation directly iterable, whilst under Zensical `nav` is an object
+         whose items live behind `.items`, so iterating it yielded key names and
+         this link rendered with no title and an empty href. Both engines expose
+         `.items`, and the homepage's own url is the empty string in both, which
+         `| url` resolves to the site root from any depth; the `or '.'` only
+         covers the homepage itself, where Zensical returns an empty string and
+         MkDocs returns a dot. #}
+      {% for nav_item in nav.items %}
         {% if loop.first %}
           <li class="md-tabs__item">
-            <a href="{{ nav_item.url | url }}" class="md-tabs__link">
+            <a href="{{ (nav_item.url | url) or '.' }}" class="md-tabs__link">
               {{ nav_item.title | striptags }}
             </a>
           </li>
