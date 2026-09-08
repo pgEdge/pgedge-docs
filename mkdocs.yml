@@ -92,6 +92,15 @@ theme:
   custom_dir: overrides
   favicon: img/favicon.ico
 
+  # Zensical-only, and ignored by MkDocs, which keeps unrecognised theme keys.
+  # Zensical defaults to its own `modern` variant, whose palette drops the
+  # `white` and `black` primary colours that Material for MkDocs supports: with
+  # `primary: white` below having nothing to apply, --md-primary-fg-color stayed
+  # at the stock indigo and every dropdown menu came out blue. `classic` is the
+  # variant that matches what we build today, right down to Roboto rather than
+  # Inter, so it is what the migration should be compared against.
+  variant: classic
+
   features:
     - navigation.tabs
     # - navigation.instant  # Disabled - causes logo flash on redirect pages
