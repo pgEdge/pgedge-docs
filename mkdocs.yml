@@ -92,9 +92,6 @@ theme:
   custom_dir: overrides
   favicon: img/favicon.ico
 
-  logo_dark_mode: 'img/logo-dark.png'
-  logo_light_mode: 'img/logo-light.png'
-
   features:
     - navigation.tabs
     # - navigation.instant  # Disabled - causes logo flash on redirect pages
@@ -122,6 +119,16 @@ theme:
         name: Switch to system preference
 
 extra:
+  # These belong here rather than under `theme:`, where they used to sit and
+  # where MkDocs was happy to keep them: MkDocs preserves arbitrary keys in the
+  # theme config, whilst Zensical drops the ones it does not recognise, so
+  # `config.theme.logo_dark_mode` rendered as an empty src and the logo broke in
+  # both colour schemes. `config.extra` is passed through intact by both, and is
+  # already where the rest of this repository's custom template data lives.
+  # Rendered by overrides/partials/logo.html.
+  logo_dark_mode: 'img/logo-dark.png'
+  logo_light_mode: 'img/logo-light.png'
+
   discord_url: https://discord.com/invite/pgedge/login
   generator: false
   analytics:
