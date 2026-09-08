@@ -16,6 +16,11 @@
 
 set -euo pipefail
 
+fail() {
+    echo "build.sh: $1" >&2
+    exit 1
+}
+
 # Installing the requirements is deliberately not this script's job: Pages does
 # it itself on detecting requirements.txt, and locally the README covers it. A
 # conditional here would have to guess whether the pinned plugins are present,
@@ -38,6 +43,13 @@ ENGINE="${ENGINE:-mkdocs}"
 # understand; this resolves them and writes mkdocs.gen.yml, which is what
 # builds. See scripts/expand_imports.py.
 python3 scripts/expand_imports.py
+
+# Rewrites GitHub alerts as admonitions and `<redoc>` tags as iframes, in the
+# staged tree, for both engines. This was the work of the gh-admonitions and
+# redoc-tag MkDocs plugins, which Zensical cannot load; doing it here keeps one
+# source of truth and keeps the two engines' output diffable. See
+# scripts/preprocess_docs.py.
+python3 scripts/preprocess_docs.py
 
 if [ "$ENGINE" = "zensical" ]; then
     # overrides/main.html needs the current page's docset and version, which
@@ -80,6 +92,36 @@ else
     mkdocs build -f mkdocs.gen.yml
 fi
 
+# The API reference pages embed Redoc in an iframe (see preprocess_docs.py),
+# which needs the Redoc browser bundle. It is fetched here rather than committed
+# because it is a megabyte of minified JavaScript, and pinned by version and
+# digest for the same reason `npx pagefind` is pinned below: an upstream release
+# should not be able to change what we publish without a change here. Bumping it
+# means updating both the version and the digest.
+REDOC_VERSION="2.5.3"
+REDOC_SHA256="1320f442151c57c447d3b70c7ffc6c4f86d08464020fe34c8cc5d3164e9944f0"
+REDOC_BUNDLE="site/assets/redoc/redoc.standalone.js"
+
+mkdir -p site/assets/redoc
+curl -sfL --retry 3 -o "$REDOC_BUNDLE" \
+    "https://cdn.jsdelivr.net/npm/redoc@${REDOC_VERSION}/bundles/redoc.standalone.js" \
+    || fail "could not download Redoc ${REDOC_VERSION}"
+
+# sha256sum on the Pages build image, shasum on a Mac; neither is everywhere.
+if command -v sha256sum >/dev/null 2>&1; then
+    actual=$(sha256sum "$REDOC_BUNDLE" | cut -d' ' -f1)
+else
+    actual=$(shasum -a 256 "$REDOC_BUNDLE" | cut -d' ' -f1)
+fi
+[ "$actual" = "$REDOC_SHA256" ] \
+    || fail "the Redoc ${REDOC_VERSION} bundle does not match its pinned digest (got $actual)"
+
+# The redark dark theme is vendored under docs/assets/redoc, so it arrives via
+# the engine's static file copying rather than the download above; check it
+# survived, because the theme also writes into site/assets.
+[ -f site/assets/redoc/redark.js ] \
+    || fail "the vendored redark theme is missing from site/assets/redoc"
+
 # Writes _redirects and marks non-latest versions as excluded from search. Must
 # run before Pagefind, which reads those exclusions when it indexes.
 python3 scripts/postprocess_site.py
@@ -95,11 +137,6 @@ npx -y pagefind@1.5.2 --site site --root-selector "article.md-content__inner"
 # below that: it is here to catch a build that has lost the external imports
 # (which would leave roughly a thousand), not to track the real figure.
 MIN_FILES=10000
-
-fail() {
-    echo "build.sh: $1" >&2
-    exit 1
-}
 
 [ -f site/index.html ] || fail "site/index.html is missing"
 [ -f site/pagefind/pagefind.js ] || fail "the Pagefind index was not generated"
