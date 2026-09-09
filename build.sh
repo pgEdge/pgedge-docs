@@ -127,7 +127,9 @@ REDOC_SHA256="1320f442151c57c447d3b70c7ffc6c4f86d08464020fe34c8cc5d3164e9944f0"
 REDOC_BUNDLE="site/assets/redoc/redoc.standalone.js"
 
 mkdir -p site/assets/redoc
-curl -sfL --retry 3 -o "$REDOC_BUNDLE" \
+# --retry alone does not bound a connection that stalls mid-transfer, and a
+# wedged CDN should fail the build rather than sit there until the job times out.
+curl -sfL --retry 3 --connect-timeout 10 --max-time 120 -o "$REDOC_BUNDLE" \
     "https://cdn.jsdelivr.net/npm/redoc@${REDOC_VERSION}/bundles/redoc.standalone.js" \
     || fail "could not download Redoc ${REDOC_VERSION}"
 

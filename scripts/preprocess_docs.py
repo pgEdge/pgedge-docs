@@ -49,13 +49,17 @@ from pathlib import Path
 #
 # Ported from mkdocs-github-admonitions-plugin 0.1.1 (MIT), whose behaviour we
 # are matching rather than improving on: a change in what these patterns accept
-# is a change in how thirty-odd imported pages render.
+# is a change in how thirty-odd imported pages render. The one deliberate
+# divergence is the `\Z` below, which lets the last line of an alert body end at
+# end of file rather than requiring a trailing newline; the plugin would leave
+# such an alert as a literal blockquote, which is a bug rather than a behaviour
+# worth preserving.
 
 CODEBLOCK_PATTERN = re.compile(r"^```.*?^```", flags=re.MULTILINE | re.DOTALL)
 
 ALERT_BASIC_PATTERN = re.compile(
     r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n"
-    r"(?P<body>(?:>.*\r?\n)+)",
+    r"(?P<body>(?:>.*(?:\r?\n|\Z))+)",
     flags=re.IGNORECASE | re.MULTILINE,
 )
 ALERT_BASIC_BODY_PREFIX = re.compile("^> ?", re.MULTILINE)
@@ -79,6 +83,7 @@ def convert_alerts(markdown: str) -> str:
     """Rewrite GitHub/GitLab alerts as Material admonitions."""
 
     def convert(match: re.Match, codeblocks: list, body_prefix: re.Pattern) -> str:
+        """Rewrite a single matched alert, unless it sits inside a code fence."""
         # An alert inside a fenced block is being shown, not used.
         if any(
             block.start() < match.start() and match.end() < block.end()
@@ -222,6 +227,7 @@ def convert_redoc_tags(markdown: str, path: Path, docs_dir: Path, log) -> tuple:
     companions = []
 
     def replace(match: re.Match) -> str:
+        """Swap one `<redoc>` tag for an iframe, queueing its companion page."""
         src_match = REDOC_SRC_PATTERN.search(match.group("attrs"))
         if not src_match:
             log(f"WARNING: {page_rel} has a <redoc> tag with no src; leaving it alone")
@@ -262,10 +268,34 @@ def convert_redoc_tags(markdown: str, path: Path, docs_dir: Path, log) -> tuple:
 
 
 def log(message: str) -> None:
+    """Print a progress or warning line, tagged with the script name."""
     print(f"preprocess_docs.py: {message}")
 
 
+def process_page(path: Path, docs_dir: Path) -> tuple:
+    """Convert one staged Markdown file in place.
+
+    Returns a `(alerts_converted, companions_written)` pair of counts, both
+    zero where the page needed no work; the file is only rewritten when the
+    conversions actually changed it.
+    """
+    original = path.read_text(encoding="utf-8")
+
+    converted = convert_alerts(original)
+    alerts_converted = int(converted != original)
+
+    converted, companions = convert_redoc_tags(converted, path, docs_dir, log)
+    for companion_path, companion_html in companions:
+        companion_path.write_text(companion_html, encoding="utf-8")
+
+    if converted != original:
+        path.write_text(converted, encoding="utf-8")
+
+    return alerts_converted, len(companions)
+
+
 def main() -> int:
+    """Walk the staged tree, converting alerts and Redoc tags on every page."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--docs", default="build/docs",
                         help="the staged tree written by expand_imports.py")
@@ -281,21 +311,10 @@ def main() -> int:
     companion_count = 0
 
     for path in sorted(docs_dir.rglob("*.md")):
-        original = path.read_text(encoding="utf-8")
-
-        converted = convert_alerts(original)
-        if converted != original:
-            alert_pages += 1
-
-        converted, companions = convert_redoc_tags(converted, path, docs_dir, log)
-        for companion_path, companion_html in companions:
-            companion_path.write_text(companion_html, encoding="utf-8")
-        if companions:
-            redoc_pages += 1
-            companion_count += len(companions)
-
-        if converted != original:
-            path.write_text(converted, encoding="utf-8")
+        alerts, companions = process_page(path, docs_dir)
+        alert_pages += alerts
+        redoc_pages += bool(companions)
+        companion_count += companions
 
     log(f"converted GitHub alerts on {alert_pages} pages")
     log(f"embedded Redoc on {redoc_pages} pages ({companion_count} specifications)")
