@@ -778,9 +778,8 @@
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
       "start_pattern": "sudo systemctl enable --now postgresql"
-    }
-  },
-  "ubuntu2604": {
+    },
+    "ubuntu2604": {
       "label": "Ubuntu 26.04 (Resolute Raccoon)",
       "family": "ubuntu",
       "version": "26.04",
