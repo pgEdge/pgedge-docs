@@ -23,7 +23,7 @@ jobs:
       SSOT_URL: https://raw.githubusercontent.com/pgEdge/pgedge-doc-sources/main/sources.yaml
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.PGEDGE_BUILDER_TOKEN }}
           fetch-depth: 0
@@ -947,7 +947,7 @@ jobs:
       # ── Open or update PR ─────────────────────────────────────────────────
       - name: Create or update PR
         if: steps.push.outputs.pushed == 'true' || steps.push.outputs.branch_ready == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           PUSHED:      ${{ steps.push.outputs.pushed }}
           FIX_BRANCH:  ${{ steps.push.outputs.fix_branch }}
