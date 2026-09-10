@@ -46,7 +46,9 @@ plugins:
       enabled: false
   # redoc-tag and gh-admonitions used to sit here. Zensical cannot load MkDocs
   # plugins, so both moved into scripts/preprocess_docs.py, which runs against
-  # the staged tree before either engine builds it.
+  # the staged tree before the build. `redirects` survives because Zensical
+  # implements it natively, reading the same config; only the MkDocs package
+  # went.
   - redirects:
       redirect_maps:
         # Legacy pgedge-containers versioned URLs redirect to pgedge-helm
@@ -92,13 +94,12 @@ theme:
   custom_dir: overrides
   favicon: img/favicon.ico
 
-  # Zensical-only, and ignored by MkDocs, which keeps unrecognised theme keys.
   # Zensical defaults to its own `modern` variant, whose palette drops the
-  # `white` and `black` primary colours that Material for MkDocs supports: with
-  # `primary: white` below having nothing to apply, --md-primary-fg-color stayed
-  # at the stock indigo and every dropdown menu came out blue. `classic` is the
-  # variant that matches what we build today, right down to Roboto rather than
-  # Inter, so it is what the migration should be compared against.
+  # `white` and `black` primary colours Material for MkDocs supported: with
+  # `primary: white` below having nothing to apply, --md-primary-fg-color fell
+  # back to the stock indigo and every dropdown menu came out blue. `classic`
+  # is the variant that matches the site we had, right down to Roboto rather
+  # than Inter. Changing it is a visible redesign, not a detail.
   variant: classic
 
   features:

@@ -10,9 +10,11 @@
      are worked out by scripts/expand_imports.py and passed in as
      config.extra.docset_versions; this only renders them. #}
   {% set docset_versions = config.extra.docset_versions or {} %}
-  {# The one engine-specific line left here: Jinja2 spells this `.split()`,
-     MiniJinja spells it `| split | list`. Everything below is data. #}
-  {% set path_parts = (page.url | default('')).split('/') %}
+  {# MiniJinja, which Zensical renders with, has no `.split()` method on
+     strings, so this is the filter spelling. Jinja2 wanted `.split('/')`, and
+     build.sh used to rewrite this line into a copy of the overrides on the way
+     past to keep both engines working; that went when MkDocs did. #}
+  {% set path_parts = (page.url | default('')) | split('/') | list %}
   {% set docset_slug = path_parts[0] if path_parts | length > 1 else '' %}
   {% set current_version_slug = path_parts[1] if path_parts | length > 1 else '' %}
   {# The page's path within its version, for switching to the same page of another #}
