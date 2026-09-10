@@ -25,10 +25,12 @@ indexes.
 """
 
 import argparse
+import datetime
 import os
 import re
 import sys
 from pathlib import Path
+from xml.sax.saxutils import escape as xml_escape
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from expand_imports import load_yaml  # noqa: E402
@@ -248,6 +250,67 @@ def write_redirects(site_dir):
             f"client-side handling in 404.html.")
 
 
+def write_sitemap(site_dir, site_url):
+    """Regenerate sitemap.xml from every page in the built tree.
+
+    Zensical's own sitemap lists only what the nav reaches, which drops the 41
+    versioned docset root stubs and the orphan pages that imported sources ship
+    without linking to. MkDocs listed every file it built, so those URLs have
+    been advertised for as long as the site has existed; they still serve 200,
+    and quietly withdrawing them is a change to what crawlers are told to visit
+    rather than a tidy-up. Rebuilding the sitemap from the tree keeps the old
+    promise and does not depend on the engine's idea of which pages count.
+
+    A page is an `index.html`, which follows from use_directory_urls: the Redoc
+    companion pages and the stray `overrides/partials/*.html` that some imported
+    sources carry are not pages and are not listed, which matches what MkDocs
+    did with them.
+
+    `lastmod` is the build date for every entry, which is precisely what MkDocs
+    emitted (`get_build_date()`). It carries no per-page information, but its
+    absence is a change too, and some crawlers do look for it.
+    """
+    base = site_url.rstrip('/')
+    build_date = datetime.date.today().isoformat()
+
+    urls = []
+    for dirpath, _, filenames in os.walk(site_dir):
+        if 'index.html' not in filenames:
+            continue
+        rel = os.path.relpath(dirpath, site_dir).replace(os.sep, '/')
+        if rel == '.':
+            urls.append(f"{base}/")
+            continue
+        # Neither is a documentation page; both contain an index.html.
+        if rel.startswith('assets/') or rel.startswith('pagefind/'):
+            continue
+        urls.append(f"{base}/{rel}/")
+
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for url in sorted(urls):
+        lines.append('  <url>')
+        lines.append(f'    <loc>{xml_escape(url)}</loc>')
+        lines.append(f'    <lastmod>{build_date}</lastmod>')
+        lines.append('  </url>')
+    lines.append('</urlset>')
+
+    sitemap_path = os.path.join(site_dir, 'sitemap.xml')
+    with open(sitemap_path, 'w') as f:
+        f.write('\n'.join(lines) + '\n')
+
+    log(f"wrote {len(urls)} URLs to {sitemap_path}")
+
+    # The floor catches a walk that has silently stopped finding pages; the real
+    # figure is around ten thousand, so this is nowhere near it.
+    if len(urls) < 1000:
+        log(f"WARNING: only {len(urls)} URLs in the sitemap, which is far below "
+            f"the expected ten thousand or so; the site directory may be "
+            f"incomplete")
+
+    return len(urls)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", default="mkdocs.yml")
@@ -257,8 +320,14 @@ def main():
     config = load_yaml(Path(args.config).read_text())
     versioned_docsets = config.get("extra", {}).get("versioned_docsets", [])
 
+    site_url = config.get("site_url")
+    if not site_url:
+        log("ERROR: mkdocs.yml has no site_url, so the sitemap cannot be built")
+        return 1
+
     write_redirects(args.site)
     exclude_old_versions_from_search(args.site, versioned_docsets)
+    write_sitemap(args.site, site_url)
     return 0
 
 
