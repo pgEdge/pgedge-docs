@@ -1,57 +1,74 @@
 # pgEdge Documentation
 
-This repository contains the core pgEdge product documentation and 
-infrastructure for generating the docs website. It is based on 
-[MkDocs](https://www.mkdocs.org), using the 
-[Material theme](https://squidfunk.github.io/mkdocs-material/), along with
-`scripts/expand_imports.py`, which merges docs from other repositories into the
-site.
+This repository contains the core pgEdge product documentation and
+infrastructure for generating the docs website. It is built with
+[Zensical](https://zensical.org), the successor to Material for MkDocs, which
+reaches end of life on 5 November 2026. The configuration is still called
+`mkdocs.yml`, and Zensical reads it, so most of what is written about Material
+for MkDocs still applies; the differences that bite are noted below.
+
+Alongside the engine there are three scripts, each of which does something the
+build cannot do without: `scripts/expand_imports.py` merges documentation from
+other repositories into the site, `scripts/preprocess_docs.py` does the work two
+MkDocs plugins used to do, and `scripts/postprocess_site.py` writes the redirects
+and the sitemap.
 
 ## Build Status
 
 [![Build Docs](https://github.com/pgEdge/pgedge-docs/actions/workflows/build-docs.yml/badge.svg)](https://github.com/pgEdge/pgedge-docs/actions/workflows/build-docs.yml)
 
-## Setup
+## Building
 
-1) Create a Python virtual environment:
-    ```bash
-    python3 -m venv pgedge-docs-venv
-    ```
+The whole build is `build.sh`, which is also the Cloudflare Pages build command,
+so what you run locally is what deploys:
 
-2) Activate the virtual environment:
-    ```bash
-    source pgedge-docs-venv/bin/activate
-    ```
+```bash
+git clone https://github.com/pgEdge/pgedge-docs
+cd pgedge-docs
+bash build.sh
+```
 
-3) Check out the source tree, and install the required Python modules:
-    ```bash
-    git clone https://github.com/pgEdge/pgedge-docs
-    cd pgedge-docs
-    pip install -r requirements.txt
-    ```
+It provisions `.venv-docs` from `requirements.txt`, fetches the imported
+documentation, preprocesses it, builds the site into `site/`, downloads the
+pinned Redoc bundle, writes the redirects and sitemap, and runs Pagefind to
+build the search index. Expect a little over five minutes and around 17,000
+files on a first run; the git mirrors under `.import-cache/` are reused
+afterwards.
 
-4) Fetch the external documentation and generate the expanded configuration:
-    ```bash
-    python3 scripts/expand_imports.py
-    Fetching 21 repositories...
-    Importing 128 versions...
-    Wrote mkdocs.gen.yml (128 imports expanded into build/docs)
-    ```
+`requirements.txt` is fully pinned, transitive dependencies included, because
+Zensical's own metadata floats most of them and an unpinned renderer changes the
+site's output without a commit. To bump it, install the Zensical version you
+want into a clean virtualenv and replace the file with `pip freeze`.
 
-    This clones each source repository listed in the `nav` section of
-    `mkdocs.yml` into `.import-cache/`, copies its documentation into
-    `build/docs/`, and writes `mkdocs.gen.yml` with every `!import` replaced by
-    the imported navigation. Re-run it whenever `mkdocs.yml` changes or you want
-    to pick up new upstream commits; the mirrors are reused between runs.
+## Previewing locally
 
-5) Run the local MkDocs server for testing:
-    ```bash
-    mkdocs serve -f mkdocs.gen.yml
-    INFO    -  Building documentation...
-    INFO    -  Documentation built in 0.18 seconds
-    INFO    -  [14:32:14] Watching paths for changes: 'build/docs', 'mkdocs.gen.yml'
-    INFO    -  [14:32:14] Serving on http://127.0.0.1:8000/
-    ```
+`build.sh` is the whole build, but it is too slow for editing prose. For a
+faster loop, expand the imports once and then serve:
+
+```bash
+python3 scripts/expand_imports.py
+python3 scripts/preprocess_docs.py
+.venv-docs/bin/zensical serve -f mkdocs.gen.yml
+```
+
+`expand_imports.py` clones each source repository listed in the `nav` section of
+`mkdocs.yml` into `.import-cache/`, copies its documentation into `build/docs/`,
+and writes `mkdocs.gen.yml` with every `!import` replaced by the imported
+navigation. Re-run it whenever `mkdocs.yml` changes or you want to pick up new
+upstream commits.
+
+`preprocess_docs.py` then rewrites that staged tree in place, and is not
+optional: skip it and every imported GitHub alert renders as a literal
+`[!NOTE]` blockquote and every API reference page comes out empty. It converts
+GitHub and GitLab alerts into Material admonitions, replaces `<redoc>` tags with
+an iframe and a companion page, and strips dotfiles the imported sources ship.
+Both of those jobs used to be MkDocs plugins, `gh-admonitions` and `redoc-tag`,
+which Zensical cannot load.
+
+Two caveats when serving this way. The API reference pages will be blank,
+because the Redoc bundle is downloaded by `build.sh` into `site/` rather than
+committed; and the redirects, search exclusions and sitemap come from
+`postprocess_site.py`, which also only runs in the full build.
 
 ## Adding External Versioned Docsets
 
@@ -112,9 +129,19 @@ extra:
   imported repository's own nav into the parent nav, writes a redirect stub at
   `<docset>/index.md` for each entry in `versioned_docsets`, and writes
   `mkdocs.gen.yml`
+- **`scripts/preprocess_docs.py`**: Before the build, rewrites the staged tree:
+  GitHub and GitLab alerts become Material admonitions, `<redoc>` tags become an
+  iframe plus a companion page loading the pinned Redoc bundle, and dotfiles the
+  imported sources ship are removed. Replaces the `gh-admonitions` and
+  `redoc-tag` MkDocs plugins, which Zensical cannot load. Fails the build if
+  either conversion matches nothing, since the imports are pinned to tags and
+  zero matches means a regression rather than a change upstream
 - **`scripts/postprocess_site.py`**: After the build, writes the Cloudflare
-  `_redirects` file and marks non-latest versions as excluded from the search
-  index. Runs before Pagefind, which reads those exclusions
+  `_redirects` file, marks non-latest versions as excluded from the search
+  index, and regenerates `sitemap.xml` from the built tree. Runs before Pagefind,
+  which reads those exclusions. The sitemap is rebuilt rather than taken from the
+  engine because Zensical lists only pages the nav reaches, which would drop the
+  docset root stubs and every unlinked page
 - **`overrides/redirect.html`**: Template that dynamically determines the latest
   version from the nav structure and generates a JavaScript/meta refresh redirect
 - **`overrides/404.html`**: Handles legacy URLs without version numbers by
