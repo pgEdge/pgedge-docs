@@ -4,6 +4,8 @@ pgedge-docs-venv/
 # Built by build.sh when ENGINE=zensical; see requirements-zensical.txt
 .venv-zensical/
 .claude/settings.local.json
+.claude/plans/
+.claude/specs/
 __pycache__/
 *.pyc
 

@@ -1,36 +1,23 @@
-babel==2.17.0
-backrefs==5.9
-certifi==2025.8.3
-charset-normalizer==3.4.3
-click==8.2.1
-colorama==0.4.6
-dacite==1.9.2
-ghp-import==2.1.0
-idna==3.10
+# The documentation build. Cloudflare Pages installs this on detecting it, and
+# build.sh installs it into .venv-docs so that a local build matches.
+#
+# Fully pinned, transitive dependencies included, and generated with
+# `pip freeze` from a clean virtualenv containing only `zensical`. Zensical's own
+# metadata floats most of these (`markdown>=3.7`, `pymdown-extensions>=11.0`,
+# `pygments>=2.20` and so on), so without pinning every deployment resolves a
+# slightly different renderer and the site's output changes without a commit;
+# highlighting spans in particular differ between Pygments releases.
+#
+# To bump: create a fresh virtualenv, install the zensical version you want, and
+# replace this list with `pip freeze`. Do not hand-edit a single line, since the
+# point is that the set is known to resolve together.
 Jinja2==3.1.6
-Markdown==3.8.2
-MarkupSafe==3.0.2
-mergedeep==1.3.4
-mkdocs==1.6.1
-mkdocs-get-deps==0.2.0
-mkdocs-material==9.6.17
-mkdocs-material-extensions==1.3.1
-mkdocs-redirects==1.2.2
-mypy_extensions==1.1.0
-packaging==25.0
-paginate==0.5.7
-pathspec==0.12.1
-platformdirs==4.3.8
-Pygments==2.19.2
-pymdown-extensions==10.16.1
-python-dateutil==2.9.0.post0
-python-slugify==8.0.4
-PyYAML==6.0.2
-pyyaml_env_tag==1.1
-requests==2.32.5
-six==1.17.0
-text-unidecode==1.3
-typing-inspect==0.8.0
-typing_extensions==4.14.1
-urllib3==2.6.3
-watchdog==6.0.0
+Markdown==3.10.3
+MarkupSafe==3.0.3
+Pygments==2.21.0
+PyYAML==6.0.3
+click==8.5.0
+deepmerge==3.0.1
+pymdown-extensions==11.0.2
+tomli==2.4.1
+zensical==0.0.59

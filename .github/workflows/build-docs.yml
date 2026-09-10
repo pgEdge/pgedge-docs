@@ -19,18 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create virtual environment
-        run: |
-          python3 -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-          
       # The same script Cloudflare Pages runs, so CI validates the deployment
-      # path rather than an approximation of it.
+      # path rather than an approximation of it. There is no environment setup
+      # step: build.sh provisions .venv-docs from requirements.txt itself, and
+      # doing it here as well would only prove that a second, differently built
+      # environment also works.
       - name: Build the docs
-        run: |
-          source venv/bin/activate
-          bash build.sh
+        run: bash build.sh
 
       - name: Upload static docs site
         uses: actions/upload-artifact@v4
