@@ -30,7 +30,6 @@ import os
 import re
 import sys
 from pathlib import Path
-from xml.sax.saxutils import escape as xml_escape
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from expand_imports import load_yaml  # noqa: E402
@@ -248,6 +247,23 @@ def write_redirects(site_dir):
             f"Cloudflare Pages' {DYNAMIC_RULE_BUDGET}-rule limit. Retire the "
             f"oldest entries from RETIRED_VERSIONS or move them to the "
             f"client-side handling in 404.html.")
+
+
+def xml_escape(text):
+    """Escape a URL for inclusion in the sitemap's `<loc>`.
+
+    The five characters the sitemap protocol asks to be escaped, done by hand
+    rather than with `xml.sax.saxutils.escape`: the security scanners flag any
+    import from `xml` as a possible XML external entity attack, and whilst that
+    is a false positive here, since nothing is parsed and only a string is
+    escaped, a handful of replacements is cheaper than arguing with two of them.
+    The ampersand has to go first, or the escapes it introduces get re-escaped.
+    """
+    return (text.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace('"', "&quot;")
+                .replace("'", "&apos;"))
 
 
 def write_sitemap(site_dir, site_url):
