@@ -40,8 +40,10 @@ Two plugins are replaced here.
 
 import argparse
 import html
+import json
 import os
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -56,6 +58,12 @@ from pathlib import Path
 # worth preserving.
 
 CODEBLOCK_PATTERN = re.compile(r"^```.*?^```", flags=re.MULTILINE | re.DOTALL)
+
+# Shared with the Redoc pass below, because either conversion can be triggered by
+# a page that documents the syntax rather than using it. The inline form matches
+# a run of backticks, whatever its length, up to the next run of the same length
+# on the same line, which is how Markdown itself delimits a code span.
+INLINE_CODE_PATTERN = re.compile(r"(?P<ticks>`+)(?:(?!(?P=ticks))[^\n])+(?P=ticks)")
 
 ALERT_BASIC_PATTERN = re.compile(
     r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n"
@@ -140,7 +148,7 @@ COMPANION_TEMPLATE = """<!DOCTYPE html>
   <div id="redoc-container"></div>
   <script src="{assets}/redoc.standalone.js" charset="UTF-8"></script>
   <script>
-    var openapiSpecUrl = "{spec_url}";
+    var openapiSpecUrl = {spec_url};
 
     function enable_dark_mode() {{
       document.getElementById("redark-css").media = "";
@@ -226,8 +234,22 @@ def convert_redoc_tags(markdown: str, path: Path, docs_dir: Path, log) -> tuple:
 
     companions = []
 
+    # Computed once, over the Markdown the substitution below is about to scan,
+    # so the offsets line up: a tag inside a fence or an inline code span is
+    # being documented rather than embedded, and converting it would inject an
+    # iframe into the example, write a companion page for a specification that
+    # does not exist, and warn about the missing specification into the bargain.
+    protected = [match.span() for match in CODEBLOCK_PATTERN.finditer(markdown)]
+    protected += [match.span() for match in INLINE_CODE_PATTERN.finditer(markdown)]
+
     def replace(match: re.Match) -> str:
         """Swap one `<redoc>` tag for an iframe, queueing its companion page."""
+        # Returning the tag untouched before anything else is done leaves both
+        # the companion counter and the sync script alone, as it must.
+        if any(start <= match.start() and match.end() <= end
+               for start, end in protected):
+            return match.group()
+
         src_match = REDOC_SRC_PATTERN.search(match.group("attrs"))
         if not src_match:
             log(f"WARNING: {page_rel} has a <redoc> tag with no src; leaving it alone")
@@ -248,7 +270,12 @@ def convert_redoc_tags(markdown: str, path: Path, docs_dir: Path, log) -> tuple:
         companions.append((path.parent / name, COMPANION_TEMPLATE.format(
             title=f"{path.stem} API reference",
             assets=REDOC_ASSET_ROOT,
-            spec_url=html.escape(spec_url, quote=True),
+            # The URL lands in a JavaScript string literal inside a <script>
+            # block, where HTML entities are not decoded, so escaping it as
+            # HTML would break any specification URL containing an ampersand.
+            # json.dumps emits the surrounding quotes itself, and the template
+            # therefore does not add its own.
+            spec_url=json.dumps(spec_url),
         )))
 
         iframe_url = f"/{page_rel_dir}/{name}" if page_rel_dir else f"/{name}"
@@ -272,6 +299,36 @@ def log(message: str) -> None:
     print(f"preprocess_docs.py: {message}")
 
 
+def remove_dotfiles(docs_dir: Path) -> int:
+    """Delete dotfiles and dot-directories from the staged tree.
+
+    MkDocs ignored anything whose name begins with a dot, whereas Zensical
+    copies it straight through into the built site, so files an imported source
+    never meant to publish would start appearing on docs.pgedge.com. What is in
+    the tree today is innocuous, being a handful of `.gitignore` files and the
+    `.claude` directories the control-plane repository carries, but the same
+    path would happily publish a `.env` the day an import picks one up.
+
+    Whole dot-directories go as well as individual dotfiles, which is safe
+    because nothing we publish can live under a path segment beginning with a
+    dot: MkDocs never built such a page, so no navigation entry, link or asset
+    reference in the site can point into one. The count returned is of files
+    removed, directories included, since that is the figure worth reporting.
+    """
+    removed = 0
+    for path in sorted(docs_dir.rglob(".*")):
+        if not path.exists():
+            # Already taken with the dot-directory that contained it.
+            continue
+        if path.is_dir():
+            removed += sum(1 for child in path.rglob("*") if child.is_file())
+            shutil.rmtree(path)
+        else:
+            removed += 1
+            path.unlink()
+    return removed
+
+
 def process_page(path: Path, docs_dir: Path) -> tuple:
     """Convert one staged Markdown file in place.
 
@@ -279,7 +336,10 @@ def process_page(path: Path, docs_dir: Path) -> tuple:
     zero where the page needed no work; the file is only rewritten when the
     conversions actually changed it.
     """
-    original = path.read_text(encoding="utf-8")
+    # Read as utf-8-sig, as MkDocs itself did, so that a byte order mark does
+    # not sit in front of the first line and stop an alert there from matching;
+    # written back as plain utf-8, so the mark is not reintroduced.
+    original = path.read_text(encoding="utf-8-sig")
 
     converted = convert_alerts(original)
     alerts_converted = int(converted != original)
@@ -319,12 +379,20 @@ def main() -> int:
     log(f"converted GitHub alerts on {alert_pages} pages")
     log(f"embedded Redoc on {redoc_pages} pages ({companion_count} specifications)")
 
+    log(f"removed {remove_dotfiles(docs_dir)} imported dotfiles from the staged tree")
+
     # Both figures were non-zero when this replaced the plugins, and a drop to
     # zero means the imports changed shape rather than that the work is done.
+    # Since the imported sources are pinned to git tags, they cannot have
+    # changed under us, so the likelier explanation by far is a regression in
+    # this script; failing here is much cheaper than publishing thirty pages of
+    # literal `[!NOTE]` blockquotes and a set of empty API references.
     if alert_pages == 0 or redoc_pages == 0:
-        log("WARNING: one of the two conversions matched nothing at all, which "
-            "previously never happened; check whether the imported sources have "
-            "changed how they write alerts or embed OpenAPI specifications")
+        log("ERROR: one of the two conversions matched nothing at all, which "
+            "previously never happened; check whether this script has regressed, "
+            "or whether the imported sources have changed how they write alerts "
+            "or embed OpenAPI specifications")
+        return 1
 
     return 0
 
