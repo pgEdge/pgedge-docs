@@ -38,8 +38,15 @@
 {% endif %}
 {# A versioned docset's root is canonically itself, not the version it happens
    to point at today. A custom redirect is canonically its own URL, including
-   one that lives under a versioned docset: the frontmatter is checked first. -#}
-<link rel="canonical" href="{{ config.site_url }}{{ canonical }}">
+   one that lives under a versioned docset: the frontmatter is checked first.
+
+   The separator is added here rather than assumed to be on either side. MkDocs
+   normalised `site_url` to a trailing slash and Zensical does not, so simply
+   concatenating emitted `https://docs.pgedge.comace/` on all 41 docset root
+   stubs. Trimming and re-adding is right whether or not the configured value
+   ends in a slash; `canonical` keeps its own trailing slash, which is
+   significant in a canonical URL. -#}
+<link rel="canonical" href="{{ config.site_url | trim('/') }}/{{ canonical }}">
 <meta charset="utf-8">
 <title>Redirecting...</title>
 </head>
