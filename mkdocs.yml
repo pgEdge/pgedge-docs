@@ -165,6 +165,7 @@ extra:
     - pgedge-rag-server
     - pgedge-vectorizer
     - pg-semantic-cache
+    - pgvolvra
     - pg-healthcheck
     - pgedge-safesession
     - pgedge-mcp-bridge
@@ -194,6 +195,7 @@ extra:
   # pgEdge Labs - shows a notice that content is experimental/under active development
   labs_docsets:
     - pg-semantic-cache
+    - pgvolvra
     - pg-healthcheck
     - pgedge-mcp-bridge
 
@@ -338,6 +340,8 @@ extra:
     pgEdge Labs:
       - title: Semantic Cache (pg_semantic_cache)
         url: pg-semantic-cache/
+      - title: Row-Level Undo (pgvolvra)
+        url: pgvolvra/
       - title: Postgres Healthcheck (pg-healthcheck)
         url: pg-healthcheck/
       - title: MCP Bridge (pgedge-mcp-bridge)
@@ -684,6 +688,10 @@ nav:
   - pg-semantic-cache:
     - v0.1.0-beta4: '!import https://github.com/pgEdge/pg_semantic_cache?branch=v0.1.0-beta4'
     - Development: '!import https://github.com/pgEdge/pg_semantic_cache?branch=main'
+
+  - pgvolvra:
+    - v1.0.0-beta1: '!import https://github.com/pgEdge/pgvolvra?branch=v1.0.0-beta1'
+    - Development: '!import https://github.com/pgEdge/pgvolvra?branch=main'
 
   - pg-healthcheck:
     - v1.1.0: '!import https://github.com/pgEdge/pg-healthcheck?branch=v1.1.0'
