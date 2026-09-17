@@ -746,16 +746,19 @@ nav:
 
   # Community Extensions - Database (from 3rd-party-docs repo)
   - pg-cron:
+    - v1.6.8: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcron168'
     - v1.6.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcron167'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcronmaster'
 
   - pgmq:
+    - v1.13.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1130'
     - v1.12.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1120'
     - v1.11.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1111'
     - v1.11.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1110'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmqmaster'
 
   - pg-stat-monitor:
+    - v2.4.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor240'
     - v2.3.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor231'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitormaster'
 
@@ -774,6 +777,7 @@ nav:
 
   # Community Tools (from 3rd-party-docs repo)
   - pgAdmin 4:
+    - v9.17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin917'
     - v9.14: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin914'
     - v9.13: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin913'
     - v9.12: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin912'
@@ -786,6 +790,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbouncermaster'
 
   - postgrest:
+    - v14.18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest1418'
     - v14.10: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest1410'
     - v14.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest149'
     - v14.8: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgrest148'
