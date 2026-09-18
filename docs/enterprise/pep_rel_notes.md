@@ -1,5 +1,8 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 09/18/2026
+* Component updates: PostgREST 14.18, pgAdmin4 9.17, pg_cron 1.6.8, pgmq 1.13.0 and pg_stat_monitor 2.4.0 
+  
 ## 09/04/2026
 * pgEdge Radar 0.6.2
 * pgEdge RAG Server 2.0.0 GA
