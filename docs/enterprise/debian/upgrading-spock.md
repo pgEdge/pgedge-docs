@@ -8,7 +8,7 @@ Ubuntu
 
 Debian
 
-  * Debian 11, 12, and 13 (AMD & ARM)
+  * Debian 12 and 13 (AMD & ARM)
 
 Before performing an upgrade to a newer version of Spock, ensure you have a current backup of your system.
 
