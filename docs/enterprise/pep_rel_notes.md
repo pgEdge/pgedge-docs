@@ -1,5 +1,8 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 09/18/2026
+* Debian 11 (Bullseye) support has ended; upgrade to Debian 12 or 13 to continue receiving pgEdge Enterprise Postgres updates.
+
 ## 09/04/2026
 * pgEdge Radar 0.6.2
 * pgEdge RAG Server 2.0.0 GA
