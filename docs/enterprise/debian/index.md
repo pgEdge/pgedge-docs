@@ -10,13 +10,19 @@ Ubuntu
 
 Debian
 
-  * Debian 11 (AMD & ARM)
-
   * Debian 12 (AMD & ARM)
 
   * Debian 13 (AMD & ARM)
 
 Using packages from the `pgedge` repository is an easy way to manage Postgres and supporting components.
+
+!!! warning "Debian 11 (Bullseye) Support Ended"
+
+    Debian 11 (Bullseye) is no longer a supported platform for pgEdge
+    Enterprise Postgres. Existing Debian 11 installations will continue
+    to run, but pgEdge will not publish new packages, security patches,
+    or updates for this platform. Upgrade to Debian 12 (Bookworm) or
+    Debian 13 (Trixie) to continue receiving updates.
 
 !!! info
 

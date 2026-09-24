@@ -376,7 +376,7 @@ nav:
       - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
-    - Debian 11, 12, and 13 & Ubuntu 22.04 LTS and 24.04 LTS:
+    - Debian 12 and 13 & Ubuntu 22.04 LTS and 24.04 LTS:
       - Debian & Ubuntu Version Support: enterprise/debian/index.md
       - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
       - Installing Postgres: enterprise/debian/installing.md
@@ -690,7 +690,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pg_semantic_cache?branch=main'
 
   - pgvolvra:
-    - v1.0.0-beta1: '!import https://github.com/pgEdge/pgvolvra?branch=v1.0.0-beta1'
+    - v1.0.0-beta2: '!import https://github.com/pgEdge/pgvolvra.git?branch=v1.0.0-beta2'
     - Development: '!import https://github.com/pgEdge/pgvolvra?branch=main'
 
   - pg-healthcheck:
@@ -702,7 +702,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=main'
 
   - PostgreSQL:
-    - v19 beta: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19beta2'
+    - v19 beta: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19beta4'
     - v18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg18'
     - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
     - v16: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg16'
@@ -735,6 +735,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgtokenizermaster'
 
   - pg-vectorize:
+    - v0.27.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0271'
     - v0.26.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0262'
     - v0.26.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0261'
     - v0.26.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvectorize0260'
