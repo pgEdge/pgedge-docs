@@ -607,6 +607,23 @@ jobs:
                   'git_url': m.group(2),
               })
 
+          # Keep a rolling pre-release label (e.g. 'v19beta') when a new pre-release
+          # of the same product replaces it: 'postgresql19beta2' → 'postgresql19beta4'
+          # must stay 'v19beta', not become 'v19beta4'. Only labels WITHOUT a trailing
+          # pre-release number are reused; 'v1.0.0-beta2' → 'v1.0.0-beta3' is untouched.
+          ROLLING_PRE_RE = re.compile(r'(alpha|beta|rc)[.\-]?$', re.I)
+          for item in missing_entries:
+              if not is_prerelease(item['version']):
+                  continue
+              stem = re.sub(r'\d+$', '', item['ref'])
+              for st in stale_entries:
+                  if (st['nu'] == item['nu']
+                          and st['ref'] != item['ref']
+                          and re.sub(r'\d+$', '', st['ref']) == stem
+                          and ROLLING_PRE_RE.search(st['label'])):
+                      item['label'] = st['label']
+                      break
+
           # ── Build drift report ────────────────────────────────────────────
 
           lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
