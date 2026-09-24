@@ -1,8 +1,13 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 09/24/2026
+
+* Component updates: pg_vectorize 0.27.1
+* pgEdge Enterprise Postgres 19 beta4
+  
 ## 09/18/2026
 
-* Component updates: PostgREST 14.18, pgAdmin4 9.17, pg_cron 1.6.8, pgmq 1.13.0 and pg_stat_monitor 2.4.0 
+* Component updates: PostgREST 14.18, pgAdmin4 9.17, pg_cron 1.6.8, pgmq 1.13.0 and pg_stat_monitor 2.4.0
   
 * Debian 11 (Bullseye) support has ended; upgrade to Debian 12 or 13 to continue receiving pgEdge Enterprise Postgres updates.
 
@@ -41,6 +46,8 @@
     * pgedge-enterprise-postgres 18.6
     * pgedge-enterprise-all 18.6
  
+* Postgres version update: pgEdge Enterprise Postgres 19.0 beta3
+  
 * Component updates: system_stats v4.0, pgBackRest 2.59.0, Radar 0.5.1
       
 ## 08/06/2026
