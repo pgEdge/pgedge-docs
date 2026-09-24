@@ -46,8 +46,8 @@ want into a clean virtualenv and replace the file with `pip freeze`.
 faster loop, expand the imports once and then serve:
 
 ```bash
-python3 scripts/expand_imports.py
-python3 scripts/preprocess_docs.py
+.venv-docs/bin/python3 scripts/expand_imports.py
+.venv-docs/bin/python3 scripts/preprocess_docs.py
 .venv-docs/bin/zensical serve -f mkdocs.gen.yml
 ```
 

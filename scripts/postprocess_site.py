@@ -297,8 +297,9 @@ def write_sitemap(site_dir, site_url):
         if rel == '.':
             urls.append(f"{base}/")
             continue
-        # Neither is a documentation page; both contain an index.html.
-        if rel.startswith('assets/') or rel.startswith('pagefind/'):
+        # Nothing under either is a documentation page, though both can hold
+        # an index.html; comparing the first component covers the roots too.
+        if rel.split('/', 1)[0] in ('assets', 'pagefind'):
             continue
         urls.append(f"{base}/{rel}/")
 
