@@ -30,6 +30,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from urllib.parse import quote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from expand_imports import load_yaml  # noqa: E402
@@ -301,7 +302,7 @@ def write_sitemap(site_dir, site_url):
         # an index.html; comparing the first component covers the roots too.
         if rel.split('/', 1)[0] in ('assets', 'pagefind'):
             continue
-        urls.append(f"{base}/{rel}/")
+        urls.append(f"{base}/{quote(rel)}/")
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
@@ -313,7 +314,7 @@ def write_sitemap(site_dir, site_url):
     lines.append('</urlset>')
 
     sitemap_path = os.path.join(site_dir, 'sitemap.xml')
-    with open(sitemap_path, 'w') as f:
+    with open(sitemap_path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(lines) + '\n')
 
     log(f"wrote {len(urls)} URLs to {sitemap_path}")

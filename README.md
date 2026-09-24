@@ -55,7 +55,9 @@ faster loop, expand the imports once and then serve:
 `mkdocs.yml` into `.import-cache/`, copies its documentation into `build/docs/`,
 and writes `mkdocs.gen.yml` with every `!import` replaced by the imported
 navigation. Re-run it whenever `mkdocs.yml` changes or you want to pick up new
-upstream commits.
+upstream commits. The preview serves that staged copy rather than `docs/`, so an
+edit to a page in this repository only appears once both scripts have been run
+again.
 
 `preprocess_docs.py` then rewrites that staged tree in place, and is not
 optional: skip it and every imported GitHub alert renders as a literal
