@@ -683,6 +683,17 @@ hide:
     <a href="pg-semantic-cache/" class="card-link">View Documentation →</a>
   </div>
 
+  <!-- pgVolvra -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>Row-Level Undo (<a href="https://github.com/pgEdge/pgvolvra">pgvolvra</a>)</h3>
+      </div>
+    </div>
+    <p class="card-description">Row-level undo and history for PostgreSQL. Plain SQL, no extension, no superuser.</p>
+    <a href="pgvolvra/" class="card-link">View Documentation →</a>
+  </div>
+
   <!-- Postgres Healthcheck -->
   <div class="card">
     <div class="card-header">
