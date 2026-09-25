@@ -187,6 +187,7 @@ extra:
     - pg-healthcheck
     - pgedge-safesession
     - pgedge-mcp-bridge
+    - pgedge-cli
     - radar
     - postgresql
     - pg-cron
@@ -216,6 +217,7 @@ extra:
     - pgvolvra
     - pg-healthcheck
     - pgedge-mcp-bridge
+    - pgedge-cli
 
   # Third-party documentation - shows a notice that content is not maintained by pgEdge
   third_party_docsets:
@@ -356,6 +358,8 @@ extra:
       - title: psycopg2
         url: psycopg2/
     pgEdge Labs:
+      - title: pgEdge CLI (pgedge-cli)
+        url: pgedge-cli/
       - title: Semantic Cache (pg_semantic_cache)
         url: pg-semantic-cache/
       - title: Row-Level Undo (pgvolvra)
@@ -718,6 +722,10 @@ nav:
   - pgedge-mcp-bridge:
     - v1.0.0-alpha6: '!import https://github.com/pgEdge/pgedge-mcp-bridge.git?branch=v1.0.0-alpha6'
     - Development: '!import https://github.com/pgEdge/pgedge-mcp-bridge?branch=main'
+
+  - pgedge-cli:
+    - v0.5.0-beta.3: '!import https://github.com/pgEdge/pgedge-cli?branch=v0.5.0-beta.3'
+    - Development: '!import https://github.com/pgEdge/pgedge-cli?branch=main'
 
   - PostgreSQL:
     - v19 beta: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19beta4'
