@@ -73,10 +73,6 @@ plugins:
         platform/troubleshooting/troubleshooting.md: platform/troubleshooting.md
         platform/troubleshooting/logging.md: platform/troubleshooting.md
 
-        # Redirect the old pgEdge Cloud docset to its pgEdge Starfleet
-        # replacement
-        cloud/index.md: pgedge-starfleet/index.md
-
         # Legacy /cloud/ paths that moved
         cloud/cl_release_notes.md: cloud/index.md
         cloud/getting_started.md: cloud/getting_started/getting_started.md
