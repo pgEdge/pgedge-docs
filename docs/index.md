@@ -349,18 +349,18 @@ hide:
     <a href="pgedge-container/" class="card-link">View Documentation →</a>
   </div>
 
-  <!-- pgEdge Cloud -->
+  <!-- pgEdge Starfleet -->
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <h3>pgEdge Cloud</h3>
+        <h3>pgEdge Starfleet</h3>
         <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
         </svg>
       </div>
     </div>
-    <p class="card-description">Fully managed PostgreSQL service.</p>
-    <a href="cloud/" class="card-link">View Documentation →</a>
+    <p class="card-description">Fully managed or BYOC PostgreSQL service.</p>
+    <a href="pgedge-starfleet/" class="card-link">View Documentation →</a>
   </div>
 
 </div>
@@ -474,7 +474,7 @@ hide:
       </li>
       <li class="ext-divider"></li>
       <li>
-        <a href="cloud/"><strong>pgEdge Cloud</strong></a>
+        <a href="pgedge-starfleet/"><strong>pgEdge Starfleet</strong></a>
         <span class="ext-desc">Fully managed, globally distributed PostgreSQL as a service</span>
       </li>
     </ul>
