@@ -20,7 +20,6 @@ modifies the working tree.
 """
 
 import argparse
-import fnmatch
 import re
 import shutil
 import subprocess
@@ -189,13 +188,15 @@ def export_docs(git_dir, ref, target):
 
 
 def apply_exclude_docs(target, spec):
-    """Delete what an imported config's `exclude_docs` names; return the paths.
+    """Delete what an imported config's `exclude_docs` names.
 
     A source keeps pages out of its own site this way, and copying its docs/
     wholesale would publish them here, sitemap and search index included.
-    MkDocs reads the setting as gitignore lines; this handles the subset of
-    that syntax without a new dependency, and refuses negation outright rather
-    than silently publishing what it would have re-included.
+    MkDocs reads the setting as gitignore lines. Only plain file and directory
+    paths are handled, so any wildcard or negation fails the build rather than
+    being matched differently from MkDocs without a gitignore library.
+
+    Returns the removed paths and the lines that matched nothing.
     """
     if isinstance(spec, list):
         spec = "\n".join(spec)
@@ -204,35 +205,34 @@ def apply_exclude_docs(target, spec):
         line = line.strip()
         if not line or line.startswith("#"):
             continue
-        if line.startswith("!"):
-            raise RuntimeError(f"exclude_docs negation is not supported: {line}")
-        dir_only = line.endswith("/")
-        line = line.rstrip("/")
-        patterns.append((line.lstrip("/"), "/" in line, dir_only))
+        if line.startswith("!") or any(c in line for c in "*?[\\"):
+            raise RuntimeError(
+                f"exclude_docs supports plain paths only, not: {line}"
+            )
+        path = line.rstrip("/")
+        patterns.append((line, path.lstrip("/"), "/" in path, line.endswith("/")))
 
-    def excluded(parts):
+    def matching(parts):
+        """The first pattern excluding this file or a directory above it."""
         for i in range(1, len(parts) + 1):
             is_dir = i < len(parts)
-            for pat, anchored, dir_only in patterns:
+            for line, path, anchored, dir_only in patterns:
                 if dir_only and not is_dir:
                     continue
                 subject = "/".join(parts[:i]) if anchored else parts[i - 1]
-                # fnmatch's `*` crosses `/`, which gitignore's does not.
-                if anchored and "**" not in pat and pat.count("/") != i - 1:
-                    continue
-                # ...and its `**/` also matches no directories at all.
-                if (fnmatch.fnmatchcase(subject, pat)
-                        or fnmatch.fnmatchcase(subject, pat.replace("**/", ""))):
-                    return True
-        return False
+                if subject == path:
+                    return line
+        return None
 
-    removed = []
-    for path in sorted(p for p in target.rglob("*") if p.is_file()):
-        rel = path.relative_to(target)
-        if excluded(rel.parts):
-            path.unlink()
+    removed, matched = [], set()
+    for file in sorted(p for p in target.rglob("*") if p.is_file()):
+        rel = file.relative_to(target)
+        line = matching(rel.parts)
+        if line is not None:
+            file.unlink()
             removed.append(rel.as_posix())
-    return patterns, removed
+            matched.add(line)
+    return removed, [line for line, *_ in patterns if line not in matched]
 
 
 # --- Markdown extension union -----------------------------------------------
@@ -503,12 +503,13 @@ def main():
         results = list(pool.map(fetch_one, imports))
     expanded = {trail: nav_result for trail, nav_result, *_ in results}
 
-    for _, _, prefix, _, (patterns, removed) in results:
+    for _, _, prefix, _, (removed, unmatched) in results:
         if removed:
             print(f"Excluded {len(removed)} file(s) from {prefix}: "
                   f"{', '.join(removed)}")
-        elif patterns:
-            print(f"WARNING: exclude_docs in {prefix} matched nothing")
+        for line in unmatched:
+            print(f"WARNING: exclude_docs entry {line!r} in {prefix} "
+                  f"matched nothing")
 
     config["markdown_extensions"] = merge_markdown_extensions(
         config.get("markdown_extensions", []),
