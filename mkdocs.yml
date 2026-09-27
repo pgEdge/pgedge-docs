@@ -259,8 +259,8 @@ extra:
       - title: Containers
         url: pgedge-container/
       - hr: true
-      - title: pgEdge Cloud
-        url: cloud/
+      - title: pgEdge Starfleet
+        url: pgedge-starfleet/
     AI Toolkit:
       - title: Overview
         url: ai-toolkit/
@@ -546,57 +546,7 @@ nav:
     - pgEdge Distributed Postgres VM Edition Release Notes: platform/pgedge_rel_notes.md
     - Troubleshooting: platform/troubleshooting.md
 
-  - pgEdge Cloud:
-    - Cloud Edition - Overview: cloud/index.md
-    - Getting Started with pgEdge Cloud: cloud/getting_started/getting_started.md
-    - Prerequisites:
-      - Linking and Managing your Cloud Provider Accounts:
-        - Managing Cloud Provider Accounts: cloud/prerequisites/cloud_accounts/index.md
-        - Linking an AWS Account: cloud/prerequisites/cloud_accounts/link_to_AWS.md
-        - Linking an Azure Account: cloud/prerequisites/cloud_accounts/link_to_Azure.md
-        - Linking a Google Account: cloud/prerequisites/cloud_accounts/link_to_Google.md
-      - Adding an SSH Key: cloud/prerequisites/ssh_key.md
-    - Cluster Management:
-      - Reviewing your Cloud Clusters: cloud/cluster/index.md
-      - Creating a Cluster: cloud/cluster/create_cluster.md
-      - Managing a Cluster: cloud/cluster/manage_cluster.md
-      - Defining a Cluster's Backup Store: cloud/cluster/backup_store.md
-      - Managing Firewall Rules: cloud/cluster/firewall.md
-      - Using Resource Tags: cloud/cluster/resource_tag.md
-      - Managing VPC Associations: cloud/cluster/vpc_assoc.md
-      - Adding an Ingress to a Private Cluster: cloud/cluster/ingress.md
-    - Database Management:
-      - Reviewing your Databases: cloud/database/index.md
-      - Creating a Database: cloud/database/create_db.md
-      - Managing a Database: cloud/database/manage_db.md
-    - Services: cloud/services.md
-    - Metrics: cloud/database_admin/metrics.md
-    - Logs: cloud/database_admin/logs.md
-    - Backups: cloud/database_admin/backup_details.md
-    - Managing Database Backups:
-      - Reviewing Backup Details: cloud/backup/backups.md
-      - Backing up your Database: cloud/backup/backup_providers.md
-      - Restoring from Backup: cloud/backup/restore.md
-    - Database and Cluster Administration:
-      - Using the Actions Menu: cloud/mod_cluster/actions.md
-      - Adding a Database or Cluster Node: cloud/mod_cluster/add.md
-      - Dropping a Database, Node, or Cluster: cloud/mod_cluster/drop.md
-      - Using Postgres Extensions: cloud/database_admin/supported_extensions.md
-    - Migrating to pgEdge Distributed Postgres (Cloud Edition):
-      - Overview - Using a Backup to Migrate into a Distributed Database: cloud/migration/index.md
-      - Taking a Backup: cloud/migration/backup.md
-      - Restoring from Backup: cloud/migration/restore.md
-    - Connecting to a Database:
-      - Connecting to your Database or Cluster: cloud/connecting/index.md
-      - Connecting with SSH: cloud/connecting/ssh.md
-      - Connecting with psql: cloud/connecting/psql.md
-      - Connecting with pgAdmin: cloud/connecting/pgadmin.md
-      - Connecting a Custom Client: cloud/connecting/custom_client.md
-      - Best Practices for Managing Connections: cloud/connecting/best_practices.md
-    - Reviewing the Activity Log: cloud/tasks.md
-    - Settings: cloud/settings.md
-    - Team Resources: cloud/teams.md
-    - Troubleshooting: cloud/troubleshooting.md
+  - pgEdge Starfleet: '!import https://github.com/pgEdge/pgedge-starfleet-docs.git?branch=main'
 
   - pgEdge Container:
     - Overview: pgedge-container/index.md
