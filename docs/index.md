@@ -359,7 +359,7 @@ hide:
         </svg>
       </div>
     </div>
-    <p class="card-description">Fully managed PostgreSQL service.</p>
+    <p class="card-description">Fully managed or BYOC PostgreSQL service.</p>
     <a href="pgedge-starfleet/" class="card-link">View Documentation →</a>
   </div>
 
