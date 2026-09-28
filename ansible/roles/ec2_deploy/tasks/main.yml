@@ -1,0 +1,154 @@
+# EC2 Deployment Role - Main Tasks
+---
+- name: Debug ec2 variable
+  ansible.builtin.debug:
+    msg:
+      - "ec2 variable: {{ ec2 | default('UNDEFINED') }}"
+      - "ec2_ami_id: {{ ec2_ami_id | default('UNDEFINED') }}"
+      - "ec2_key_name: {{ ec2_key_name | default('UNDEFINED') }}"
+  when: ec2_ami_id is not defined or ec2_key_name is not defined
+
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - ec2_ami_id is defined
+      - ec2_ami_id | length > 0
+      - ec2_key_name is defined
+      - ec2_key_name | length > 0
+    fail_msg: "ec2.ami_id and ec2.key_name must be defined in group_vars/all.yml. Got ami_id={{ ec2_ami_id | default('undefined') }}, key_name={{ ec2_key_name | default('undefined') }}"
+
+- name: Get default VPC if not specified
+  amazon.aws.ec2_vpc_net_info:
+    region: "{{ ec2_region }}"
+    filters:
+      isDefault: "true"
+  register: default_vpc
+  when: ec2_vpc_id | length == 0
+
+- name: Set VPC ID from config
+  ansible.builtin.set_fact:
+    effective_vpc_id: "{{ ec2_vpc_id }}"
+  when: ec2_vpc_id | length > 0
+
+- name: Set VPC ID from default
+  ansible.builtin.set_fact:
+    effective_vpc_id: "{{ default_vpc.vpcs[0].vpc_id }}"
+  when: ec2_vpc_id | length == 0
+
+- name: Get default subnet if not specified
+  amazon.aws.ec2_vpc_subnet_info:
+    region: "{{ ec2_region }}"
+    filters:
+      vpc-id: "{{ effective_vpc_id }}"
+      availability-zone: "{{ ec2_az }}"
+      default-for-az: "true"
+  register: default_subnet
+  when: ec2_subnet_id | length == 0
+
+- name: Set Subnet ID from config
+  ansible.builtin.set_fact:
+    effective_subnet_id: "{{ ec2_subnet_id }}"
+  when: ec2_subnet_id | length > 0
+
+- name: Set Subnet ID from default
+  ansible.builtin.set_fact:
+    effective_subnet_id: "{{ default_subnet.subnets[0].subnet_id }}"
+  when: ec2_subnet_id | length == 0
+
+- name: Create security group
+  amazon.aws.ec2_security_group:
+    name: "{{ ec2_security_group_name }}"
+    description: "{{ ec2_security_group_description }}"
+    vpc_id: "{{ effective_vpc_id }}"
+    region: "{{ ec2_region }}"
+    rules: "{{ ec2.security_group.rules }}"
+    rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
+        rule_desc: Allow all outbound traffic
+    tags:
+      Name: "{{ ec2_security_group_name }}"
+      Project: pgedge-docs
+  register: security_group
+
+# SSM Support - IAM Role and Instance Profile
+- name: Create IAM role for SSM
+  amazon.aws.iam_role:
+    name: "{{ ec2_iam_role_name }}"
+    region: "{{ ec2_region }}"
+    assume_role_policy_document: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "ec2.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+          }
+        ]
+      }
+    managed_policies:
+      - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+    state: present
+    tags:
+      Project: pgedge-docs
+      ManagedBy: ansible
+  register: iam_role
+  when: ec2_enable_ssm | bool
+
+- name: Create instance profile for SSM
+  amazon.aws.iam_instance_profile:
+    name: "{{ ec2_instance_profile_name }}"
+    region: "{{ ec2_region }}"
+    role: "{{ ec2_iam_role_name }}"
+    state: present
+    tags:
+      Project: pgedge-docs
+      ManagedBy: ansible
+  register: instance_profile
+  when: ec2_enable_ssm | bool
+
+- name: Wait for instance profile to be ready
+  ansible.builtin.pause:
+    seconds: 10
+  when: ec2_enable_ssm | bool and instance_profile.changed
+
+- name: Launch EC2 instance
+  amazon.aws.ec2_instance:
+    name: "{{ ec2_tags.Name | default('pgedge-rag-server') }}"
+    region: "{{ ec2_region }}"
+    image_id: "{{ ec2_ami_id }}"
+    instance_type: "{{ ec2_instance_type }}"
+    key_name: "{{ ec2_key_name }}"
+    vpc_subnet_id: "{{ effective_subnet_id }}"
+    security_group: "{{ security_group.group_id }}"
+    instance_role: "{{ ec2_instance_profile_name if ec2_enable_ssm | bool else omit }}"
+    network:
+      assign_public_ip: true
+    volumes:
+      - device_name: /dev/xvda
+        ebs:
+          volume_size: "{{ ec2_root_volume_size }}"
+          volume_type: "{{ ec2_root_volume_type }}"
+          iops: "{{ ec2_root_volume_iops if ec2_root_volume_type == 'gp3' else omit }}"
+          throughput: "{{ ec2_root_volume_throughput if ec2_root_volume_type == 'gp3' else omit }}"
+          encrypted: "{{ ec2_root_volume_encrypted }}"
+          delete_on_termination: true
+    tags: "{{ ec2_tags | combine({'ManagedBy': 'ansible'}) }}"
+    wait: true
+    state: running
+  register: ec2_result
+
+- name: Set instance facts
+  ansible.builtin.set_fact:
+    ec2_instance: "{{ ec2_result.instances[0] }}"
+
+- name: Display instance details
+  ansible.builtin.debug:
+    msg:
+      - "Instance ID: {{ ec2_instance.instance_id }}"
+      - "Public IP: {{ ec2_instance.public_ip_address }}"
+      - "Private IP: {{ ec2_instance.private_ip_address }}"
+      - "State: {{ ec2_instance.state.name }}"

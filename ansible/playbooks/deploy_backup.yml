@@ -1,0 +1,74 @@
+# =============================================================================
+# pgEdge RAG Server - AWS Backup Deployment Playbook
+# =============================================================================
+#
+# This playbook configures AWS Backup for automated VM backups with a
+# sensible retention schedule:
+#   - Daily backups: retained for 7 days
+#   - Weekly backups: retained for 4 weeks
+#   - Monthly backups: retained for 12 months
+#
+# Prerequisites:
+#   - AWS credentials configured (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+#   - Required Python packages: pip install boto3 botocore
+#   - Required Ansible collections:
+#       ansible-galaxy collection install amazon.aws community.aws
+#   - EC2 instance already deployed with proper tags
+#
+# Usage:
+#   ansible-playbook playbooks/deploy_backup.yml
+#
+# Override variables:
+#   ansible-playbook playbooks/deploy_backup.yml -e "aws_backup.enabled=false"
+#
+# =============================================================================
+
+---
+- name: Configure AWS Backup for RAG Server
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  pre_tasks:
+    - name: Verify AWS credentials are configured
+      ansible.builtin.command: aws sts get-caller-identity --query Account --output text
+      register: aws_identity
+      changed_when: false
+      failed_when: aws_identity.rc != 0
+
+    - name: Display AWS account info
+      ansible.builtin.debug:
+        msg: "Configuring AWS Backup in account: {{ aws_identity.stdout }}"
+
+  roles:
+    - role: aws_backup
+      tags: backup
+
+  post_tasks:
+    - name: Display next steps
+      ansible.builtin.debug:
+        msg: |
+          AWS Backup Configuration Complete!
+
+          Your EC2 instances tagged with:
+            - Project: pgedge-docs
+            - ManagedBy: ansible
+
+          Will be automatically backed up with this schedule:
+            - Daily at 5:00 AM UTC (kept 7 days)
+            - Weekly on Sundays (kept 4 weeks)
+            - Monthly on 1st (kept 12 months)
+
+          To verify in AWS Console:
+            1. Go to AWS Backup > Backup plans
+            2. Look for: {{ aws_backup.plan_name | default('pgedge-rag-backup-plan') }}
+
+          To trigger an on-demand backup:
+            aws backup start-backup-job \
+              --backup-vault-name {{ aws_backup.vault_name | default('pgedge-rag-backup-vault') }} \
+              --resource-arn arn:aws:ec2:{{ aws_backup.region | default('us-east-1') }}:ACCOUNT_ID:instance/INSTANCE_ID \
+              --iam-role-arn arn:aws:iam::ACCOUNT_ID:role/{{ aws_backup.iam_role_name | default('AWSBackupRole-pgedge-rag') }}
+
+          To list recovery points:
+            aws backup list-recovery-points-by-backup-vault \
+              --backup-vault-name {{ aws_backup.vault_name | default('pgedge-rag-backup-vault') }}

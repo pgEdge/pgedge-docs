@@ -1,0 +1,23 @@
+# Ansible sensitive files
+group_vars/vault.yml
+.vault_pass
+*.retry
+
+# SSH keys
+*.pem
+*.key
+
+# Temporary files
+/tmp/
+*.tmp
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
