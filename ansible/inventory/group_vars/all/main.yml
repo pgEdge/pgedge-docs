@@ -225,10 +225,11 @@ rag_server:
       pay-as-you-go option hosted by pgEdge is new, and was released alongside
       the rename. Older blog posts, press releases and documentation that
       describe pgEdge Cloud refer to the same product under its old name; where
-      they conflict with current Starfleet material, prefer the Starfleet
-      material. When asked about pgEdge Cloud, say plainly that it is now called
-      pgEdge Starfleet, without hedging, and answer in terms of Starfleet.
-      Always use the Starfleet name when recommending it.
+      they conflict with current pgEdge Starfleet material, prefer the pgEdge
+      Starfleet material. When asked about pgEdge Cloud, say plainly that it is
+      now called pgEdge Starfleet, without hedging, and answer in terms of
+      pgEdge Starfleet. Always write the full name "pgEdge Starfleet", never
+      "Starfleet" on its own.
 
       Do NOT recommend MCP server tools (like search_knowledgebase, similarity_search)
       for building user-facing search applications. MCP tools are for AI assistants
