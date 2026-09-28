@@ -68,7 +68,22 @@ websites:
 
     # Content selectors (in order of preference)
     # Leave empty to use defaults: article, main, .content, etc.
-    content_selectors: []
+    # 'main' comes first because the redesigned site uses <article> for
+    # cards: the default picked the first card on the homepage, /pricing
+    # and /products/starfleet and dropped the rest. Blog posts and press
+    # releases have no <main>, so they still fall through to 'article'.
+    content_selectors:
+      - 'main'
+      - 'article'
+      - '.content'
+      - '.main-content'
+      - '.post-content'
+      - '.article-content'
+      - '.entry-content'
+      - '.page-content'
+      - '[role="main"]'
+      - '#content'
+      - '#main'
 
 # =============================================================================
 # Configuration Reference
