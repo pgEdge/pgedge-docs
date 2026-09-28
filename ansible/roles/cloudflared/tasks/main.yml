@@ -1,0 +1,86 @@
+# Cloudflared Role - Main Tasks
+---
+- name: Check if cloudflared is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/cloudflared
+  register: cloudflared_binary
+
+- name: Download cloudflared
+  ansible.builtin.get_url:
+    url: "{{ cf_download_url }}"
+    dest: /usr/local/bin/cloudflared
+    mode: '0755'
+  when: not cloudflared_binary.stat.exists
+
+- name: Create cloudflared config directory
+  ansible.builtin.file:
+    path: /etc/cloudflared
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Check if tunnel credentials exist
+  ansible.builtin.stat:
+    path: "{{ cf_credentials_file }}"
+  register: credentials_file
+
+- name: Display manual setup instructions if credentials don't exist
+  ansible.builtin.debug:
+    msg: |
+      Cloudflared credentials not found. Manual setup required:
+
+      1. Run on the server as root:
+         cloudflared tunnel login
+
+      2. Create the tunnel:
+         cloudflared tunnel create {{ cf_tunnel_name }}
+
+      3. Copy credentials to {{ cf_credentials_file }}:
+         cp ~/.cloudflared/<tunnel-id>.json {{ cf_credentials_file }}
+
+      4. Get the tunnel ID and set it in your configuration
+
+      5. Configure DNS in Cloudflare dashboard:
+         - Add a CNAME record for {{ cf_internal_hostname }}
+         - Point it to <tunnel-id>.cfargotunnel.com
+
+      6. Re-run this playbook after setup is complete.
+  when: not credentials_file.stat.exists
+
+- name: Deploy cloudflared configuration
+  ansible.builtin.template:
+    src: config.yml.j2
+    dest: "{{ cf_config_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart cloudflared
+  when: credentials_file.stat.exists
+
+- name: Install cloudflared as a service
+  ansible.builtin.command:
+    cmd: cloudflared service install
+    creates: /etc/systemd/system/cloudflared.service
+  when: credentials_file.stat.exists
+
+- name: Ensure cloudflared service is enabled and started
+  ansible.builtin.systemd:
+    name: cloudflared
+    enabled: true
+    state: started
+    daemon_reload: true
+  when: credentials_file.stat.exists
+
+- name: Verify tunnel is connected
+  ansible.builtin.command:
+    cmd: cloudflared tunnel info {{ cf_tunnel_name }}
+  register: tunnel_info
+  changed_when: false
+  failed_when: false
+  when: credentials_file.stat.exists
+
+- name: Display tunnel status
+  ansible.builtin.debug:
+    msg: "{{ tunnel_info.stdout_lines }}"
+  when: credentials_file.stat.exists and tunnel_info.rc == 0

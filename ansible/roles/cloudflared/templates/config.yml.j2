@@ -1,0 +1,12 @@
+# Cloudflare Tunnel Configuration
+# Managed by Ansible - do not edit manually
+
+tunnel: {{ cf_tunnel_name }}
+credentials-file: {{ cf_credentials_file }}
+
+ingress:
+  - hostname: {{ cf_internal_hostname }}
+    service: {{ cf_service_url }}
+    originRequest:
+      noTLSVerify: true
+  - service: http_status:404

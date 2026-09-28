@@ -1,0 +1,6 @@
+# Cloudflared Role - Handlers
+---
+- name: Restart cloudflared
+  ansible.builtin.systemd:
+    name: cloudflared
+    state: restarted

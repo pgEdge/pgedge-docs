@@ -1,0 +1,84 @@
+# =============================================================================
+# pgEdge Website Crawler Configuration
+# =============================================================================
+#
+# Configure websites to crawl for documentation content.
+# Run 'sudo crawl-website' to crawl all configured sites.
+#
+# NOTE: This file is NOT managed by Ansible after initial deployment.
+# Your changes will be preserved across Ansible runs.
+#
+# =============================================================================
+
+websites:
+  # -------------------------------------------------------------------------
+  # pgEdge Corporate Website
+  # -------------------------------------------------------------------------
+  - name: pgedge-website
+    base_url: https://www.pgedge.com
+    product: "pgEdge Website"
+    version: ""
+    max_pages: 200
+    delay_seconds: 1.0
+
+    # URL patterns to crawl (supports * wildcard)
+    # Pages not matching any pattern will be skipped
+    url_patterns:
+      # Company information
+      - https://www.pgedge.com/company
+      - https://www.pgedge.com/contact
+      - https://www.pgedge.com/support
+
+      # Products and solutions (note: /products and /solutions return 404)
+      - https://www.pgedge.com/products/*
+      - https://www.pgedge.com/solutions/*
+
+      # Blog and news
+      - https://www.pgedge.com/blog
+      - https://www.pgedge.com/blog/*
+      - https://www.pgedge.com/press-releases
+      - https://www.pgedge.com/press-releases/*
+
+      # Resources
+      - https://www.pgedge.com/resources/faq
+
+    # Additional selectors to remove (site-specific)
+    # These are in addition to the default nav/header/footer selectors
+    remove_selectors:
+      - '.hero-cta'
+      - '.demo-request'
+      - '.contact-form'
+      - '.pricing-cta'
+      - '.signup-form'
+
+    # Content selectors (in order of preference)
+    # Leave empty to use defaults: article, main, .content, etc.
+    content_selectors: []
+
+# =============================================================================
+# Configuration Reference
+# =============================================================================
+#
+# Website configuration options:
+#
+#   name: Unique identifier for this crawl (used for output directory)
+#   base_url: Starting URL for the crawl
+#   product: Product name to tag documents with
+#   version: Version string (optional)
+#   max_pages: Maximum number of pages to crawl (default: 100)
+#   delay_seconds: Delay between requests in seconds (default: 1.0)
+#
+#   url_patterns: List of URL patterns to match
+#     - Exact URLs: https://example.com/page
+#     - Wildcards: https://example.com/blog/* (matches any subpath)
+#     - Only pages matching at least one pattern will be crawled
+#
+#   remove_selectors: Additional CSS selectors for elements to remove
+#     - Default removals include: nav, header, footer, .cta, etc.
+#     - Add site-specific selectors here
+#
+#   content_selectors: CSS selectors for main content (in preference order)
+#     - Defaults: article, main, .content, .main-content, etc.
+#     - Specify custom selectors if the site uses different structure
+#
+# =============================================================================

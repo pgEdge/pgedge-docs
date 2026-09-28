@@ -1,0 +1,99 @@
+# GitHub OIDC Role - Main Tasks
+# Creates IAM OIDC provider and role for GitHub Actions to trigger SSM commands
+---
+- name: Get AWS account ID
+  amazon.aws.aws_caller_info:
+    region: "{{ github_oidc_region }}"
+  register: caller_info
+
+- name: Check if GitHub Actions OIDC provider exists
+  ansible.builtin.command:
+    cmd: >
+      aws iam list-open-id-connect-providers
+      --region {{ github_oidc_region }}
+      --query "OpenIDConnectProviderList[?ends_with(Arn, '/token.actions.githubusercontent.com')].Arn"
+      --output text
+  register: existing_oidc
+  changed_when: false
+
+- name: Create GitHub Actions OIDC provider
+  ansible.builtin.command:
+    cmd: >
+      aws iam create-open-id-connect-provider
+      --url https://token.actions.githubusercontent.com
+      --thumbprint-list {{ github_oidc_thumbprint }}
+      --client-id-list sts.amazonaws.com
+      --tags Key=Project,Value=pgedge-docs Key=ManagedBy,Value=ansible
+      --region {{ github_oidc_region }}
+  register: oidc_provider
+  when: existing_oidc.stdout | length == 0
+
+- name: Create IAM role for GitHub Actions
+  amazon.aws.iam_role:
+    name: "{{ github_oidc_role_name }}"
+    region: "{{ github_oidc_region }}"
+    assume_role_policy_document: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "Federated": "arn:aws:iam::{{ caller_info.account }}:oidc-provider/token.actions.githubusercontent.com"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+              "StringEquals": {
+                "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+              },
+              "StringLike": {
+                "token.actions.githubusercontent.com:sub": "repo:{{ github_oidc_repo }}:ref:refs/heads/{{ github_oidc_branch }}",
+                "token.actions.githubusercontent.com:workflow_ref": "{{ github_oidc_repo }}/.github/workflows/{{ github_oidc_workflow_file }}@refs/heads/{{ github_oidc_branch }}"
+              }
+            }
+          }
+        ]
+      }
+    state: present
+    tags:
+      Project: pgedge-docs
+      ManagedBy: ansible
+  register: github_oidc_role
+
+- name: Attach SSM inline policy to GitHub Actions role
+  amazon.aws.iam_policy:
+    iam_type: role
+    iam_name: "{{ github_oidc_role_name }}"
+    policy_name: ssm-send-command
+    policy_json: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": "ssm:SendCommand",
+            "Resource": [
+              "arn:aws:ssm:{{ github_oidc_region }}::document/AWS-RunShellScript",
+              "arn:aws:ec2:{{ github_oidc_region }}:{{ caller_info.account }}:instance/{{ github_oidc_ssm_instance_id }}"
+            ]
+          },
+          {
+            "Effect": "Allow",
+            "Action": "ssm:GetCommandInvocation",
+            "Resource": "arn:aws:ssm:{{ github_oidc_region }}:{{ caller_info.account }}:*"
+          }
+        ]
+      }
+    state: present
+
+- name: Display GitHub Actions configuration
+  ansible.builtin.debug:
+    msg: |
+      GitHub OIDC setup complete!
+
+      Role ARN: {{ github_oidc_role.iam_role.arn }}
+
+      Add these secrets to the GitHub repo ({{ github_oidc_repo }}):
+        AWS_ROLE_ARN: {{ github_oidc_role.iam_role.arn }}
+        RAG_INSTANCE_ID: {{ github_oidc_ssm_instance_id }}
+        AWS_REGION: {{ github_oidc_region }}

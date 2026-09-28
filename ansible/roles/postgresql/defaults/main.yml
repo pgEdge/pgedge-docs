@@ -1,0 +1,29 @@
+# PostgreSQL Role - Default Variables
+
+pg_version: "{{ postgresql.version | default('17') }}"
+
+pg_database: "{{ postgresql.database.name }}"
+pg_user: "{{ postgresql.database.user }}"
+pg_password: "{{ postgresql.database.password }}"
+
+pg_extensions: "{{ postgresql.extensions | default(['pgvector']) }}"
+
+# Standalone packages that don't follow postgresql-XX-name pattern
+pg_standalone_packages: "{{ postgresql.standalone_packages | default(['vectorizer']) }}"
+
+pg_config: "{{ postgresql.config | default({}) }}"
+
+# Database locale settings (C.UTF-8 is universally available)
+pg_lc_collate: "{{ postgresql.database.lc_collate | default('C.UTF-8') }}"
+pg_lc_ctype: "{{ postgresql.database.lc_ctype | default('C.UTF-8') }}"
+
+# Vectorizer configuration
+vectorizer_enabled: "{{ postgresql.vectorizer.enabled | default(false) }}"
+vectorizer_provider: "{{ postgresql.vectorizer.provider | default('openai') }}"
+vectorizer_api_key: "{{ postgresql.vectorizer.api_key | default('') }}"
+vectorizer_api_key_dir: "{{ postgresql.vectorizer.api_key_dir | default('/var/lib/postgresql/.pgedge') }}"
+vectorizer_embedding_model: "{{ postgresql.vectorizer.embedding_model | default('text-embedding-3-small') }}"
+vectorizer_chunk_size: "{{ postgresql.vectorizer.chunk_size | default(400) }}"
+vectorizer_chunk_overlap: "{{ postgresql.vectorizer.chunk_overlap | default(50) }}"
+vectorizer_num_workers: "{{ postgresql.vectorizer.num_workers | default(2) }}"
+vectorizer_batch_size: "{{ postgresql.vectorizer.batch_size | default(10) }}"
