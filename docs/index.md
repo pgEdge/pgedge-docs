@@ -672,6 +672,17 @@ hide:
 
 <div class="cards-grid">
 
+  <!-- pgEdge CLI -->
+  <div class="card card-featured">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>pgEdge CLI (<a href="https://github.com/pgEdge/pgedge-cli">pgedge-cli</a>) <span class="chip-new">NEW</span></h3>
+      </div>
+    </div>
+    <p class="card-description">One command line for Starfleet and Control Plane: provision, connect, back up and operate, with output built for scripts and AI agents.</p>
+    <a href="pgedge-cli/" class="card-link">View Documentation →</a>
+  </div>
+
   <!-- Semantic Cache -->
   <div class="card">
     <div class="card-header">

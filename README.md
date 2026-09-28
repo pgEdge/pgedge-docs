@@ -127,7 +127,9 @@ extra:
 ### How It Works
 
 - **`scripts/expand_imports.py`**: Fetches each `!import` source at its pinned
-  ref, copies its `docs/` tree into `build/docs/<docset>/<version>/`, splices the
+  ref, copies its `docs/` tree into `build/docs/<docset>/<version>/` less any
+  files its own `mkdocs.yml` lists under `exclude_docs` (plain paths only; a
+  wildcard fails the build), splices the
   imported repository's own nav into the parent nav, writes a redirect stub at
   `<docset>/index.md` for each entry in `versioned_docsets`, and writes
   `mkdocs.gen.yml`

@@ -187,6 +187,54 @@ def export_docs(git_dir, ref, target):
     return load_yaml(config.stdout) if config.returncode == 0 else {}
 
 
+def apply_exclude_docs(target, spec):
+    """Delete what an imported config's `exclude_docs` names.
+
+    A source keeps pages out of its own site this way, and copying its docs/
+    wholesale would publish them here, sitemap and search index included.
+    MkDocs reads the setting as gitignore lines. Only plain file and directory
+    paths are handled, so any wildcard or negation fails the build rather than
+    being matched differently from MkDocs without a gitignore library.
+
+    Returns the removed paths and the lines that matched nothing.
+    """
+    if isinstance(spec, list):
+        spec = "\n".join(spec)
+    patterns = []
+    for line in (spec or "").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("!") or any(c in line for c in "*?[\\"):
+            raise RuntimeError(
+                f"exclude_docs supports plain paths only, not: {line}"
+            )
+        path = line.rstrip("/")
+        patterns.append((line, path.lstrip("/"), "/" in path, line.endswith("/")))
+
+    def matching(parts):
+        """The first pattern excluding this file or a directory above it."""
+        for i in range(1, len(parts) + 1):
+            is_dir = i < len(parts)
+            for line, path, anchored, dir_only in patterns:
+                if dir_only and not is_dir:
+                    continue
+                subject = "/".join(parts[:i]) if anchored else parts[i - 1]
+                if subject == path:
+                    return line
+        return None
+
+    removed, matched = [], set()
+    for file in sorted(p for p in target.rglob("*") if p.is_file()):
+        rel = file.relative_to(target)
+        line = matching(rel.parts)
+        if line is not None:
+            file.unlink()
+            removed.append(rel.as_posix())
+            matched.add(line)
+    return removed, [line for line, *_ in patterns if line not in matched]
+
+
 # --- Markdown extension union -----------------------------------------------
 
 def _extension_shape(entry):
@@ -442,18 +490,30 @@ def main():
         trail, url, ref = job
         prefix = prefix_for(trail)
         imported = export_docs(mirrors.path_for(url), ref, staging / prefix)
+        exclusions = apply_exclude_docs(
+            staging / prefix, imported.get("exclude_docs")
+        )
         nav = imported.get("nav")
         nav_result = reprefix(nav, prefix) if nav else f"{prefix}/index.md"
-        return trail, nav_result, prefix, imported.get("markdown_extensions")
+        return (trail, nav_result, prefix, imported.get("markdown_extensions"),
+                exclusions)
 
     print(f"Importing {len(imports)} versions...")
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
         results = list(pool.map(fetch_one, imports))
-    expanded = {trail: nav_result for trail, nav_result, _, _ in results}
+    expanded = {trail: nav_result for trail, nav_result, *_ in results}
+
+    for _, _, prefix, _, (removed, unmatched) in results:
+        if removed:
+            print(f"Excluded {len(removed)} file(s) from {prefix}: "
+                  f"{', '.join(removed)}")
+        for line in unmatched:
+            print(f"WARNING: exclude_docs entry {line!r} in {prefix} "
+                  f"matched nothing")
 
     config["markdown_extensions"] = merge_markdown_extensions(
         config.get("markdown_extensions", []),
-        [(prefix, exts) for _, _, prefix, exts in results],
+        [(prefix, exts) for _, _, prefix, exts, _ in results],
     )
 
     stubs = write_redirect_stubs(staging, config)
