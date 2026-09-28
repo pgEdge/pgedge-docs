@@ -370,6 +370,112 @@ sources:
     product: "pg_semantic_cache"
     version: ""
 
+  # ColdFront and SafeSession are pinned rather than "latest": git's
+  # version sort ranks pre-release tags above their release (v1.0-rc1
+  # over v1.0) and test tags above betas (v1.0.0-test1 over
+  # v1.0.0-beta2), so "latest" would load the wrong docs. Bump these
+  # alongside the version the site publishes in mkdocs.yml.
+  - git_url: "https://github.com/pgEdge/coldfront.git"
+    git_tag: "v1.0.0-beta2"
+    doc_path: "README.md"
+    product: "pgEdge ColdFront"
+    version: "1.0.0-beta2"
+
+  - git_url: "https://github.com/pgEdge/coldfront.git"
+    git_tag: "v1.0.0-beta2"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge ColdFront"
+    version: "1.0.0-beta2"
+
+  - git_url: "https://github.com/pgEdge/pgedge-safesession.git"
+    git_tag: "v1.0"
+    doc_path: "README.md"
+    product: "pgEdge SafeSession"
+    version: "1.0"
+
+  - git_url: "https://github.com/pgEdge/pgedge-safesession.git"
+    git_tag: "v1.0"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge SafeSession"
+    version: "1.0"
+
+  - git_url: "https://github.com/pgEdge/pgvolvra.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "README.md"
+    product: "pgvolvra"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgvolvra.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pgvolvra"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pg-healthcheck.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "README.md"
+    product: "pg-healthcheck"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pg-healthcheck.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pg-healthcheck"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-mcp-bridge.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "README.md"
+    product: "pgEdge MCP Bridge"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-mcp-bridge.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge MCP Bridge"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-cli.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "README.md"
+    product: "pgEdge CLI"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-cli.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge CLI"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-ansible.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "README.md"
+    product: "pgEdge Ansible"
+    version: ""
+
+  - git_url: "https://github.com/pgEdge/pgedge-ansible.git"
+    git_tag: "latest"
+    tag_prefix: "v"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge Ansible"
+    version: ""
+
+  # The Starfleet docs repo has no tags; the site builds it from main.
+  - git_url: "https://github.com/pgEdge/pgedge-starfleet-docs.git"
+    git_branch: "main"
+    doc_path: "docs/**/*.md"
+    product: "pgEdge Starfleet"
+    version: ""
+
   # -------------------------------------------------------------------------
   # 3rd-Party Tools and Extensions (via pgEdge/3rd-party-docs MKDocs branches)
   # -------------------------------------------------------------------------
