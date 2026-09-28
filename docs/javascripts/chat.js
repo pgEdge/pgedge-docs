@@ -1041,6 +1041,11 @@
                 return `\x00CODE_BLOCK_${index}\x00`;
             });
 
+            // Tables are emitted on a single line so the newline-to-<br>
+            // conversion below leaves their internals alone, whilst the
+            // inline passes (code, bold, links) still apply to cell contents
+            html = this.renderTables(html);
+
             // Process other markdown (this will convert \n to <br> but not inside placeholders)
             html = html
                 // Headings (process longest patterns first)
@@ -1073,7 +1078,7 @@
                 // Line breaks (but not after block elements or inside code block placeholders)
                 .replace(/\n(?!<)/g, '<br>')
                 // Clean up extra <br> after block elements
-                .replace(/(<\/(?:h[2-6]|ul|pre|li)>)<br>/g, '$1');
+                .replace(/(<\/(?:h[2-6]|ul|pre|li|div)>)<br>/g, '$1');
 
             // Restore code blocks (with real newlines preserved)
             html = html.replace(/\x00CODE_BLOCK_(\d+)\x00/g, (_match, index) => {
@@ -1085,6 +1090,60 @@
             html = html.replace(/(<\/pre>)<br>/g, '$1');
 
             return html;
+        }
+
+        /**
+         * Convert GitHub-style pipe tables to HTML. Expects already-escaped
+         * input; a table needs a header row followed by a separator row such
+         * as |---|:---:|.
+         */
+        renderTables(text) {
+            const splitRow = (line) => {
+                let row = line.trim();
+                if (row.startsWith('|')) row = row.slice(1);
+                if (row.endsWith('|') && !row.endsWith('\\|')) row = row.slice(0, -1);
+                return row.split(/(?<!\\)\|/).map(cell => cell.trim().replace(/\\\|/g, '|'));
+            };
+            const isSeparator = (line) =>
+                /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(line);
+            const isRow = (line) => line.includes('|') && line.trim() !== '';
+
+            const lines = text.split('\n');
+            const out = [];
+            let i = 0;
+            while (i < lines.length) {
+                if (i + 1 < lines.length && isRow(lines[i]) && isSeparator(lines[i + 1])) {
+                    const header = splitRow(lines[i]);
+                    const aligns = splitRow(lines[i + 1]).map(spec => {
+                        const left = spec.startsWith(':');
+                        const right = spec.endsWith(':');
+                        if (left && right) return 'center';
+                        if (right) return 'right';
+                        if (left) return 'left';
+                        return '';
+                    });
+                    const cell = (tag, content, col) => {
+                        const align = aligns[col] ? ` style="text-align: ${aligns[col]}"` : '';
+                        return `<${tag}${align}>${content}</${tag}>`;
+                    };
+
+                    let table = '<div class="ellie-table-wrap"><table class="ellie-table"><thead><tr>';
+                    table += header.map((c, col) => cell('th', c, col)).join('');
+                    table += '</tr></thead><tbody>';
+                    i += 2;
+                    while (i < lines.length && isRow(lines[i])) {
+                        const cells = splitRow(lines[i]);
+                        table += '<tr>' + header.map((_h, col) => cell('td', cells[col] || '', col)).join('') + '</tr>';
+                        i++;
+                    }
+                    table += '</tbody></table></div>';
+                    out.push(table);
+                } else {
+                    out.push(lines[i]);
+                    i++;
+                }
+            }
+            return out.join('\n');
         }
 
         scrollToBottom(force = false) {
