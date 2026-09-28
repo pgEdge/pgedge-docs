@@ -42,7 +42,10 @@
     src: /tmp/pgedge-rag-server.tar.gz
     dest: /tmp/
     remote_src: true
-  when: rag_install_method == 'github'
+  # The download doesn't happen in check mode, so there is nothing to extract
+  when:
+    - rag_install_method == 'github'
+    - not ansible_check_mode
 
 - name: Install RAG server binary
   ansible.builtin.copy:
@@ -50,7 +53,9 @@
     dest: /usr/local/bin/pgedge-rag-server
     mode: '0755'
     remote_src: true
-  when: rag_install_method == 'github'
+  when:
+    - rag_install_method == 'github'
+    - not ansible_check_mode
   notify: Restart RAG Server
 
 - name: Clean up tarball

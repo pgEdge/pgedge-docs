@@ -10,6 +10,8 @@
   ansible.builtin.apt:
     deb: /tmp/pgedge-release.deb
     state: present
+  # The download doesn't happen in check mode, so there is nothing to install
+  when: not ansible_check_mode
 
 - name: Remove temporary release package
   ansible.builtin.file:

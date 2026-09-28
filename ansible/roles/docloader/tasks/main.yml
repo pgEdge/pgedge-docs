@@ -30,7 +30,10 @@
     src: /tmp/pgedge-docloader.tar.gz
     dest: /tmp/
     remote_src: true
-  when: docloader_install_method == 'github'
+  # The download doesn't happen in check mode, so there is nothing to extract
+  when:
+    - docloader_install_method == 'github'
+    - not ansible_check_mode
 
 - name: Install docloader binary
   ansible.builtin.copy:
@@ -38,7 +41,9 @@
     dest: /usr/local/bin/pgedge-docloader
     mode: '0755'
     remote_src: true
-  when: docloader_install_method == 'github'
+  when:
+    - docloader_install_method == 'github'
+    - not ansible_check_mode
 
 - name: Clean up docloader tarball
   ansible.builtin.file:
