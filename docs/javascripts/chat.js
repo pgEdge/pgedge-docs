@@ -1044,7 +1044,7 @@
             // Tables are emitted on a single line so the newline-to-<br>
             // conversion below leaves their internals alone, whilst the
             // inline passes (code, bold, links) still apply to cell contents
-            html = this.renderTables(html);
+            html = this.renderTablesAsHtml(html);
 
             // Process other markdown (this will convert \n to <br> but not inside placeholders)
             html = html
@@ -1097,22 +1097,64 @@
          * input; a table needs a header row followed by a separator row such
          * as |---|:---:|.
          */
-        renderTables(text) {
+        renderTablesAsHtml(text) {
+            // Split on unescaped pipes outside inline code spans, so that
+            // e.g. `a || b` in a cell stays in one piece
             const splitRow = (line) => {
                 let row = line.trim();
                 if (row.startsWith('|')) row = row.slice(1);
-                if (row.endsWith('|') && !row.endsWith('\\|')) row = row.slice(0, -1);
-                return row.split(/(?<!\\)\|/).map(cell => cell.trim().replace(/\\\|/g, '|'));
+                const cells = [];
+                let current = '';
+                let endedWithPipe = false;
+                let pos = 0;
+                while (pos < row.length) {
+                    const ch = row[pos];
+                    endedWithPipe = false;
+                    if (ch === '\\' && row[pos + 1] === '|') {
+                        current += '|';
+                        pos += 2;
+                    } else if (ch === '`') {
+                        let run = 0;
+                        while (row[pos + run] === '`') run++;
+                        const fence = '`'.repeat(run);
+                        let close = row.indexOf(fence, pos + run);
+                        while (close !== -1 && row[close + run] === '`') {
+                            close = row.indexOf(fence, close + run + 1);
+                        }
+                        const end = close === -1 ? pos + run : close + run;
+                        current += row.slice(pos, end);
+                        pos = end;
+                    } else if (ch === '|') {
+                        cells.push(current.trim());
+                        current = '';
+                        endedWithPipe = true;
+                        pos++;
+                    } else {
+                        current += ch;
+                        pos++;
+                    }
+                }
+                if (!endedWithPipe) cells.push(current.trim());
+                return cells;
             };
-            const isSeparator = (line) =>
-                /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(line);
             const isRow = (line) => line.includes('|') && line.trim() !== '';
+            const isSeparator = (line) => {
+                const specs = splitRow(line);
+                return specs.length > 0 && specs.every(spec => /^:?-+:?$/.test(spec));
+            };
+            // GFM only treats the lines as a table when the header and
+            // separator have the same number of columns
+            const isTableStart = (idx) =>
+                idx + 1 < lines.length &&
+                isRow(lines[idx]) &&
+                isSeparator(lines[idx + 1]) &&
+                splitRow(lines[idx]).length === splitRow(lines[idx + 1]).length;
 
             const lines = text.split('\n');
             const out = [];
             let i = 0;
             while (i < lines.length) {
-                if (i + 1 < lines.length && isRow(lines[i]) && isSeparator(lines[i + 1])) {
+                if (isTableStart(i)) {
                     const header = splitRow(lines[i]);
                     const aligns = splitRow(lines[i + 1]).map(spec => {
                         const left = spec.startsWith(':');
@@ -1127,17 +1169,19 @@
                         return `<${tag}${align}>${content}</${tag}>`;
                     };
 
-                    let table = '<div class="ellie-table-wrap"><table class="ellie-table"><thead><tr>';
-                    table += header.map((c, col) => cell('th', c, col)).join('');
-                    table += '</tr></thead><tbody>';
+                    let tableHtml = '<div class="ellie-table-wrap"><table class="ellie-table"><thead><tr>';
+                    tableHtml += header.map((c, col) => cell('th', c, col)).join('');
+                    tableHtml += '</tr></thead><tbody>';
                     i += 2;
-                    while (i < lines.length && isRow(lines[i])) {
+                    // Stop at a new header and separator, in case two tables
+                    // are written without a blank line between them
+                    while (i < lines.length && isRow(lines[i]) && !isTableStart(i)) {
                         const cells = splitRow(lines[i]);
-                        table += '<tr>' + header.map((_h, col) => cell('td', cells[col] || '', col)).join('') + '</tr>';
+                        tableHtml += '<tr>' + header.map((_h, col) => cell('td', cells[col] || '', col)).join('') + '</tr>';
                         i++;
                     }
-                    table += '</tbody></table></div>';
-                    out.push(table);
+                    tableHtml += '</tbody></table></div>';
+                    out.push(tableHtml);
                 } else {
                     out.push(lines[i]);
                     i++;
