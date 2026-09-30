@@ -270,7 +270,7 @@ Sets up documentation loading tools:
 
 | File | Purpose |
 |------|---------|
-| `/etc/pgedge/docloader/config.yaml` | Document sources (git repos, local paths) |
+| `/etc/pgedge/docloader/config.yaml` | Site repository, database and extra sources (managed by Ansible) |
 | `/etc/pgedge/docloader/websites.yaml` | Website crawling configuration |
 | `/etc/pgedge/docloader/.atlassian` | Atlassian credentials (email + API token) |
 
@@ -352,34 +352,44 @@ Default wiki settings can be overridden in your variables:
 | `docloader_wiki_space` | Confluence space key | `KB` |
 | `docloader_wiki_parent_page` | Parent page ID to extract from | `61571365` |
 
-**Adding Document Sources:**
+**Adding or Removing Document Sources:**
 
-Edit `/etc/pgedge/docloader/config.yaml` to add documentation sources. Sources can be Git repositories or local paths:
+What Ellie loads is decided by the documentation site's `mkdocs.yml`, not by
+`config.yaml`. On every run, `load-docs` fetches this repository at `main`,
+reads the nav, and loads:
 
-```yaml
-sources:
-  # Git repository with tag
-  - git_url: "https://github.com/org/repo.git"
-    git_tag: "v1.0.0"
-    doc_path: "docs/**/*.md"
-    product: "Product Name"
-    version: "1.0.0"
+- every section of `!import` entries, at the version the site treats as latest
+  (the newest stable release, else the newest pre-release, else Development),
+  using the imported repository's `docs/` tree at exactly that ref;
+- the site's own pages that the nav links to, grouped by top-level section;
+- the `extra_sources` in `config.yaml`, for content the site does not publish
+  (the website crawl, the package scan and the wiki).
 
-  # Git repository with branch
-  - git_url: "https://github.com/org/repo.git"
-    git_branch: "main"
-    doc_path: "**/*.rst"
-    product: "Product Name"
-    version: "latest"
+It then deletes the rows of documents that are no longer published: a removed
+section or page, a file dropped from a repository, or a version that has been
+replaced. The vectorizer deletes their chunks with them.
 
-  # Local directory
-  - local_path: "/var/lib/pgedge/docloader/websites/my-site"
-    doc_path: "*.md"
-    product: "My Website"
-    version: ""
+To add, bump or remove a product, change `mkdocs.yml` (usually by merging the
+`sync-mkdocs` PR, which updates it from `pgedge-doc-sources`). Merging a change
+to `mkdocs.yml` or `docs/**` triggers `update-rag-index.yml`, which runs
+`load-docs` on the server; nothing else needs editing.
+
+Safeguards:
+
+- A source that fails to fetch keeps its existing rows, and the run exits
+  non-zero.
+- If `mkdocs.yml` cannot be fetched or parsed, only `extra_sources` are loaded
+  and nothing is deleted.
+- A run that would delete more than half of all documents
+  (`docloader_prune_max_fraction`) stops; rerun with `--force-prune` if that is
+  expected.
+
+```bash
+sudo load-docs --list               # Show the sources mkdocs.yml resolves to
+sudo load-docs --dry-run --skip-prep  # Fetch sources; report what would be removed
+sudo load-docs --source "ACE"       # Load one source by product or index (no pruning)
+sudo load-docs --no-prune           # Load without deleting anything
 ```
-
-Supported document formats: Markdown (`.md`), HTML (`.html`), reStructuredText (`.rst`), DocBook SGML (`.sgml`), DocBook XML (`.xml`).
 
 **Configuring Website Crawling:**
 

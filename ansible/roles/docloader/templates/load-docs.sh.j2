@@ -7,13 +7,22 @@
 #   1. Crawl websites (crawl-website)
 #   2. Scan package repositories (scan-packages)
 #   3. Extract wiki content (extract-wiki)
-#   4. Clone/update git repositories
-#   5. Load all documentation into the RAG database
+#   4. Read the documentation site's mkdocs.yml to find what it publishes
+#   5. Fetch each published source and load it into the RAG database
+#   6. Delete rows for documents the site no longer publishes
+#
+# The site's mkdocs.yml is the source of truth: adding, bumping or removing an
+# !import there (by hand or through the sync-mkdocs PR) changes what is loaded
+# on the next run, with no change to this script or its configuration. Only
+# content the site does not publish (the website crawl, the package scan and
+# the wiki) is listed in the config file, under extra_sources.
 #
 # Usage:
 #   sudo load-docs              # Run all steps and load all documentation
-#   sudo load-docs --dry-run    # Show what would be done without loading
-#   sudo load-docs --source N   # Load only source N (0-indexed)
+#   sudo load-docs --list       # List the sources that would be loaded
+#   sudo load-docs --dry-run    # Fetch sources and report, without loading
+#   sudo load-docs --source X   # Load only source X (index or product name)
+#   sudo load-docs --no-prune   # Load without deleting unpublished documents
 #   sudo load-docs --skip-crawl # Skip website crawling
 #   sudo load-docs --skip-packages  # Skip package scanning
 #   sudo load-docs --skip-wiki  # Skip wiki extraction
@@ -23,11 +32,13 @@
 # =============================================================================
 
 import os
+import re
 import sys
+import shutil
+import fnmatch
 import subprocess
 import argparse
-import tempfile
-from pathlib import Path
+from glob import glob
 
 try:
     import yaml
@@ -38,6 +49,16 @@ except ImportError:
 CONFIG_FILE = "{{ docloader_config_dir }}/config.yaml"
 RUN_USER = "{{ docloader_user }}"
 ATLASSIAN_CREDS = "{{ docloader_config_dir }}/.atlassian"
+
+# Formats pgedge-docloader converts; anything else in a directory is skipped
+SUPPORTED_EXTENSIONS = ('.md', '.html', '.htm', '.rst', '.sgml', '.sgm', '.xml')
+
+# The same rules scripts/expand_imports.py applies when building the site, so
+# that Ellie and the site agree on what an !import means.
+IMPORT_RE = re.compile(r"^!import\s+(?P<url>[^?\s]+)(?:\?branch=(?P<ref>.+))?$")
+SAFE_URL_RE = re.compile(r"^https://github\.com/[\w.-]+/[\w.-]+?(?:\.git)?/?$")
+SAFE_REF_RE = re.compile(r"^[A-Za-z0-9][\w./-]*$")
+PRERELEASE_RE = re.compile(r"(?<![A-Za-z])(alpha|beta|rc)", re.I)
 
 
 def run_prep_script(script_name: str, description: str, dry_run: bool = False,
@@ -80,96 +101,219 @@ def load_config(config_path: str) -> dict:
         return yaml.safe_load(f)
 
 
-def run_as_user(cmd: list, user: str, cwd: str = None, env: dict = None) -> subprocess.CompletedProcess:
+def run_as_user(cmd: list, user: str, cwd: str = None,
+                capture: bool = False) -> subprocess.CompletedProcess:
     """Run a command as a specific user."""
-    full_cmd = ['sudo', '-u', user]
-    if env:
-        for k, v in env.items():
-            full_cmd.extend([f'{k}={v}'])
-    full_cmd.extend(cmd)
-    return subprocess.run(full_cmd, cwd=cwd, capture_output=False)
+    return subprocess.run(['sudo', '-u', user] + cmd, cwd=cwd,
+                          capture_output=capture, text=True)
 
 
-def get_repo_dir(data_dir: str, git_url: str, ref: str) -> str:
-    """Generate a unique directory name for a git repo + ref combination."""
-    # Extract repo name from URL
-    repo_name = git_url.rstrip('/').split('/')[-1]
-    if repo_name.endswith('.git'):
-        repo_name = repo_name[:-4]
-
-    # Sanitize ref for use in directory name
-    safe_ref = ref.replace('/', '_').replace('\\', '_')
-
-    return os.path.join(data_dir, 'repos', f'{repo_name}_{safe_ref}')
+def slug(text) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")
 
 
-def resolve_latest_tag(repo_dir: str, user: str, tag_prefix: str = '') -> str:
-    """Find the highest-version tag in a repository.
+# -----------------------------------------------------------------------------
+# Git
+# -----------------------------------------------------------------------------
 
-    If tag_prefix is set (e.g., 'v', 'REL_'), only consider tags matching that prefix.
-    Returns the tag name, or empty string if no tags found.
+def fetch_ref(git_url: str, ref: str, repo_dir: str, user: str) -> str:
+    """Check out exactly `ref` (a branch or tag) of `git_url` into repo_dir.
+
+    Only that one ref is fetched, one commit deep, so a repository with a long
+    history (postgres) costs no more than a small one, and a branch that is not
+    the default branch is reachable (a plain shallow clone only tracks the
+    default branch). The directory is reused across runs; files the ref no
+    longer has are removed, so they drop out of the database as well.
+
+    Returns the checked-out commit, or '' on failure.
     """
-    # Get tags sorted by version (newest first)
-    cmd = ['git', 'tag', '--sort=-version:refname']
-    result = subprocess.run(
-        ['sudo', '-u', user] + cmd,
-        cwd=repo_dir, capture_output=True, text=True
-    )
-    if result.returncode != 0 or not result.stdout.strip():
-        return ''
+    git = ['git', '-C', repo_dir]
 
-    tags = result.stdout.strip().split('\n')
-    if tag_prefix:
-        tags = [t for t in tags if t.startswith(tag_prefix)]
-
-    return tags[0] if tags else ''
-
-
-def clone_or_update_repo(git_url: str, ref: str, ref_type: str, repo_dir: str,
-                         user: str, skip_checkout: bool = False) -> bool:
-    """Clone or update a git repository to a specific ref."""
-    repo_path = Path(repo_dir)
-
-    if repo_path.exists():
-        print(f"  Updating existing repo: {repo_dir}")
-        # Fetch and checkout
-        result = run_as_user(['git', 'fetch', '--all', '--tags', '--force'], user, cwd=repo_dir)
-        if result.returncode != 0:
-            print(f"  Warning: git fetch failed", file=sys.stderr)
-            return False
+    if not os.path.isdir(os.path.join(repo_dir, '.git')):
+        # git runs as `user`, so the parent it creates the checkout in must be
+        # theirs too; this script runs as root
+        parent = os.path.dirname(repo_dir)
+        os.makedirs(parent, exist_ok=True)
+        shutil.chown(parent, user, user)
+        if run_as_user(['git', 'init', '-q', repo_dir], user).returncode != 0:
+            return ''
+        run_as_user(git + ['remote', 'add', 'origin', git_url], user)
     else:
-        print(f"  Cloning: {git_url}")
-        repo_path.parent.mkdir(parents=True, exist_ok=True)
-        # Shallow clone for efficiency
-        result = run_as_user(['git', 'clone', '--depth', '1', git_url, repo_dir], user)
+        run_as_user(git + ['remote', 'set-url', 'origin', git_url], user)
+
+    steps = [
+        ['fetch', '-q', '--depth', '1', '--force', '--no-tags', 'origin', ref],
+        ['checkout', '-q', '--force', '--detach', 'FETCH_HEAD'],
+        ['clean', '-q', '-ffdx'],
+    ]
+    for step in steps:
+        result = run_as_user(git + step, user, capture=True)
         if result.returncode != 0:
-            print(f"  Error: git clone failed", file=sys.stderr)
-            return False
-        # Fetch all refs for checkout
-        result = run_as_user(['git', 'fetch', '--all', '--tags', '--force'], user, cwd=repo_dir)
-        if result.returncode != 0:
-            print(f"  Error: git fetch failed after clone", file=sys.stderr)
-            return False
+            print(f"  Error: git {step[0]} failed: {result.stderr.strip()}", file=sys.stderr)
+            return ''
 
-    if skip_checkout:
-        return True
+    result = run_as_user(git + ['rev-parse', '--short', 'HEAD'], user, capture=True)
+    return result.stdout.strip()
 
-    # Checkout the specific ref
-    print(f"  Checking out {ref_type}: {ref}")
-    result = run_as_user(['git', 'checkout', ref], user, cwd=repo_dir)
-    if result.returncode != 0:
-        print(f"  Error: git checkout failed", file=sys.stderr)
-        return False
 
-    # Pull if it's a branch
-    if ref_type == 'branch':
-        run_as_user(['git', 'pull', '--ff-only'], user, cwd=repo_dir)
+# -----------------------------------------------------------------------------
+# Sources from the documentation site
+# -----------------------------------------------------------------------------
 
-    return True
+class NavLoader(yaml.SafeLoader):
+    """mkdocs.yml carries !!python/name tags; read them as plain strings."""
+
+
+NavLoader.add_multi_constructor(
+    '', lambda loader, suffix, node:
+        loader.construct_scalar(node) if isinstance(node, yaml.ScalarNode)
+        else loader.construct_sequence(node) if isinstance(node, yaml.SequenceNode)
+        else loader.construct_mapping(node))
+
+
+def walk_nav(node, trail=()):
+    """Yield (trail, value) for every leaf of the nav."""
+    if isinstance(node, list):
+        for item in node:
+            yield from walk_nav(item, trail)
+    elif isinstance(node, dict):
+        for key, value in node.items():
+            yield from walk_nav(value, trail + (str(key),))
+    elif isinstance(node, str):
+        yield trail, node
+
+
+def pick_version(versions: list) -> dict:
+    """The version the site treats as latest (see docset_versions in
+    scripts/expand_imports.py): the newest stable release, else the newest
+    pre-release, else Development. The nav lists versions newest first."""
+    stable = [v for v in versions if v['label'] != 'Development'
+              and not PRERELEASE_RE.search(v['label'])]
+    released = [v for v in versions if v['label'] != 'Development']
+    return (stable or released or versions)[0]
+
+
+def site_sources(site_dir: str, site: dict, data_dir: str) -> list:
+    """Build the source list from the site's mkdocs.yml nav.
+
+    - Every nav section of !import entries becomes one source, at the version
+      the site treats as latest, loading that repository's docs/ tree (which is
+      what the site imports). The section title is the product name.
+    - Every top-level nav section of the site's own pages becomes one source
+      holding exactly the pages the nav links to, so pages the site stopped
+      publishing are not loaded.
+    """
+    with open(os.path.join(site_dir, site.get('mkdocs_file', 'mkdocs.yml'))) as f:
+        mkdocs = yaml.load(f, Loader=NavLoader)
+
+    docs_dir = os.path.join(site_dir, mkdocs.get('docs_dir', 'docs'))
+    imports, pages = {}, {}
+
+    for trail, value in walk_nav(mkdocs.get('nav', [])):
+        if value.startswith('!import'):
+            match = IMPORT_RE.match(value.strip())
+            url, ref = (match['url'], match['ref'] or 'HEAD') if match else ('', '')
+            if not (SAFE_URL_RE.match(url) and SAFE_REF_RE.match(ref)):
+                raise ValueError(f"Refusing import at {'/'.join(trail)}: {value}")
+            # Keyed by the section's whole trail, so two sections that share a
+            # title under different parents stay separate products
+            section = trail[:-1] if len(trail) > 1 else trail
+            label = trail[-1] if len(trail) > 1 else ''
+            imports.setdefault(section, []).append(
+                {'label': label, 'git_url': url, 'ref': ref})
+        elif value.endswith('.md') and '://' not in value:
+            pages.setdefault(trail[0] if trail else 'Home', []).append(value)
+
+    # Checkout and staging directory names must be unique; fall back to the
+    # whole trail for a section whose title slug is already taken
+    def unique_dir(trail, used: set) -> str:
+        name = slug(trail[-1])
+        if name in used:
+            name = slug('-'.join(trail))
+        used.add(name)
+        return name
+
+    repo_names, stage_names = set(), set()
+
+    sources = []
+    for section, versions in imports.items():
+        chosen = pick_version(versions)
+        label = chosen['label']
+        sources.append({
+            'product': section[-1],
+            'version': '' if label in ('', 'Development') else label.lstrip('vV'),
+            'git_url': chosen['git_url'],
+            'git_ref': chosen['ref'],
+            'repo_dir': os.path.join(data_dir, 'repos', unique_dir(section, repo_names)),
+            'doc_path': 'docs/**/*.md',
+        })
+
+    # A page linked from more than one section is loaded once, under the first
+    seen = set()
+    for section, paths in pages.items():
+        paths = sorted(set(paths) - seen)
+        seen.update(paths)
+        if paths:
+            sources.append({
+                'product': section,
+                'version': '',
+                'site_pages': paths,
+                'docs_dir': docs_dir,
+                'local_path': os.path.join(data_dir, 'site-pages', unique_dir((section,), stage_names)),
+            })
+
+    return sources
+
+
+def staged_pages(source: dict) -> dict:
+    """Map each staged link path to the site page it points at."""
+    links = {}
+    for page in source['site_pages']:
+        target = os.path.join(source['docs_dir'], page)
+        if os.path.isfile(target):
+            links[os.path.join(source['local_path'], page)] = target
+        else:
+            print(f"  Warning: nav page not found: {target}", file=sys.stderr)
+    return links
+
+
+def stage_site_pages(source: dict, user: str):
+    """Mirror the pages a nav section links to as symlinks in one directory, so
+    docloader loads just those pages in one run. A page dropped from the nav
+    loses its link, and its row is then pruned."""
+    stage = source['local_path']
+    shutil.rmtree(stage, ignore_errors=True)
+    os.makedirs(stage, exist_ok=True)
+    for link, target in staged_pages(source).items():
+        os.makedirs(os.path.dirname(link), exist_ok=True)
+        os.symlink(target, link)
+    subprocess.run(['chown', '-R', f'{user}:{user}', os.path.dirname(stage)], check=False)
+
+
+# -----------------------------------------------------------------------------
+# Loading
+# -----------------------------------------------------------------------------
+
+def expand_source(pattern: str) -> set:
+    """The files pgedge-docloader will load for --source `pattern`, matched the
+    same way it matches them, so that pruning never removes a file it loads."""
+    if os.path.isfile(pattern):
+        return {pattern}
+    if '**' in pattern:
+        base, file_pattern = pattern.split('**', 1)
+        base, file_pattern = base.rstrip('/') or '.', file_pattern.lstrip('/')
+        return {os.path.join(root, name)
+                for root, _dirs, names in os.walk(base)
+                for name in names if fnmatch.fnmatchcase(name, file_pattern)}
+    if any(c in pattern for c in '*?['):
+        return {p for p in glob(pattern) if os.path.isfile(p)}
+    return {os.path.join(root, name)
+            for root, _dirs, names in os.walk(pattern)
+            for name in names if name.lower().endswith(SUPPORTED_EXTENSIONS)}
 
 
 def run_docloader(source_path: str, config: dict, product: str, version: str,
-                  user: str, password_file: str, dry_run: bool = False) -> bool:
+                  user: str, password_file: str) -> bool:
     """Run pgedge-docloader for a source."""
     db = config['database']
     cols = config['columns']
@@ -189,120 +333,190 @@ def run_docloader(source_path: str, config: dict, product: str, version: str,
         '--col-row-created', cols['row_created'],
         '--col-row-updated', cols['row_updated'],
         '--set-column', f'product={product}',
+        '--set-column', f'version={version}',
         '--update',
     ]
 
-    if version:
-        cmd.extend(['--set-column', f'version={version}'])
-    else:
-        cmd.extend(['--set-column', 'version='])
-
-    if dry_run:
-        print(f"  Would run: {' '.join(cmd)}")
-        return True
-
-    # Set PGPASSWORD from password file
-    env = {}
-    if password_file and os.path.exists(password_file):
-        with open(password_file, 'r') as f:
-            env['PGPASSWORD'] = f.read().strip()
-
-    print(f"  Running docloader for: {source_path}")
-
-    # Build the command - pass environment through subprocess, not command line
-    full_cmd = ['sudo', '--preserve-env=PGPASSWORD', '-u', user]
-    full_cmd.extend(cmd)
-
     # Pass PGPASSWORD via environment to avoid exposure in process list
     run_env = os.environ.copy()
-    if env:
-        run_env.update(env)
+    if password_file and os.path.exists(password_file):
+        with open(password_file, 'r') as f:
+            run_env['PGPASSWORD'] = f.read().strip()
 
+    print(f"  Running docloader for: {source_path}")
+    full_cmd = ['sudo', '--preserve-env=PGPASSWORD', '-u', user] + cmd
     result = subprocess.run(full_cmd, capture_output=False, env=run_env)
     return result.returncode == 0
 
 
-def process_source(index: int, source: dict, config: dict, user: str, dry_run: bool = False) -> bool:
-    """Process a single documentation source."""
+def process_source(index: int, source: dict, config: dict, user: str,
+                   dry_run: bool = False):
+    """Fetch and load one source.
+
+    Returns (ok, files): the files the source holds, which is what pruning
+    keeps. A source that fails returns ok=False and its rows are left alone.
+    """
     product = source.get('product', 'Unknown')
-    version = source.get('version', '')
-    doc_path = source.get('doc_path', '**/*.md')
+    version = str(source.get('version', '') or '')
+    print(f"\n[{index}] Processing: {product} {version}".rstrip())
 
-    print(f"\n[{index}] Processing: {product} {version}".strip())
-
-    data_dir = config.get('data_dir', '/var/lib/pgedge/docloader')
-    password_file = config['database'].get('password_file')
-
-    # Determine source path
     if 'git_url' in source:
-        git_url = source['git_url']
-
-        # Determine ref type and value
-        use_latest = False
-        if 'git_tag' in source:
-            ref = source['git_tag']
-            ref_type = 'tag'
-            if ref == 'latest':
-                use_latest = True
-                # For latest, clone to a shared repo dir (not tag-specific)
-                ref = 'main'
-                ref_type = 'branch'
-        else:
-            ref = source.get('git_branch', 'main')
-            ref_type = 'branch'
-
-        repo_dir = get_repo_dir(data_dir, git_url, ref if not use_latest else 'latest')
-
-        if not dry_run:
-            # Ensure repos directory exists with correct ownership
-            repos_dir = os.path.join(data_dir, 'repos')
-            os.makedirs(repos_dir, exist_ok=True)
-            subprocess.run(['chown', '-R', f'{user}:{user}', repos_dir], check=True)
-
-            if not clone_or_update_repo(git_url, ref, ref_type, repo_dir, user,
-                                        skip_checkout=use_latest):
-                print(f"  Error: Failed to clone/update repository", file=sys.stderr)
-                return False
-
-            # Resolve latest tag after fetch
-            if use_latest:
-                tag_prefix = source.get('tag_prefix', '')
-                latest_tag = resolve_latest_tag(repo_dir, user, tag_prefix)
-                if not latest_tag:
-                    print(f"  Error: No tags found in repository", file=sys.stderr)
-                    return False
-                print(f"  Resolved latest tag: {latest_tag}")
-                # Checkout the resolved tag
-                result = run_as_user(['git', 'checkout', latest_tag], user, cwd=repo_dir)
-                if result.returncode != 0:
-                    print(f"  Error: Failed to checkout {latest_tag}", file=sys.stderr)
-                    return False
-                # Auto-detect version from tag if not explicitly set in config
-                if not source.get('version', ''):
-                    resolved_version = latest_tag
-                    for prefix in ['v', 'V', tag_prefix]:
-                        if prefix and resolved_version.startswith(prefix):
-                            resolved_version = resolved_version[len(prefix):]
-                            break
-                    version = resolved_version
-                print(f"  Version: {version}")
-        else:
-            if use_latest:
-                print(f"  Would clone/update: {git_url} (latest tag, prefix: {source.get('tag_prefix', 'any')})")
-            else:
-                print(f"  Would clone/update: {git_url} ({ref_type}: {ref})")
-
-        source_path = os.path.join(repo_dir, doc_path)
+        ref = source.get('git_ref') or source.get('git_branch') or source.get('git_tag') or 'HEAD'
+        repo_dir = source.get('repo_dir') or os.path.join(
+            config.get('data_dir', '/var/lib/pgedge/docloader'), 'repos', slug(product))
+        commit = fetch_ref(source['git_url'], ref, repo_dir, user)
+        if not commit:
+            print(f"  Error: Failed to fetch {source['git_url']} at {ref}", file=sys.stderr)
+            return False, set()
+        print(f"  Checked out {ref} ({commit})")
+        source_path = os.path.join(repo_dir, source.get('doc_path', 'docs/**/*.md'))
 
     elif 'local_path' in source:
-        local_path = source['local_path']
-        source_path = os.path.join(local_path, doc_path)
+        if 'site_pages' in source:
+            if dry_run:
+                files = set(staged_pages(source))
+                print(f"  Would load {len(files)} site pages")
+                return True, files
+            stage_site_pages(source, user)
+        if not os.path.isdir(source['local_path']):
+            print(f"  Error: Directory not found: {source['local_path']}", file=sys.stderr)
+            return False, set()
+        source_path = source['local_path']
+        if source.get('doc_path'):
+            source_path = os.path.join(source_path, source['doc_path'])
 
     else:
-        print(f"  Error: Source must have either 'git_url' or 'local_path'", file=sys.stderr)
-        return False
+        print("  Error: Source must have either 'git_url' or 'local_path'", file=sys.stderr)
+        return False, set()
 
-    return run_docloader(source_path, config, product, version, user, password_file, dry_run)
+    files = expand_source(source_path)
+    if dry_run:
+        print(f"  Would load {len(files)} files from: {source_path}")
+        return True, files
+    if not files:
+        print("  No files to load")
+        return True, files
+
+    ok = run_docloader(source_path, config, product, version, user,
+                       config['database'].get('password_file'))
+    return ok, files
+
+
+# -----------------------------------------------------------------------------
+# Pruning
+# -----------------------------------------------------------------------------
+
+def prune(config: dict, keep: set, protected: list, dry_run: bool,
+          force: bool) -> bool:
+    """Delete rows for documents that no source holds any more.
+
+    Rows under a protected directory (a source that failed this run) are kept,
+    so a fetch error never empties a product. The vectorizer's delete trigger
+    removes the deleted rows' chunks and embeddings.
+    """
+    import psycopg2
+
+    print(f"\n{'=' * 60}")
+    print("Step: Removing documents the site no longer publishes")
+    print('=' * 60)
+
+    db = config['database']
+    with open(db['password_file']) as f:
+        password = f.read().strip()
+    col = config['columns']['filename']
+    table = db['table']
+    max_fraction = float(config.get('prune', {}).get('max_fraction', 0.5))
+
+    conn = psycopg2.connect(host=db['host'], port=db['port'], dbname=db['name'],
+                            user=db['user'], password=password,
+                            sslmode=db.get('sslmode', 'prefer'))
+    try:
+        with conn, conn.cursor() as cur:
+            where = f"""{col} IS NOT NULL
+                AND NOT ({col} = ANY(%(keep)s::text[]))
+                AND NOT EXISTS (SELECT 1 FROM unnest(%(protected)s::text[]) p
+                                WHERE starts_with({col}, p))"""
+            params = {'keep': sorted(keep), 'protected': protected}
+
+            # Measured against the table as it stands once this run's files are
+            # loaded, so a dry run (which has loaded nothing) and a real run
+            # reach the same verdict.
+            cur.execute(f"SELECT count(*), count(*) FILTER (WHERE {col} = ANY(%(keep)s::text[])) "
+                        f"FROM {table}", params)
+            total, present = cur.fetchone()
+            total += len(keep) - present
+            cur.execute(f"SELECT product, count(*) FROM {table} WHERE {where} "
+                        f"GROUP BY product ORDER BY product", params)
+            doomed = cur.fetchall()
+            count = sum(n for _, n in doomed)
+
+            for product, n in doomed:
+                print(f"  {product}: {n} documents")
+            if not count:
+                print("  Nothing to remove")
+                return True
+
+            if total and count / total > max_fraction and not force:
+                print(f"  Refusing to remove {count} of {total} documents "
+                      f"(more than {max_fraction:.0%}). Rerun with --force-prune "
+                      f"if this is expected.", file=sys.stderr)
+                return False
+
+            if dry_run:
+                print(f"  Would remove {count} of {total} documents")
+                return True
+
+            cur.execute(f"DELETE FROM {table} WHERE {where}", params)
+            print(f"  Removed {cur.rowcount} of {total} documents")
+            return True
+    finally:
+        conn.close()
+
+
+def remove_unused_repos(data_dir: str, sources: list):
+    """Delete checkouts no current source uses (e.g. a removed product)."""
+    repos_dir = os.path.join(data_dir, 'repos')
+    in_use = {os.path.basename(s['repo_dir']) for s in sources if s.get('repo_dir')}
+    for name in sorted(os.listdir(repos_dir)) if os.path.isdir(repos_dir) else []:
+        if name not in in_use:
+            print(f"  Removing unused checkout: {name}")
+            shutil.rmtree(os.path.join(repos_dir, name), ignore_errors=True)
+
+
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
+
+def build_sources(config: dict):
+    """Fetch the documentation site and build the full source list.
+
+    Returns (sources, site_ok). When the site cannot be read, only
+    extra_sources are returned and site_ok is False, which disables pruning.
+    """
+    data_dir = config.get('data_dir', '/var/lib/pgedge/docloader')
+    site = config.get('site')
+    extras = [dict(s) for s in config.get('extra_sources', [])]
+    if not site:
+        return extras, False
+
+    site_dir = os.path.join(data_dir, 'site')
+    print(f"\nReading published sources from {site['git_url']} ({site.get('git_ref', 'main')})")
+    commit = fetch_ref(site['git_url'], site.get('git_ref', 'main'), site_dir, RUN_USER)
+    if not commit:
+        print("  Error: could not fetch the documentation site", file=sys.stderr)
+        return extras, False
+
+    try:
+        sources = site_sources(site_dir, site, data_dir)
+        if not sources:
+            raise ValueError("the nav lists no pages or imports")
+    except Exception as e:
+        print(f"  Error: could not read {site.get('mkdocs_file', 'mkdocs.yml')}: {e}",
+              file=sys.stderr)
+        return extras, False
+
+    print(f"  {site.get('mkdocs_file', 'mkdocs.yml')} at {commit}: {len(sources)} sources")
+    return sources + extras, True
 
 
 def main():
@@ -314,20 +528,24 @@ Configuration file: {CONFIG_FILE}
 
 Examples:
   sudo load-docs              # Run all steps and load all sources
-  sudo load-docs --dry-run    # Show what would be done
-  sudo load-docs --source 0   # Load only the first source
-  sudo load-docs --list       # List all sources
+  sudo load-docs --list       # List the sources mkdocs.yml resolves to
+  sudo load-docs --dry-run    # Fetch sources; show what would load/be removed
+  sudo load-docs --source ACE # Load only one source (by index or product)
   sudo load-docs --skip-prep  # Skip prep steps, just load docs
 '''
     )
     parser.add_argument('--dry-run', '-n', action='store_true',
-                        help='Show what would be done without making changes')
-    parser.add_argument('--source', '-s', type=int, metavar='N',
-                        help='Process only source N (0-indexed)')
+                        help='Fetch sources and report, without changing the database')
+    parser.add_argument('--source', '-s', metavar='X',
+                        help='Process only source X (index or product name); disables pruning')
     parser.add_argument('--list', '-l', action='store_true',
                         help='List all sources and exit')
     parser.add_argument('--config', '-c', default=CONFIG_FILE,
                         help='Path to configuration file')
+    parser.add_argument('--no-prune', action='store_true',
+                        help='Do not delete documents the site no longer publishes')
+    parser.add_argument('--force-prune', action='store_true',
+                        help='Prune even when it would remove most documents')
 
     # Skip options for preparatory steps
     parser.add_argument('--skip-crawl', action='store_true',
@@ -357,28 +575,27 @@ Examples:
         print(f"Error: Failed to load configuration: {e}", file=sys.stderr)
         sys.exit(1)
 
-    sources = config.get('sources', [])
-    if not sources:
-        print("No sources configured in config file", file=sys.stderr)
-        sys.exit(1)
-
-    # List mode
-    if args.list:
-        print(f"Documentation sources ({len(sources)} total):\n")
-        for i, source in enumerate(sources):
-            product = source.get('product', 'Unknown')
-            version = source.get('version', '')
-            if 'git_url' in source:
-                ref = source.get('git_tag') or source.get('git_branch', 'main')
-                print(f"  [{i}] {product} {version} ({ref})")
-            else:
-                print(f"  [{i}] {product} {version} (local)")
-        sys.exit(0)
-
     # Ensure data directory exists
     data_dir = config.get('data_dir', '/var/lib/pgedge/docloader')
     os.makedirs(data_dir, exist_ok=True)
     subprocess.run(['chown', '-R', f'{RUN_USER}:{RUN_USER}', data_dir], check=True)
+
+    sources, site_ok = build_sources(config)
+    if not sources:
+        print("No sources found", file=sys.stderr)
+        sys.exit(1)
+
+    # List mode
+    if args.list:
+        print(f"\nDocumentation sources ({len(sources)} total):\n")
+        for i, source in enumerate(sources):
+            where = (f"{source['git_url'].split('github.com/')[-1]} @ {source['git_ref']}"
+                     if 'git_url' in source else
+                     f"{len(source['site_pages'])} site pages" if 'site_pages' in source
+                     else source['local_path'])
+            print(f"  [{i}] {source['product']} {source.get('version', '')}".rstrip()
+                  + f"  ({where})")
+        sys.exit(0 if site_ok else 1)
 
     print(f"Loading documentation from: {args.config}")
     print(f"Data directory: {data_dir}")
@@ -410,27 +627,50 @@ Examples:
     print("Step: Loading documentation into database")
     print('=' * 60)
 
-    # Process sources
     if args.source is not None:
-        if args.source < 0 or args.source >= len(sources):
-            print(f"Error: Source index {args.source} out of range (0-{len(sources)-1})", file=sys.stderr)
+        if args.source.isdigit() and int(args.source) < len(sources):
+            selected = [int(args.source)]
+        else:
+            selected = [i for i, s in enumerate(sources)
+                        if s['product'].lower() == args.source.lower()]
+        if not selected:
+            print(f"Error: No source matches {args.source!r} (see --list)", file=sys.stderr)
             sys.exit(1)
-        sources_to_process = [(args.source, sources[args.source])]
+        sources_to_process = [(i, sources[i]) for i in selected]
     else:
         sources_to_process = list(enumerate(sources))
 
     success_count = 0
     fail_count = 0
+    keep = set()
+    protected = []
 
     for index, source in sources_to_process:
         try:
-            if process_source(index, source, config, RUN_USER, args.dry_run):
-                success_count += 1
-            else:
-                fail_count += 1
+            ok, files = process_source(index, source, config, RUN_USER, args.dry_run)
         except Exception as e:
             print(f"  Error: {e}", file=sys.stderr)
+            ok, files = False, set()
+        keep |= files
+        if ok:
+            success_count += 1
+        else:
             fail_count += 1
+            protected.append(source.get('repo_dir') or source.get('local_path', ''))
+
+    # Step 5: Prune, only after a complete run against a readable site
+    prune_ok = True
+    if args.no_prune or args.source is not None:
+        print("\nSkipping removal of unpublished documents")
+    elif not site_ok:
+        print("\nSkipping removal of unpublished documents: the site could not be read",
+              file=sys.stderr)
+        prune_ok = False
+    else:
+        prune_ok = prune(config, keep, [p for p in protected if p],
+                         args.dry_run, args.force_prune)
+        if prune_ok and not args.dry_run:
+            remove_unused_repos(data_dir, sources)
 
     print(f"\n{'=' * 60}")
     print("Summary")
@@ -443,7 +683,7 @@ Examples:
 
     print(f"Documentation loading: {success_count} successful, {fail_count} failed")
 
-    sys.exit(0 if fail_count == 0 else 1)
+    sys.exit(0 if fail_count == 0 and site_ok and prune_ok else 1)
 
 
 if __name__ == '__main__':

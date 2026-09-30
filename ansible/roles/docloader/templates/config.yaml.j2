@@ -2,19 +2,17 @@
 # pgEdge Docloader Configuration
 # =============================================================================
 #
-# This file configures documentation sources to load into the RAG database.
-# Edit this file to add or remove documentation sources.
+# Managed by Ansible - changes made on the server are overwritten on deploy.
 #
-# NOTE: This file is NOT managed by Ansible after initial deployment.
-# Your changes will be preserved across Ansible runs.
+# What Ellie loads is decided by the documentation site's mkdocs.yml, not by
+# this file: load-docs reads the site's nav on every run and loads each
+# section at the version the site treats as latest, and removes documents the
+# site no longer publishes. To add, bump or remove a product, change
+# mkdocs.yml (usually through the sync-mkdocs PR from pgedge-doc-sources).
+#
+# Only content the site does not publish is listed here, under extra_sources.
 #
 # Usage: Run 'sudo load-docs' to process all sources
-#
-# Source list is aligned with pgEdge/pgedge-postgres-mcp NLA-KB builder
-# canonical list (examples/pgedge-nla-kb-builder.yaml, maintained by
-# Muhammad Aqeel). Versioning strategy differs: Ellie uses latest-only
-# per product for RAG retrieval quality; NLA-KB pins multiple versions
-# for version-aware lookup.
 #
 # =============================================================================
 
@@ -40,578 +38,47 @@ columns:
   row_updated: updated_at
 
 # =============================================================================
-# Documentation Sources
+# Documentation Site (source of truth)
 # =============================================================================
-#
-# Each source specifies a git repository or local path to load.
-#
-# Git repository options:
-#   git_url: URL to clone (required for git sources)
-#   git_tag: Specific tag to checkout, or "latest" to auto-detect newest tag
-#   git_branch: Specific branch to checkout (default: main)
-#   tag_prefix: Filter tags by prefix when using "latest" (e.g., "v", "REL_")
-#   doc_path: Glob pattern within repo for docs (e.g., "docs/**/*.md")
+site:
+  git_url: "{{ docloader_site_git_url }}"
+  git_ref: "{{ docloader_site_git_ref }}"
+  mkdocs_file: "{{ docloader_site_mkdocs_file }}"
+
+# Removing documents the site no longer publishes. A run that would remove
+# more than max_fraction of all documents stops instead, unless load-docs is
+# given --force-prune; that guards against a broken or truncated nav.
+prune:
+  max_fraction: {{ docloader_prune_max_fraction }}
+
+# =============================================================================
+# Extra Sources (content the site does not publish)
+# =============================================================================
 #
 # Local path options:
 #   local_path: Local directory path
-#   doc_path: Glob pattern within path for docs
+#   doc_path: Glob pattern within path for docs (optional)
+#
+# Git repository options:
+#   git_url: URL to fetch
+#   git_ref: Branch or tag to check out (default: HEAD)
+#   doc_path: Glob pattern within repo for docs (e.g., "docs/**/*.md")
 #
 # Metadata (mapped to custom columns):
 #   product: Product name (required)
-#   version: Version string (optional — auto-detected from tag if empty)
+#   version: Version string (optional)
+#
+# Supported document formats: Markdown (.md), HTML (.html, .htm),
+# reStructuredText (.rst), DocBook SGML (.sgml, .sgm) and XML (.xml). All are
+# converted to Markdown for storage, and the pgedge-vectorizer extension
+# generates embeddings for new and changed rows.
 #
 # =============================================================================
 
-sources:
-  # -------------------------------------------------------------------------
-  # PostgreSQL Core Documentation (upstream — raw SGML)
-  # -------------------------------------------------------------------------
-  # tag_prefix pins to major version; version is fixed since tag format
-  # (REL_18_1) doesn't map cleanly to a display version.
-  - git_url: "https://github.com/postgres/postgres.git"
-    git_tag: "latest"
-    tag_prefix: "REL_18_"
-    doc_path: "doc/src/sgml/*.sgml"
-    product: "PostgreSQL"
-    version: "18"
-
-  - git_url: "https://github.com/postgres/postgres.git"
-    git_tag: "latest"
-    tag_prefix: "REL_17_"
-    doc_path: "doc/src/sgml/*.sgml"
-    product: "PostgreSQL"
-    version: "17"
-
-  - git_url: "https://github.com/postgres/postgres.git"
-    git_tag: "latest"
-    tag_prefix: "REL_16_"
-    doc_path: "doc/src/sgml/*.sgml"
-    product: "PostgreSQL"
-    version: "16"
-
-  - git_url: "https://github.com/postgres/postgres.git"
-    git_tag: "latest"
-    tag_prefix: "REL_15_"
-    doc_path: "doc/src/sgml/*.sgml"
-    product: "PostgreSQL"
-    version: "15"
-
-  - git_url: "https://github.com/postgres/postgres.git"
-    git_tag: "latest"
-    tag_prefix: "REL_14_"
-    doc_path: "doc/src/sgml/*.sgml"
-    product: "PostgreSQL"
-    version: "14"
-
-  # -------------------------------------------------------------------------
-  # pgEdge Docs Site (in-repo sections)
-  # -------------------------------------------------------------------------
-  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
-    git_branch: "main"
-    doc_path: "docs/cloud/**/*.md"
-    product: "pgEdge Cloud"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
-    git_branch: "main"
-    doc_path: "docs/platform/**/*.md"
-    product: "pgEdge Platform"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
-    git_branch: "main"
-    doc_path: "docs/enterprise/**/*.md"
-    product: "pgEdge Enterprise"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
-    git_branch: "main"
-    doc_path: "docs/ai-toolkit/**/*.md"
-    product: "pgEdge AI Toolkit"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
-    git_branch: "main"
-    doc_path: "docs/kubernetes/**/*.md"
-    product: "pgEdge Kubernetes"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
-    git_branch: "main"
-    doc_path: "docs/postgresql/**/*.md"
-    product: "pgEdge PostgreSQL"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
-    git_branch: "main"
-    doc_path: "docs/container-images/**/*.md"
-    product: "pgEdge Container Images"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docs.git"
-    git_branch: "main"
-    doc_path: "docs/pgedge-container/**/*.md"
-    product: "pgEdge Container"
-    version: ""
-
-  # -------------------------------------------------------------------------
-  # Spock Multi-Master Replication
-  # -------------------------------------------------------------------------
-  - git_url: "https://github.com/pgEdge/spock.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "Spock"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/spock.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "Spock"
-    version: ""
-
-  # -------------------------------------------------------------------------
-  # pgEdge Tools and Extensions
-  # -------------------------------------------------------------------------
-  - git_url: "https://github.com/pgEdge/ace.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge ACE"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/ace.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge ACE"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-vectorizer.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Vectorizer"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-vectorizer.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Vectorizer"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-rag-server.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge RAG Server"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-rag-server.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge RAG Server"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docloader.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Docloader"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-docloader.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Docloader"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-postgres-mcp.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Postgres MCP"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-postgres-mcp.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Postgres MCP"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-anonymizer.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Anonymizer"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-anonymizer.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Anonymizer"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/snowflake.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Snowflake"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/snowflake.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Snowflake"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/lolor.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge LOLOR"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/lolor.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge LOLOR"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/control-plane.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Control Plane"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/control-plane.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Control Plane"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-helm.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Helm"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-helm.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Helm"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/ai-dba-workbench.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge AI DBA Workbench"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/ai-dba-workbench.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge AI DBA Workbench"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/radar.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Radar"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/radar.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Radar"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-loadgen.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Load Generator"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-loadgen.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Load Generator"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pg_semantic_cache.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pg_semantic_cache"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pg_semantic_cache.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pg_semantic_cache"
-    version: ""
-
-  # ColdFront and SafeSession are pinned rather than "latest": git's
-  # version sort ranks pre-release tags above their release (v1.0-rc1
-  # over v1.0) and test tags above betas (v1.0.0-test1 over
-  # v1.0.0-beta2), so "latest" would load the wrong docs. Bump these
-  # alongside the version the site publishes in mkdocs.yml.
-  - git_url: "https://github.com/pgEdge/coldfront.git"
-    git_tag: "v1.0.0-beta2"
-    doc_path: "README.md"
-    product: "pgEdge ColdFront"
-    version: "1.0.0-beta2"
-
-  - git_url: "https://github.com/pgEdge/coldfront.git"
-    git_tag: "v1.0.0-beta2"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge ColdFront"
-    version: "1.0.0-beta2"
-
-  - git_url: "https://github.com/pgEdge/pgedge-safesession.git"
-    git_tag: "v1.0"
-    doc_path: "README.md"
-    product: "pgEdge SafeSession"
-    version: "1.0"
-
-  - git_url: "https://github.com/pgEdge/pgedge-safesession.git"
-    git_tag: "v1.0"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge SafeSession"
-    version: "1.0"
-
-  - git_url: "https://github.com/pgEdge/pgvolvra.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgvolvra"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgvolvra.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgvolvra"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pg-healthcheck.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pg-healthcheck"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pg-healthcheck.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pg-healthcheck"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-mcp-bridge.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge MCP Bridge"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-mcp-bridge.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge MCP Bridge"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-cli.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge CLI"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-cli.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge CLI"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-ansible.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "README.md"
-    product: "pgEdge Ansible"
-    version: ""
-
-  - git_url: "https://github.com/pgEdge/pgedge-ansible.git"
-    git_tag: "latest"
-    tag_prefix: "v"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Ansible"
-    version: ""
-
-  # The Starfleet docs repo has no tags; the site builds it from main.
-  - git_url: "https://github.com/pgEdge/pgedge-starfleet-docs.git"
-    git_branch: "main"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge Starfleet"
-    version: ""
-
-  # -------------------------------------------------------------------------
-  # 3rd-Party Tools and Extensions (via pgEdge/3rd-party-docs MKDocs branches)
-  # -------------------------------------------------------------------------
-  # Branch names encode product+version; one most-recent released branch
-  # per product. Switch to newer branch when next version lands upstream.
-  #
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgadmin913"
-    doc_path: "docs/**/*.md"
-    product: "pgAdmin 4"
-    version: "9.13"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgbouncer125"
-    doc_path: "docs/**/*.md"
-    product: "PgBouncer"
-    version: "1.25.1"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgbackrest258"
-    doc_path: "docs/**/*.md"
-    product: "pgBackRest"
-    version: "2.58.0"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "postgis362"
-    doc_path: "docs/**/*.md"
-    product: "PostGIS"
-    version: "3.6.2"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgvector081"
-    doc_path: "docs/**/*.md"
-    product: "pgvector"
-    version: "0.8.1"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgaudit180"
-    doc_path: "docs/**/*.md"
-    product: "pgAudit"
-    version: "18.0"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "psycopg2910"
-    doc_path: "docs/**/*.md"
-    product: "psycopg2"
-    version: "2.9.10"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "postgrest145"
-    doc_path: "docs/**/*.md"
-    product: "PostgREST"
-    version: "14.5"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "patroni411"
-    doc_path: "docs/**/*.md"
-    product: "patroni"
-    version: "4.1.1"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "cnpg129"
-    doc_path: "docs/**/*.md"
-    product: "CloudNativePG"
-    version: "1.29"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgcron167"
-    doc_path: "docs/**/*.md"
-    product: "pg_cron"
-    version: "1.6.7"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgmq1110"
-    doc_path: "docs/**/*.md"
-    product: "pgmq"
-    version: "1.11.0"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgtokenizer011"
-    doc_path: "docs/**/*.md"
-    product: "pg_tokenizer"
-    version: "0.1.1"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgvectorize0260"
-    doc_path: "docs/**/*.md"
-    product: "pg_vectorize"
-    version: "0.26.0"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pgstatmonitor231"
-    doc_path: "docs/**/*.md"
-    product: "pg_stat_monitor"
-    version: "2.3.1"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "pldebugger19"
-    doc_path: "docs/**/*.md"
-    product: "pldebugger"
-    version: "1.9"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "vchordbm25030"
-    doc_path: "docs/**/*.md"
-    product: "VectorChord-bm25"
-    version: "0.3.0"
-
-  - git_url: "https://github.com/pgEdge/3rd-party-docs.git"
-    git_branch: "systemstats321"
-    doc_path: "docs/**/*.md"
-    product: "pgEdge System Stats"
-    version: "3.2.1"
-
-# =============================================================================
-# Notes
-# =============================================================================
-#
-# Supported document formats:
-#   - Markdown (.md)
-#   - HTML (.html, .htm)
-#   - reStructuredText (.rst)
-#   - DocBook SGML (.sgml)
-#   - DocBook XML (.xml)
-#
-# All formats are automatically converted to Markdown for storage.
-#
-# The pgedge-vectorizer extension will automatically generate embeddings
-# for new/updated rows in the docs table.
-#
-# =============================================================================
-
+extra_sources:
   # -------------------------------------------------------------------------
   # Website Content (crawled by crawl-website)
   # -------------------------------------------------------------------------
-  # Run 'sudo crawl-website' first to populate this directory
   - local_path: "{{ docloader_data_dir }}/websites/pgedge-website"
     doc_path: "*.md"
     product: "pgEdge Website"
@@ -620,7 +87,6 @@ sources:
   # -------------------------------------------------------------------------
   # Package Availability (generated by scan-packages)
   # -------------------------------------------------------------------------
-  # Run 'sudo scan-packages' to generate/update the package list
   - local_path: "{{ docloader_data_dir }}/packages"
     doc_path: "*.md"
     product: "pgEdge Packages"
@@ -629,7 +95,6 @@ sources:
   # -------------------------------------------------------------------------
   # Internal Wiki (extracted by extract-wiki)
   # -------------------------------------------------------------------------
-  # Run 'sudo extract-wiki' to extract content from Confluence
   - local_path: "{{ docloader_data_dir }}/wiki"
     doc_path: "*.md"
     product: "pgEdge Internal KB"

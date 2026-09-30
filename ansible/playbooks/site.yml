@@ -79,8 +79,7 @@
             - Then: sudo load-docs
 
           Next steps:
-            1. Edit /etc/pgedge/docloader/config.yaml to customize sources
-            2. Run 'sudo crawl-website' to crawl website content
-            3. Run 'sudo load-docs' to load documentation into the database
-            4. Test the chat interface on your documentation site
+            1. Run 'sudo load-docs --list' to see the sources mkdocs.yml resolves to
+            2. Run 'sudo load-docs' to load documentation into the database
+            3. Test the chat interface on your documentation site
       tags: always

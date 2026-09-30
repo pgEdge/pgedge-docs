@@ -322,11 +322,11 @@ The RAG knowledge base is updated automatically through two mechanisms:
 
 ### GitHub Actions (on docs merge)
 
-When changes to `docs/` are pushed to `main`, a GitHub Actions workflow triggers an update:
+When changes to `docs/` or `mkdocs.yml` are pushed to `main`, a GitHub Actions workflow triggers an update:
 
 1. The workflow authenticates to AWS via OIDC (no stored credentials)
 2. Sends an SSM RunShellScript command to the EC2 instance
-3. The instance runs `load-docs`, which clones/updates all git sources and loads them into the database
+3. The instance runs `load-docs`, which reads the published sources from `mkdocs.yml`, fetches them, loads them into the database, and removes documents that are no longer published
 4. The workflow polls for completion and reports success/failure
 
 **Workflow file:** `.github/workflows/update-rag-index.yml`
@@ -348,41 +348,25 @@ A cron job runs every Sunday at 3:00 AM UTC to update all sources, including web
 
 Both the workflow and cron job use `flock` to prevent concurrent runs.
 
-### Auto-Latest-Tag
+### Sources Come From mkdocs.yml
 
-All git-based sources use `git_tag: "latest"` in the docloader config. On each run, `load-docs`:
+`mkdocs.yml` decides what Ellie knows about. On each run, `load-docs` fetches this repository at `main` and reads the nav:
 
-1. Clones or fetches the repo
-2. Lists all tags, sorted by semantic version
-3. Filters by `tag_prefix` (e.g., `v`, `REL_18_`, `pgbouncer_`)
-4. Checks out the highest-version matching tag
-5. Auto-detects the version from the tag name (strips the prefix)
+1. Each section of `!import` entries is one product. It is loaded at the version the site treats as latest, chosen from the versions listed in that section (not from the repository's tags): the first stable release, else the first pre-release, else `Development`. This is the same rule `scripts/expand_imports.py` uses for a docset's default version, so Ellie and the site agree. For example, PostgreSQL loads v18 while v19 is only a beta.
+2. The imported repository's `docs/` tree is loaded at exactly that ref, which is what the site publishes.
+3. The site's own pages are loaded if the nav links to them, grouped by top-level section.
+4. The website crawl, package scan and wiki are loaded from `extra_sources` in `/etc/pgedge/docloader/config.yaml`, since the site does not publish them.
+5. Rows for documents that are no longer published (a removed section or page, a file deleted upstream, or a replaced version) are deleted, along with their chunks.
 
-This means patch and minor releases are picked up automatically without config changes.
+So adding, bumping or removing a product or version needs only a change to `mkdocs.yml`, usually by merging the `sync-mkdocs` PR that updates it from `pgedge-doc-sources`. A version that exists upstream but is not in `mkdocs.yml` is not loaded.
 
-**Tag prefix reference:**
+Safeguards:
 
-| Source | tag_prefix | Example tag |
-|--------|-----------|-------------|
-| PostgreSQL 18/17/16 | `REL_18_`, `REL_17_`, `REL_16_` | `REL_18_1` |
-| pgEdge products | `v` | `v5.0.4` |
-| pgAdmin 4 | `REL-` | `REL-9_10` |
-| PgBouncer | `pgbouncer_` | `pgbouncer_1_25_0` |
-| pgBackRest | `release/` | `release/2.57.0` |
-| PostGIS | `3.` | `3.5.3` |
-| pgvector | `v` | `v0.8.2` |
+- A source that fails to fetch keeps its existing rows, and the run exits non-zero.
+- If `mkdocs.yml` cannot be fetched or parsed, only `extra_sources` are loaded and nothing is deleted.
+- A run that would delete more than half of all documents stops; rerun with `--force-prune` if that is expected.
 
-### Manual Config Updates Required
-
-Auto-latest-tag handles patch and minor releases automatically, but the following changes require manually editing the config on the server (`/etc/pgedge/docloader/config.yaml`) or updating the Ansible template (`ansible/roles/docloader/templates/config.yaml.j2`):
-
-- **New major PostgreSQL version** — When pgEdge starts supporting PostgreSQL 19, add a new source entry with `tag_prefix: "REL_19_"` and `version: "19"`.
-- **New pgEdge product or extension** — Add a new source entry with the repo URL and appropriate `tag_prefix`.
-- **New third-party tool** — Add a new source entry. Check the repo's tag naming convention to set the right `tag_prefix`.
-- **PostGIS major version bump** — The current `tag_prefix: "3."` only picks up PostGIS 3.x tags. When PostGIS 4.0 releases, update the prefix to `"4."` (or add a second entry for both).
-- **Dropping support for an old version** — Remove the corresponding source entry.
-
-The config on the server (`/etc/pgedge/docloader/config.yaml`) is NOT overwritten by Ansible after initial deployment. To apply config template changes from the repo, either redeploy the config manually via SSM or re-run the Ansible playbook with the config file removed first.
+`config.yaml` is managed by Ansible and redeployed on every run of the `docloader` role, so do not edit it on the server.
 
 ### Running load-docs Manually
 
@@ -396,9 +380,10 @@ aws ssm send-command \
 
 # On the server directly:
 sudo load-docs              # Run all steps
-sudo load-docs --dry-run    # Preview without loading
-sudo load-docs --list       # List all configured sources
-sudo load-docs --source 0   # Load only source 0
+sudo load-docs --dry-run    # Fetch sources; show what would load and be removed
+sudo load-docs --list       # List the sources mkdocs.yml resolves to
+sudo load-docs --source ACE # Load only one source, by product or index (no removal)
+sudo load-docs --no-prune   # Load without removing anything
 sudo load-docs --skip-prep  # Skip website/wiki/package crawling
 ```
 
