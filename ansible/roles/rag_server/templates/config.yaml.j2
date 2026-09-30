@@ -40,6 +40,9 @@ pipelines:
       - table: "{{ table.table }}"
         text_column: "{{ table.text_column }}"
         vector_column: "{{ table.vector_column }}"
+{% if table.id_column is defined %}
+        id_column: "{{ table.id_column }}"
+{% endif %}
 {% if table.filter is defined %}
         filter:
           conditions:
@@ -63,6 +66,12 @@ pipelines:
     # Retrieval settings for response quality
     token_budget: {{ rag_pipeline.token_budget | default(8000) }}
     top_n: {{ rag_pipeline.top_n | default(20) }}
+
+    search:
+      # Rows the BM25 keyword search reads per request, which the server
+      # defaults to 10000; below the corpus size, keyword search covers only
+      # an arbitrary subset of it
+      bm25_max_documents: {{ rag_pipeline.search.bm25_max_documents | default(10000) }}
 
     system_prompt: |
 {{ rag_pipeline.system_prompt | indent(6, first=true) }}

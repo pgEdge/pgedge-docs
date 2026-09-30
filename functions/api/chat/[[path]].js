@@ -52,13 +52,28 @@ export async function onRequest(context) {
     // Build the target URL, preserving query parameters
     const requestUrl = new URL(request.url);
     const search = requestUrl.search;
-    let targetUrl;
-    if (path.startsWith('v1/')) {
-      // Direct API path (e.g., v1/health, v1/pipelines/...)
-      targetUrl = `${RAG_INTERNAL_URL}/${path}${search}`;
-    } else {
+    // Only the endpoints chat.js uses are forwarded. The RAG server has no
+    // authentication of its own, so anything else it serves (the pipeline
+    // list, token usage stats) must not be reachable through this proxy.
+    const pipelinePath = `v1/pipelines/${PIPELINE_NAME}`;
+    let targetPaths;
+    if (request.method === 'GET' && path === 'v1/health') {
+      // chat.js checks health on every page load, and /v1/health pings each
+      // LLM provider, whereas /v1/live (RAG server 2.x) only reports that the
+      // server is up. /v1/health is the fallback for a server without /v1/live.
+      targetPaths = ['v1/live', 'v1/health'];
+    } else if (request.method === 'POST' &&
+               (path === pipelinePath || !path.startsWith('v1/'))) {
       // Default to pipeline endpoint
-      targetUrl = `${RAG_INTERNAL_URL}/v1/pipelines/${PIPELINE_NAME}${search}`;
+      targetPaths = [pipelinePath];
+    } else {
+      return new Response(JSON.stringify({ error: 'Not found' }), {
+        status: 404,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+        },
+      });
     }
 
     // Forward the request
@@ -70,11 +85,17 @@ export async function onRequest(context) {
       headers.set('X-Internal-Secret', RAG_SECRET);
     }
 
-    const response = await fetch(targetUrl, {
-      method: request.method,
-      headers: headers,
-      body: request.method !== 'GET' ? request.body : undefined,
-    });
+    let response;
+    for (const targetPath of targetPaths) {
+      response = await fetch(`${RAG_INTERNAL_URL}/${targetPath}${search}`, {
+        method: request.method,
+        headers: headers,
+        body: request.method !== 'GET' ? request.body : undefined,
+      });
+      if (response.status !== 404) {
+        break;
+      }
+    }
 
     // Add CORS headers to response
     const newHeaders = new Headers(response.headers);
