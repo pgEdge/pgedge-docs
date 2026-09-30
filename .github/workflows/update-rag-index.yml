@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
+      # The nav decides what Ellie loads, so adding, bumping or removing an
+      # !import (e.g. by merging the sync-mkdocs PR) updates the index too
+      - 'mkdocs.yml'
   workflow_dispatch:
 
 permissions:

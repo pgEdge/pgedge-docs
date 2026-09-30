@@ -9,6 +9,7 @@
       - python3-requests
       - python3-bs4
       - python3-html2text
+      - python3-psycopg2
     state: present
 
 - name: Enable cron service
@@ -72,19 +73,14 @@
     - "{{ docloader_config_dir }}"
     - "{{ docloader_data_dir }}"
 
-- name: Check if docloader config exists
-  ansible.builtin.stat:
-    path: "{{ docloader_config_dir }}/config.yaml"
-  register: docloader_config_stat
-
-- name: Deploy initial docloader configuration
+# The config holds no source list (mkdocs.yml does), so it is always managed
+- name: Deploy docloader configuration
   ansible.builtin.template:
     src: config.yaml.j2
     dest: "{{ docloader_config_dir }}/config.yaml"
     owner: "{{ docloader_user }}"
     group: "{{ docloader_group }}"
     mode: '0640'
-  when: not docloader_config_stat.stat.exists
 
 - name: Deploy docloader wrapper script
   ansible.builtin.template:
