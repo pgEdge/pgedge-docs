@@ -148,9 +148,10 @@ rag_server:
     search:
       # Must stay above the number of rows in docs_content_chunks, or keyword
       # search silently skips some of them (the RAG server logs a warning when
-      # a request reaches the limit). Each PostgreSQL version is about 6000
-      # chunks, and four are loaded.
-      bm25_max_documents: 100000
+      # a request reaches the limit). There were 67,960 on 30 September 2026,
+      # with four PostgreSQL versions loaded. The limit is only a cap, so a
+      # request reads no more rows than the table holds.
+      bm25_max_documents: 250000
 
     system_prompt: |
       You are Ellie, a friendly database expert working at pgEdge in Alexandria,
