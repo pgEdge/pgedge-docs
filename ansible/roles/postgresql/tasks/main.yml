@@ -173,16 +173,10 @@
   community.postgresql.postgresql_ext:
     name: vector
     db: "{{ pg_database }}"
+    # Without a version, an extension that already exists is never updated
+    # when a newer package is installed
+    version: latest
     state: present
-
-- name: Check if pgedge_vectorizer extension exists
-  become: true
-  become_user: postgres
-  community.postgresql.postgresql_query:
-    db: "{{ pg_database }}"
-    query: "SELECT COUNT(*) as count FROM pg_extension WHERE extname = 'pgedge_vectorizer'"
-  register: vectorizer_ext_check
-  when: vectorizer_enabled | default(false)
 
 - name: Enable pgedge_vectorizer extension
   become: true
@@ -190,10 +184,9 @@
   community.postgresql.postgresql_ext:
     name: pgedge_vectorizer
     db: "{{ pg_database }}"
+    version: latest
     state: present
-  when:
-    - vectorizer_enabled | default(false)
-    - vectorizer_ext_check.query_result[0].count | int == 0
+  when: vectorizer_enabled | default(false)
 
 - name: Grant privileges to RAG user
   become: true
