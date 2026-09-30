@@ -178,7 +178,7 @@ pipelines:
 
     rag_llm:
       provider: "anthropic"
-      model: "claude-sonnet-4-20250514"
+      model: "claude-sonnet-5-5"
 
     # Retrieval settings
     token_budget: 8000  # Maximum tokens for context
@@ -230,7 +230,12 @@ server:
 GET /v1/health
 ```
 
-Returns `200 OK` if the server is healthy.
+Returns `200 OK` if the server is healthy, after checking that each pipeline's
+LLM providers are reachable. `GET /v1/live` only checks that the server is up,
+and the Pages Function answers the widget's health check with it.
+
+The Pages Function forwards only this health check and queries to the
+`pgedge-docs` pipeline; the RAG server's other endpoints are not public.
 
 ### Query Pipeline
 

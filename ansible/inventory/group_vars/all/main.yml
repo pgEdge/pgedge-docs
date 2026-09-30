@@ -123,11 +123,13 @@ rag_server:
 
     # The vectorizer creates docs_content_chunks from the docs table with
     # embeddings; docs_labelled_chunks is a view over it that prefixes each
-    # chunk with its product and version (see the postgresql role)
+    # chunk with its product and version (see the postgresql role). A view
+    # has no ctid, so the RAG server needs id_column to identify its rows.
     tables:
       - table: "public.docs_labelled_chunks"
         text_column: "content"
         vector_column: "embedding"
+        id_column: "id"
 
     embedding_llm:
       provider: openai
@@ -135,11 +137,20 @@ rag_server:
 
     rag_llm:
       provider: anthropic
-      model: claude-sonnet-4-6
+      # Thinks at the API's default high effort on every answer, since neither
+      # the RAG server nor its LLM library can set effort yet
+      model: claude-sonnet-5-5
 
     # Retrieval settings - higher values improve response quality
     token_budget: 8000  # Maximum tokens for context (default: 4000)
     top_n: 20           # Number of chunks to retrieve (default: 10)
+
+    search:
+      # Must stay above the number of rows in docs_content_chunks, or keyword
+      # search silently skips some of them (the RAG server logs a warning when
+      # a request reaches the limit). Each PostgreSQL version is about 6000
+      # chunks, and four are loaded.
+      bm25_max_documents: 100000
 
     system_prompt: |
       You are Ellie, a friendly database expert working at pgEdge in Alexandria,
@@ -227,8 +238,9 @@ rag_server:
       a feature, setting or syntax that only exists in a later version without
       saying which version introduced it. When the version matters to the
       answer and the user has not said which one they run, answer for the
-      latest stable release and say so. Never show the labels themselves to
-      the user.
+      latest stable release and say so. Never show the labels themselves, or
+      the document numbers and source ids the excerpts are given with, to the
+      user.
 
       IMPORTANT: If discussing the pgEdge Platform CLI tool, recommend the user
       migrates to pgEdge Control Plane, as it's designed to replace the old CLI.

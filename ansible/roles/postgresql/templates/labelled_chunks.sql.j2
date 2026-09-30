@@ -8,8 +8,8 @@
 -- docs_content_chunks. The embeddings are unchanged, and the HNSW index on
 -- docs_content_chunks is still used for the similarity search.
 --
--- ctid is exposed under that name because the RAG server's BM25 search
--- selects ctid, which a view does not otherwise have.
+-- A view has no ctid, so the RAG server pipeline sets id_column to the chunk
+-- id to identify rows.
 --
 -- Dropped and recreated in one transaction rather than CREATE OR REPLACE,
 -- which cannot rename or remove a view's columns if this definition changes.
@@ -18,8 +18,7 @@ BEGIN;
 DROP VIEW IF EXISTS public.docs_labelled_chunks;
 
 CREATE VIEW public.docs_labelled_chunks AS
-SELECT c.ctid AS ctid,
-       c.id,
+SELECT c.id,
        c.source_id,
        c.embedding,
        '[' || concat_ws(' ', d.product, NULLIF(d.version, '')) || '] ' || c.content AS content
