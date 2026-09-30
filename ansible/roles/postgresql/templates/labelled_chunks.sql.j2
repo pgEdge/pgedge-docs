@@ -1,0 +1,31 @@
+-- Labelled documentation chunks for the RAG server
+-- Managed by Ansible - do not edit manually
+--
+-- The RAG server passes only a chunk's text to the model, so without a label
+-- the model cannot tell a PostgreSQL 16 chunk from a PostgreSQL 18 one. This
+-- view prefixes every chunk with its document's product and version, e.g.
+-- "[PostgreSQL 17] ...", and the RAG server searches it instead of
+-- docs_content_chunks. The embeddings are unchanged, and the HNSW index on
+-- docs_content_chunks is still used for the similarity search.
+--
+-- ctid is exposed under that name because the RAG server's BM25 search
+-- selects ctid, which a view does not otherwise have.
+--
+-- Dropped and recreated in one transaction rather than CREATE OR REPLACE,
+-- which cannot rename or remove a view's columns if this definition changes.
+BEGIN;
+
+DROP VIEW IF EXISTS public.docs_labelled_chunks;
+
+CREATE VIEW public.docs_labelled_chunks AS
+SELECT c.ctid AS ctid,
+       c.id,
+       c.source_id,
+       c.embedding,
+       '[' || concat_ws(' ', d.product, NULLIF(d.version, '')) || '] ' || c.content AS content
+FROM public.docs_content_chunks c
+JOIN public.docs d ON d.id = c.source_id;
+
+GRANT SELECT ON public.docs_labelled_chunks TO {{ pg_user }};
+
+COMMIT;

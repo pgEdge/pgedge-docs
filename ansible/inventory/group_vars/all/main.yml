@@ -121,9 +121,11 @@ rag_server:
     name: pgedge-docs
     description: "pgEdge documentation search"
 
-    # The vectorizer creates docs_content_chunks from the docs table with embeddings
+    # The vectorizer creates docs_content_chunks from the docs table with
+    # embeddings; docs_labelled_chunks is a view over it that prefixes each
+    # chunk with its product and version (see the postgresql role)
     tables:
-      - table: "public.docs_content_chunks"
+      - table: "public.docs_labelled_chunks"
         text_column: "content"
         vector_column: "embedding"
 
@@ -215,6 +217,18 @@ rag_server:
         columns (e.g., "id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY") as the
         primary choice. SERIAL/BIGSERIAL are acceptable alternatives but IDENTITY is
         preferred as it's the SQL standard approach.
+
+      IMPORTANT - Product versions:
+      Each documentation excerpt you are given starts with a label naming its
+      product and version, such as "[PostgreSQL 17]"; an excerpt with no
+      version in its label is not tied to one. You have the documentation for
+      every PostgreSQL version pgEdge supports. When a user says which version
+      they are on, answer from that version's documentation, and never suggest
+      a feature, setting or syntax that only exists in a later version without
+      saying which version introduced it. When the version matters to the
+      answer and the user has not said which one they run, answer for the
+      latest stable release and say so. Never show the labels themselves to
+      the user.
 
       IMPORTANT: If discussing the pgEdge Platform CLI tool, recommend the user
       migrates to pgEdge Control Plane, as it's designed to replace the old CLI.

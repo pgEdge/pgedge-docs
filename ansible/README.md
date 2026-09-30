@@ -360,7 +360,9 @@ reads the nav, and loads:
 
 - every section of `!import` entries, at the version the site treats as latest
   (the newest stable release, else the newest pre-release, else Development),
-  using the imported repository's `docs/` tree at exactly that ref;
+  using the imported repository's `docs/` tree at exactly that ref, except
+  that sections listed in `docloader_site_all_versions` (by default just
+  PostgreSQL) are loaded at every version the nav lists except Development;
 - the site's own pages that the nav links to, grouped by top-level section;
 - the `extra_sources` in `config.yaml`, for content the site does not publish
   (the website crawl, the package scan and the wiki).
@@ -368,6 +370,12 @@ reads the nav, and loads:
 It then deletes the rows of documents that are no longer published: a removed
 section or page, a file dropped from a repository, or a version that has been
 replaced. The vectorizer deletes their chunks with them.
+
+The RAG server searches the `docs_labelled_chunks` view, created by the
+`postgresql` role, rather than `docs_content_chunks` directly. The view
+prefixes each chunk with its product and version (for example
+`[PostgreSQL 17]`), because the RAG server passes only a chunk's text to the
+model, and without the label it could not tell the versions apart.
 
 To add, bump or remove a product, change `mkdocs.yml` (usually by merging the
 `sync-mkdocs` PR, which updates it from `pgedge-doc-sources`). Merging a change

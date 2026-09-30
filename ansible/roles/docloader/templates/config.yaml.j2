@@ -44,6 +44,9 @@ site:
   git_url: "{{ docloader_site_git_url }}"
   git_ref: "{{ docloader_site_git_ref }}"
   mkdocs_file: "{{ docloader_site_mkdocs_file }}"
+  # Nav sections loaded at every published version (except Development)
+  # rather than only the latest, matched by section title
+  all_versions: {{ docloader_site_all_versions | to_json }}
 
 # Removing documents the site no longer publishes. A run that would remove
 # more than max_fraction of all documents stops instead, unless load-docs is

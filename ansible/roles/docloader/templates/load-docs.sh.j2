@@ -198,7 +198,9 @@ def site_sources(site_dir: str, site: dict, data_dir: str) -> list:
 
     - Every nav section of !import entries becomes one source, at the version
       the site treats as latest, loading that repository's docs/ tree (which is
-      what the site imports). The section title is the product name.
+      what the site imports). The section title is the product name. A section
+      named in the site's all_versions list becomes one source per version
+      instead, for every version except Development.
     - Every top-level nav section of the site's own pages becomes one source
       holding exactly the pages the nav links to, so pages the site stopped
       publishing are not loaded.
@@ -235,18 +237,30 @@ def site_sources(site_dir: str, site: dict, data_dir: str) -> list:
 
     repo_names, stage_names = set(), set()
 
+    # Products whose users run older versions too (PostgreSQL), so Ellie needs
+    # every version the site publishes to answer for the one a user is on
+    all_versions = {str(p).lower() for p in site.get('all_versions') or []}
+
     sources = []
     for section, versions in imports.items():
-        chosen = pick_version(versions)
-        label = chosen['label']
-        sources.append({
-            'product': section[-1],
-            'version': '' if label in ('', 'Development') else label.lstrip('vV'),
-            'git_url': chosen['git_url'],
-            'git_ref': chosen['ref'],
-            'repo_dir': os.path.join(data_dir, 'repos', unique_dir(section, repo_names)),
-            'doc_path': 'docs/**/*.md',
-        })
+        if section[-1].lower() in all_versions:
+            chosen = [v for v in versions if v['label'] != 'Development'] or versions
+        else:
+            chosen = [pick_version(versions)]
+        for version in chosen:
+            label = version['label']
+            # One checkout per version: rows are matched by file path, so
+            # versions sharing a checkout would overwrite each other
+            dir_trail = (section if len(chosen) == 1
+                         else section[:-1] + (f"{section[-1]} {label}",))
+            sources.append({
+                'product': section[-1],
+                'version': '' if label in ('', 'Development') else label.lstrip('vV'),
+                'git_url': version['git_url'],
+                'git_ref': version['ref'],
+                'repo_dir': os.path.join(data_dir, 'repos', unique_dir(dir_trail, repo_names)),
+                'doc_path': 'docs/**/*.md',
+            })
 
     # A page linked from more than one section is loaded once, under the first
     seen = set()

@@ -34,6 +34,11 @@ docloader_site_git_url: "https://github.com/pgEdge/pgedge-docs.git"
 docloader_site_git_ref: main
 docloader_site_mkdocs_file: mkdocs.yml
 
+# Nav sections to load at every version the site publishes, not just the
+# latest, so Ellie can answer for the version a user says they are on
+docloader_site_all_versions:
+  - PostgreSQL
+
 # Stop instead of removing more than this fraction of all documents in one run
 docloader_prune_max_fraction: 0.5
 

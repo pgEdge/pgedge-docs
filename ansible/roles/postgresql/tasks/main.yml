@@ -262,6 +262,24 @@
   register: vectorizer_result
   failed_when: false
 
+# Applied on every run (the view is replaced idempotently), so existing
+# servers get it too, not only a fresh install
+- name: Deploy labelled chunks view script
+  ansible.builtin.template:
+    src: labelled_chunks.sql.j2
+    dest: /tmp/pgedge_labelled_chunks.sql
+    mode: '0644'
+  when: vectorizer_enabled | default(false)
+
+- name: Apply labelled chunks view
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_script:
+    db: "{{ pg_database }}"
+    path: /tmp/pgedge_labelled_chunks.sql
+  when: vectorizer_enabled | default(false)
+  changed_when: false
+
 - name: Clean up temporary SQL files
   ansible.builtin.file:
     path: "{{ item }}"
@@ -269,3 +287,4 @@
   loop:
     - /tmp/pgedge_schema.sql
     - /tmp/pgedge_vectorizer.sql
+    - /tmp/pgedge_labelled_chunks.sql

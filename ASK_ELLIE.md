@@ -352,11 +352,12 @@ Both the workflow and cron job use `flock` to prevent concurrent runs.
 
 `mkdocs.yml` decides what Ellie knows about. On each run, `load-docs` fetches this repository at `main` and reads the nav:
 
-1. Each section of `!import` entries is one product. It is loaded at the version the site treats as latest, chosen from the versions listed in that section (not from the repository's tags): the first stable release, else the first pre-release, else `Development`. This is the same rule `scripts/expand_imports.py` uses for a docset's default version, so Ellie and the site agree. For example, PostgreSQL loads v18 while v19 is only a beta.
+1. Each section of `!import` entries is one product. It is loaded at the version the site treats as latest, chosen from the versions listed in that section (not from the repository's tags): the first stable release, else the first pre-release, else `Development`. This is the same rule `scripts/expand_imports.py` uses for a docset's default version, so Ellie and the site agree. The exception is a section listed in `docloader_site_all_versions` (by default just PostgreSQL), which is loaded at every version the nav lists except `Development`, so Ellie can answer for the version a user is actually on.
 2. The imported repository's `docs/` tree is loaded at exactly that ref, which is what the site publishes.
 3. The site's own pages are loaded if the nav links to them, grouped by top-level section.
 4. The website crawl, package scan and wiki are loaded from `extra_sources` in `/etc/pgedge/docloader/config.yaml`, since the site does not publish them.
 5. Rows for documents that are no longer published (a removed section or page, a file deleted upstream, or a replaced version) are deleted, along with their chunks.
+6. Each chunk reaches the model through the `docs_labelled_chunks` view, which prefixes it with its product and version (for example `[PostgreSQL 17]`); the RAG server passes only a chunk's text to the model, so without the label Ellie could not tell versions apart.
 
 So adding, bumping or removing a product or version needs only a change to `mkdocs.yml`, usually by merging the `sync-mkdocs` PR that updates it from `pgedge-doc-sources`. A version that exists upstream but is not in `mkdocs.yml` is not loaded.
 
