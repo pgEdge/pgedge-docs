@@ -137,7 +137,9 @@ rag_server:
 
     rag_llm:
       provider: anthropic
-      model: claude-sonnet-4-6
+      # Thinks at the API's default high effort on every answer, since neither
+      # the RAG server nor its LLM library can set effort yet
+      model: claude-sonnet-5-5
 
     # Retrieval settings - higher values improve response quality
     token_budget: 8000  # Maximum tokens for context (default: 4000)
