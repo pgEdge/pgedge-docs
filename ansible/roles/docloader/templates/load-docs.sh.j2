@@ -266,27 +266,31 @@ def site_sources(site_dir: str, site: dict, data_dir: str) -> list:
 
 
 def staged_pages(source: dict) -> dict:
-    """Map each staged link path to the site page it points at."""
-    links = {}
+    """Map each staged copy's path to the site page it is copied from."""
+    copies = {}
     for page in source['site_pages']:
         target = os.path.join(source['docs_dir'], page)
         if os.path.isfile(target):
-            links[os.path.join(source['local_path'], page)] = target
+            copies[os.path.join(source['local_path'], page)] = target
         else:
             print(f"  Warning: nav page not found: {target}", file=sys.stderr)
-    return links
+    return copies
 
 
 def stage_site_pages(source: dict, user: str):
-    """Mirror the pages a nav section links to as symlinks in one directory, so
-    docloader loads just those pages in one run. A page dropped from the nav
-    loses its link, and its row is then pruned."""
+    """Copy the pages a nav section links to into one directory, so docloader
+    loads just those pages in one run. A page dropped from the nav is not
+    copied, and its row is then pruned.
+
+    The pages are copied rather than symlinked because pgedge-docloader reads
+    files through os.Root, which refuses absolute symlinks and symlinks that
+    leave the source directory (pgedge-docloader commit 543208d)."""
     stage = source['local_path']
     shutil.rmtree(stage, ignore_errors=True)
     os.makedirs(stage, exist_ok=True)
-    for link, target in staged_pages(source).items():
-        os.makedirs(os.path.dirname(link), exist_ok=True)
-        os.symlink(target, link)
+    for copy, target in staged_pages(source).items():
+        os.makedirs(os.path.dirname(copy), exist_ok=True)
+        shutil.copy2(target, copy)
     subprocess.run(['chown', '-R', f'{user}:{user}', os.path.dirname(stage)], check=False)
 
 
