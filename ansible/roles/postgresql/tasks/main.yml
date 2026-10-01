@@ -115,6 +115,7 @@
     - { key: 'pgedge_vectorizer.batch_size', value: '{{ vectorizer_batch_size }}' }
     - { key: 'pgedge_vectorizer.default_chunk_size', value: '{{ vectorizer_chunk_size }}' }
     - { key: 'pgedge_vectorizer.default_chunk_overlap', value: '{{ vectorizer_chunk_overlap }}' }
+    - { key: 'pgedge_vectorizer.enable_hybrid', value: "{{ 'on' if vectorizer_enable_hybrid | bool else 'off' }}" }
   when: vectorizer_enabled | default(false)
   notify: Restart PostgreSQL
 

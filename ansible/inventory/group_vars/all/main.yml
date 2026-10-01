@@ -88,6 +88,9 @@ postgresql:
     chunk_overlap: 50
     num_workers: 2
     batch_size: 10
+    # BM25 sparse vectors in the chunk table. Off, because the RAG server
+    # does its own keyword search in memory and never reads them.
+    enable_hybrid: false
 
 # -----------------------------------------------------------------------------
 # RAG Server Configuration
