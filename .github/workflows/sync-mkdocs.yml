@@ -493,12 +493,19 @@ jobs:
                   # versions, not every label under the URL — all
                   # 3rd-party-docs products share one URL, so a URL-wide
                   # count let pgvector/pgmq's `vX.Y.Z` turn PgBouncer 1.26.0
-                  # into `v1.26.0` beside `v1.25`. Fall back to the full version.
+                  # into `v1.26.0` beside `v1.25`. If none of the product's
+                  # SSOT refs is still in the nav (e.g. every one has moved
+                  # on), a URL that hosts only this product can still lend
+                  # its labels; failing that, use the full version.
                   target_count = label_components(
                       entry.get('name'),
                       entries_by_name.get(entry.get('name'), []),
                       default=None,
                   )
+                  existing = url_label_map.get(nu, set())
+                  if not target_count and existing and '3rd-party-docs' not in nu:
+                      counts = [len(lbl.lstrip('v').split('.')) for lbl in existing]
+                      target_count = max(set(counts), key=counts.count)
                   if target_count:
                       parts = str(version).split('.')
                       label = 'v' + '.'.join(parts[:target_count])
