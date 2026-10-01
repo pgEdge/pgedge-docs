@@ -247,7 +247,7 @@ jobs:
           # label and mis-size that product's version slots.
           ref_to_label = {(nu, ref): lbl for (nu, lbl), ref in url_label_to_ref.items()}
 
-          def label_components(name, versions_by_name_entries):
+          def label_components(name, versions_by_name_entries, default=3):
               counts = []
               for e in versions_by_name_entries:
                   u, r = get_import_info(e)
@@ -256,7 +256,7 @@ jobs:
                   lbl = ref_to_label.get((normalize_url(u), r))
                   if lbl:
                       counts.append(len(lbl.lstrip('v').split('.')))
-              return max(set(counts), key=counts.count) if counts else 3
+              return max(set(counts), key=counts.count) if counts else default
 
           entries_by_name = defaultdict(list)
           for e in ssot['sources']:
@@ -487,14 +487,26 @@ jobs:
               if not has_block:
                   new_products.append(entry)
               else:
-                  # Mirror the existing label convention for this URL block:
+                  # Mirror this product's existing label convention:
                   # control-plane uses `v0.8` (2 components), spock uses
-                  # `v5.0.6` (3). Pick the most common component count among
-                  # existing labels; fall back to the full version.
+                  # `v5.0.6` (3). Read it from the product's own published
+                  # versions, not every label under the URL — all
+                  # 3rd-party-docs products share one URL, so a URL-wide
+                  # count let pgvector/pgmq's `vX.Y.Z` turn PgBouncer 1.26.0
+                  # into `v1.26.0` beside `v1.25`. If none of the product's
+                  # SSOT refs is still in the nav (e.g. every one has moved
+                  # on), a URL that hosts only this product can still lend
+                  # its labels; failing that, use the full version.
+                  target_count = label_components(
+                      entry.get('name'),
+                      entries_by_name.get(entry.get('name'), []),
+                      default=None,
+                  )
                   existing = url_label_map.get(nu, set())
-                  if existing:
+                  if not target_count and existing and '3rd-party-docs' not in nu:
                       counts = [len(lbl.lstrip('v').split('.')) for lbl in existing]
                       target_count = max(set(counts), key=counts.count)
+                  if target_count:
                       parts = str(version).split('.')
                       label = 'v' + '.'.join(parts[:target_count])
                   else:
@@ -507,6 +519,19 @@ jobs:
                       'version': version,
                       'label'  : label,
                   })
+
+          # Collapse to ONE insertion per (url, product, label). Several
+          # retained releases can share a label (PgBouncer 1.26.0 and 1.26.1
+          # both map to 'v1.26'), and insert_version doesn't dedupe, so each
+          # would add its own line. Keep the highest. Product is part of the
+          # key because 3rd-party-docs products share one URL.
+          _best = {}
+          for _item in missing_entries:
+              _k = (_item['nu'], _item['entry'].get('name'), _item['label'])
+              if (_k not in _best
+                      or version_key(_item['version']) > version_key(_best[_k]['version'])):
+                  _best[_k] = _item
+          missing_entries = list(_best.values())
 
           # Collapse to ONE update per (url, label). Several SSOT entries can
           # share a label (0.10.1 and 0.10.2 both map to 'v0.10'), and each was
