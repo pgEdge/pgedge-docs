@@ -520,6 +520,19 @@ jobs:
                       'label'  : label,
                   })
 
+          # Collapse to ONE insertion per (url, product, label). Several
+          # retained releases can share a label (PgBouncer 1.26.0 and 1.26.1
+          # both map to 'v1.26'), and insert_version doesn't dedupe, so each
+          # would add its own line. Keep the highest. Product is part of the
+          # key because 3rd-party-docs products share one URL.
+          _best = {}
+          for _item in missing_entries:
+              _k = (_item['nu'], _item['entry'].get('name'), _item['label'])
+              if (_k not in _best
+                      or version_key(_item['version']) > version_key(_best[_k]['version'])):
+                  _best[_k] = _item
+          missing_entries = list(_best.values())
+
           # Collapse to ONE update per (url, label). Several SSOT entries can
           # share a label (0.10.1 and 0.10.2 both map to 'v0.10'), and each was
           # compared against the same pre-existing ref, so both would queue.
