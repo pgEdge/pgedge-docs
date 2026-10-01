@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 10/01/2026
+
+* Component updates: Spock 5.0.12, PgBouncer 1.26.0, pgAdmin 9.18, etcd 3.7.2, and ai-kb 1.0.2
+
 ## 09/24/2026
 
 * Component updates: pg_vectorize 0.27.1
