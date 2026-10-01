@@ -247,7 +247,7 @@ jobs:
           # label and mis-size that product's version slots.
           ref_to_label = {(nu, ref): lbl for (nu, lbl), ref in url_label_to_ref.items()}
 
-          def label_components(name, versions_by_name_entries):
+          def label_components(name, versions_by_name_entries, default=3):
               counts = []
               for e in versions_by_name_entries:
                   u, r = get_import_info(e)
@@ -256,7 +256,7 @@ jobs:
                   lbl = ref_to_label.get((normalize_url(u), r))
                   if lbl:
                       counts.append(len(lbl.lstrip('v').split('.')))
-              return max(set(counts), key=counts.count) if counts else 3
+              return max(set(counts), key=counts.count) if counts else default
 
           entries_by_name = defaultdict(list)
           for e in ssot['sources']:
@@ -487,14 +487,19 @@ jobs:
               if not has_block:
                   new_products.append(entry)
               else:
-                  # Mirror the existing label convention for this URL block:
+                  # Mirror this product's existing label convention:
                   # control-plane uses `v0.8` (2 components), spock uses
-                  # `v5.0.6` (3). Pick the most common component count among
-                  # existing labels; fall back to the full version.
-                  existing = url_label_map.get(nu, set())
-                  if existing:
-                      counts = [len(lbl.lstrip('v').split('.')) for lbl in existing]
-                      target_count = max(set(counts), key=counts.count)
+                  # `v5.0.6` (3). Read it from the product's own published
+                  # versions, not every label under the URL — all
+                  # 3rd-party-docs products share one URL, so a URL-wide
+                  # count let pgvector/pgmq's `vX.Y.Z` turn PgBouncer 1.26.0
+                  # into `v1.26.0` beside `v1.25`. Fall back to the full version.
+                  target_count = label_components(
+                      entry.get('name'),
+                      entries_by_name.get(entry.get('name'), []),
+                      default=None,
+                  )
+                  if target_count:
                       parts = str(version).split('.')
                       label = 'v' + '.'.join(parts[:target_count])
                   else:
