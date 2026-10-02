@@ -451,6 +451,39 @@
     background-color: transparent !important;
 }
 
+/* Tables */
+.ellie-message__content .ellie-table-wrap {
+    overflow-x: auto;
+    margin: 8px 0;
+}
+
+.ellie-message__content .ellie-table {
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+.ellie-message__content .ellie-table th,
+.ellie-message__content .ellie-table td {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 4px 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.ellie-message__content .ellie-table th {
+    background: rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .ellie-table th,
+[data-md-color-scheme="slate"] .ellie-message__content .ellie-table td {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .ellie-table th {
+    background: rgba(255, 255, 255, 0.05);
+}
+
 /* Pending code block indicator (streaming) */
 .ellie-message__content .ellie-code--pending {
     position: relative;
