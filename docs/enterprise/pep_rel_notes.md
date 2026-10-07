@@ -59,12 +59,12 @@
 
 
 ## 07/21/2026
-* Component updates: ACE 2.1.0, Postgis 3.6.4 for PG 19, Snowflake 2.6.0, Spock 5.11.0 for PG 16, 17 and 18, Pgvector 0.8.5
+* Component updates: ACE 2.1.0, Postgis 3.6.4 for PG 19, Snowflake 2.6.0, Spock 5.0.11 for PG 16, 17 and 18, Pgvector 0.8.5
 * pgEdge Enterprise Postgres 19 beta2
 
 
 ## 07/14/2026
-* Ubuntu 24.04 (AMD & ARM) support for all supported pgEdge Enterprise Postgres packages.
+* Ubuntu 26.04 (AMD & ARM) support for all supported pgEdge Enterprise Postgres packages.
 
 
 ## 07/09/2026
