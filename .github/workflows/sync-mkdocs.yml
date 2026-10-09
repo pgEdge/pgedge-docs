@@ -92,6 +92,9 @@ jobs:
               # Two live lines published side by side: newest two of each
               # (3.6.4/3.6.3 with 3.5.7/3.5.6) rather than three of 3.6 alone.
               'PostGIS': {'group': 'minor', 'max': 2},
+              # Each release is ~770 files; only the newest is kept to stay
+              # under the 20,000-file cap.
+              'pgAdmin 4': {'group': 'product', 'max': 1},
           }
 
           # ── Helpers ───────────────────────────────────────────────────────
