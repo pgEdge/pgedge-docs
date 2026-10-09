@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 10/09/2026
+
+* Component updates: Spock 5.0.13 and LOLOR 1.2.3 (with PG19 support), Control Plane v0.11.0, pgBackRest 2.59.3, pgvector 0.8.7, and Supautils 3.4.4.
+  
 ## 10/01/2026
 
 * Component updates: Spock 5.0.12, PgBouncer 1.26.0, pgAdmin 9.18, etcd 3.7.2, and ai-kb 1.0.2
