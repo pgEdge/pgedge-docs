@@ -761,10 +761,6 @@ nav:
   # Community Tools (from 3rd-party-docs repo)
   - pgAdmin 4:
     - v9.18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin918'
-    - v9.17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin917'
-    - v9.14: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin914'
-    - v9.13: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin913'
-    - v9.12: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin912'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadminmaster'
 
   - PgBouncer:
