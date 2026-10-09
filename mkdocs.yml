@@ -13,7 +13,7 @@ extra_css:
 extra_javascript:
   # Pulled from control-plane repo for install page
   # Note: Must update version when control-plane latest version changes
-  - /control-plane/v0-10/scripts/generate-stack.js
+  - /control-plane/v0-11/scripts/generate-stack.js
   - javascripts/tabs-dropdown.js
   - javascripts/org-stars.js
   - javascripts/version-selector.js
@@ -581,6 +581,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/ace.git?branch=main'
 
   - lolor:
+    - v1.2.3: '!import https://github.com/pgEdge/lolor.git?branch=v1.2.3'
     - v1.2.2: '!import https://github.com/pgEdge/lolor.git?branch=v1.2.2'
     - Development: '!import https://github.com/pgEdge/lolor.git?branch=main'
 
@@ -603,6 +604,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
 
   - Spock v5:
+    - v5.0.13: '!import https://github.com/pgEdge/spock.git?branch=v5.0.13'
     - v5.0.12: '!import https://github.com/pgEdge/spock.git?branch=v5.0.12'
     - v5.0.11: '!import https://github.com/pgEdge/spock.git?branch=v5.0.11'
     - v5.0.10: '!import https://github.com/pgEdge/spock.git?branch=v5.0.10'
@@ -611,6 +613,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=v5_STABLE'
 
   - Control Plane:
+    - v0.11: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.11.0'
     - v0.10: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.10.1'
     - v0.9: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.9.0'
     - v0.8: '!import https://github.com/pgEdge/control-plane.git?branch=release/v0.8.1'
@@ -687,6 +690,7 @@ nav:
 
   # Community Extensions (from 3rd-party-docs repo)
   - pgvector:
+    - v0.8.7: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector087'
     - v0.8.5: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector085'
     - v0.8.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector082'
     - v0.8.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgvector081'
@@ -750,6 +754,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstatsmaster'
 
   - supautils:
+    - v3.4.4: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=supautils344'
     - v3.2.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=supautils322'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=supautilsmaster'
 
@@ -783,6 +788,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2master'
 
   - pgBackRest:
+    - v2.59.3: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2593'
     - v2.59.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2590'
     - v2.58.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest258'
     - v2.57.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest257'
