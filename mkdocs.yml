@@ -596,6 +596,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
 
   - ColdFront:
+    - Preview PR 114: '!import https://github.com/pgEdge/coldfront.git?branch=docs/standard-toc-experiment'
     - v1.0.0-beta2: '!import https://github.com/pgEdge/coldfront.git?branch=v1.0.0-beta2'
     - Development: '!import https://github.com/pgEdge/coldfront.git?branch=main'
 
