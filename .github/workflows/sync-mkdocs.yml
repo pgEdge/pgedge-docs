@@ -381,6 +381,17 @@ jobs:
               if e.get('kb_tag'):
                   product_kb_refs[e.get('name')].add(e['kb_tag'])
 
+          # (name, url, ref) → SSOT version. Tells which product a nav label
+          # belongs to under a shared URL, and how old its release is when the
+          # ref itself isn't version-shaped (pgbouncer1260).
+          product_ref_version = {}
+          for e in ssot['sources']:
+              if not for_pgedge_docs(e):
+                  continue
+              u, r = get_import_info(e)
+              if u and r:
+                  product_ref_version[(e.get('name'), normalize_url(u), r)] = str(e.get('version', ''))
+
           # ── Compare SSOT against mkdocs.yml ──────────────────────────────
 
           missing_entries = []  # product has a block; this version is absent
@@ -425,8 +436,21 @@ jobs:
               # check whether its ref is up to date. If not, queue a ref update.
               # Only flagged when both refs follow a standard version pattern —
               # decorated refs like 'v0.6.2-docs' are treated as intentional.
+              # 3rd-party-docs refs are never version-shaped (pgbouncer1260),
+              # so there the SSOT versions behind the two refs are compared.
+              #
+              # Under the shared 3rd-party-docs URL only this product's own
+              # labels count: otherwise Patroni's 'v4.1.3' "covers"
+              # system_stats 4.1 and the new version is silently dropped.
+              name = entry.get('name')
+              shared_url = '3rd-party-docs' in nu
+              candidate_labels = sorted(
+                  lbl for lbl in url_label_map.get(nu, set())
+                  if not shared_url
+                  or (name, nu, url_label_to_ref[(nu, lbl)]) in product_ref_version
+              )
               covering_label = next(
-                  (lbl for lbl in url_label_map.get(nu, set())
+                  (lbl for lbl in candidate_labels
                    if label_covers_version(lbl, version)),
                   None,
               )
@@ -436,10 +460,15 @@ jobs:
                   # patch releases of the same minor (e.g. 0.10.1 and 0.10.0),
                   # both collapse onto one label ('v0.10'); without this guard
                   # the older entry rewrites the label back to its own ref.
-                  if (existing_ref != ref
-                          and is_standard_ref(existing_ref)
-                          and is_standard_ref(ref)
-                          and ref_version(ref) > ref_version(existing_ref)):
+                  if is_standard_ref(existing_ref) and is_standard_ref(ref):
+                      newer = ref_version(ref) > ref_version(existing_ref)
+                  elif shared_url:
+                      existing_ver = product_ref_version.get((name, nu, existing_ref))
+                      newer = (existing_ver is not None
+                               and version_key(version) > version_key(existing_ver))
+                  else:
+                      newer = False
+                  if existing_ref != ref and newer:
                       ref_updates.append({
                           'entry'  : entry,
                           'git_url': git_url,
