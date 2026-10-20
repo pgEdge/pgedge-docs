@@ -383,8 +383,8 @@ nav:
 
   - Ansible: '!import https://github.com/pgEdge/pgedge-ansible.git?branch=main'
 
-  - pgEdge Enterprise Postgres:
-    - Enterprise Edition: enterprise/index.md
+  - pgEdge Enterprise Postgres Repository:
+    - pgEdge Enterprise Postgres Repository: enterprise/index.md
     - Enterprise Linux 9 & 10:
       - Enterprise Linux Version Support: enterprise/el/index.md
       - Getting Started - Configuring the Repository: enterprise/el/configure-repo.md

@@ -1,4 +1,4 @@
-# pgEdge Enterprise Postgres (VM Edition)
+# pgEdge Enterprise Postgres Repository
 
 pgEdge makes FIPS-enabled packages available via the `pgedge` repository for
 Enterprise Linux, Debian, and Ubuntu. Access to the repository requires a
@@ -92,7 +92,7 @@ If your organization needs professional grade support, pgEdge offers support and
 - a dedicated technical account manager (TAM).
 - fully licensed for production usage (on a per vCPU basis).
 
-For more information about support for pgEdge Distributed Postgres (VM Edition), [reach out to pgEdge](https://www.pgedge.com/contact).
+For more information about support for the pgEdge Enterprise Postgres Repository, [reach out to pgEdge](https://www.pgedge.com/contact).
 
 
 !!! note

@@ -1,4 +1,4 @@
-# pgEdge Enterprise Postgres (VM Edition)
+# pgEdge Enterprise Postgres Repository for Debian and Ubuntu
 
 pgEdge Enterprise Postgres (and supporting component) packages for Debian and Ubuntu are supported on: 
 
