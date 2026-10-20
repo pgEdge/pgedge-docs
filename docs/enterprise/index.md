@@ -60,9 +60,9 @@ Your certificate and your access to the repository expire separately:
   extend your access without sending you a new certificate, so there is
   nothing for you to install.
 
-Your access can end before your certificate does; for example, a trial
-certificate can stay valid after the trial's access period ends. To see when
-your certificate expires, run:
+Your access can end before your certificate does; for example, the
+certificate for a 30-day evaluation can stay valid after the evaluation's
+access period ends. To see when your certificate expires, run:
 
 ```bash
 openssl x509 -noout -enddate -in client.crt
