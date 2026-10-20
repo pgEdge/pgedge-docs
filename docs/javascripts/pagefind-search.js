@@ -95,7 +95,7 @@
         'spock-v5': 'Spock v5',
         'cloud': 'pgEdge Cloud',
         'distributed': 'pgEdge Distributed Postgres',
-        'enterprise': 'pgEdge Enterprise Postgres',
+        'enterprise': 'pgEdge Enterprise Postgres Repository',
         'pgedge-container': 'pgEdge Container'
     };
 
