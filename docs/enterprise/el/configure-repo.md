@@ -59,6 +59,21 @@ failures:
 sudo dnf config-manager --set-disabled pgdg*
 ```
 
+## Registering Your Certificate
+
+Access to the `pgedge` repository requires a certificate from pgEdge. To
+request one, see
+[Obtaining and Installing a Repository Certificate](../index.md#obtaining-and-installing-a-repository-certificate).
+pgEdge sends you two files: `client.crt`, the certificate, and `client.key`,
+its private key. Copy both files to the host, then install them in
+`/etc/pki/pgedge`:
+
+```bash
+sudo install -d -m 0755 /etc/pki/pgedge
+sudo install -m 0644 client.crt /etc/pki/pgedge/client.crt
+sudo install -m 0600 client.key /etc/pki/pgedge/client.key
+```
+
 ## Creating the Repository
 
 After meeting the prerequisites for your system, create the repository with the command:
