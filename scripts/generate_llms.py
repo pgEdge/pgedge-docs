@@ -21,8 +21,8 @@ for links an agent can skip when it is short of context.
 Runs after the build and after postprocess_site.py, since it reads the built
 pages and checks every link against them. A link that does not resolve is
 dropped with a warning rather than failing the deployment over one line of an
-index; descriptions vanishing across the board does fail it, because that means
-the page markup has changed under the parser.
+index. Most links failing, or most descriptions vanishing, does fail it,
+because that means an incomplete site or changed page markup.
 """
 
 import argparse
@@ -127,16 +127,16 @@ def shorten(text):
 
 
 def resolve(url, site_dir, versioned):
-    """The built path for a menu URL, moved onto the latest version."""
+    """The built path for a menu URL, moved onto the latest version.
+
+    None for a versioned docset whose latest version cannot be found, since its
+    root is only a redirect.
+    """
     path = url.strip("/")
     docset = path.split("/", 1)[0]
     if docset in versioned and path == docset:
         version = latest_version(site_dir, docset)
-        if version:
-            path = f"{docset}/{version}"
-        else:
-            log(f"WARNING: no latest version found for {docset}; linking its "
-                f"root, which is only a redirect")
+        return f"{docset}/{version}" if version else None
     return path
 
 
@@ -163,18 +163,22 @@ def build_sections(config, site_dir, base):
     seen = set()
     sections = []
     optional = []
+    unresolved = 0
     for category, items in extra.get("nav_categories", {}).items():
         lines = []
         for item in items:
             if "url" not in item:
                 continue
             path = resolve(item["url"], site_dir, versioned)
-            if path in seen:
+            if path is not None and path in seen:
                 continue  # the menus list some products in two categories
             seen.add(path)
-            if not page_exists(site_dir, path):
+            # Menu items are pages, so a fragment or a file is not accepted.
+            if path is None or not os.path.isfile(
+                    os.path.join(site_dir, path, "index.html")):
                 log(f"WARNING: the {category} menu links {item['url']}, which "
-                    f"is not in the built site; leaving it out")
+                    f"has no built page; leaving it out")
+                unresolved += 1
                 continue
             line = entry(item, path, site_dir, base)
             if path.split("/", 1)[0] in third_party:
@@ -184,28 +188,40 @@ def build_sections(config, site_dir, base):
         if lines:
             sections.append(f"## {category}\n\n" + "\n".join(lines))
 
-    return sections, optional
+    return sections, optional, unresolved
 
 
 def expand_intro(text, site_dir, base):
-    """Fill `{site}` and `{latest:<docset>}` in the intro, and check links."""
+    """Fill `{site}` and `{latest:<docset>}` in the intro, and check links.
+
+    A link that does not resolve keeps its text and loses its target, so the
+    prose around it still reads.
+    """
+    missing = "\0missing"
+
     def latest(match):
         docset = match.group(1)
         version = latest_version(site_dir, docset)
         if not version:
             log(f"WARNING: llms_intro.md refers to {{latest:{docset}}}, which "
-                f"has no built version")
-            return f"{base}/{docset}"
+                f"has no built version; unlinking it")
+            return missing
         return f"{base}/{docset}/{version}"
+
+    def check(match):
+        label, url = match.groups()
+        if url.startswith(missing):
+            return label
+        if url.startswith(base + "/") and not page_exists(
+                site_dir, url[len(base):]):
+            log(f"WARNING: llms_intro.md links {url}, which is not in the "
+                f"built site; unlinking it")
+            return label
+        return match.group(0)
 
     text = re.sub(r"\{latest:([\w.-]+)\}", latest, text)
     text = text.replace("{site}", base)
-
-    for url in re.findall(rf"\]\(({re.escape(base)}/[^)]*)\)", text):
-        if not page_exists(site_dir, url[len(base):]):
-            log(f"WARNING: llms_intro.md links {url}, which is not in the "
-                f"built site")
-    return text
+    return re.sub(r"\[([^\]]*)\]\(([^)]*)\)", check, text)
 
 
 def main():
@@ -222,13 +238,17 @@ def main():
         log(f"ERROR: llms_intro.md has no '{SECTIONS_MARKER}' line")
         return 1
 
-    sections, optional = build_sections(config, args.site, base)
+    sections, optional, unresolved = build_sections(config, args.site, base)
     if not sections:
         log("ERROR: no product links were generated; is nav_categories empty?")
         return 1
 
-    entries = [line for s in sections + ["\n".join(optional)]
+    entries = [line for s in [*sections, "\n".join(optional)]
                for line in s.splitlines() if line.startswith("- [")]
+    if unresolved > len(entries):
+        log(f"ERROR: {unresolved} menu links have no built page and only "
+            f"{len(entries)} do; is the site incomplete?")
+        return 1
     described = sum(1 for line in entries if "): " in line)
     if described < len(entries) / 2:
         log(f"ERROR: only {described} of {len(entries)} links have a "
