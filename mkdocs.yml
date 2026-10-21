@@ -307,6 +307,9 @@ extra:
         url: pgedge-safesession/
       - title: Snowflake
         url: snowflake/
+        # The page's first sentence sells the benefit, not the product.
+        description: A Postgres extension that generates IDs unique across a
+          multi-master cluster, as an optional replacement for bigserial.
       - title: pgEdge Vectorizer
         url: pgedge-vectorizer/
       - hr: true
