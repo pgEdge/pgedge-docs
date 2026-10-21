@@ -3,7 +3,7 @@
 
 const SOURCES_PATH = '/_markdown/sources.json';
 // Every source path in the docs is made of these; anything else is not ours.
-const SAFE_PATH = /^[A-Za-z0-9._~%+-]+(?:\/[A-Za-z0-9._~%+-]+)*\.md$/;
+const SAFE_PATH = /^[A-Za-z0-9._~%+/-]+\.md$/;
 const CACHE_SECONDS = 600;
 
 let sources = null;
@@ -39,6 +39,40 @@ function rawUrl(path, data) {
     `${source.slice(at + 1)}/docs/${rest}`;
 }
 
+// Rejects a path that decodes to a parent, empty or control-character segment.
+function isSafe(path) {
+  if (!SAFE_PATH.test(path)) return false;
+  let decoded;
+  try {
+    decoded = decodeURIComponent(path);
+  } catch (error) {
+    return false;
+  }
+  if ([...decoded].some((c) => c.charCodeAt(0) < 0x20 || c === '\\')) {
+    return false;
+  }
+  return decoded.split('/').every((s) => s !== '..' && s !== '');
+}
+
+async function fetchSource(path, context) {
+  const target = new URL(rawUrl(path, await loadSources(context)));
+  if (target.hostname !== 'raw.githubusercontent.com') {
+    return new Response(null, { status: 404 });
+  }
+  // The host is fixed above; only the path within it comes from the request.
+  // nosemgrep: rules_lgpl_javascript_ssrf_rule-node-ssrf
+  return fetch(target, {
+    // Only successes are worth keeping: GitHub rate-limits shared egress
+    // addresses, and a cached 429 would outlast the limit by minutes.
+    cf: {
+      cacheEverything: true,
+      cacheTtlByStatus: {
+        '200-299': CACHE_SECONDS, '404': 60, '400-403': 0, '405-599': 0,
+      },
+    },
+  });
+}
+
 function pageUrl(path, origin) {
   const page = path.replace(/(^|\/)(index|README)\.md$/, '$1')
     .replace(/\.md$/, '/');
@@ -55,35 +89,13 @@ export async function onRequest(context) {
   }
 
   const path = url.pathname.slice(1);
-  if (!SAFE_PATH.test(path)) {
-    return new Response('Not found\n', { status: 404 });
-  }
-  let segments;
-  try {
-    segments = decodeURIComponent(path).split('/');
-  } catch (error) {
-    segments = [''];
-  }
-  if (segments.some((s) => s === '..' || s === '' || /[\x00-\x1f\\]/.test(s))) {
+  if (!isSafe(path)) {
     return new Response('Not found\n', { status: 404 });
   }
 
   let upstream;
   try {
-    const target = new URL(rawUrl(path, await loadSources(context)));
-    if (target.hostname !== 'raw.githubusercontent.com') {
-      return new Response('Not found\n', { status: 404 });
-    }
-    upstream = await fetch(target, {
-      // Only successes are worth keeping: GitHub rate-limits shared egress
-      // addresses, and a cached 429 would outlast the limit by minutes.
-      cf: {
-        cacheEverything: true,
-        cacheTtlByStatus: {
-          '200-299': CACHE_SECONDS, '404': 60, '400-403': 0, '405-599': 0,
-        },
-      },
-    });
+    upstream = await fetchSource(path, context);
   } catch (error) {
     return new Response('Markdown source unavailable\n', { status: 502 });
   }
