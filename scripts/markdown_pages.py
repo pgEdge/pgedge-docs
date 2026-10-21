@@ -13,13 +13,12 @@ links inside a source file resolve to other `.md` URLs unchanged.
 import argparse
 import json
 import os
-import subprocess
 import sys
 from pathlib import Path
 from urllib.parse import quote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from expand_imports import load_yaml  # noqa: E402
+from expand_imports import load_yaml, run  # noqa: E402
 
 LOCAL_REPO = "pgEdge/pgedge-docs"
 
@@ -40,21 +39,22 @@ def local_ref():
     sha = os.environ.get("CF_PAGES_COMMIT_SHA")
     if sha:
         return sha
-    result = subprocess.run(["git", "rev-parse", "HEAD"],
-                            capture_output=True, text=True)
-    return result.stdout.strip() if result.returncode == 0 else "main"
+    try:
+        return run(["git", "rev-parse", "HEAD"]).strip()
+    except RuntimeError:
+        return "main"
 
 
 def tracked_docs(docs_dir="docs"):
     """This repository's committed pages, relative to docs/, or None."""
-    result = subprocess.run(["git", "ls-files", "-z", docs_dir],
-                            capture_output=True, text=True)
-    if result.returncode != 0:
-        log(f"WARNING: git ls-files failed, so every page under {docs_dir}/ "
-            f"is assumed committed: {result.stderr.strip()}")
+    try:
+        listing = run(["git", "ls-files", "-z", docs_dir])
+    except RuntimeError as error:
+        log(f"WARNING: every page under {docs_dir}/ is assumed committed: "
+            f"{error}")
         return None
     prefix = docs_dir.rstrip("/") + "/"
-    return {path[len(prefix):] for path in result.stdout.split("\0") if path}
+    return {path[len(prefix):] for path in listing.split("\0") if path}
 
 
 def page_sources(staging, site, prefixes):

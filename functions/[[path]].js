@@ -2,6 +2,8 @@
 // Serves /<path>.md from GitHub. See scripts/markdown_pages.py.
 
 const SOURCES_PATH = '/_markdown/sources.json';
+// Every source path in the docs is made of these; anything else is not ours.
+const SAFE_PATH = /^[A-Za-z0-9._~%+-]+(?:\/[A-Za-z0-9._~%+-]+)*\.md$/;
 const CACHE_SECONDS = 600;
 
 let sources = null;
@@ -53,19 +55,26 @@ export async function onRequest(context) {
   }
 
   const path = url.pathname.slice(1);
+  if (!SAFE_PATH.test(path)) {
+    return new Response('Not found\n', { status: 404 });
+  }
   let segments;
   try {
     segments = decodeURIComponent(path).split('/');
   } catch (error) {
     segments = [''];
   }
-  if (segments.some((s) => s === '..' || s === '')) {
+  if (segments.some((s) => s === '..' || s === '' || /[\x00-\x1f\\]/.test(s))) {
     return new Response('Not found\n', { status: 404 });
   }
 
   let upstream;
   try {
-    upstream = await fetch(rawUrl(path, await loadSources(context)), {
+    const target = new URL(rawUrl(path, await loadSources(context)));
+    if (target.hostname !== 'raw.githubusercontent.com') {
+      return new Response('Not found\n', { status: 404 });
+    }
+    upstream = await fetch(target, {
       // Only successes are worth keeping: GitHub rate-limits shared egress
       // addresses, and a cached 429 would outlast the limit by minutes.
       cf: {
