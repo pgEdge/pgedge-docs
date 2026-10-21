@@ -529,6 +529,14 @@ def main():
         for docset, versions in extra["docset_versions"].items()
     }
 
+    # Read by scripts/markdown_pages.py.
+    extra["markdown_sources"] = {
+        prefix_for(trail):
+            url.split("github.com/")[-1].rstrip("/").removesuffix(".git")
+            + f"@{ref}"
+        for trail, url, ref in imports
+    }
+
     config["nav"] = substitute(config["nav"], expanded)
     config["docs_dir"] = args.staging
 

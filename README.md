@@ -7,11 +7,12 @@ reaches end of life on 5 November 2026. The configuration is still called
 `mkdocs.yml`, and Zensical reads it, so most of what is written about Material
 for MkDocs still applies; the differences that bite are noted below.
 
-Alongside the engine there are three scripts, each of which does something the
+Alongside the engine there are five scripts, each of which does something the
 build cannot do without: `scripts/expand_imports.py` merges documentation from
 other repositories into the site, `scripts/preprocess_docs.py` does the work two
-MkDocs plugins used to do, and `scripts/postprocess_site.py` writes the redirects
-and the sitemap.
+MkDocs plugins used to do, `scripts/postprocess_site.py` writes the redirects
+and the sitemap, `scripts/markdown_pages.py` gives each page a markdown version,
+and `scripts/generate_llms.py` writes `llms.txt`.
 
 ## Build Status
 
@@ -146,6 +147,17 @@ extra:
   which reads those exclusions. The sitemap is rebuilt rather than taken from the
   engine because Zensical lists only pages the nav reaches, which would drop the
   docset root stubs and every unlinked page
+- **`scripts/markdown_pages.py`**: After the build, points each page at its
+  markdown version, `<source path>.md`, through a `text/markdown` alternate
+  link. `functions/[[path]].js` serves those URLs by fetching the source from
+  the public repository and ref the page was built from, so no markdown is
+  copied into the site and the file count stays under Cloudflare Pages' limit.
+  Also writes the `_routes.json` that keeps the Function to `.md` requests and
+  the chat API. `docs/javascripts/copy-page.js` reads the same link to add a
+  "Copy page" button beside the page title
+- **`scripts/generate_llms.py`**: After `markdown_pages.py`, writes `llms.txt`
+  from the `nav_categories` menus, linking each product's latest version. The
+  prose around the links is in `scripts/llms_intro.md`
 - **`overrides/redirect.html`**: Template that dynamically determines the latest
   version from the nav structure and generates a JavaScript/meta refresh redirect
 - **`overrides/404.html`**: Handles legacy URLs without version numbers by

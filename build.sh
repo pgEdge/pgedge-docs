@@ -99,6 +99,11 @@ fi
 # run before Pagefind, which reads those exclusions when it indexes.
 python3 scripts/postprocess_site.py
 
+# Points each page at its markdown version, which functions/[[path]].js
+# serves. Must run before generate_llms.py, which links those versions. See
+# scripts/markdown_pages.py.
+python3 scripts/markdown_pages.py
+
 # Builds llms.txt from the nav menus and the built pages. See
 # scripts/generate_llms.py.
 python3 scripts/generate_llms.py
@@ -118,6 +123,7 @@ MIN_FILES=10000
 [ -f site/index.html ] || fail "site/index.html is missing"
 [ -f site/pagefind/pagefind.js ] || fail "the Pagefind index was not generated"
 [ -f site/llms.txt ] || fail "site/llms.txt was not generated"
+[ -f site/_routes.json ] || fail "site/_routes.json was not generated"
 
 count=$(find site -type f | wc -l | tr -d ' ')
 [ "$count" -ge "$MIN_FILES" ] \

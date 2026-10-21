@@ -649,3 +649,21 @@
     white-space: nowrap;
 }
 
+
+/* "Copy page" button beside the page title (javascripts/copy-page.js) */
+.md-typeset .md-copy-page {
+    float: right;
+    margin: 0.4rem 0 0 0.8rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.7rem;
+    color: var(--md-default-fg-color--light);
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 0.2rem;
+    cursor: pointer;
+}
+
+.md-typeset .md-copy-page:hover,
+.md-typeset .md-copy-page:focus-visible {
+    color: var(--md-accent-fg-color);
+    border-color: var(--md-accent-fg-color);
+}
