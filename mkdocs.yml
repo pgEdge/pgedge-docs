@@ -248,6 +248,8 @@ extra:
   #   - title/url: clickable link
   #   - heading: non-clickable sub-heading label
   #   - hr: horizontal rule divider
+  # These menus also build llms.txt (scripts/generate_llms.py). A link item
+  # may carry a `description:` for it; the menus ignore the key.
   nav_categories:
     Deployment:
       - heading: "VM / Bare Metal"
@@ -347,8 +349,13 @@ extra:
         url: cloudnativepg/
       - title: Patroni
         url: patroni/
+        # The page opens with a warning, not an introduction.
+        description: A template for PostgreSQL high availability with
+          ZooKeeper, etcd or Consul.
       - title: pgAdmin 4
         url: pgadmin-4/
+        # The page opens with a greeting.
+        description: An open-source graphical management tool for Postgres.
       - title: pgBackRest
         url: pgbackrest/
       - title: PgBouncer
