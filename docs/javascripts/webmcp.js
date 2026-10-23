@@ -21,14 +21,17 @@
     // Expected failures resolve to {sentence}, one an agent can act on;
     // other failures throw.
     async function fetchOrExplain(url, pageUrl, missing) {
+        var offSite = { sentence: 'Only pages on ' + location.origin +
+            ' can be read.' };
         // Checked here, not by callers, because links read out of fetched
         // pages reach this too.
-        if (url.origin !== location.origin) {
-            return { sentence: 'Only pages on ' + location.origin +
-                ' can be read.' };
-        }
+        if (url.origin !== location.origin) return offSite;
         // nosemgrep: rules_lgpl_javascript_ssrf_rule-node-ssrf
         var response = await fetch(url);
+        // fetch follows redirects, so check where the response ended too.
+        if (response.url && new URL(response.url).origin !== location.origin) {
+            return offSite;
+        }
         if (response.status === 404) return { sentence: missing };
         if (response.status === 429 || response.status >= 500) {
             return { sentence: 'This page is temporarily unavailable.' +
