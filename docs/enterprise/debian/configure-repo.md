@@ -27,24 +27,30 @@ sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb || true
 ## Registering Your Certificate
 
 Access to the `pgedge` repository requires a certificate from pgEdge. The
-repository package installs the `pgedge-subscription-manager` tool, which
-creates the host's private key and certificate signing request. The following
-command registers the host and writes the request to the `client.csr` file:
+following command, run on the host that will install the packages, registers
+the host and creates its private key and a certificate signing request in the
+`client.csr` file:
 
 ```bash
 sudo pgedge-subscription-manager register-system
 ```
 
-Email the `client.csr` file to pgEdge support at `support@pgedge.com`. pgEdge
-returns your certificate, `client.crt`, by email. Copy `client.crt` to the
-host, then run the following command in the directory that contains it to
-install the certificate:
+Email the `client.csr` file to pgEdge support at `support@pgedge.com`, with
+your organization's name and customer ID, the type of certificate you need (a
+trial or a paid subscription), and how long the host needs access; a trial
+provides 30 days of access by default. pgEdge returns your certificate,
+`client.crt`, by email. Each host that downloads packages needs its own
+certificate, so repeat these steps once on every host; you can send several
+requests in one email if you rename each `client.csr` to identify the host.
+Copy `client.crt` to the host, then install the certificate with the following
+command, giving the path to the file. The command also enables the repository,
+which stays disabled until a certificate is installed:
 
 ```bash
-sudo pgedge-subscription-manager install client.crt
+sudo pgedge-subscription-manager install ~/Downloads/client.crt
 ```
 
-For more information about certificate expiry, see
+For file locations, the `status` command, and certificate expiry, see
 [Obtaining and Installing a Repository Certificate](../index.md#obtaining-and-installing-a-repository-certificate).
 After installing the certificate, you're ready to use the repository to
 [install Postgres](./installing.md) and

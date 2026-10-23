@@ -1,10 +1,13 @@
 # Updating your Repository for FIPS Support
 
 The `pgedge` repository distributes FIPS-enabled native packages for RHEL
-and Debian platforms. If you created your repository after March 1, 2026, your
-repository should be configured to use FIPS-enabled packages, but if you
-created your repository before that date, you need to replace the repository
-package and refresh the content.
+and Debian platforms.
+
+!!! hint
+
+    If you created your repository before March 1, 2026, replace the
+    repository package, register the host for a repository certificate, and
+    refresh the content.
 
 ## Updating a RHEL Repository Host
 
@@ -17,7 +20,25 @@ sudo dnf remove pgedge-release
 sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
 ```
 
-2. Refresh the repository contents and upgrade the packages:
+2. Register the host and install its certificate. The new repository
+   package adds the repository disabled, and installing a certificate enables
+   it. Create the certificate request with the command:
+
+``` bash
+sudo pgedge-subscription-manager register-system
+```
+
+   Email the `client.csr` file the command names to `support@pgedge.com`. When
+   pgEdge returns your certificate, install it with the command:
+
+``` bash
+sudo pgedge-subscription-manager install /path/to/client.crt
+```
+
+   For details, see
+   [Obtaining and Installing a Repository Certificate](index.md#obtaining-and-installing-a-repository-certificate).
+
+3. Refresh the repository contents and upgrade the packages:
 
 ``` bash
 sudo dnf update
@@ -35,7 +56,25 @@ sudo rm -f /etc/apt/sources.list.d/pgedge.sources
 sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb
 ```
 
-2. Refresh the repository contents and upgrade the packages:
+2. Register the host and install its certificate. The new repository
+   package adds the repository disabled, and installing a certificate enables
+   it. Create the certificate request with the command:
+
+``` bash
+sudo pgedge-subscription-manager register-system
+```
+
+   Email the `client.csr` file the command names to `support@pgedge.com`. When
+   pgEdge returns your certificate, install it with the command:
+
+``` bash
+sudo pgedge-subscription-manager install /path/to/client.crt
+```
+
+   For details, see
+   [Obtaining and Installing a Repository Certificate](index.md#obtaining-and-installing-a-repository-certificate).
+
+3. Refresh the repository contents and upgrade the packages:
 
 ``` bash
 sudo apt-get update

@@ -187,7 +187,7 @@ function buildUI(mount, catalog) {
     lines.push({ text: "# " + certStep + ". Register this host and install its certificate", comment: true });
     lines.push({ text: "sudo pgedge-subscription-manager register-system" });
     lines.push({ text: "# Email client.csr to support@pgedge.com; when client.crt arrives, run:", comment: true });
-    lines.push({ text: "sudo pgedge-subscription-manager install client.crt" });
+    lines.push({ text: "sudo pgedge-subscription-manager install /path/to/client.crt" });
     lines.push({ text: "" });
 
     var stepNum = certStep + 1;

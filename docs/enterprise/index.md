@@ -1,9 +1,9 @@
 # pgEdge Enterprise Postgres Repository
 
 pgEdge makes FIPS-enabled packages available via the `pgedge` repository for
-Enterprise Linux, Debian, and Ubuntu. Access to the repository requires a
-certificate from pgEdge; install the certificate after you add the repository
-and before you install any packages.
+Enterprise Linux, Debian, and Ubuntu. Access to the repository requires an
+active pgEdge subscription and a certificate from pgEdge; install the
+certificate after you add the repository and before you install any packages.
 
 !!! note
 
@@ -13,53 +13,102 @@ and before you install any packages.
 
 ## Obtaining and Installing a Repository Certificate
 
-The certificate provides your host access to the `pgedge` repository. The
-`pgedge-subscription-manager` tool, which the repository package installs,
-creates the host's private key and certificate signing request, and installs
-the certificate that pgEdge returns. The private key stays on your host; you
-send pgEdge only the certificate signing request.
+The certificate provides your host access to the `pgedge` repository. To
+request it, you generate a key pair on the host itself: a private key, and a
+certificate signing request that contains the matching public key. The
+private key stays on your host; you send pgEdge only the certificate signing
+request.
 
-The following steps are the same on Enterprise Linux, Debian, and Ubuntu:
+Each host that downloads packages from the repository needs its own
+certificate, so run the following steps once on every host. The steps are the
+same on Enterprise Linux, Debian, and Ubuntu:
 
 1. Add the `pgedge` repository to the host, as described in Configuring the
    Repository for [Enterprise Linux](el/configure-repo.md) or for
    [Debian and Ubuntu](debian/configure-repo.md).
 
-2. Register the host. The following command creates the host's private key
-   and a certificate signing request in the `client.csr` file:
+2. Register the host. Run the following command on the host that will
+   install the packages; it creates the host's private key and a certificate
+   signing request, `client.csr`, and prints the location of the request:
 
     ```bash
     sudo pgedge-subscription-manager register-system
     ```
 
-3. Email the `client.csr` file to pgEdge support at `support@pgedge.com`.
-   pgEdge returns your certificate, `client.crt`, by email.
+    To copy the request to a specific directory, add `--out` and the
+    directory; for example, `--out ~/pgedge`.
 
-4. Copy `client.crt` to the host, then install the certificate. Run the
-   following command in the directory that contains `client.crt`:
+3. Email the `client.csr` file to pgEdge support at `support@pgedge.com`; do
+   not send the private key (`client.key`). In the email, include:
+
+    - your organization's name and customer ID.
+    - the type of certificate you need: a trial or a paid subscription.
+    - how long the host needs access to the repository; a trial provides 30
+      days of access by default.
+
+    If you register several hosts, you can include all of their requests in
+    one email. Every request is named `client.csr`, so rename each copy to
+    identify the host before you attach it; for example, `db1-client.csr`.
+
+    pgEdge returns your certificate, `client.crt`, by email.
+
+4. Copy `client.crt` to the host, then install the certificate. The following
+   command checks that the certificate matches the host's private key,
+   installs it, and enables the repository:
 
     ```bash
-    sudo pgedge-subscription-manager install client.crt
+    sudo pgedge-subscription-manager install ~/Downloads/client.crt
     ```
+
+    Pass the path to the certificate as you would to any command. If you
+    switch to the root user with `sudo -i` first, use a full path, because
+    `sudo -i` changes the working directory.
+
+When the certificate is installed, the host can install and update pgEdge
+packages as usual. If you run into problems, email `support@pgedge.com` or
+open a support ticket.
+
+The repository stays disabled until a certificate is installed, so the
+`pgedge` repository cannot interfere with your other package operations
+before then.
+
+The following table describes where the tool keeps the files on each
+platform:
+
+| Platform | Directory | Files |
+|----------|-----------|-------|
+| Enterprise Linux | `/etc/pki/pgedge` | `client.key`, `client.csr`, and `client.crt` |
+| Debian and Ubuntu | `/etc/pgedge` | `client.key`, `client.csr`, and `client.crt`; the `_apt` user owns `client.key` so that `apt` can read it |
+
+To see what is installed, when the certificate expires, and whether the
+repository responds, use the command:
+
+```bash
+sudo pgedge-subscription-manager status
+```
 
 ### Understanding Certificate and Access Expiry
 
 Your certificate and your access to the repository expire separately:
 
 - The certificate expiry date is written into `client.crt`. If your access
-  continues past that date, pgEdge sends you a new certificate, which you
-  install the same way.
-- Your access expiry is kept by pgEdge, not in the certificate. pgEdge can
-  extend your access without sending you a new certificate, so there is
-  nothing for you to install.
+  continues past that date, pgEdge sends you a new certificate. Install it
+  with the same `install` command, adding `--force` to replace the current
+  certificate.
+- Your access expiry is managed by pgEdge, not stored in the certificate.
+  pgEdge can extend your access without sending you a new certificate, so
+  there is nothing for you to install.
 
-Your access can end before your certificate does; for example, the
+Your access can end before your certificate expires; for example, the
 certificate for a 30-day evaluation can stay valid after the evaluation's
-access period ends. To see when your certificate expires, run:
+access period ends. The `pgedge-subscription-manager status` command reports
+the certificate's expiry date:
 
 ```bash
-openssl x509 -noout -enddate -in client.crt
+sudo pgedge-subscription-manager status
 ```
+
+Ask pgEdge support for your access expiry.
 
 ## Installing pgEdge Enterprise Postgres
 

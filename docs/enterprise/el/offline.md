@@ -34,13 +34,30 @@ You must ensure the system with internet access and the offline target server th
 
     `sudo subscription-manager repos --enable codeready-builder-for-rhel-10-x86_64-rpms`
 
-3. Download the content of the `pgedge` repository:
+3. Register the online machine and install its certificate, so it can
+   download packages from the `pgedge` repository. Create the certificate
+   request with the command:
+
+    `sudo pgedge-subscription-manager register-system`
+
+    Email the `client.csr` file the command names to `support@pgedge.com`.
+    When pgEdge returns your certificate, install it with the command:
+
+    `sudo pgedge-subscription-manager install /path/to/client.crt`
+
+    For details, see
+    [Obtaining and Installing a Repository Certificate](../index.md#obtaining-and-installing-a-repository-certificate).
+
+4. Download the content of the `pgedge` repository:
 
     `sudo dnf -y install --downloadonly --downloaddir=<target_directory>/pgedge-enterprise-all_18 pgedge-*` 
 
-4. After creating the model of the repository on the temporary host, you can transfer the entire repo to the offline repository host.
+5. After creating the model of the repository on the temporary host, you can transfer the entire repo to the offline repository host.
 
 **Using the Repository**
+
+The offline repository host and the systems that install from it do not need
+a certificate; only the online machine that downloads the packages does.
 
 To use your local repository, include the `localinstall` clause when you invoke `dnf` to install packages.  For example, to install all of the pgEdge Enterprise Postgres packages:
 
