@@ -21,6 +21,13 @@
     // Expected failures resolve to {sentence}, one an agent can act on;
     // other failures throw.
     async function fetchOrExplain(url, pageUrl, missing) {
+        // Checked here, not by callers, because links read out of fetched
+        // pages reach this too.
+        if (url.origin !== location.origin) {
+            return { sentence: 'Only pages on ' + location.origin +
+                ' can be read.' };
+        }
+        // nosemgrep: rules_lgpl_javascript_ssrf_rule-node-ssrf
         var response = await fetch(url);
         if (response.status === 404) return { sentence: missing };
         if (response.status === 429 || response.status >= 500) {
@@ -45,30 +52,37 @@
         return target ? new URL(target[1].trim(), base) : null;
     }
 
-    // A page's markdown: a .md URL directly, or the text/markdown alternate
-    // link of an HTML page, following a docset root's redirect to its latest
-    // version.
-    async function pageMarkdown(input, redirects) {
+    // An agent's URL or path as a URL, or null if it is not one.
+    function resolveInput(input) {
         var url;
         try {
             url = new URL(input, location.origin);
         } catch (error) {
-            return 'Not a valid URL or path.';
+            return null;
         }
         // llms.txt links to production, so read those links from here.
         if (url.origin === PRODUCTION_ORIGIN) {
             url = new URL(url.pathname + url.search + url.hash,
                           location.origin);
         }
-        if (url.origin !== location.origin) {
-            return 'Only pages on ' + location.origin + ' can be read.';
-        }
+        return url;
+    }
+
+    // A page's markdown: a .md URL directly, or the text/markdown alternate
+    // link of an HTML page, following a docset root's redirect to its latest
+    // version.
+    async function pageMarkdown(input, redirects) {
+        var url = resolveInput(input);
+        if (!url) return 'Not a valid URL or path.';
         if (url.pathname.endsWith('.md')) {
             var htmlPath = url.pathname.replace(/(^|\/)(index|README)\.md$/,
                                                 '$1').replace(/\.md$/, '/');
             return fetchMarkdown(url, new URL(htmlPath, url));
         }
+        return htmlPageMarkdown(url, redirects);
+    }
 
+    async function htmlPageMarkdown(url, redirects) {
         var page = await fetchOrExplain(
             url, null, 'No page exists at ' + url.href + '.');
         if (page.sentence) return page.sentence;
