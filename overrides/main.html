@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block extrahead %}
+  {% if config.extra.webmcp_origin_trial_token %}
+  <meta http-equiv="origin-trial" content="{{ config.extra.webmcp_origin_trial_token }}">
+  {% endif %}
   <meta name="description" content="pgEdge provides open source enterprise PostgreSQL for distributed and non-distributed applications to achieve high availability and reduce data latency.">
   <meta name="keywords" content="database, postgres, postgresql, enterprise postgres, postgres download, relational, high availability, multi master, multi-master, multimaster, active active, active-active, replication, spock, snowflake, lolor, docker, kubernetes">
 {% endblock %}
