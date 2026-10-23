@@ -2,8 +2,8 @@
 
 pgEdge makes FIPS-enabled packages available via the `pgedge` repository for
 Enterprise Linux, Debian, and Ubuntu. Access to the repository requires a
-certificate from pgEdge; install the certificate before you install any
-packages.
+certificate from pgEdge; install the certificate after you add the repository
+and before you install any packages.
 
 !!! note
 
@@ -13,41 +13,34 @@ packages.
 
 ## Obtaining and Installing a Repository Certificate
 
-The certificate provides your host access to the `pgedge` repository. To
-request a certificate, submit the request form at:
-[pgedge.com/contact](https://www.pgedge.com/contact).
+The certificate provides your host access to the `pgedge` repository. The
+`pgedge-subscription-manager` tool, which the repository package installs,
+creates the host's private key and certificate signing request, and installs
+the certificate that pgEdge returns. The private key stays on your host; you
+send pgEdge only the certificate signing request.
 
-pgEdge will send you two files:
+The following steps are the same on Enterprise Linux, Debian, and Ubuntu:
 
-- `client.crt`, the certificate.
-- `client.key`, the certificate's private key.
+1. Add the `pgedge` repository to the host, as described in Configuring the
+   Repository for [Enterprise Linux](el/configure-repo.md) or for
+   [Debian and Ubuntu](debian/configure-repo.md).
 
-Copy both files to the system you'll use for downloads, then perform the
-platform-specific installation steps that follow. Keep `client.key` private;
-the commands below make it readable only by the account that downloads
-packages.
+2. Register the host. The following command creates the host's private key
+   and a certificate signing request in the `client.csr` file:
 
-### Installing the Certificate on Enterprise Linux
+    ```bash
+    sudo pgedge-subscription-manager register-system
+    ```
 
-On RHEL, Rocky Linux, AlmaLinux, or Oracle Linux, install the files in
-`/etc/pki/pgedge`:
+3. Email the `client.csr` file to pgEdge support at `support@pgedge.com`.
+   pgEdge returns your certificate, `client.crt`, by email.
 
-```bash
-sudo install -d -m 0755 /etc/pki/pgedge
-sudo install -m 0644 client.crt /etc/pki/pgedge/client.crt
-sudo install -m 0600 client.key /etc/pki/pgedge/client.key
-```
+4. Copy `client.crt` to the host, then install the certificate. Run the
+   following command in the directory that contains `client.crt`:
 
-### Installing the Certificate on Debian and Ubuntu
-
-On Debian or Ubuntu, install the files in `/etc/pgedge`. `apt` downloads
-packages as the `_apt` user, so that user owns the private key:
-
-```bash
-sudo install -d -m 0755 /etc/pgedge
-sudo install -m 0644 client.crt /etc/pgedge/client.crt
-sudo install -o _apt -g root -m 0400 client.key /etc/pgedge/client.key
-```
+    ```bash
+    sudo pgedge-subscription-manager install client.crt
+    ```
 
 ### Understanding Certificate and Access Expiry
 
@@ -70,8 +63,9 @@ openssl x509 -noout -enddate -in client.crt
 
 ## Installing pgEdge Enterprise Postgres
 
-When the certificate is in place, use the install builder below to configure
-and copy the commands for your platform.
+Use the install builder below to configure and copy the commands for your
+platform. The builder's commands add the repository, register the host and
+install its certificate, and then install and start Postgres.
 
 <div id="package-catalog"></div>
 <noscript>

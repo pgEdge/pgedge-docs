@@ -14,7 +14,7 @@ On a RHEL-based system, use the following steps to update your repository.
 
 ``` bash
 sudo dnf remove pgedge-release
-sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
+sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
 ```
 
 2. Refresh the repository contents and upgrade the packages:
@@ -32,7 +32,7 @@ On a Debian system, use the following steps to update your repository.
 
 ``` bash
 sudo rm -f /etc/apt/sources.list.d/pgedge.sources
-sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb
+sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb
 ```
 
 2. Refresh the repository contents and upgrade the packages:

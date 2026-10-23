@@ -26,7 +26,7 @@ Then, install prerequisite software and add the pgEdge APT repository:
 
 ```bash
 apt-get update && apt-get install -y curl gnupg2 lsb-release
-curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb || true
+curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb || true
 apt-get update
 ```
 

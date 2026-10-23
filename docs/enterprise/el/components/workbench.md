@@ -29,7 +29,7 @@ the PostgreSQL 18 package.
 sudo dnf install -y epel-release
 sudo dnf config-manager --set-enabled crb
 sudo dnf install -y \
-    https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
+    https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
 sudo dnf install -y pgedge-enterprise-postgres_18
 ```
 

@@ -59,27 +59,37 @@ failures:
 sudo dnf config-manager --set-disabled pgdg*
 ```
 
-## Registering Your Certificate
-
-Access to the `pgedge` repository requires a certificate from pgEdge. To
-request one, see
-[Obtaining and Installing a Repository Certificate](../index.md#obtaining-and-installing-a-repository-certificate).
-pgEdge sends you two files: `client.crt`, the certificate, and `client.key`,
-its private key. Copy both files to the host, then install them in
-`/etc/pki/pgedge`:
-
-```bash
-sudo install -d -m 0755 /etc/pki/pgedge
-sudo install -m 0644 client.crt /etc/pki/pgedge/client.crt
-sudo install -m 0600 client.key /etc/pki/pgedge/client.key
-```
-
 ## Creating the Repository
 
-After meeting the prerequisites for your system, create the repository with the command:
+After meeting the prerequisites for your system, create the repository with
+the command:
 
 ```bash
-sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
+sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
 ```
 
-After creating the repository, you're ready to [use the repository](./installing.md) to install Postgres and supporting components.
+## Registering Your Certificate
+
+Access to the `pgedge` repository requires a certificate from pgEdge. The
+repository package installs the `pgedge-subscription-manager` tool, which
+creates the host's private key and certificate signing request. The following
+command registers the host and writes the request to the `client.csr` file:
+
+```bash
+sudo pgedge-subscription-manager register-system
+```
+
+Email the `client.csr` file to pgEdge support at `support@pgedge.com`. pgEdge
+returns your certificate, `client.crt`, by email. Copy `client.crt` to the
+host, then run the following command in the directory that contains it to
+install the certificate:
+
+```bash
+sudo pgedge-subscription-manager install client.crt
+```
+
+For more information about certificate expiry, see
+[Obtaining and Installing a Repository Certificate](../index.md#obtaining-and-installing-a-repository-certificate).
+After installing the certificate, you're ready to
+[use the repository](./installing.md) to install Postgres and supporting
+components.

@@ -12,7 +12,7 @@ You must ensure the system with internet access and the offline target server th
 
 1. Create a temporary repository on the online machine with the command:
 
-    `dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
+    `dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
 
 2. Install prerequisite software on the both the host with access and the repository host.  
 

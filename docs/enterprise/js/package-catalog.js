@@ -183,7 +183,14 @@ function buildUI(mount, catalog) {
     lines.push({ text: platform.repo_install });
     lines.push({ text: "" });
 
-    var stepNum = hasPrereqs ? 3 : 2;
+    var certStep = hasPrereqs ? 3 : 2;
+    lines.push({ text: "# " + certStep + ". Register this host and install its certificate", comment: true });
+    lines.push({ text: "sudo pgedge-subscription-manager register-system" });
+    lines.push({ text: "# Email client.csr to support@pgedge.com; when client.crt arrives, run:", comment: true });
+    lines.push({ text: "sudo pgedge-subscription-manager install client.crt" });
+    lines.push({ text: "" });
+
+    var stepNum = certStep + 1;
     lines.push({ text: "# " + stepNum + ". Install " + meta.label, comment: true });
     lines.push({ text: platform.install_pattern.replace("{package}", pkgName) });
     lines.push({ text: "" });
