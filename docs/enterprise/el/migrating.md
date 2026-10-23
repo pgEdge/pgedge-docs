@@ -19,7 +19,7 @@ If your current Postgres version is the same as your target Postgres version, yo
 
 2. [Enable the `pgedge` repository](../el/configure-repo.md) with the commands:
 
-    `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
+    `sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
   
     `sudo dnf config-manager --set-enabled crb`
   
@@ -50,7 +50,7 @@ If your installed version of Postgres is the same major version but an older min
 
 2. [Enable the `pgedge` repository](../el/configure-repo.md) with the commands:
 
-    `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
+    `sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
 
 3. Upgrade to the latest minor version of Postgres with the command:
 
@@ -77,7 +77,7 @@ To perform a migration from an older major version of community Postgres to a mo
 
 2. [Enable the `pgedge` repository](../el/configure-repo.md) with the commands:
 
-    `sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
+    `sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm`
   
     `sudo dnf config-manager --set-enabled crb`
   

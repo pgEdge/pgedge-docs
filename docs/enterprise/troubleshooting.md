@@ -21,5 +21,5 @@ Error: GPG check FAILED
 To omit the gpgcheck during installation, include the --nogpgcheck flag when installing Postgres:
 
 ```bash
-dnf install --nogpgcheck -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
+dnf install --nogpgcheck -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
 ```

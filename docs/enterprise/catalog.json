@@ -558,7 +558,7 @@
         "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm",
         "sudo dnf config-manager --set-enabled codeready-builder-for-rhel-9-rhui-rpms"
       ],
-      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "repo_install": "sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
@@ -576,7 +576,7 @@
         "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm",
         "sudo subscription-manager repos --enable codeready-builder-for-rhel-10-$(arch)-rpms"
       ],
-      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "repo_install": "sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
@@ -594,7 +594,7 @@
         "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm",
         "sudo dnf config-manager --set-enabled ol9_codeready_builder"
       ],
-      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "repo_install": "sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
@@ -612,7 +612,7 @@
         "sudo dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm",
         "sudo dnf config-manager --set-enabled ol10_codeready_builder"
       ],
-      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "repo_install": "sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
@@ -630,7 +630,7 @@
         "sudo dnf install -y epel-release",
         "sudo dnf config-manager --set-enabled crb"
       ],
-      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "repo_install": "sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
@@ -648,7 +648,7 @@
         "sudo dnf install -y epel-release",
         "sudo dnf config-manager --set-enabled crb"
       ],
-      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "repo_install": "sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
@@ -666,7 +666,7 @@
         "sudo dnf install -y epel-release",
         "sudo dnf config-manager --set-enabled crb"
       ],
-      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "repo_install": "sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
@@ -684,7 +684,7 @@
         "sudo dnf install -y epel-release",
         "sudo dnf config-manager --set-enabled crb"
       ],
-      "repo_install": "sudo dnf install -y https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
+      "repo_install": "sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm",
       "install_pattern": "sudo dnf install -y {package}",
       "init_pattern": "sudo /usr/pgsql-{ver}/bin/postgresql-{ver}-setup initdb",
       "start_pattern": "sudo systemctl enable --now postgresql-{ver}"
@@ -702,7 +702,7 @@
         "sudo apt-get update",
         "sudo apt-get install -y curl gnupg2 lsb-release"
       ],
-      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "repo_install": "sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
       "start_pattern": "sudo systemctl enable --now postgresql"
@@ -720,7 +720,7 @@
         "sudo apt-get update",
         "sudo apt-get install -y curl gnupg2 lsb-release"
       ],
-      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "repo_install": "sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
       "start_pattern": "sudo systemctl enable --now postgresql"
@@ -738,7 +738,7 @@
         "sudo apt-get update",
         "sudo apt-get install -y curl gnupg2 lsb-release"
       ],
-      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "repo_install": "sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
       "start_pattern": "sudo systemctl enable --now postgresql"
@@ -756,7 +756,7 @@
         "sudo apt-get update",
         "sudo apt-get install -y curl gnupg2 lsb-release"
       ],
-      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "repo_install": "sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
       "start_pattern": "sudo systemctl enable --now postgresql"
@@ -774,7 +774,7 @@
         "sudo apt-get update",
         "sudo apt-get install -y curl gnupg2 lsb-release"
       ],
-      "repo_install": "sudo curl -sSL https://apt.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
+      "repo_install": "sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb -o /tmp/pgedge-release.deb && sudo dpkg -i /tmp/pgedge-release.deb && sudo apt-get update",
       "install_pattern": "sudo apt-get install -y {package}",
       "init_pattern": "sudo pg_ctlcluster {ver} main start",
       "start_pattern": "sudo systemctl enable --now postgresql"
