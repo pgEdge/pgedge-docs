@@ -16,19 +16,24 @@
         return response.text();
     }
 
-    // A page's markdown text. Expected failures come back as a sentence an
-    // agent can act on; anything else throws.
-    async function fetchMarkdown(url, pageUrl) {
+    // Fetch a page's text. Expected failures resolve to {sentence}, one an
+    // agent can act on; other failures throw.
+    async function fetchOrExplain(url, pageUrl, missing) {
         var response = await fetch(url);
-        if (response.status === 404) {
-            return 'No markdown version exists for ' + url.href + '.';
-        }
+        if (response.status === 404) return { sentence: missing };
         if (response.status === 429 || response.status >= 500) {
-            return 'This page is temporarily unavailable.' + (pageUrl ?
-                ' It can still be read as HTML at ' + pageUrl.href + '.' : '');
+            return { sentence: 'This page is temporarily unavailable.' +
+                (pageUrl ? ' It can still be read as HTML at ' +
+                 pageUrl.href + '.' : '') };
         }
         if (!response.ok) throw new Error(url + ' returned ' + response.status);
-        return response.text();
+        return { text: await response.text() };
+    }
+
+    async function fetchMarkdown(url, pageUrl) {
+        var result = await fetchOrExplain(
+            url, pageUrl, 'No markdown version exists for ' + url.href + '.');
+        return result.sentence || result.text;
     }
 
     // Where a page's meta refresh points, if it is a redirect.
@@ -48,8 +53,10 @@
         }
         if (url.pathname.endsWith('.md')) return fetchMarkdown(url);
 
-        var html = new DOMParser().parseFromString(await fetchText(url),
-                                                   'text/html');
+        var page = await fetchOrExplain(
+            url, null, 'No page exists at ' + url.href + '.');
+        if (page.sentence) return page.sentence;
+        var html = new DOMParser().parseFromString(page.text, 'text/html');
         var link = html.querySelector(
             'link[rel="alternate"][type="text/markdown"]');
         if (link) {
@@ -120,7 +127,9 @@
     ];
 
     tools.forEach(function(tool) {
-        document.modelContext.registerTool(tool).catch(function(error) {
+        Promise.resolve().then(function() {
+            return document.modelContext.registerTool(tool);
+        }).catch(function(error) {
             console.warn('WebMCP: could not register ' + tool.name, error);
         });
     });
