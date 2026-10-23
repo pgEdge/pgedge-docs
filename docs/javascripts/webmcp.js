@@ -9,6 +9,7 @@
     if (!('modelContext' in document)) return;
 
     var SEARCH_LIMIT = 10;
+    var PRODUCTION_ORIGIN = 'https://docs.pgedge.com';
 
     async function fetchText(url) {
         var response = await fetch(url);
@@ -16,8 +17,9 @@
         return response.text();
     }
 
-    // Fetch a page's text. Expected failures resolve to {sentence}, one an
-    // agent can act on; other failures throw.
+    // Fetch a page's text, with the URL it ended on after redirects.
+    // Expected failures resolve to {sentence}, one an agent can act on;
+    // other failures throw.
     async function fetchOrExplain(url, pageUrl, missing) {
         var response = await fetch(url);
         if (response.status === 404) return { sentence: missing };
@@ -27,7 +29,7 @@
                  pageUrl.href + '.' : '') };
         }
         if (!response.ok) throw new Error(url + ' returned ' + response.status);
-        return { text: await response.text() };
+        return { text: await response.text(), url: response.url };
     }
 
     async function fetchMarkdown(url, pageUrl) {
@@ -47,23 +49,40 @@
     // link of an HTML page, following a docset root's redirect to its latest
     // version.
     async function pageMarkdown(input, redirects) {
-        var url = new URL(input, location.origin);
+        var url;
+        try {
+            url = new URL(input, location.origin);
+        } catch (error) {
+            return 'Not a valid URL or path.';
+        }
+        // llms.txt links to production, so read those links from here.
+        if (url.origin === PRODUCTION_ORIGIN) {
+            url = new URL(url.pathname + url.search + url.hash,
+                          location.origin);
+        }
         if (url.origin !== location.origin) {
             return 'Only pages on ' + location.origin + ' can be read.';
         }
-        if (url.pathname.endsWith('.md')) return fetchMarkdown(url);
+        if (url.pathname.endsWith('.md')) {
+            var htmlPath = url.pathname.replace(/(^|\/)(index|README)\.md$/,
+                                                '$1').replace(/\.md$/, '/');
+            return fetchMarkdown(url, new URL(htmlPath, url));
+        }
 
         var page = await fetchOrExplain(
             url, null, 'No page exists at ' + url.href + '.');
         if (page.sentence) return page.sentence;
         var html = new DOMParser().parseFromString(page.text, 'text/html');
+        // Relative links resolve against the URL fetch ended on, which
+        // differs from the one asked for after a trailing-slash redirect.
+        var base = new URL(page.url);
         var link = html.querySelector(
             'link[rel="alternate"][type="text/markdown"]');
         if (link) {
-            return fetchMarkdown(new URL(link.getAttribute('href'), url), url);
+            return fetchMarkdown(new URL(link.getAttribute('href'), base), base);
         }
 
-        var target = refreshTarget(html, url);
+        var target = refreshTarget(html, base);
         if (target && !redirects) return pageMarkdown(target, 1);
         return 'No markdown version exists for ' + url.href + '.';
     }
@@ -77,7 +96,8 @@
             }));
         if (!results.length) return 'No pages match "' + query + '".';
         return results.map(function(page) {
-            var excerpt = page.excerpt.replace(/<[^>]+>/g, '');
+            var excerpt = page.excerpt.replace(/<[^>]+>/g, '')
+                .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
             return '- [' + page.meta.title + '](' +
                 new URL(page.url, location.origin).href + '): ' + excerpt;
         }).join('\n');

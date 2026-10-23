@@ -142,10 +142,8 @@ extra:
   logo_light_mode: 'img/logo-light.png'
 
   discord_url: https://discord.com/invite/pgedge/login
-  # Chrome's WebMCP origin trial token for docs.pgedge.com, which lets
-  # javascripts/webmcp.js register its tools for every visitor rather than
-  # only those with chrome://flags/#enable-webmcp-testing. Empty until pgEdge
-  # registers for the trial.
+  # Chrome WebMCP origin-trial token for javascripts/webmcp.js; empty until
+  # pgEdge registers.
   webmcp_origin_trial_token: ""
   generator: false
   analytics:
