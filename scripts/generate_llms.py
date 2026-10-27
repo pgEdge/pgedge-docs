@@ -44,9 +44,19 @@ SECTIONS_MARKER = "<!-- generated sections -->"
 MAX_DESCRIPTION = 300
 
 # A full stop followed by any word ends a sentence, since product names such
-# as pgAdmin start lowercase, except after the abbreviations listed.
-SENTENCE_END = re.compile(r"(?<!\be\.g)(?<!\bi\.e)(?<!\betc)(?<!\bvs)"
-                          r"[.!?](?=\s|$)")
+# as pgAdmin start lowercase, except after a single letter ("U.S.", "v.") or
+# one of the abbreviations listed. Add to the list when a description comes
+# out cut short.
+ABBREVIATIONS = ["e.g", "i.e", "etc", "vs", "cf", "approx", "no", "fig",
+                 "ver", "rev", "incl", "excl"]
+SENTENCE_END = re.compile(
+    r"(?<!\b[A-Za-z])"
+    + "".join(rf"(?<!\b{re.escape(a)})" for a in ABBREVIATIONS)
+    + r"[.!?](?=\s|$)", re.IGNORECASE)
+
+# Matches the notice overrides/main.html shows on Labs pages.
+LABS_NOTICE = ("pgEdge Labs projects are under active development. APIs and "
+               "features may change without notice.")
 
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input",
              "link", "meta", "source", "track", "wbr"}
@@ -159,6 +169,7 @@ def build_sections(config, site_dir, base):
     extra = config.get("extra", {})
     versioned = set(extra.get("versioned_docsets", []))
     third_party = set(extra.get("third_party_docsets", []))
+    labs = set(extra.get("labs_docsets", []))
 
     seen = set()
     sections = []
@@ -166,6 +177,7 @@ def build_sections(config, site_dir, base):
     unresolved = 0
     for category, items in extra.get("nav_categories", {}).items():
         lines = []
+        labs_lines = []
         for item in items:
             if "url" not in item:
                 continue
@@ -181,10 +193,21 @@ def build_sections(config, site_dir, base):
                 unresolved += 1
                 continue
             line = entry(item, path, site_dir, base)
-            if path.split("/", 1)[0] in third_party:
+            docset = path.split("/", 1)[0]
+            if docset in third_party:
                 optional.append(line)
+            elif docset in labs:
+                labs_lines.append(line)
             else:
                 lines.append(line)
+        # The site shows a notice on every pgEdge Labs page; an agent reading
+        # only this index needs the same warning. A section made up of Labs
+        # projects gets it as a sentence, and a Labs project listed among
+        # supported ones gets it on its own line.
+        if labs_lines and not lines:
+            lines = [LABS_NOTICE + "\n", *labs_lines]
+        else:
+            lines += [f"{line} (pgEdge Labs)" for line in labs_lines]
         if lines:
             sections.append(f"## {category}\n\n" + "\n".join(lines))
 
