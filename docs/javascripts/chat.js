@@ -1041,6 +1041,12 @@
                 return `\x00CODE_BLOCK_${index}\x00`;
             });
 
+            // Tables are rendered with each cell's inline formatting applied
+            // separately, so that e.g. italics cannot run across cells, and
+            // held in placeholders so the passes below leave them alone
+            const tablesHtml = [];
+            html = this.renderTablesAsHtml(html, tablesHtml);
+
             // Process other markdown (this will convert \n to <br> but not inside placeholders)
             html = html
                 // Headings (process longest patterns first)
@@ -1052,7 +1058,37 @@
                 // Unordered lists
                 .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
                 // Ordered lists
-                .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+                .replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+            html = this.renderInlineAsHtml(html);
+            html = html
+                // Tables go back in before line breaks; each is on one line
+                // and starts with a tag, so it gains no <br>
+                .replace(/\uE000TABLE_(\d+)\uE000/g, (_match, index) => tablesHtml[parseInt(index, 10)])
+                // Wrap consecutive <li> in <ul> (non-greedy to prevent ReDoS)
+                .replace(/(<li>.*?<\/li>\n?)+/g, '<ul>$&</ul>')
+                // Line breaks (but not after block elements or inside code block placeholders)
+                .replace(/\n(?!<)/g, '<br>')
+                // Clean up extra <br> after block elements
+                .replace(/(<\/(?:h[2-6]|ul|pre|li|div)>)<br>/g, '$1');
+
+            // Restore code blocks (with real newlines preserved)
+            html = html.replace(/\x00CODE_BLOCK_(\d+)\x00/g, (_match, index) => {
+                return codeBlocks[parseInt(index, 10)];
+            });
+
+            // Clean up <br> before/after code blocks (placeholders weren't treated as block elements)
+            html = html.replace(/<br>(<pre)/g, '$1');
+            html = html.replace(/(<\/pre>)<br>/g, '$1');
+
+            return html;
+        }
+
+        /**
+         * Apply the inline markdown passes (code, bold, italic, links) to
+         * already-escaped text.
+         */
+        renderInlineAsHtml(html) {
+            return html
                 // Inline code
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 // Bold
@@ -1067,24 +1103,139 @@
                         return `<a href="${safeUrl}" target="_blank" rel="noopener">${linkText}</a>`;
                     }
                     return match;
-                })
-                // Wrap consecutive <li> in <ul> (non-greedy to prevent ReDoS)
-                .replace(/(<li>.*?<\/li>\n?)+/g, '<ul>$&</ul>')
-                // Line breaks (but not after block elements or inside code block placeholders)
-                .replace(/\n(?!<)/g, '<br>')
-                // Clean up extra <br> after block elements
-                .replace(/(<\/(?:h[2-6]|ul|pre|li)>)<br>/g, '$1');
+                });
+        }
 
-            // Restore code blocks (with real newlines preserved)
-            html = html.replace(/\x00CODE_BLOCK_(\d+)\x00/g, (_match, index) => {
-                return codeBlocks[parseInt(index, 10)];
-            });
+        /**
+         * Convert GitHub-style pipe tables to HTML. Expects already-escaped
+         * input; a table needs a header row followed by a separator row such
+         * as |---|:---:|. Each table is stored in `tablesHtml` and replaced in
+         * the output by a placeholder, which renderMarkdown() restores. The
+         * placeholder uses a private-use character that escaped text from a
+         * response will not contain.
+         */
+        renderTablesAsHtml(text, tablesHtml) {
+            // Split on unescaped pipes outside inline code spans, so that
+            // e.g. `a || b` in a cell stays in one piece
+            const splitRow = (line) => {
+                let row = line.trim();
+                const cells = [];
+                // Count the delimiters found, so that a pipe that only
+                // appears escaped or inside inline code does not make a row
+                cells.delimiters = 0;
+                if (row.startsWith('|')) {
+                    row = row.slice(1);
+                    cells.delimiters++;
+                }
+                let current = '';
+                let endedWithPipe = false;
+                let pos = 0;
+                while (pos < row.length) {
+                    const ch = row[pos];
+                    endedWithPipe = false;
+                    if (ch === '\\') {
+                        // GFM reads `\\` as one literal backslash, so only
+                        // an odd-length run escapes a following pipe
+                        let run = 0;
+                        while (row[pos + run] === '\\') run++;
+                        if (run % 2 === 1 && row[pos + run] === '|') {
+                            current += '\\'.repeat(run - 1) + '|';
+                            pos += run + 1;
+                        } else {
+                            current += '\\'.repeat(run);
+                            pos += run;
+                        }
+                    } else if (ch === '`') {
+                        let run = 0;
+                        while (row[pos + run] === '`') run++;
+                        const fence = '`'.repeat(run);
+                        let close = row.indexOf(fence, pos + run);
+                        while (close !== -1 && row[close + run] === '`') {
+                            close = row.indexOf(fence, close + run + 1);
+                        }
+                        const end = close === -1 ? pos + run : close + run;
+                        // GFM removes a pipe's escaping backslash inside code
+                        // spans too; an even run is literal backslashes only
+                        current += row.slice(pos, end).replace(/(\\+)\|/g, (_m, slashes) =>
+                            (slashes.length % 2 === 1 ? slashes.slice(1) : slashes) + '|');
+                        pos = end;
+                    } else if (ch === '|') {
+                        cells.push(current.trim());
+                        cells.delimiters++;
+                        current = '';
+                        endedWithPipe = true;
+                        pos++;
+                    } else {
+                        current += ch;
+                        pos++;
+                    }
+                }
+                if (!endedWithPipe) cells.push(current.trim());
+                return cells;
+            };
+            const isRow = (line) => line.includes('|') && splitRow(line).delimiters > 0;
+            // A heading or code fence starts another block and so ends the
+            // table even when it contains a pipe
+            const isBlockStart = (line) =>
+                /^\s*#{1,6}\s|^\s*(?:```|~~~)/.test(line);
+            // In a table written without leading pipes, a row such as
+            // `- | yes` is a row whose first cell is '-', not a list item
+            const isListItem = (line) => /^\s*(?:[-*+]|\d+[.)])\s/.test(line);
+            const isSeparator = (line) => {
+                const specs = splitRow(line);
+                return specs.length > 0 && specs.every(spec => /^:?-+:?$/.test(spec));
+            };
+            // GFM only treats the lines as a table when the header and
+            // separator have the same number of columns
+            const isTableStart = (idx) =>
+                idx + 1 < lines.length &&
+                isRow(lines[idx]) &&
+                isSeparator(lines[idx + 1]) &&
+                splitRow(lines[idx]).length === splitRow(lines[idx + 1]).length;
 
-            // Clean up <br> before/after code blocks (placeholders weren't treated as block elements)
-            html = html.replace(/<br>(<pre)/g, '$1');
-            html = html.replace(/(<\/pre>)<br>/g, '$1');
+            const lines = text.split('\n');
+            const out = [];
+            let tableCount = 0;
+            let i = 0;
+            while (i < lines.length) {
+                if (isTableStart(i)) {
+                    const header = splitRow(lines[i]);
+                    const aligns = splitRow(lines[i + 1]).map(spec => {
+                        const left = spec.startsWith(':');
+                        const right = spec.endsWith(':');
+                        if (left && right) return 'center';
+                        if (right) return 'right';
+                        if (left) return 'left';
+                        return '';
+                    });
+                    const cellAsHtml = (tag, content, col) => {
+                        const align = aligns[col] ? ` style="text-align: ${aligns[col]}"` : '';
+                        return `<${tag}${align}>${this.renderInlineAsHtml(content)}</${tag}>`;
+                    };
 
-            return html;
+                    let tableHtml = '<div class="ellie-table-wrap"><table class="ellie-table"><thead><tr>';
+                    tableHtml += header.map((c, col) => cellAsHtml('th', c, col)).join('');
+                    tableHtml += '</tr></thead><tbody>';
+                    i += 2;
+                    // Stop at a new header and separator, in case two tables
+                    // are written without a blank line between them, and at
+                    // the start of any other block
+                    const leadingPipes = lines[i - 2].trim().startsWith('|');
+                    while (i < lines.length && isRow(lines[i]) && !isTableStart(i) &&
+                           !isBlockStart(lines[i]) && !(leadingPipes && isListItem(lines[i]))) {
+                        const cells = splitRow(lines[i]);
+                        tableHtml += '<tr>' + header.map((_h, col) => cellAsHtml('td', cells[col] || '', col)).join('') + '</tr>';
+                        i++;
+                    }
+                    tableHtml += '</tbody></table></div>';
+                    out.push('\uE000TABLE_' + tableCount + '\uE000');
+                    tablesHtml[tableCount++] = tableHtml;
+                } else {
+                    out.push(lines[i]);
+                    i++;
+                }
+            }
+            return out.join('\n');
         }
 
         scrollToBottom(force = false) {
