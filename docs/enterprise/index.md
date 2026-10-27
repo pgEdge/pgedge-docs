@@ -65,7 +65,7 @@ same on Enterprise Linux, Debian, and Ubuntu:
 
     Include the complete path to the location of the `client.crt` file.
 
-When the certificate is installed, the host can install and update pgEdge
+With the certificate installed, the host can install and update pgEdge
 packages as usual. If you run into problems, email `support@pgedge.com` or
 open a support ticket.
 
