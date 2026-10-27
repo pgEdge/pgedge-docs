@@ -1,4 +1,4 @@
-# Configuring Supporting Components
+# Installing Supporting Components
 
 Many of the supporting components distributed via the `pgedge` repository
 follow standard configuration and usage as documented by their open-source
