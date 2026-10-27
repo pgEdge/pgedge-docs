@@ -495,15 +495,20 @@ def main():
         )
         nav = imported.get("nav")
         nav_result = reprefix(nav, prefix) if nav else f"{prefix}/index.md"
+        # The commit the ref names right now, so the markdown served for
+        # these pages matches the HTML built from them even after the branch
+        # moves on. `^{commit}` peels an annotated tag.
+        commit = run(["git", "--git-dir", str(mirrors.path_for(url)),
+                      "rev-parse", f"{ref}^{{commit}}"]).strip()
         return (trail, nav_result, prefix, imported.get("markdown_extensions"),
-                exclusions)
+                exclusions, commit)
 
     print(f"Importing {len(imports)} versions...")
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
         results = list(pool.map(fetch_one, imports))
     expanded = {trail: nav_result for trail, nav_result, *_ in results}
 
-    for _, _, prefix, _, (removed, unmatched) in results:
+    for _, _, prefix, _, (removed, unmatched), _ in results:
         if removed:
             print(f"Excluded {len(removed)} file(s) from {prefix}: "
                   f"{', '.join(removed)}")
@@ -513,7 +518,7 @@ def main():
 
     config["markdown_extensions"] = merge_markdown_extensions(
         config.get("markdown_extensions", []),
-        [(prefix, exts) for _, _, prefix, exts, _ in results],
+        [(prefix, exts) for _, _, prefix, exts, _, _ in results],
     )
 
     stubs = write_redirect_stubs(staging, config)
@@ -529,12 +534,15 @@ def main():
         for docset, versions in extra["docset_versions"].items()
     }
 
-    # Read by scripts/markdown_pages.py.
+    # Read by scripts/markdown_pages.py. Pinned to the commit each import
+    # resolved to, not the branch name, for the same reason the local pages
+    # use the deployed commit.
+    commits = {trail: commit for trail, *_, commit in results}
     extra["markdown_sources"] = {
         prefix_for(trail):
             url.split("github.com/")[-1].rstrip("/").removesuffix(".git")
-            + f"@{ref}"
-        for trail, url, ref in imports
+            + f"@{commits[trail]}"
+        for trail, url, _ref in imports
     }
 
     config["nav"] = substitute(config["nav"], expanded)
