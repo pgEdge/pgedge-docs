@@ -400,7 +400,7 @@ nav:
         - Installing and Configuring ACE: enterprise/el/components/ace.md
         - Installing and Configuring Patroni: enterprise/el/components/patroni.md
         - Installing and Configuring PgBouncer: enterprise/el/components/pgbouncer.md
-      - Upgrading Spock: enterprise/el/upgrading-spock.md
+        - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
     - Debian 12 and 13 & Ubuntu 22.04 LTS and 24.04 LTS:
       - Debian & Ubuntu Version Support: enterprise/debian/index.md
@@ -414,7 +414,7 @@ nav:
         - Installing and Configuring ACE: enterprise/debian/components/ace.md
         - Installing and Configuring Patroni: enterprise/debian/components/patroni.md
         - Installing and Configuring PgBouncer: enterprise/debian/components/pgbouncer.md
-      - Upgrading Spock: enterprise/debian/upgrading-spock.md
+        - Upgrading Spock: enterprise/debian/upgrading-spock.md
       - Creating an Offline Repo: enterprise/debian/offline.md
     - Troubleshooting: enterprise/troubleshooting.md
     - Enterprise Postgres Release Notes: enterprise/pep_rel_notes.md
