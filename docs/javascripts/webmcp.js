@@ -49,8 +49,8 @@
     }
 
     // Where a page's meta refresh points, if it is a redirect.
-    function refreshTarget(html, base) {
-        var refresh = html.querySelector('meta[http-equiv="refresh"]');
+    function refreshTarget(doc, base) {
+        var refresh = doc.querySelector('meta[http-equiv="refresh"]');
         var target = refresh && /url=(.+)$/i.exec(refresh.content);
         return target ? new URL(target[1].trim(), base) : null;
     }
@@ -89,17 +89,17 @@
         var page = await fetchOrExplain(
             url, null, 'No page exists at ' + url.href + '.');
         if (page.sentence) return page.sentence;
-        var html = new DOMParser().parseFromString(page.text, 'text/html');
+        var doc = new DOMParser().parseFromString(page.text, 'text/html');
         // Relative links resolve against the URL fetch ended on, which
         // differs from the one asked for after a trailing-slash redirect.
         var base = new URL(page.url);
-        var link = html.querySelector(
+        var link = doc.querySelector(
             'link[rel="alternate"][type="text/markdown"]');
         if (link) {
             return fetchMarkdown(new URL(link.getAttribute('href'), base), base);
         }
 
-        var target = refreshTarget(html, base);
+        var target = refreshTarget(doc, base);
         if (target && !redirects) return pageMarkdown(target, 1);
         return 'No markdown version exists for ' + url.href + '.';
     }
@@ -113,8 +113,10 @@
             }));
         if (!results.length) return 'No pages match "' + query + '".';
         return results.map(function(page) {
-            var excerpt = page.excerpt.replace(/<[^>]+>/g, '')
-                .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+            // The excerpt is HTML with <mark> around the matches; parsing it
+            // drops the tags and decodes every entity.
+            var excerpt = new DOMParser().parseFromString(
+                page.excerpt, 'text/html').body.textContent;
             return '- [' + page.meta.title + '](' +
                 new URL(page.url, location.origin).href + '): ' + excerpt;
         }).join('\n');
