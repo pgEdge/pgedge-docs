@@ -75,7 +75,7 @@ Before performing an upgrade to a newer version of Spock, ensure you have a curr
     When you've upgraded the Spock extension on all of the nodes in your cluster, enable Auto-DDL (as needed):
 
     ```sql
-    SYSTEM SET spock.enable_ddl_replication = on;
+    ALTER SYSTEM SET spock.enable_ddl_replication = on;
     ALTER SYSTEM SET spock.include_ddl_repset = on;
     ALTER SYSTEM SET spock.allow_ddl_from_functions = on;
     SELECT pg_reload_conf();

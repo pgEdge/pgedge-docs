@@ -73,6 +73,6 @@ After stopping automatic DDL replication on all of the nodes in your cluster, up
     ```sql
     ALTER SYSTEM SET spock.enable_ddl_replication = on;
     ALTER SYSTEM SET spock.include_ddl_repset = on;
-    SYSTEM SET spock.allow_ddl_from_functions = on;
+    ALTER SYSTEM SET spock.allow_ddl_from_functions = on;
     SELECT pg_reload_conf();
     ```
