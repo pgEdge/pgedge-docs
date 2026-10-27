@@ -468,6 +468,10 @@
     padding: 4px 8px;
     text-align: left;
     vertical-align: top;
+    /* Keep words whole, overriding the bubble's break-word, so a wide
+       table scrolls sideways instead of splitting words across lines */
+    word-break: normal;
+    overflow-wrap: normal;
 }
 
 .ellie-message__content .ellie-table th {
