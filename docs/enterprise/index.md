@@ -99,7 +99,7 @@ responds:
 sudo pgedge-subscription-manager status
 ```
 
-Ask pgEdge support for your access expiry.
+Reach out to pgEdge support for details about your access expiry.
 
 ## Installing pgEdge Enterprise Postgres
 
