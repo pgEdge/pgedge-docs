@@ -68,6 +68,24 @@ the command:
 sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
 ```
 
+## Upgrading an Existing Repository
+
+If your host has an earlier version of the `pgedge` repository installed, the
+`dnf install` command upgrades the repository package and saves the new
+repository definition in `/etc/yum.repos.d/pgedge.repo.rpmnew`. Replace the
+existing repository file with the new definition, and refresh the package
+cache with the commands:
+
+```bash
+sudo mv /etc/yum.repos.d/pgedge.repo.rpmnew /etc/yum.repos.d/pgedge.repo
+sudo dnf clean all
+```
+
+The new definition leaves the repository disabled until you
+[register the host and install its certificate](#registering-your-certificate);
+until then, the host can't install or update packages from the `pgedge`
+repository.
+
 ## Registering Your Certificate
 
 Access to the `pgedge` repository requires a certificate from pgEdge. The

@@ -7,7 +7,10 @@ and Debian platforms.
 
     If you created your repository before March 1, 2026, replace the
     repository package, register the host for a repository certificate, and
-    refresh the content.
+    refresh the content. The new repository package leaves the repository
+    disabled until you install the certificate, so the host can't install or
+    update packages from the `pgedge` repository until pgEdge returns your
+    certificate and you install it.
 
 ## Updating a RHEL Repository Host
 
