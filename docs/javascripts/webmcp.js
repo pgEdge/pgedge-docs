@@ -160,7 +160,7 @@
                 'when unsure which product applies, then use ' +
                 'search_docs or read_page.',
             inputSchema: { type: 'object', properties: {} },
-            annotations: { readOnlyHint: true },
+            annotations: { readOnlyHint: true, untrustedContentHint: true },
             execute: function() { return fetchText('/llms.txt'); }
         }
     ];
