@@ -47,7 +47,7 @@ command, giving the path to the file. The command also enables the repository,
 which stays disabled until a certificate is installed:
 
 ```bash
-sudo pgedge-subscription-manager install ~/Downloads/client.crt
+sudo pgedge-subscription-manager install complete_path_to/client.crt
 ```
 
 For file locations, the `status` command, and certificate expiry, see

@@ -60,7 +60,7 @@ same on Enterprise Linux, Debian, and Ubuntu:
    installs it, and enables the repository:
 
     ```bash
-    sudo pgedge-subscription-manager install ~/Downloads/client.crt
+    sudo pgedge-subscription-manager install complete_path_to/client.crt
     ```
 
     Pass the path to the certificate as you would to any command. If you
