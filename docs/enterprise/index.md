@@ -9,7 +9,9 @@ certificate after you add the repository, and before you install any packages.
 
     If you installed the `pgedge` repository prior to March 1, 2026, you will
     need to replace and refresh your repository package.  For details, see
-    [Updating your Repo for FIPS Support](fips_update.md).
+    Updating your Repository for FIPS Support for
+    [Enterprise Linux](el/fips_update.md) or for
+    [Debian and Ubuntu](debian/fips_update.md).
 
 ## Obtaining and Installing a Repository Certificate
 

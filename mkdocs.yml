@@ -51,6 +51,9 @@ plugins:
   # went.
   - redirects:
       redirect_maps:
+        # The FIPS update page split into per-platform pages
+        enterprise/fips_update.md: enterprise/index.md
+
         # Legacy pgedge-containers versioned URLs redirect to pgedge-helm
         pgedge-containers/v0-1/index.md: pgedge-helm/v0-1/index.md
         pgedge-containers/development/index.md: pgedge-helm/development/index.md
@@ -385,10 +388,10 @@ nav:
 
   - pgEdge Enterprise Postgres Repository:
     - Repository Overview: enterprise/index.md
-    - Updating your Repository for FIPS Support: enterprise/fips_update.md
     - Enterprise Linux 9 & 10:
       - Enterprise Linux Version Support: enterprise/el/index.md
       - Getting Started - Configuring the Repository: enterprise/el/configure-repo.md
+      - Updating your Repository for FIPS Support: enterprise/el/fips_update.md
       - Installing Postgres: enterprise/el/installing.md
       - Supporting Components:
         - Installing Supporting Components: enterprise/el/components/components.md
@@ -403,6 +406,7 @@ nav:
     - Debian 12 and 13 & Ubuntu 22.04 LTS and 24.04 LTS:
       - Debian & Ubuntu Version Support: enterprise/debian/index.md
       - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
+      - Updating your Repository for FIPS Support: enterprise/debian/fips_update.md
       - Installing Postgres: enterprise/debian/installing.md
       - Supporting Components:
         - Installing Supporting Components: enterprise/debian/components/components.md

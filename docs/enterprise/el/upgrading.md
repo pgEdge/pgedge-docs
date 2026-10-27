@@ -17,7 +17,7 @@ your previous version if needed.
     The host must have the current repository package and an installed
     repository certificate before you upgrade. If you installed the `pgedge`
     repository before March 1, 2026, update the repository first, as described
-    in [Updating your Repository for FIPS Support](../fips_update.md). If
+    in [Updating your Repository for FIPS Support](fips_update.md). If
     you're moving from community Postgres, see
     [Migrating to pgEdge Enterprise Postgres](migrating.md) instead.
 
