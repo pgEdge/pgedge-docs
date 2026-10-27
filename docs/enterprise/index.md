@@ -3,7 +3,7 @@
 pgEdge makes FIPS-enabled packages available via the `pgedge` repository for
 Enterprise Linux, Debian, and Ubuntu. Access to the repository requires an
 active pgEdge subscription and a certificate from pgEdge; install the
-certificate after you add the repository and before you install any packages.
+certificate after you add the repository, and before you install any packages.
 
 !!! note
 
