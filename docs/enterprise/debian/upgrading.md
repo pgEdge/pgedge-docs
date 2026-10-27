@@ -12,12 +12,14 @@ Postgres installation to a newer minor or major version of Postgres:
 Before you start an upgrade, take a recent backup so that you can revert to
 your previous version if needed.
 
-The host must have the current repository package and an installed repository
-certificate before you upgrade. If you installed the `pgedge` repository
-before March 1, 2026, update the repository first, as described in
-[Updating your Repository for FIPS Support](../fips_update.md). If you're
-moving from community Postgres, see
-[Migrating to pgEdge Enterprise Postgres](migrating.md) instead.
+!!! hint
+
+    The host must have the current repository package and an installed
+    repository certificate before you upgrade. If you installed the `pgedge`
+    repository before March 1, 2026, update the repository first, as described
+    in [Updating your Repository for FIPS Support](../fips_update.md). If
+    you're moving from community Postgres, see
+    [Migrating to pgEdge Enterprise Postgres](migrating.md) instead.
 
 The examples on this page upgrade Postgres 18 to a newer minor version, and
 Postgres 17 to Postgres 18; substitute the versions on your host.
