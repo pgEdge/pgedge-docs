@@ -396,7 +396,7 @@ nav:
         - Installing and Configuring Patroni: enterprise/el/components/patroni.md
         - Installing and Configuring PgBouncer: enterprise/el/components/pgbouncer.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
-      - Performing an Upgrade: enterprise/el/upgrading.md
+      - Upgrading a Postgres Installation: enterprise/el/upgrading.md
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
     - Debian 12 and 13 & Ubuntu 22.04 LTS and 24.04 LTS:
@@ -410,7 +410,7 @@ nav:
         - Installing and Configuring Patroni: enterprise/debian/components/patroni.md
         - Installing and Configuring PgBouncer: enterprise/debian/components/pgbouncer.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
-      - Performing an Upgrade: enterprise/debian/upgrading.md
+      - Upgrading a Postgres Installation: enterprise/debian/upgrading.md
       - Upgrading Spock: enterprise/debian/upgrading-spock.md
       - Creating an Offline Repo: enterprise/debian/offline.md
     - Troubleshooting: enterprise/troubleshooting.md

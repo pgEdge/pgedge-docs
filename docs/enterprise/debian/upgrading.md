@@ -1,4 +1,4 @@
-# Performing an Upgrade
+# Upgrading a Postgres Installation
 
 You can use the `pgedge` repository to upgrade an existing pgEdge Enterprise
 Postgres installation to a newer minor or major version of Postgres. A minor
