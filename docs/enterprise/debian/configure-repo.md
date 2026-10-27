@@ -1,6 +1,9 @@
 # Configuring the Repository
 
-Using packages from the `pgedge` repository is an easy way to manage Postgres and supporting components.
+Using packages from the `pgedge` repository is an easy way to manage Postgres
+and supporting components. Before using the `pgedge` repository, you'll need
+to [request an access certificate](#requesting-and-registering-your-certificate)
+from pgEdge.
 
 **Meeting Platform-Specific Prerequisites**
 
@@ -24,7 +27,7 @@ sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.de
 sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb || true
 ```
 
-## Registering Your Certificate
+## Requesting and Registering Your Certificate
 
 Access to the `pgedge` repository requires a certificate from pgEdge. The
 following command, run on the host that will install the packages, registers
@@ -80,7 +83,7 @@ Use the following steps to update an existing repository:
    [Creating the Repository](#creating-the-repository).
 
 3. Register the host and install its certificate, as described in
-   [Registering Your Certificate](#registering-your-certificate).
+   [Requesting and Registering Your Certificate](#requesting-and-registering-your-certificate).
 
 4. Refresh the repository contents and upgrade your packages with the
    commands:
