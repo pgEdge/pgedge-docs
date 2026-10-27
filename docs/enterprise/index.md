@@ -63,9 +63,8 @@ same on Enterprise Linux, Debian, and Ubuntu:
     sudo pgedge-subscription-manager install complete_path_to/client.crt
     ```
 
-    Pass the path to the certificate as you would to any command. If you
-    switch to the root user with `sudo -i` first, use a full path, because
-    `sudo -i` changes the working directory.
+    If you switch to the root user with `sudo -i` first, use a full path,
+    because `sudo -i` changes the working directory.
 
 When the certificate is installed, the host can install and update pgEdge
 packages as usual. If you run into problems, email `support@pgedge.com` or

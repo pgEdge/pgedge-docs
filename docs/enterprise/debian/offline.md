@@ -42,7 +42,7 @@ Email the `client.csr` file the command names to `support@pgedge.com`. When
 pgEdge returns your certificate, install it with the command:
 
 ```bash
-sudo pgedge-subscription-manager install /path/to/client.crt
+sudo pgedge-subscription-manager install complete_path_to/client.crt
 ```
 
 For details, see
