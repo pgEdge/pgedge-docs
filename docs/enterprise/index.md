@@ -137,3 +137,8 @@ For more information about support for the pgEdge Enterprise Postgres Repository
 !!! note
 
     The platform-specific commands shared in this section work on the majority of the corresponding systems, but may not work on *all* systems.  You may need to find a system-specific command to accomplish the task performed by the commands we've shared.
+
+## License
+
+Use of components distributed via the `pgedge` repository is governed by
+product-specific licenses; see the bundled readme files for more information.

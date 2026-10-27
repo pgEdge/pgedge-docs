@@ -83,7 +83,3 @@ Installation of the server package creates a database user named `postgres`.  Th
   postgres=# ALTER ROLE postgres PASSWORD '1safepassword!';
   ALTER ROLE
   ```
-
-### License
-
-Use of components distributed via the `pgedge` repository is governed by product-specific licenses; see the bundled readme files for more information.
