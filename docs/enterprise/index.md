@@ -27,8 +27,9 @@ Each host that downloads packages from the repository needs its own
 certificate, so run the following steps once on every host. The steps are the
 same on Enterprise Linux, Debian, and Ubuntu:
 
-1. Add the `pgedge` repository to the host, as described in Configuring the
-   Repository for [Enterprise Linux](el/configure-repo.md) or for
+1. After meeting platform-specific prerequisites, add the `pgedge` repository
+   to the host, as described in Configuring the Repository for
+   [Enterprise Linux](el/configure-repo.md) or for
    [Debian and Ubuntu](debian/configure-repo.md).
 
 2. Register the host. Run the following command on the host that will
