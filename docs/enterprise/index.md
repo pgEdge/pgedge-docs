@@ -77,29 +77,30 @@ platform:
 | Enterprise Linux | `/etc/pki/pgedge` | `client.key`, `client.csr`, and `client.crt` |
 | Debian and Ubuntu | `/etc/pgedge` | `client.key`, `client.csr`, and `client.crt`; the `_apt` user owns `client.key` so that `apt` can read it |
 
-### Understanding Certificate and Access Expiry
+### Understanding Certificate and Access Expiration
 
 Your certificate and your access to the repository expire separately:
 
-- The certificate expiry date is written into `client.crt`. If your access
+- The certificate expiration date is written into `client.crt`. If your access
   continues past that date, pgEdge sends you a new certificate. Install it
   with the same `install` command, adding `--force` to replace the current
   certificate.
-- Your access expiry is managed by pgEdge, not stored in the certificate.
-  pgEdge can extend your access without sending you a new certificate, so
-  there is nothing for you to install.
+- Your access expiration date is managed by pgEdge, not stored in the
+  certificate. pgEdge can extend your access without sending you a new
+  certificate, so there is nothing for you to install.
 
 Your access can end before your certificate expires; for example, the
 certificate for a 30-day evaluation can stay valid after the evaluation's
 access period ends. The `pgedge-subscription-manager status` command reports
-what is installed, the certificate's expiry date, and whether the repository
-responds:
+what is installed, the certificate's expiration date, and whether the
+repository responds:
 
 ```bash
 sudo pgedge-subscription-manager status
 ```
 
-Reach out to pgEdge support for details about your access expiry.
+Reach out to [pgEdge support](mailto:support@pgedge.com) for details about
+your access expiration date.
 
 ## Installing pgEdge Enterprise Postgres
 

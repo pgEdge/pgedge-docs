@@ -94,7 +94,7 @@ which stays disabled until a certificate is installed:
 sudo pgedge-subscription-manager install complete_path_to/client.crt
 ```
 
-For file locations, the `status` command, and certificate expiry, see
+For file locations, the `status` command, and certificate expiration, see
 [Obtaining and Installing a Repository Certificate](../index.md#obtaining-and-installing-a-repository-certificate).
 After installing the certificate, you're ready to
 [use the repository](./installing.md) to install Postgres and supporting
