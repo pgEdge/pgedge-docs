@@ -35,7 +35,7 @@ If your current Postgres version is the same as your target Postgres version, yo
 
 5. Then, adjust your PATH to point to the new version of Postgres; for example:
 
-    `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
+    `echo 'export PATH=/usr/pgsql-18/bin:$PATH' >> ~/.bashrc`
   
     `source ~/.bashrc`
 
@@ -62,7 +62,7 @@ If your installed version of Postgres is the same major version but an older min
 
 5. Then, adjust your PATH to point to the new version of Postgres; for example:
 
-    `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
+    `echo 'export PATH=/usr/pgsql-18/bin:$PATH' >> ~/.bashrc`
 
     `source ~/.bashrc`
 
@@ -111,7 +111,7 @@ To perform a migration from an older major version of community Postgres to a mo
 
 6. Then, adjust your PATH to point to the new version of Postgres; for example:
 
-    `echo 'export PATH=/opt/pgedge/18/bin:$PATH' >> ~/.bashrc`
+    `echo 'export PATH=/usr/pgsql-18/bin:$PATH' >> ~/.bashrc`
 
     `source ~/.bashrc`
 

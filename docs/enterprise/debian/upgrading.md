@@ -94,7 +94,9 @@ upgrade from Postgres 17 to Postgres 18:
 
     The command stops the Postgres 17 cluster, creates and upgrades the
     Postgres 18 cluster, and starts the new cluster on the old cluster's
-    port.
+    port. The command also gives the new cluster the same data checksum
+    setting as the old cluster, so you don't need to match the setting
+    yourself.
 
 4. Confirm that the Postgres 18 cluster is online with the command:
 
