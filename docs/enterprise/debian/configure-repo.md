@@ -55,3 +55,33 @@ For file locations, the `status` command, and certificate expiration, see
 After installing the certificate, you're ready to use the repository to
 [install Postgres](./installing.md) and
 [supporting components](./components/components.md).
+
+## Updating an Existing Repository
+
+If you installed the `pgedge` repository before March 1, 2026, replace the
+repository sources and register the host for a repository certificate. The
+new repository package leaves the repository disabled until you install the
+certificate, so the host can't install or update packages from the `pgedge`
+repository until pgEdge returns your certificate and you install it.
+
+Use the following steps to update an existing repository:
+
+1. Remove the existing repository sources with the command:
+
+    ```bash
+    sudo rm -f /etc/apt/sources.list.d/pgedge.sources
+    ```
+
+2. Install the new repository package, as described in
+   [Creating the Repository](#creating-the-repository).
+
+3. Register the host and install its certificate, as described in
+   [Registering Your Certificate](#registering-your-certificate).
+
+4. Refresh the repository contents and upgrade your packages with the
+   commands:
+
+    ```bash
+    sudo apt-get update
+    sudo apt-get upgrade <package_name>
+    ```
