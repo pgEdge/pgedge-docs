@@ -54,4 +54,4 @@ For file locations, the `status` command, and certificate expiry, see
 [Obtaining and Installing a Repository Certificate](../index.md#obtaining-and-installing-a-repository-certificate).
 After installing the certificate, you're ready to use the repository to
 [install Postgres](./installing.md) and
-[supporting components](./components.md).
+[supporting components](./components/components.md).
