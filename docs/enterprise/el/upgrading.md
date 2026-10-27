@@ -54,8 +54,13 @@ sudo -u postgres psql -c "SELECT version();"
 
 A new major version of Postgres uses a different data directory format, so
 you install the new version beside the old one and use `pg_upgrade` to migrate
-your data. The steps on this page upgrade a single server; if the server is a
-node in a Spock cluster, contact pgEdge support before you begin.
+your data.
+
+!!! hint
+
+    The steps on this page upgrade a single server. If your server is a node in
+    a Spock cluster, reach out to
+    [pgEdge support](mailto:support@pgedge.com) for assistance if needed.
 
 Install the same extensions for the new version that your databases use on
 the old version; `pg_upgrade` fails its compatibility check if an extension's
