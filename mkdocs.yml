@@ -392,6 +392,7 @@ nav:
       - Enterprise Linux Version Support: enterprise/el/index.md
       - Configuring the Repository: enterprise/el/configure-repo.md
       - Installing Postgres: enterprise/el/installing.md
+      - Upgrading a Postgres Installation: enterprise/el/upgrading.md
       - Supporting Components:
         - Installing Supporting Components: enterprise/el/components/components.md
         - Installing and Configuring pgEdge AI DBA Workbench: enterprise/el/components/workbench.md
@@ -399,13 +400,13 @@ nav:
         - Installing and Configuring Patroni: enterprise/el/components/patroni.md
         - Installing and Configuring PgBouncer: enterprise/el/components/pgbouncer.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/el/migrating.md
-      - Upgrading a Postgres Installation: enterprise/el/upgrading.md
       - Upgrading Spock: enterprise/el/upgrading-spock.md
       - Creating an Offline Repo: enterprise/el/offline.md
     - Debian 12 and 13 & Ubuntu 22.04 LTS and 24.04 LTS:
       - Debian & Ubuntu Version Support: enterprise/debian/index.md
       - Configuring the Repository: enterprise/debian/configure-repo.md
       - Installing Postgres: enterprise/debian/installing.md
+      - Upgrading a Postgres Installation: enterprise/debian/upgrading.md
       - Supporting Components:
         - Installing Supporting Components: enterprise/debian/components/components.md
         - Installing and Configuring pgEdge AI DBA Workbench: enterprise/debian/components/workbench.md
@@ -413,7 +414,6 @@ nav:
         - Installing and Configuring Patroni: enterprise/debian/components/patroni.md
         - Installing and Configuring PgBouncer: enterprise/debian/components/pgbouncer.md
       - Migrating to pgEdge Enterprise Postgres: enterprise/debian/migrating.md
-      - Upgrading a Postgres Installation: enterprise/debian/upgrading.md
       - Upgrading Spock: enterprise/debian/upgrading-spock.md
       - Creating an Offline Repo: enterprise/debian/offline.md
     - Troubleshooting: enterprise/troubleshooting.md
