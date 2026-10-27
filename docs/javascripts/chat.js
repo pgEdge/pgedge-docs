@@ -1119,8 +1119,14 @@
             // e.g. `a || b` in a cell stays in one piece
             const splitRow = (line) => {
                 let row = line.trim();
-                if (row.startsWith('|')) row = row.slice(1);
                 const cells = [];
+                // Count the delimiters found, so that a pipe that only
+                // appears escaped or inside inline code does not make a row
+                cells.delimiters = 0;
+                if (row.startsWith('|')) {
+                    row = row.slice(1);
+                    cells.delimiters++;
+                }
                 let current = '';
                 let endedWithPipe = false;
                 let pos = 0;
@@ -1155,6 +1161,7 @@
                         pos = end;
                     } else if (ch === '|') {
                         cells.push(current.trim());
+                        cells.delimiters++;
                         current = '';
                         endedWithPipe = true;
                         pos++;
@@ -1166,7 +1173,7 @@
                 if (!endedWithPipe) cells.push(current.trim());
                 return cells;
             };
-            const isRow = (line) => line.includes('|') && line.trim() !== '';
+            const isRow = (line) => line.includes('|') && splitRow(line).delimiters > 0;
             // A heading or code fence starts another block and so ends the
             // table even when it contains a pipe
             const isBlockStart = (line) =>
