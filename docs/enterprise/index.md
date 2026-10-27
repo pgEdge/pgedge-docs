@@ -77,13 +77,6 @@ platform:
 | Enterprise Linux | `/etc/pki/pgedge` | `client.key`, `client.csr`, and `client.crt` |
 | Debian and Ubuntu | `/etc/pgedge` | `client.key`, `client.csr`, and `client.crt`; the `_apt` user owns `client.key` so that `apt` can read it |
 
-To see what is installed, when the certificate expires, and whether the
-repository responds, use the command:
-
-```bash
-sudo pgedge-subscription-manager status
-```
-
 ### Understanding Certificate and Access Expiry
 
 Your certificate and your access to the repository expire separately:
@@ -99,7 +92,8 @@ Your certificate and your access to the repository expire separately:
 Your access can end before your certificate expires; for example, the
 certificate for a 30-day evaluation can stay valid after the evaluation's
 access period ends. The `pgedge-subscription-manager status` command reports
-the certificate's expiry date:
+what is installed, the certificate's expiry date, and whether the repository
+responds:
 
 ```bash
 sudo pgedge-subscription-manager status
