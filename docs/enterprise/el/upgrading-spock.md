@@ -55,7 +55,7 @@ After stopping automatic DDL replication on all of the nodes in your cluster, up
 
     If the command does not return the latest Spock extension version, run the following commands:
 
-    `ALTER EXTENSION spock UPDATE TO '5.0.4';`
+    `ALTER EXTENSION spock UPDATE;`
 
     `SELECT extname, extversion FROM pg_extension WHERE extname = 'spock';`
 
