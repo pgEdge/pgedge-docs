@@ -1044,8 +1044,8 @@
             // Tables are rendered with each cell's inline formatting applied
             // separately, so that e.g. italics cannot run across cells, and
             // held in placeholders so the passes below leave them alone
-            const tables = [];
-            html = this.renderTablesAsHtml(html, tables);
+            const tablesHtml = [];
+            html = this.renderTablesAsHtml(html, tablesHtml);
 
             // Process other markdown (this will convert \n to <br> but not inside placeholders)
             html = html
@@ -1059,10 +1059,11 @@
                 .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
                 // Ordered lists
                 .replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
-            html = this.renderInlineHtml(html)
+            html = this.renderInlineAsHtml(html);
+            html = html
                 // Tables go back in before line breaks; each is on one line
                 // and starts with a tag, so it gains no <br>
-                .replace(/\x00TABLE_(\d+)\x00/g, (_match, index) => tables[parseInt(index, 10)])
+                .replace(/\uE000TABLE_(\d+)\uE000/g, (_match, index) => tablesHtml[parseInt(index, 10)])
                 // Wrap consecutive <li> in <ul> (non-greedy to prevent ReDoS)
                 .replace(/(<li>.*?<\/li>\n?)+/g, '<ul>$&</ul>')
                 // Line breaks (but not after block elements or inside code block placeholders)
@@ -1086,8 +1087,8 @@
          * Apply the inline markdown passes (code, bold, italic, links) to
          * already-escaped text.
          */
-        renderInlineHtml(text) {
-            return text
+        renderInlineAsHtml(html) {
+            return html
                 // Inline code
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
                 // Bold
@@ -1108,10 +1109,12 @@
         /**
          * Convert GitHub-style pipe tables to HTML. Expects already-escaped
          * input; a table needs a header row followed by a separator row such
-         * as |---|:---:|. Each table is pushed onto `tables` and replaced in
-         * the output by a placeholder, which renderMarkdown() restores.
+         * as |---|:---:|. Each table is stored in `tablesHtml` and replaced in
+         * the output by a placeholder, which renderMarkdown() restores. The
+         * placeholder uses a private-use character that escaped text from a
+         * response will not contain.
          */
-        renderTablesAsHtml(text, tables) {
+        renderTablesAsHtml(text, tablesHtml) {
             // Split on unescaped pipes outside inline code spans, so that
             // e.g. `a || b` in a cell stays in one piece
             const splitRow = (line) => {
@@ -1185,6 +1188,7 @@
 
             const lines = text.split('\n');
             const out = [];
+            let tableCount = 0;
             let i = 0;
             while (i < lines.length) {
                 if (isTableStart(i)) {
@@ -1197,13 +1201,13 @@
                         if (left) return 'left';
                         return '';
                     });
-                    const cell = (tag, content, col) => {
+                    const cellAsHtml = (tag, content, col) => {
                         const align = aligns[col] ? ` style="text-align: ${aligns[col]}"` : '';
-                        return `<${tag}${align}>${this.renderInlineHtml(content)}</${tag}>`;
+                        return `<${tag}${align}>${this.renderInlineAsHtml(content)}</${tag}>`;
                     };
 
                     let tableHtml = '<div class="ellie-table-wrap"><table class="ellie-table"><thead><tr>';
-                    tableHtml += header.map((c, col) => cell('th', c, col)).join('');
+                    tableHtml += header.map((c, col) => cellAsHtml('th', c, col)).join('');
                     tableHtml += '</tr></thead><tbody>';
                     i += 2;
                     // Stop at a new header and separator, in case two tables
@@ -1213,12 +1217,12 @@
                     while (i < lines.length && isRow(lines[i]) && !isTableStart(i) &&
                            !isBlockStart(lines[i]) && !(leadingPipes && isListItem(lines[i]))) {
                         const cells = splitRow(lines[i]);
-                        tableHtml += '<tr>' + header.map((_h, col) => cell('td', cells[col] || '', col)).join('') + '</tr>';
+                        tableHtml += '<tr>' + header.map((_h, col) => cellAsHtml('td', cells[col] || '', col)).join('') + '</tr>';
                         i++;
                     }
                     tableHtml += '</tbody></table></div>';
-                    out.push(`\x00TABLE_${tables.length}\x00`);
-                    tables.push(tableHtml);
+                    out.push('\uE000TABLE_' + tableCount + '\uE000');
+                    tablesHtml[tableCount++] = tableHtml;
                 } else {
                     out.push(lines[i]);
                     i++;
