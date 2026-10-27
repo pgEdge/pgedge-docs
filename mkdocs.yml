@@ -391,8 +391,8 @@ nav:
     - Enterprise Linux 9 & 10:
       - Enterprise Linux Version Support: enterprise/el/index.md
       - Getting Started - Configuring the Repository: enterprise/el/configure-repo.md
-      - Updating your Repository for FIPS Support: enterprise/el/fips_update.md
       - Installing Postgres: enterprise/el/installing.md
+      - Updating your Repository for FIPS Support: enterprise/el/fips_update.md
       - Supporting Components:
         - Installing Supporting Components: enterprise/el/components/components.md
         - Installing and Configuring pgEdge AI DBA Workbench: enterprise/el/components/workbench.md
@@ -406,8 +406,8 @@ nav:
     - Debian 12 and 13 & Ubuntu 22.04 LTS and 24.04 LTS:
       - Debian & Ubuntu Version Support: enterprise/debian/index.md
       - Getting Started - Configuring the Repository: enterprise/debian/configure-repo.md
-      - Updating your Repository for FIPS Support: enterprise/debian/fips_update.md
       - Installing Postgres: enterprise/debian/installing.md
+      - Updating your Repository for FIPS Support: enterprise/debian/fips_update.md
       - Supporting Components:
         - Installing Supporting Components: enterprise/debian/components/components.md
         - Installing and Configuring pgEdge AI DBA Workbench: enterprise/debian/components/workbench.md
