@@ -19,8 +19,9 @@ Debian
 ## Installing Spock
 
 The `pgedge-enterprise-all-18` and `pgedge-enterprise-postgres-18`
-packages include Spock; if you installed either package, Spock is already on
-the host. To install Spock on its own for Postgres 18, use the command:
+packages include Spock; if you have installed either package, Spock is
+already on the host. To install Spock on its own for Postgres 18, use the
+command:
 
 ```bash
 sudo apt-get install -y pgedge-postgresql-18-spock50

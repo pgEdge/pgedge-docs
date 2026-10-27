@@ -16,8 +16,9 @@ Spock 5.0.13 runs on:
 ## Installing Spock
 
 The `pgedge-enterprise-all_18` and `pgedge-enterprise-postgres_18`
-packages include Spock; if you installed either package, Spock is already on
-the host. To install Spock on its own for Postgres 18, use the command:
+packages include Spock; if you have installed either package, Spock is
+already on the host. To install Spock on its own for Postgres 18, use the
+command:
 
 ```bash
 sudo dnf install -y pgedge-spock50_18
