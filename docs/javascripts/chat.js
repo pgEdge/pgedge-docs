@@ -1110,9 +1110,18 @@
                 while (pos < row.length) {
                     const ch = row[pos];
                     endedWithPipe = false;
-                    if (ch === '\\' && row[pos + 1] === '|') {
-                        current += '|';
-                        pos += 2;
+                    if (ch === '\\') {
+                        // GFM reads `\\` as one literal backslash, so only
+                        // an odd-length run escapes a following pipe
+                        let run = 0;
+                        while (row[pos + run] === '\\') run++;
+                        if (run % 2 === 1 && row[pos + run] === '|') {
+                            current += '\\'.repeat(run - 1) + '|';
+                            pos += run + 1;
+                        } else {
+                            current += '\\'.repeat(run);
+                            pos += run;
+                        }
                     } else if (ch === '`') {
                         let run = 0;
                         while (row[pos + run] === '`') run++;
@@ -1138,6 +1147,10 @@
                 return cells;
             };
             const isRow = (line) => line.includes('|') && line.trim() !== '';
+            // A list item, heading or code fence starts another block and so
+            // ends the table even when it contains a pipe
+            const isBlockStart = (line) =>
+                /^\s*(?:[-*+]|\d+[.)])\s|^\s*#{1,6}\s|^\s*(?:```|~~~)/.test(line);
             const isSeparator = (line) => {
                 const specs = splitRow(line);
                 return specs.length > 0 && specs.every(spec => /^:?-+:?$/.test(spec));
@@ -1174,8 +1187,9 @@
                     tableHtml += '</tr></thead><tbody>';
                     i += 2;
                     // Stop at a new header and separator, in case two tables
-                    // are written without a blank line between them
-                    while (i < lines.length && isRow(lines[i]) && !isTableStart(i)) {
+                    // are written without a blank line between them, and at
+                    // the start of any other block
+                    while (i < lines.length && isRow(lines[i]) && !isTableStart(i) && !isBlockStart(lines[i])) {
                         const cells = splitRow(lines[i]);
                         tableHtml += '<tr>' + header.map((_h, col) => cell('td', cells[col] || '', col)).join('') + '</tr>';
                         i++;
