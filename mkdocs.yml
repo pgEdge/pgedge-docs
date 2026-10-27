@@ -18,6 +18,7 @@ extra_javascript:
   - javascripts/org-stars.js
   - javascripts/version-selector.js
   - javascripts/pagefind-search.js
+  - javascripts/copy-page.js
   # Highlight.js for dynamic code highlighting in chat (must load before chat.js)
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js
   - javascripts/chat.js

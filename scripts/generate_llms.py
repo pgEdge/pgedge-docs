@@ -8,9 +8,9 @@ menus keeps the two in step, which a hand-written copy did not.
 The prose at the top and the Resources section come from
 `scripts/llms_intro.md`, which is the one part to edit by hand. The product
 links come from `extra.nav_categories` in mkdocs.yml, in menu order, with each
-category becoming a section. Each link points at the latest version of a
-versioned docset rather than its root, because the root is a meta refresh that
-an agent fetching the page will not follow. Each description is the first
+category becoming a section. Each link points at the markdown version of the
+latest version of a docset, never its root, because the root is a meta refresh
+that an agent fetching the page will not follow. Each description is the first
 sentence of the page it links to, so it changes when the page does; where
 that sentence does not describe the product, a `description:` key on the menu
 item replaces it. The menu template ignores the key.
@@ -18,7 +18,7 @@ item replaces it. The menu template ignores the key.
 Third-party documentation goes under `## Optional`, which the format reserves
 for links an agent can skip when it is short of context.
 
-Runs after the build and after postprocess_site.py, since it reads the built
+Runs after the build and after markdown_pages.py, since it reads the built
 pages and checks every link against them. A link that does not resolve is
 dropped with a warning rather than failing the deployment over one line of an
 index. Most links failing, or most descriptions vanishing, does fail it,
@@ -66,8 +66,8 @@ def log(message):
     print(f"generate_llms: {message}")
 
 
-class FirstParagraph(HTMLParser):
-    """The text of the first top-level paragraph in a page's article.
+class PageSummary(HTMLParser):
+    """A page's markdown link, and its first top-level paragraph.
 
     Only a <p> sitting directly in the article counts: one inside an
     admonition, a tab or a card is not the page introducing itself.
@@ -75,6 +75,7 @@ class FirstParagraph(HTMLParser):
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
+        self.markdown = None
         self.stack = []
         self.article_depth = None
         self.capturing = False
@@ -84,6 +85,10 @@ class FirstParagraph(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if self.result is not None:
             return
+        if tag == "link":
+            attrs = dict(attrs)
+            if attrs.get("type") == "text/markdown":
+                self.markdown = attrs.get("href")
         if tag in VOID_TAGS:
             return
         self.stack.append(tag)
@@ -118,11 +123,18 @@ class FirstParagraph(HTMLParser):
             self.text.append(data)
 
 
-def describe(page_path):
-    with open(page_path, encoding="utf-8") as f:
-        parser = FirstParagraph()
+def summarise(site_dir, path):
+    """The URL path to link for a page, and its description.
+
+    The link is the page's markdown version where markdown_pages.py gave it
+    one, since that is what an agent reading this file wants.
+    """
+    with open(os.path.join(site_dir, path, "index.html"),
+              encoding="utf-8") as f:
+        parser = PageSummary()
         parser.feed(f.read())
-    return shorten(parser.result) if parser.result else None
+    link = parser.markdown or f"/{path}/"
+    return link, shorten(parser.result) if parser.result else None
 
 
 def shorten(text):
@@ -158,10 +170,9 @@ def page_exists(site_dir, path):
 
 
 def entry(item, path, site_dir, base):
-    description = (item.get("description")
-                   or describe(os.path.join(site_dir, path, "index.html")))
-    title = item["title"]
-    line = f"- [{title}]({base}/{path}/)"
+    link, description = summarise(site_dir, path)
+    description = item.get("description") or description
+    line = f"- [{item['title']}]({base}{link})"
     return f"{line}: {description}" if description else line
 
 
@@ -240,6 +251,10 @@ def expand_intro(text, site_dir, base):
             log(f"WARNING: llms_intro.md links {url}, which is not in the "
                 f"built site; unlinking it")
             return label
+        path = url[len(base):].strip("/")
+        if (url.startswith(base + "/") and not re.search(r"[#?]", url)
+                and os.path.isfile(os.path.join(site_dir, path, "index.html"))):
+            return f"[{label}]({base}{summarise(site_dir, path)[0]})"
         return match.group(0)
 
     text = re.sub(r"\{latest:([\w.-]+)\}", latest, text)

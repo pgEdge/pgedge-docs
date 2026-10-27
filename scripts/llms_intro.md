@@ -6,8 +6,9 @@
 > for you, as a managed service or in your own cloud account. pgEdge
 > Enterprise Postgres runs on servers you manage yourself.
 
-Each link below goes to the latest release of a product's docs. Each page
-lists its other versions.
+Each link below goes to the markdown version of the latest release of a
+product's docs. A page with a markdown version names it in a
+`<link rel="alternate" type="text/markdown">` tag.
 
 To run pgEdge Starfleet or the Control Plane from a terminal, use the pgEdge
 CLI. An AI agent can use it too. This guide covers the agent skills and the
