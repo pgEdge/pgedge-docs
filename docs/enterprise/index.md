@@ -69,11 +69,7 @@ With the certificate installed, the host can install and update pgEdge
 packages as usual. If you run into problems, email `support@pgedge.com` or
 open a support ticket.
 
-The repository stays disabled until a certificate is installed, so the
-`pgedge` repository cannot interfere with your other package operations
-before then.
-
-The following table describes where the tool keeps the files on each
+The following table describes where the tool stores the files on each
 platform:
 
 | Platform | Directory | Files |
