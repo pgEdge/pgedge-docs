@@ -1,16 +1,16 @@
 # Upgrading a Postgres Installation
 
 You can use the `pgedge` repository to upgrade an existing pgEdge Enterprise
-Postgres installation to a newer minor or major version of Postgres. A minor
-version upgrade (for example, from 18.0 to 18.1) replaces the packages in
-place; a major version upgrade (for example, from 17 to 18) installs the new
-version beside the old one and migrates your data with
-[pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html).
+Postgres installation to a newer minor or major version of Postgres:
 
-!!! info
+- A minor version upgrade (for example, from 18.0 to 18.1) replaces the
+  packages in place.
+- A major version upgrade (for example, from 17 to 18) installs the new
+  version beside the old one and migrates your data with
+  [pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html).
 
-    Before you start an upgrade, take a recent backup so that you can revert
-    to your previous version if needed.
+Before you start an upgrade, take a recent backup so that you can revert to
+your previous version if needed.
 
 The host must have the current repository package and an installed repository
 certificate before you upgrade. If you installed the `pgedge` repository
