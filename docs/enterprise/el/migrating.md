@@ -38,3 +38,21 @@ If your current Postgres version is the same as your target Postgres version, yo
     `echo 'export PATH=/usr/pgsql-18/bin:$PATH' >> ~/.bashrc`
   
     `source ~/.bashrc`
+
+## Migrating to a Newer Postgres Version
+
+If your community Postgres installation runs an older major version than the
+pgEdge Enterprise Postgres version you're moving to, migrate and upgrade in two
+stages:
+
+1. Migrate to pgEdge Enterprise Postgres at your current major version, as
+   described in
+   [Migrating Between the Same Postgres Versions](#migrating-between-the-same-postgres-versions).
+
+2. Upgrade to the newer major version, as described in
+   [Performing a Major Version Upgrade](upgrading.md#performing-a-major-version-upgrade).
+
+The `pgedge` repository provides Postgres 16, 17, and 18. If your community
+installation runs Postgres 15 or earlier, there is no matching pgEdge version
+to migrate to first; reach out to [pgEdge support](mailto:support@pgedge.com)
+for help planning the migration.
