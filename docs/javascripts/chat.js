@@ -1041,10 +1041,11 @@
                 return `\x00CODE_BLOCK_${index}\x00`;
             });
 
-            // Tables are emitted on a single line so the newline-to-<br>
-            // conversion below leaves their internals alone, whilst the
-            // inline passes (code, bold, links) still apply to cell contents
-            html = this.renderTablesAsHtml(html);
+            // Tables are rendered with each cell's inline formatting applied
+            // separately, so that e.g. italics cannot run across cells, and
+            // held in placeholders so the passes below leave them alone
+            const tables = [];
+            html = this.renderTablesAsHtml(html, tables);
 
             // Process other markdown (this will convert \n to <br> but not inside placeholders)
             html = html
@@ -1057,22 +1058,11 @@
                 // Unordered lists
                 .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
                 // Ordered lists
-                .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-                // Inline code
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                // Bold
-                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-                // Italic
-                .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-                // Links (validate URL and escape for attribute context)
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
-                    if (/^(https?:\/\/|mailto:|\/)/i.test(url)) {
-                        // Escape URL for href attribute (quotes could break out)
-                        const safeUrl = url.replace(/"/g, '&quot;');
-                        return `<a href="${safeUrl}" target="_blank" rel="noopener">${linkText}</a>`;
-                    }
-                    return match;
-                })
+                .replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+            html = this.renderInlineHtml(html)
+                // Tables go back in before line breaks; each is on one line
+                // and starts with a tag, so it gains no <br>
+                .replace(/\x00TABLE_(\d+)\x00/g, (_match, index) => tables[parseInt(index, 10)])
                 // Wrap consecutive <li> in <ul> (non-greedy to prevent ReDoS)
                 .replace(/(<li>.*?<\/li>\n?)+/g, '<ul>$&</ul>')
                 // Line breaks (but not after block elements or inside code block placeholders)
@@ -1093,11 +1083,35 @@
         }
 
         /**
+         * Apply the inline markdown passes (code, bold, italic, links) to
+         * already-escaped text.
+         */
+        renderInlineHtml(text) {
+            return text
+                // Inline code
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                // Bold
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                // Italic
+                .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+                // Links (validate URL and escape for attribute context)
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+                    if (/^(https?:\/\/|mailto:|\/)/i.test(url)) {
+                        // Escape URL for href attribute (quotes could break out)
+                        const safeUrl = url.replace(/"/g, '&quot;');
+                        return `<a href="${safeUrl}" target="_blank" rel="noopener">${linkText}</a>`;
+                    }
+                    return match;
+                });
+        }
+
+        /**
          * Convert GitHub-style pipe tables to HTML. Expects already-escaped
          * input; a table needs a header row followed by a separator row such
-         * as |---|:---:|.
+         * as |---|:---:|. Each table is pushed onto `tables` and replaced in
+         * the output by a placeholder, which renderMarkdown() restores.
          */
-        renderTablesAsHtml(text) {
+        renderTablesAsHtml(text, tables) {
             // Split on unescaped pipes outside inline code spans, so that
             // e.g. `a || b` in a cell stays in one piece
             const splitRow = (line) => {
@@ -1131,7 +1145,10 @@
                             close = row.indexOf(fence, close + run + 1);
                         }
                         const end = close === -1 ? pos + run : close + run;
-                        current += row.slice(pos, end);
+                        // GFM removes a pipe's escaping backslash inside code
+                        // spans too; an even run is literal backslashes only
+                        current += row.slice(pos, end).replace(/(\\+)\|/g, (_m, slashes) =>
+                            (slashes.length % 2 === 1 ? slashes.slice(1) : slashes) + '|');
                         pos = end;
                     } else if (ch === '|') {
                         cells.push(current.trim());
@@ -1147,10 +1164,13 @@
                 return cells;
             };
             const isRow = (line) => line.includes('|') && line.trim() !== '';
-            // A list item, heading or code fence starts another block and so
-            // ends the table even when it contains a pipe
+            // A heading or code fence starts another block and so ends the
+            // table even when it contains a pipe
             const isBlockStart = (line) =>
-                /^\s*(?:[-*+]|\d+[.)])\s|^\s*#{1,6}\s|^\s*(?:```|~~~)/.test(line);
+                /^\s*#{1,6}\s|^\s*(?:```|~~~)/.test(line);
+            // In a table written without leading pipes, a row such as
+            // `- | yes` is a row whose first cell is '-', not a list item
+            const isListItem = (line) => /^\s*(?:[-*+]|\d+[.)])\s/.test(line);
             const isSeparator = (line) => {
                 const specs = splitRow(line);
                 return specs.length > 0 && specs.every(spec => /^:?-+:?$/.test(spec));
@@ -1179,7 +1199,7 @@
                     });
                     const cell = (tag, content, col) => {
                         const align = aligns[col] ? ` style="text-align: ${aligns[col]}"` : '';
-                        return `<${tag}${align}>${content}</${tag}>`;
+                        return `<${tag}${align}>${this.renderInlineHtml(content)}</${tag}>`;
                     };
 
                     let tableHtml = '<div class="ellie-table-wrap"><table class="ellie-table"><thead><tr>';
@@ -1189,13 +1209,16 @@
                     // Stop at a new header and separator, in case two tables
                     // are written without a blank line between them, and at
                     // the start of any other block
-                    while (i < lines.length && isRow(lines[i]) && !isTableStart(i) && !isBlockStart(lines[i])) {
+                    const leadingPipes = lines[i - 2].trim().startsWith('|');
+                    while (i < lines.length && isRow(lines[i]) && !isTableStart(i) &&
+                           !isBlockStart(lines[i]) && !(leadingPipes && isListItem(lines[i]))) {
                         const cells = splitRow(lines[i]);
                         tableHtml += '<tr>' + header.map((_h, col) => cell('td', cells[col] || '', col)).join('') + '</tr>';
                         i++;
                     }
                     tableHtml += '</tbody></table></div>';
-                    out.push(tableHtml);
+                    out.push(`\x00TABLE_${tables.length}\x00`);
+                    tables.push(tableHtml);
                 } else {
                     out.push(lines[i]);
                     i++;
