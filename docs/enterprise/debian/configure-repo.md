@@ -44,8 +44,7 @@ Each host that downloads packages needs its own certificate, so repeat these
 steps once on every host; you can send several requests in one email if you
 rename each `client.csr` to identify the host. Copy `client.crt` to the host,
 then install the certificate with the following command, giving the path to the
-file. The command also enables the repository, which stays disabled until a
-certificate is installed:
+file. The command also enables the repository:
 
 ```bash
 sudo pgedge-subscription-manager install complete_path_to/client.crt
