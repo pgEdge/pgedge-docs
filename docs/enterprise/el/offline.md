@@ -40,8 +40,9 @@ You must ensure the system with internet access and the offline target server th
 
     `sudo pgedge-subscription-manager register-system`
 
-    Email the `client.csr` file the command names to `support@pgedge.com`.
-    When pgEdge returns your certificate, install it with the command:
+    Email the `client.csr` file the command names to
+    [support@pgedge.com](mailto:support@pgedge.com). When pgEdge returns your
+    certificate, install it with the command:
 
     `sudo pgedge-subscription-manager install complete_path_to/client.crt`
 

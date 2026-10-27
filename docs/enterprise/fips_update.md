@@ -31,8 +31,9 @@ sudo dnf install -y https://downloads.pgedge.com/reporpm/pgedge-release-latest.n
 sudo pgedge-subscription-manager register-system
 ```
 
-   Email the `client.csr` file the command names to `support@pgedge.com`. When
-   pgEdge returns your certificate, install it with the command:
+   Email the `client.csr` file the command names to
+   [support@pgedge.com](mailto:support@pgedge.com). When pgEdge returns your
+   certificate, install it with the command:
 
 ``` bash
 sudo pgedge-subscription-manager install complete_path_to/client.crt
@@ -67,8 +68,9 @@ sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.de
 sudo pgedge-subscription-manager register-system
 ```
 
-   Email the `client.csr` file the command names to `support@pgedge.com`. When
-   pgEdge returns your certificate, install it with the command:
+   Email the `client.csr` file the command names to
+   [support@pgedge.com](mailto:support@pgedge.com). When pgEdge returns your
+   certificate, install it with the command:
 
 ``` bash
 sudo pgedge-subscription-manager install complete_path_to/client.crt

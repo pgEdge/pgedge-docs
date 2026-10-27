@@ -41,8 +41,9 @@ same on Enterprise Linux, Debian, and Ubuntu:
     To copy the request to a specific directory, add `--out` and the
     directory; for example, `--out ~/pgedge`.
 
-3. Email the `client.csr` file to pgEdge support at `support@pgedge.com`; do
-   not send the private key (`client.key`). In the email, include:
+3. Email the `client.csr` file to pgEdge support at
+   [support@pgedge.com](mailto:support@pgedge.com); do not send the private key
+   (`client.key`). In the email, include:
 
     - your organization's name and customer ID.
     - the type of certificate you need: a trial or a paid subscription.
@@ -65,9 +66,9 @@ same on Enterprise Linux, Debian, and Ubuntu:
 
     Include the complete path to the location of the `client.crt` file.
 
-With the certificate installed, the host can install and update pgEdge
-packages as usual. If you run into problems, email `support@pgedge.com` or
-open a support ticket.
+With the certificate installed, the host can install and update pgEdge packages
+as usual. If you run into problems, email
+[support@pgedge.com](mailto:support@pgedge.com) or open a support ticket.
 
 The following table describes where the tool stores the files on each
 platform:

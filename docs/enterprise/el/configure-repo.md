@@ -79,16 +79,17 @@ the host and creates its private key and a certificate signing request in the
 sudo pgedge-subscription-manager register-system
 ```
 
-Email the `client.csr` file to pgEdge support at `support@pgedge.com`, with
-your organization's name and customer ID, the type of certificate you need (a
-trial or a paid subscription), and how long the host needs access; a trial
-provides 30 days of access by default. pgEdge returns your certificate,
-`client.crt`, by email. Each host that downloads packages needs its own
-certificate, so repeat these steps once on every host; you can send several
-requests in one email if you rename each `client.csr` to identify the host.
-Copy `client.crt` to the host, then install the certificate with the following
-command, giving the path to the file. The command also enables the repository,
-which stays disabled until a certificate is installed:
+Email the `client.csr` file to pgEdge support at
+[support@pgedge.com](mailto:support@pgedge.com), with your organization's name
+and customer ID, the type of certificate you need (a trial or a paid
+subscription), and how long the host needs access; a trial provides 30 days of
+access by default. pgEdge returns your certificate, `client.crt`, by email.
+Each host that downloads packages needs its own certificate, so repeat these
+steps once on every host; you can send several requests in one email if you
+rename each `client.csr` to identify the host. Copy `client.crt` to the host,
+then install the certificate with the following command, giving the path to the
+file. The command also enables the repository, which stays disabled until a
+certificate is installed:
 
 ```bash
 sudo pgedge-subscription-manager install complete_path_to/client.crt
