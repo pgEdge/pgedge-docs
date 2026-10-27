@@ -21,18 +21,27 @@ Before installing the Workbench, install and enable the `pgedge` repository.
 For detailed instructions for each supported platform,
 see the [documentation](../configure-repo.md).
 
-In the following example, we use the `apt` command to add the `pgedge`
-repository and install the PostgreSQL 18 package:
+In the following example, we add the `pgedge` repository and use
+`pgedge-subscription-manager` to register the host for a repository
+certificate:
 
 ```bash
 sudo apt install -y curl
-curl -fsSL https://apt.pgedge.com/pgedge.gpg \
-    | sudo gpg --dearmor -o /usr/share/keyrings/pgedge.gpg
-echo "deb [signed-by=/usr/share/keyrings/pgedge.gpg] \
-    https://apt.pgedge.com bookworm main" \
-    | sudo tee /etc/apt/sources.list.d/pgedge.list
+sudo curl -sSL https://downloads.pgedge.com/repodeb/pgedge-release_latest_all.deb \
+    -o /tmp/pgedge-release.deb
+sudo dpkg -i /tmp/pgedge-release.deb && rm -f /tmp/pgedge-release.deb
+sudo pgedge-subscription-manager register-system
+```
+
+Email the `client.csr` file the command names to
+[support@pgedge.com](mailto:support@pgedge.com). When pgEdge returns your
+certificate, use the following commands to install the certificate and the
+PostgreSQL 18 package:
+
+```bash
+sudo pgedge-subscription-manager install complete_path_to/client.crt
 sudo apt update
-sudo apt install -y pgedge-enterprise-postgres_18
+sudo apt install -y pgedge-enterprise-postgres-18
 ```
 
 On Debian, the PostgreSQL package automatically initializes the `data`
