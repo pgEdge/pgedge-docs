@@ -22,7 +22,7 @@ your previous version if needed.
     [Migrating to pgEdge Enterprise Postgres](migrating.md) instead.
 
 The examples on this page upgrade Postgres 18 to a newer minor version, and
-Postgres 17 to Postgres 18; substitute the versions on your host.
+Postgres 17 to Postgres 18; substitute for correct versions on your host.
 
 ## Performing a Minor Version Upgrade
 
