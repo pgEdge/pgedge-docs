@@ -105,9 +105,9 @@ your access expiration date.
 
 ## Installing pgEdge Enterprise Postgres
 
-Use the install builder below to configure and copy the commands for your
-platform. The builder's commands add the repository, register the host and
-install its certificate, and then install and start Postgres.
+Use the install builder that follows to configure and copy the commands for
+your platform. The builder's commands add the repository, register the host
+and install its certificate, and then install and start Postgres.
 
 <div id="package-catalog"></div>
 <noscript>
