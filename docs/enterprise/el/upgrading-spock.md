@@ -1,6 +1,7 @@
 # Upgrading Spock on a pgEdge Enterprise Postgres Installation
 
-Spock 5.0.4 is supported on PG versions 16, 17, and 18, running on:
+Spock 5.0.13, the latest version in the `pgedge` repository, supports
+Postgres 16, 17, and 18, and the Postgres 19 release candidate, running on:
 
 * RHEL 9 / 10
 * AlmaLinux
