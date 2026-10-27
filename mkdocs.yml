@@ -19,6 +19,7 @@ extra_javascript:
   - javascripts/version-selector.js
   - javascripts/pagefind-search.js
   - javascripts/copy-page.js
+  - javascripts/webmcp.js
   # Highlight.js for dynamic code highlighting in chat (must load before chat.js)
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js
   - javascripts/chat.js
@@ -141,6 +142,9 @@ extra:
   logo_light_mode: 'img/logo-light.png'
 
   discord_url: https://discord.com/invite/pgedge/login
+  # Chrome WebMCP origin-trial token for javascripts/webmcp.js; empty until
+  # pgEdge registers.
+  webmcp_origin_trial_token: ""
   generator: false
   analytics:
     provider: google
