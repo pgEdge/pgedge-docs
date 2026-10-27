@@ -30,8 +30,9 @@ same on Enterprise Linux, Debian, and Ubuntu:
    [Debian and Ubuntu](debian/configure-repo.md).
 
 2. Register the host. Run the following command on the host that will
-   install the packages; it creates the host's private key and a certificate
-   signing request, `client.csr`, and prints the location of the request:
+   install the packages; the command creates the host's private key and a
+   certificate signing request, `client.csr`, and prints the location of the
+   request:
 
     ```bash
     sudo pgedge-subscription-manager register-system
