@@ -1,7 +1,12 @@
 # Upgrading Spock on a pgEdge Enterprise Postgres Installation
 
-Spock 5.0.13, the latest version in the `pgedge` repository, supports
-Postgres 16, 17, and 18, and the Postgres 19 release candidate, running on:
+The `pgedge` repository provides Spock 5.0.13, the latest stable release of
+Spock, for Postgres 16, 17, and 18, and the Postgres 19 release candidate.
+Spock 6.0.0 is available as a beta release; the steps on this page upgrade a
+cluster between Spock 5.0 releases. For Spock 6, see the
+[Spock 6 documentation](https://docs.pgedge.com/spock-v6/).
+
+Spock 5.0.13 runs on:
 
 * RHEL 9 / 10
 * AlmaLinux
