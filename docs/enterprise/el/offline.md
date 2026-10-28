@@ -4,7 +4,7 @@ The `pgedge` repository provides packages that provide a simplified way to insta
 
 Creating an offline repository requires two systems:
 
-* You will need to use an OS compatible system with internet access to download and create a *live* model of the repository. 
+* You will need to use an OS compatible system with internet access and a valid [pgEdge repository certificate](configure-repo.md#requesting-and-registering-your-certificate) to download and create a *live* model of the repository. 
 
 * You will need an OS compatible system with access to the machine with internet access; after creating the model on the first host, you will copy the repository to the system without internet access.
 
