@@ -2,8 +2,17 @@
 
 pgEdge makes FIPS-enabled packages available via the `pgedge` repository for
 Enterprise Linux, Debian, and Ubuntu. Access to the repository requires an
-active pgEdge subscription and a certificate from pgEdge; install the
-certificate after you add the repository, and before you install any packages.
+active pgEdge subscription or evaluation, and a certificate from pgEdge;
+install the certificate after you add the repository, and before you install
+any packages.
+
+!!! note
+
+    If you are not a pgEdge customer and want to evaluate pgEdge Enterprise
+    Postgres, submit the
+    [evaluation request form](https://www.pgedge.com/download/enterprise-evaluation).
+    The steps on this page show what pgEdge needs from you once your
+    evaluation is set up.
 
 !!! note
 
