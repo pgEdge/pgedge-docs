@@ -22,14 +22,24 @@ repository.  For detailed instructions for all of the supported platforms,
 see the [pgEdge documentation](https://docs.pgedge.com/enterprise/).
 
 In the following example, the `dnf` command installs the EPEL release, enables
-the CodeReady Builder repository, adds the `pgedge` repository, and installs
-the PostgreSQL 18 package.
+the CodeReady Builder repository, and adds the `pgedge` repository; then
+`pgedge-subscription-manager` registers the host for a repository certificate:
 
 ```bash
 sudo dnf install -y epel-release
 sudo dnf config-manager --set-enabled crb
 sudo dnf install -y \
-    https://dnf.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
+    https://downloads.pgedge.com/reporpm/pgedge-release-latest.noarch.rpm
+sudo pgedge-subscription-manager register-system
+```
+
+Email the `client.csr` file the command names to
+[support@pgedge.com](mailto:support@pgedge.com). When pgEdge returns your
+certificate, install the certificate and the PostgreSQL 18 package with the
+following commands:
+
+```bash
+sudo pgedge-subscription-manager install complete_path_to/client.crt
 sudo dnf install -y pgedge-enterprise-postgres_18
 ```
 

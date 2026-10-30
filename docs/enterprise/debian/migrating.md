@@ -40,49 +40,20 @@ If your current Postgres version is the same as your target Postgres version, yo
     (1 row)
     ```
 
+## Migrating to a Newer Postgres Version
 
-## Performing a Major Version Upgrade to pgEdge Enterprise Postgres
+If your community Postgres installation runs an older major version than the
+pgEdge Enterprise Postgres version you're moving to, migrate and upgrade in two
+stages:
 
-To perform a migration from an older major version of community Postgres to a more recent major version of pgEdge Enterprise Postgres, you will need to use [pg_upgrade](https://www.postgresql.org/docs/current/pgupgrade.html). 
+1. Migrate to pgEdge Enterprise Postgres at your current major version, as
+   described in
+   [Migrating Between the Same Postgres Versions](#migrating-between-the-same-postgres-versions).
 
-The example that follows will walk you through an upgrade from community Postgres version 17 to pgEdge Enterprise Postgres version 18; the following is a high-level overview of the steps required:
+2. Upgrade to the newer major version, as described in
+   [Performing a Major Version Upgrade](upgrading.md#performing-a-major-version-upgrade).
 
-1. Install and [configure the pgedge repository](configure-repo.md).
-
-2. Next, install the `pgedge-enterprise-postgres-18` packages; use the following command:
-
-    `sudo apt-get install pgedge-enterprise-postgres-18`
-
-3. Create and start a pgEdge Enterprise Postgres cluster:
-
-    ```sql
-    sudo pg_createcluster 18 main -- --locale=C.UTF-8 --encoding=UTF8
-    sudo pg_ctlcluster 18 main start
-    ```
-
-4. Next, you'll use pg_upgrade to migrate from Postgres 17 to pgEdge Enterprise Postgres 18. Invoke the new version of the pg_upgrade utility (the version located in the newly created `/usr/pgsql-18/bin directory`) to migrate your Postgres installation. For example, the following command converts a version 17 installation to a version 18 installation:
-
-    ```sql
-    /usr/lib/postgresql/18/bin/pg_upgrade \
-    --old-datadir=/var/lib/postgresql/17/main \
-    --new-datadir=/var/lib/postgresql/18/main \
-    --old-bindir=/usr/lib/postgresql/17/bin \
-    --new-bindir=/usr/lib/postgresql/18/bin \
-    --username=postgres \
-    --check
-    ```
-    
-    !!! hint
-
-        Include the `--check` option to perform a test upgrade before invoking the command without `--check` to perform the actual upgrade.
-
-5. When the upgrade completes, restart the server with the command:
-
-    `sudo systemctl restart postgresql@18-main`
-
-6. Then, adjust your PATH to point to the new version of Postgres; for example:
-
-    ```bash
-    echo 'export PATH=/usr/lib/postgresql/18/bin:$PATH' >> ~/.bashrc
-    . ~/.bashrc
-    ```
+The `pgedge` repository provides Postgres 16, 17, and 18. If your community
+installation runs Postgres 15 or earlier, there is no matching pgEdge version
+to migrate to first; reach out to [pgEdge support](mailto:support@pgedge.com)
+for help planning the migration.

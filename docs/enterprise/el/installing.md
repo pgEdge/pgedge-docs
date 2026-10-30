@@ -6,7 +6,7 @@ After installing the `pgedge` repository, you're ready to create Postgres databa
 
     If you installed the `pgedge` repository prior to March 1, 2026, you will
     need to replace and refresh your repository package.  For details, see
-    [Updating your Repo for FIPS Support](../fips_update.md).
+    [Updating an Existing Repository](configure-repo.md#updating-an-existing-repository).
 
 To review a list of packages available from the `pgedge` repository, use the command:
 
@@ -83,7 +83,3 @@ Installation of the server package creates a database user named `postgres`.  Th
   postgres=# ALTER ROLE postgres PASSWORD '1safepassword!';
   ALTER ROLE
   ```
-
-### License
-
-Use of components distributed via the `pgedge` repository is governed by product-specific licenses; see the bundled readme files for more information.
