@@ -592,6 +592,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-helm.git?branch=main'
 
   - ACE:
+    - v3.0.0: '!import https://github.com/pgEdge/ace.git?branch=v3.0.0'
     - v2.1.1: '!import https://github.com/pgEdge/ace.git?branch=v2.1.1'
     - v2.1.0: '!import https://github.com/pgEdge/ace.git?branch=v2.1.0'
     - v2.0.0: '!import https://github.com/pgEdge/ace.git?branch=v2.0.0'
@@ -686,7 +687,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pg_semantic_cache?branch=main'
 
   - pgvolvra:
-    - v1.0.0-beta2: '!import https://github.com/pgEdge/pgvolvra.git?branch=v1.0.0-beta2'
+    - v1.0.0-beta3: '!import https://github.com/pgEdge/pgvolvra.git?branch=v1.0.0-beta3'
     - Development: '!import https://github.com/pgEdge/pgvolvra?branch=main'
 
   - pg-healthcheck:
@@ -805,6 +806,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2master'
 
   - pgBackRest:
+    - v2.60.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2600'
     - v2.59.3: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2593'
     - v2.59.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2590'
     - v2.58.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest258'
