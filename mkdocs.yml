@@ -115,6 +115,7 @@ theme:
     - navigation.top
     - toc.follow
     - content.code.copy
+    - content.tabs.link
 
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -375,6 +376,11 @@ extra:
         url: postgrest/
       - title: psycopg2
         url: psycopg2/
+    # Rendered as a single header link rather than a dropdown; see
+    # overrides/partials/tabs.html.
+    Cookbook:
+      - title: Ellie's Postgres Cookbook
+        url: ellies-postgres-cookbook/
     pgEdge Labs:
       - title: pgEdge CLI (pgedge-cli)
         url: pgedge-cli/
@@ -398,6 +404,10 @@ nav:
   - Security: security/index.md
 
   - AI Toolkit: ai-toolkit/index.md
+
+  # The published branch carries the recipes' code inlined into the pages;
+  # main includes it from files outside docs/, which an import never sees.
+  - Ellie's Postgres Cookbook: '!import https://github.com/pgEdge/ellies-postgres-cookbook.git?branch=published'
 
   - Ansible: '!import https://github.com/pgEdge/pgedge-ansible.git?branch=main'
 

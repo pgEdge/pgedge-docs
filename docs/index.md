@@ -446,6 +446,30 @@ hide:
 
 </div>
 
+<!-- Learn by Example -->
+<div class="section-header">
+  <h2>Learn by Example</h2>
+</div>
+
+<div class="cards-grid">
+
+  <!-- Ellie's Postgres Cookbook -->
+  <div class="card card-featured">
+    <div class="card-header">
+      <div class="card-title-row">
+        <h3>Ellie's Postgres Cookbook <span class="chip-new">NEW</span></h3>
+        <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M2 5c3-1 7-1 10 1v14c-3-2-7-2-10-1z" />
+          <path d="M22 5c-3-1-7-1-10 1v14c3-2 7-2 10-1z" />
+        </svg>
+      </div>
+    </div>
+    <p class="card-description">Tested recipes with code samples for PostgreSQL, the RAG Server, the AI DBA Workbench and pgEdge Starfleet, in Python, TypeScript, Go and more.</p>
+    <a href="ellies-postgres-cookbook/" class="card-link">View the Cookbook →</a>
+  </div>
+
+</div>
+
 <!-- All Documentation -->
 <div class="section-header">
   <h2>All Documentation</h2>

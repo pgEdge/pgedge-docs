@@ -99,7 +99,10 @@ def load_yaml(text, strict=False):
 # --- Source fetching -------------------------------------------------------
 
 def slug(text):
-    return re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")
+    # Apostrophes are dropped rather than treated as separators, so that
+    # "Ellie's Postgres Cookbook" becomes ellies-postgres-cookbook.
+    text = re.sub(r"['\u2019]", "", str(text).lower())
+    return re.sub(r"[^a-z0-9]+", "-", text).strip("-")
 
 
 def repo_key(url):
