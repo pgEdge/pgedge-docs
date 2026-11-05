@@ -86,6 +86,14 @@
         {{ dropdown_menu('Tools', nav_categories['Tools'], 'tools') }}
       {% endif %}
 
+      {# Cookbook link: one destination, so a plain tab rather than a dropdown #}
+      {% if 'Cookbook' in nav_categories %}
+        {% set cookbook = nav_categories['Cookbook'][0] %}
+        <li class="md-tabs__item">
+          <a href="{{ cookbook.url | url }}" class="md-tabs__link">Cookbook</a>
+        </li>
+      {% endif %}
+
       {# Labs dropdown #}
       {% if 'pgEdge Labs' in nav_categories %}
         {{ dropdown_menu('Labs', nav_categories['pgEdge Labs'], 'pgedge-labs') }}
