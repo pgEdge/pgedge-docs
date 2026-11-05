@@ -455,6 +455,40 @@
 .ellie-message__content .ellie-table-wrap {
     overflow-x: auto;
     margin: 8px 0;
+    /* Scrollbar styling - Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #c0c0c0 transparent;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .ellie-table-wrap {
+    scrollbar-color: #555555 transparent;
+}
+
+/* Table scrollbar styling - webkit. A styled scrollbar stays visible, so
+   it shows that a wide table scrolls sideways, as on code blocks */
+.ellie-message__content .ellie-table-wrap::-webkit-scrollbar {
+    height: 6px;
+}
+
+.ellie-message__content .ellie-table-wrap::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ellie-message__content .ellie-table-wrap::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 3px;
+}
+
+.ellie-message__content .ellie-table-wrap::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .ellie-table-wrap::-webkit-scrollbar-thumb {
+    background: #555555;
+}
+
+[data-md-color-scheme="slate"] .ellie-message__content .ellie-table-wrap::-webkit-scrollbar-thumb:hover {
+    background: #777777;
 }
 
 .ellie-message__content .ellie-table {

@@ -1181,9 +1181,10 @@
             // In a table written without leading pipes, a row such as
             // `- | yes` is a row whose first cell is '-', not a list item
             const isListItem = (line) => /^\s*(?:[-*+]|\d+[.)])\s/.test(line);
+            // A bare `---` with no pipe is a divider, not a separator row
             const isSeparator = (line) => {
                 const specs = splitRow(line);
-                return specs.length > 0 && specs.every(spec => /^:?-+:?$/.test(spec));
+                return specs.delimiters > 0 && specs.every(spec => /^:?-+:?$/.test(spec));
             };
             // GFM only treats the lines as a table when the header and
             // separator have the same number of columns
