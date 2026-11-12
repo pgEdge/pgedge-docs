@@ -719,7 +719,6 @@ nav:
 
   - PostgreSQL:
     - v19rc2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19rc2'
-    - v19rc1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19rc1'
     - v18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg18'
     - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
     - v16: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg16'

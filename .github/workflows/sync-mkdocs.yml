@@ -331,8 +331,13 @@ jobs:
                   if entry.get('kb_tag'):    pairs.append((kb, entry['kb_tag']))
               return pairs
 
+          def ref_stem(ref):
+              """Leading non-digit part of a ref: 'postgresql19rc2' → 'postgresql'."""
+              return re.match(r'^\D*', ref or '').group(0).lower()
+
           expected_refs     = defaultdict(set)
-          expected_versions = defaultdict(set)
+          expected_versions = defaultdict(set)   # nu → {(version, product name)}
+          product_ref_stems = defaultdict(set)   # product name → ref stems it uses
           for entry in ssot['sources']:
               if not for_pgedge_docs(entry):
                   continue
@@ -342,7 +347,8 @@ jobs:
               for git_url, ref in candidate_imports(entry):
                   nu = normalize_url(git_url)
                   expected_refs[nu].add(ref)
-                  expected_versions[nu].add(str(version))
+                  expected_versions[nu].add((str(version), entry.get('name')))
+                  product_ref_stems[entry.get('name')].add(ref_stem(ref))
 
           # SSH URL check
           ssh_urls = bool(re.search(r"'!import git@github\.com:", mkdocs_text))
@@ -665,8 +671,15 @@ jobs:
               s_ref   = m.group(3)
               if s_ref in expected_refs.get(s_nu, set()):
                   continue  # ref still present in SSOT
-              if any(str(v) in s_ref and label_covers_version(s_label, v)
-                     for v in expected_versions.get(s_nu, set())):
+              # On the shared 3rd-party-docs URL a version only shields a line
+              # when it belongs to the product that owns the ref (matched by ref
+              # stem): otherwise pgAudit '19rc1' shields PostgreSQL's stale
+              # 'postgresql19rc1' line, since that ref contains '19rc1' too.
+              shared = '3rd-party-docs' in s_nu
+              if any(v in s_ref and label_covers_version(s_label, v)
+                     and (not shared
+                          or ref_stem(s_ref) in product_ref_stems.get(name, set()))
+                     for v, name in expected_versions.get(s_nu, set())):
                   continue  # version still in SSOT under a decorated ref for THIS product
               stale_entries.append({
                   'label'  : s_label,
