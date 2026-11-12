@@ -1,5 +1,26 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 11/12/2026
+
+* Postgres version update: pgEdge Enterprise Postgres 16.16
+
+    * pgedge-enterprise-postgres 16.16
+    * pgedge-enterprise-all 16.16
+
+* Postgres version update: pgEdge Enterprise Postgres 17.12
+
+    * pgedge-enterprise-postgres 17.12
+    * pgedge-enterprise-all 17.12
+
+* Postgres version update: pgEdge Enterprise Postgres 18.7
+
+    * pgedge-enterprise-postgres 18.7
+    * pgedge-enterprise-all 18.7
+ 
+* Postgres version update: pgEdge Enterprise Postgres 19.0 rc2
+  
+* Component updates: Spock 5.0.14, Snowflake 2.6.1, pgAdmin 9.19, PostGIS 3.6.4, PostGIS 3.5.7 (RHEL only), pgmq 1.13.1, Supautils 4.0.0, pldebugger 1.10, pg_cron 1.6.8-2 (PG 19 only), pgAudit 19 rc1 (PG 19 only), pgEdge Radar 0.6.3, SafeSession 1.1, pgEdge RAG Server 2.0.1, pgEdge Anonymizer 1.0.1, libpq 18.7 (PG 18 only)
+
 ## 11/04/2026
 
 * Component updates: ACE 3.0.0, pgBackRest 2.60.0, etcd 3.7.3
