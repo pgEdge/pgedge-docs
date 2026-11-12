@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 11/04/2026
+
+* Component updates: ACE 3.0.0, pgBackRest 2.60.0, etcd 3.7.3
+  
 ## 10/15/2026
 
 * pgEdge Enterprise Postgres 19 RC1
