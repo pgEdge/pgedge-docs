@@ -622,7 +622,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-safesession?branch=main'
 
   - Snowflake:
-    - v2.6: '!import https://github.com/pgEdge/snowflake.git?branch=v2.6.0'
+    - v2.6: '!import https://github.com/pgEdge/snowflake.git?branch=v2.6.1'
     - v2.5: '!import https://github.com/pgEdge/snowflake.git?branch=v2.5.0'
     - v2.4: '!import https://github.com/pgEdge/snowflake.git?branch=v2.4'
     - Development: '!import https://github.com/pgEdge/snowflake.git?branch=main'
@@ -636,6 +636,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
 
   - Spock v5:
+    - v5.0.14: '!import https://github.com/pgEdge/spock.git?branch=v5.0.14'
     - v5.0.13: '!import https://github.com/pgEdge/spock.git?branch=v5.0.13'
     - v5.0.12: '!import https://github.com/pgEdge/spock.git?branch=v5.0.12'
     - v5.0.11: '!import https://github.com/pgEdge/spock.git?branch=v5.0.11'
@@ -652,6 +653,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/control-plane.git?branch=main'
 
   - Radar:
+    - v0.6.3: '!import https://github.com/pgEdge/radar?branch=v0.6.3'
     - v0.6.2: '!import https://github.com/pgEdge/radar?branch=v0.6.2'
     - v0.5.1: '!import https://github.com/pgEdge/radar?branch=v0.5.1'
     - v0.4.1: '!import https://github.com/pgEdge/radar?branch=v0.4.1'
@@ -671,6 +673,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=main'
 
   - pgEdge Anonymizer:
+    - v1.0.1: '!import https://github.com/pgEdge/pgedge-anonymizer.git?branch=v1.0.1'
     - v1.0.0: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-anonymizer?branch=main'
 
@@ -679,6 +682,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-docloader?branch=main'
 
   - pgEdge RAG Server:
+    - v2.0.1: '!import https://github.com/pgEdge/pgedge-rag-server.git?branch=v2.0.1'
     - v2.0.0: '!import https://github.com/pgEdge/pgedge-rag-server.git?branch=v2.0.0'
     - v1.0.0: '!import https://github.com/pgEdge/pgedge-rag-server?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-rag-server?branch=main'
@@ -714,6 +718,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-cli?branch=main'
 
   - PostgreSQL:
+    - v19rc2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19rc2'
     - v19rc1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19rc1'
     - v18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg18'
     - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
@@ -736,7 +741,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgismaster'
 
   - pgAudit:
-    - v19beta3: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit19beta3'
+    - v19rc1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit19rc1'
     - v18.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit180'
     - v17.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit171'
     - v16.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit161'
@@ -765,6 +770,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgcronmaster'
 
   - pgmq:
+    - v1.13.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1131'
     - v1.13.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1130'
     - v1.12.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1120'
     - v1.11.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmq1111'
@@ -777,6 +783,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitormaster'
 
   - pldebugger:
+    - v1.10: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebugger110'
     - v1.9: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebugger19'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pldebuggermaster'
 
@@ -787,12 +794,14 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=systemstatsmaster'
 
   - supautils:
+    - v4.0.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=supautils400'
     - v3.4.4: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=supautils344'
     - v3.2.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=supautils322'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=supautilsmaster'
 
   # Community Tools (from 3rd-party-docs repo)
   - pgAdmin 4:
+    - v9.19: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin919'
     - v9.18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadmin918'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgadminmaster'
 
