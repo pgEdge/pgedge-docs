@@ -668,6 +668,7 @@ nav:
   # Each version is imported separately to enable version navigation
   # Latest version first, older versions next, development (main branch) last
   - pgEdge Postgres MCP Server:
+    - v1.2.0-beta1: '!import https://github.com/pgEdge/pgedge-postgres-mcp.git?branch=v1.2.0-beta1'
     - v1.1.0: '!import https://github.com/pgEdge/pgedge-postgres-mcp.git?branch=v1.1.0'
     - v1.0.0: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/pgedge-postgres-mcp?branch=main'
@@ -693,6 +694,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-vectorizer?branch=main'
 
   - AI DBA Workbench:
+    - v2.0.0-beta1: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=v2.0.0-beta1'
     - v1.0.0: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=v1.0.0'
     - Development: '!import https://github.com/pgEdge/ai-dba-workbench.git?branch=main'
 
