@@ -1,0 +1,25 @@
+# Code owners under the Code Review and Commit Policy v2.0.
+# pgedge-docs is Tier 2. The last matching line wins.
+
+# Workflows, release, packaging and signing: a code owner or build-packaging.
+/.github/workflows/  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+/.github/actions/  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+action.yml  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+action.yaml  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+.goreleaser*.yml  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+.goreleaser*.yaml  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+*.spec  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+debian/  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+rpm/  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+packaging/  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+release*.sh  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+sign*.sh  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+sign*.py  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+Dockerfile*  @dpage @AntTheLimey @susan-pgedge @pgEdge/build-packaging
+
+# Ownership and AI review configuration: code owners only.
+/CODEOWNERS  @dpage @AntTheLimey @susan-pgedge
+/.github/CODEOWNERS  @dpage @AntTheLimey @susan-pgedge
+/docs/CODEOWNERS  @dpage @AntTheLimey @susan-pgedge
+/REVIEW.md  @dpage @AntTheLimey @susan-pgedge
+/.coderabbit.yaml  @dpage @AntTheLimey @susan-pgedge
