@@ -252,9 +252,9 @@ Use the following steps to install, configure, and start Lakekeeper:
 
 ## Completing the ColdFront Configuration
 
-The remaining configuration applies to every ColdFront installation, so the
-ColdFront documentation describes it. Use the following steps to finish the
-configuration:
+The rest of the ColdFront installation applies to each installation method;
+consult the [ColdFront documentation](https://docs.pgedge.com/coldfront/development/)
+for details. Use the following steps to finish the configuration:
 
 1. Bootstrap Lakekeeper as described in
     [Bootstrapping Lakekeeper](https://docs.pgedge.com/coldfront/development/configure_lakekeeper/#bootstrapping-lakekeeper).
