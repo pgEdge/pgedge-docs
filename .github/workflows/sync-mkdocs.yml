@@ -359,10 +359,14 @@ jobs:
               vv = str(version).split('.')
               return vv[:len(lv)] == lv[:len(vv)]
 
-          STANDARD_REF_RE = re.compile(r'^(release/)?v?\d+(\.\d+)*$')
+          STANDARD_REF_RE = re.compile(
+              r'^(release/)?v?\d+(\.\d+)*([.\-]?(alpha|beta|rc)([.\-]?\d+)?)?$',
+              re.IGNORECASE,
+          )
 
           def is_standard_ref(ref):
-              """True for plain version tags/branches like v0.8.1 or release/v0.8.1.
+              """True for plain version tags/branches like v0.8.1 or release/v0.8.1,
+              including pre-release tags like v6.0.0-beta.2 or v1.0.0-rc1.
               Excludes decorated refs like 'v0.6.2-docs' or 'fix-for-1.5.1-docs'
               that maintainers chose intentionally for docs reasons."""
               return bool(STANDARD_REF_RE.match(ref or ''))
@@ -403,6 +407,58 @@ jobs:
               if u and r:
                   product_ref_version[(e.get('name'), normalize_url(u), r)] = str(e.get('version', ''))
 
+          # ── Development lines: follow the living SSOT entry ──────────────
+          # A living source (version 'dev' or 'NNdevel', e.g. postgresql-dev) is
+          # published as the product's 'Development' nav line, never as a
+          # versioned label. When its ref moves (postgresql-dev: pg19 → pg20 once
+          # PG19 goes GA), the existing Development line is repointed in place.
+          # The old ref is dropped from url_ref_map unless a versioned line still
+          # uses it, so a release that inherits it (postgresql-19 → pg19) is not
+          # mistaken for "already present".
+          dev_re = re.compile(
+              r"(?m)^    - Development: '!import (https?://[^?'\s]+)\?branch=([^'\s]+)'"
+          )
+          dev_lines = [(normalize_url(m.group(1)), m.group(2), m.group(1))
+                       for m in dev_re.finditer(mkdocs_text)]
+          versioned_refs = defaultdict(set)
+          for nu_, pairs in url_label_refs.items():
+              for _lbl, r in pairs:
+                  versioned_refs[nu_].add(r)
+
+          dev_updates = []
+          for entry in ssot['sources']:
+              if not for_pgedge_docs(entry):
+                  continue
+              v = entry.get('version', '')
+              if v and v != 'dev' and not is_living(v):
+                  continue
+              git_url, ref = get_import_info(entry)
+              if not git_url or not ref:
+                  continue
+              nu = normalize_url(git_url)
+              if any(d_nu == nu and d_ref == ref for d_nu, d_ref, _ in dev_lines):
+                  continue  # already current
+              if '3rd-party-docs' in nu:
+                  # Shared URL: the Development line belongs to this product when
+                  # its ref is one of the product's own kb refs in SSOT.
+                  own = product_kb_refs.get(entry.get('name'), set())
+                  cands = [d for d in dev_lines if d[0] == nu and d[1] in own]
+              else:
+                  cands = [d for d in dev_lines if d[0] == nu]
+              if len(cands) != 1:
+                  continue  # ambiguous or no Development line — leave for a human
+              d_nu, old_ref, raw_url = cands[0]
+              dev_updates.append({
+                  'entry'  : entry,
+                  'nu'     : nu,
+                  'raw_url': raw_url,
+                  'old_ref': old_ref,
+                  'new_ref': ref,
+              })
+              url_ref_map.setdefault(nu, set()).add(ref)
+              if old_ref not in versioned_refs.get(nu, set()):
+                  url_ref_map[nu].discard(old_ref)
+
           # ── Compare SSOT against mkdocs.yml ──────────────────────────────
 
           missing_entries = []  # product has a block; this version is absent
@@ -416,8 +472,8 @@ jobs:
               if not for_pgedge_docs(entry):
                   continue
               version = entry.get('version', '')
-              if not version or version == 'dev':
-                  continue  # skip living/dev sources
+              if not version or version == 'dev' or is_living(version):
+                  continue  # living/dev sources are Development lines (see above)
               git_url, ref = get_import_info(entry)
               if not git_url or not ref:
                   continue
@@ -478,7 +534,13 @@ jobs:
                   # both collapse onto one label ('v0.10'); without this guard
                   # the older entry rewrites the label back to its own ref.
                   if is_standard_ref(existing_ref) and is_standard_ref(ref):
-                      newer = ref_version(ref) > ref_version(existing_ref)
+                      # A pre-release never replaces a GA ref under the same label:
+                      # version_key ranks '1.0.0-beta1' above '1.0.0' (longer list),
+                      # so without this guard 'v1.0' could be bumped to a beta.
+                      if is_prerelease(ref) and not is_prerelease(existing_ref):
+                          newer = False
+                      else:
+                          newer = ref_version(ref) > ref_version(existing_ref)
                   elif shared_url:
                       existing_ver = product_ref_version.get((name, nu, existing_ref))
                       newer = (existing_ver is not None
@@ -525,11 +587,17 @@ jobs:
               # pg18 → 'pg' and colliding with unrelated pg* products.
               if '3rd-party-docs' in nu:
                   present = url_ref_map.get(nu, set())
-                  has_block = any(
-                      r in present
-                      for r in product_kb_refs.get(entry.get('name'), set())
-                      if r != ref
-                  )
+                  own = product_kb_refs.get(entry.get('name'), set())
+                  has_block = any(r in present for r in own if r != ref)
+                  if not has_block:
+                      # Every SSOT version may have been replaced at once (pgAudit
+                      # 18.0/17.1/16.1 → 18.1/17.2/16.2), so no sibling is in the
+                      # nav yet. Fall back to the ref stem: the old lines still in
+                      # mkdocs.yml (pgaudit180) share this product's stem (pgaudit).
+                      # Stems are compared exactly, never as prefixes, so 'pg'
+                      # (pg18) does not match 'pgvector' or 'pgaudit'.
+                      own_stems = {ref_stem(r) for r in own} - {''}
+                      has_block = any(ref_stem(r) in own_stems for r in present)
               else:
                   has_block = nu in url_ref_map
 
@@ -688,6 +756,12 @@ jobs:
                   'git_url': m.group(2),
               })
 
+          # A line whose ref is bumped in place (ref_updates) is not stale: the
+          # update rewrites it, so listing it under REMOVE would misreport it.
+          _bumped = {(u['nu'], u['label'], u['old_ref']) for u in ref_updates}
+          stale_entries = [st for st in stale_entries
+                           if (st['nu'], st['label'], st['ref']) not in _bumped]
+
           # Keep a rolling pre-release label (e.g. 'v19beta') when a new pre-release
           # of the same product replaces it: 'postgresql19beta2' → 'postgresql19beta4'
           # must stay 'v19beta', not become 'v19beta4'. Only labels WITHOUT a trailing
@@ -710,7 +784,8 @@ jobs:
           lines = ['## mkdocs.yml Drift Report — pgedge-docs\n']
           clean = (not missing_entries and not new_products and not ssh_urls
                    and not ref_updates and not cp_path_update and not stale_entries
-                   and not new_sections and not prune_candidates)
+                   and not new_sections and not prune_candidates
+                   and not dev_updates)
 
           if ssh_urls:
               lines += ['### SSH URLs detected in mkdocs.yml\n',
@@ -723,6 +798,16 @@ jobs:
                   lines.append(
                       f"  - **UPDATE** `{e['id']}` ({e['name']} {e.get('version', '')}) "
                       f"— label `{item['label']}`: `{item['old_ref']}` → `{item['new_ref']}`"
+                  )
+              lines.append('')
+
+          if dev_updates:
+              lines += ['### Development updates (living source ref moved)\n']
+              for item in dev_updates:
+                  e = item['entry']
+                  lines.append(
+                      f"  - **UPDATE** `{e['id']}` ({e['name']} {e.get('version', '')}) "
+                      f"— `Development`: `{item['old_ref']}` → `{item['new_ref']}`"
                   )
               lines.append('')
 
@@ -800,6 +885,7 @@ jobs:
           else:
               lines += ['---',
                         f'*{len(ref_updates)} ref update(s), '
+                        f'{len(dev_updates)} development update(s), '
                         f'{len(missing_entries)} missing, '
                         f'{len(stale_entries)} stale, '
                         f'{len(new_products)} new product(s), '
@@ -835,7 +921,7 @@ jobs:
               )
 
           actionable = bool(missing_entries or ssh_urls or ref_updates
-                            or cp_path_update or stale_entries)
+                            or cp_path_update or stale_entries or dev_updates)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
               fh.write(f'actionable={"true" if actionable else "false"}\n')
               fh.write(f'clean={"true" if clean else "false"}\n')
@@ -875,6 +961,16 @@ jobs:
                   rf"\?branch={re.escape(item['old_ref'])}'",
                   rf"\g<1>\g<2>?branch={item['new_ref']}'",
                   fixed
+              )
+
+          # Repoint Development lines whose living source moved (pg19 → pg20)
+          for item in dev_updates:
+              fixed = re.sub(
+                  r"(?m)^(    - Development: '!import " + re.escape(item['raw_url'])
+                  + r"\?branch=)" + re.escape(item['old_ref']) + r"'",
+                  lambda m, new=item['new_ref']: f"{m.group(1)}{new}'",
+                  fixed,
+                  count=1,
               )
 
           def find_block(text, nu, ref=None):
