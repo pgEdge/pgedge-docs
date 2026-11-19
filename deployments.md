@@ -2,5 +2,15 @@
 
 Test: Use this file to deploy changes to branches that do not require a change to pgedge-docs - add to the list below to initiate a Cloudflare update.
 
-11/05/2026 - Rebuilding the cookbook preview.
+11/19/2026 - Preview the ColdFront docs from the docs/link-enterprise-package-install branch (coldfront PR 152).
+
+11/19/2026 - Rebuild the PR 152 preview with the postgresql.conf wording fix.
+
+11/19/2026 - Rebuild the PR 152 preview with the settings introduction fix.
+
+11/19/2026 - Rebuild the PR 152 preview with the tuning settings wording.
+
+11/19/2026 - Rebuild the PR 152 preview with the new package section introduction.
+
+11/19/2026 - Rebuild the PR 152 preview with the reviewed package section edits.
 
