@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MKDOCS_FILE: mkdocs.yml
+      POSTPROCESS_FILE: scripts/postprocess_site.py
       BASE_BRANCH: main
       FIX_BRANCH: auto/sync-mkdocs
       SSOT_URL: https://raw.githubusercontent.com/pgEdge/pgedge-doc-sources/main/sources.yaml
@@ -49,6 +50,7 @@ jobs:
           from collections import defaultdict
 
           MKDOCS_FILE = os.environ['MKDOCS_FILE']
+          POSTPROCESS_FILE = os.environ.get('POSTPROCESS_FILE', 'scripts/postprocess_site.py')
 
           # ── Config: products with per-major nav sections ──────────────────
           # Products whose docs are split into one nav section PER MAJOR
@@ -749,11 +751,13 @@ jobs:
                           or ref_stem(s_ref) in product_ref_stems.get(name, set()))
                      for v, name in expected_versions.get(s_nu, set())):
                   continue  # version still in SSOT under a decorated ref for THIS product
+              hdrs = [h.group(1) for h in header_re.finditer(mkdocs_scan, 0, m.start())]
               stale_entries.append({
                   'label'  : s_label,
                   'nu'     : s_nu,
                   'ref'    : s_ref,
                   'git_url': m.group(2),
+                  'header' : hdrs[-1] if hdrs else None,
               })
 
           # A line whose ref is bumped in place (ref_updates) is not stale: the
@@ -1096,6 +1100,99 @@ jobs:
                   count=1,
               )
 
+          # ── Redirects for retired version URLs ───────────────────────────
+          # A removed versioned line takes its published URL (slug(section)/
+          # slug(label), as built by scripts/expand_imports.py) with it. Point it
+          # at the nearest surviving version in the same section: the newest one
+          # sharing its major (pgaudit/v18-0 → pgaudit/v18-1, postgresql/v19rc2 →
+          # postgresql/v19), else the newest in the section. Added to
+          # RETIRED_VERSIONS in scripts/postprocess_site.py, which already guards
+          # against a source that is rebuilt or a target that is missing.
+          def url_slug(text):
+              text = re.sub(r"['\u2019]", "", str(text).lower())
+              return re.sub(r"[^a-z0-9]+", "-", text).strip("-")
+
+          def surviving_labels(text, header):
+              hm = re.search(r'(?m)^  - ' + re.escape(header) + r':\s*$', text)
+              if not hm:
+                  return []
+              labels = []
+              for line in text[hm.end():].split('\n')[1:]:
+                  if re.match(r'^ {0,2}\S', line):
+                      break
+                  lm = re.match(r"^    - (v\d[^:]*): '!import ", line)
+                  if lm:
+                      labels.append(lm.group(1))
+              return labels
+
+          def label_major(label):
+              mm = re.match(r'v?(\d+)', label)
+              return mm.group(1) if mm else None
+
+          redirects = []  # (old_path, new_path)
+          for item in stale_entries:
+              header = item.get('header')
+              if not header:
+                  continue
+              survivors = surviving_labels(fixed, header)
+              if item['label'] in survivors:
+                  continue  # same label still published — URL unchanged
+              same_major = [l for l in survivors
+                            if label_major(l) == label_major(item['label'])]
+              pool = same_major or survivors
+              if not pool:
+                  continue  # nothing left in the section — needs a human decision
+              target = max(pool, key=lambda l: version_key(l.lstrip('v')))
+              docset = url_slug(header)
+              old_path = f"{docset}/{url_slug(item['label'])}"
+              new_path = f"{docset}/{url_slug(target)}"
+              if old_path != new_path:
+                  redirects.append((old_path, new_path))
+
+          if redirects and os.path.exists(POSTPROCESS_FILE):
+              with open(POSTPROCESS_FILE) as f:
+                  pp_text = f.read()
+              rv = re.search(r'(?ms)^RETIRED_VERSIONS = \{\n(.*?)^\}', pp_text)
+              if rv:
+                  body = rv.group(1)
+                  entry_line = re.compile(r"(?m)^    '([^']+)': '([^']+)',[^\n]*\n")
+                  existing = {m.group(1) for m in entry_line.finditer(body)}
+                  # Retarget redirects that pointed at a version retired now, so
+                  # no rule chains through (or lands on) a path that is gone.
+                  for old_path, new_path in redirects:
+                      body = re.sub(
+                          r"(?m)^(    '[^']+': )'" + re.escape(old_path) + r"',",
+                          lambda m, n=new_path: f"{m.group(1)}'{n}',",
+                          body,
+                      )
+                  for old_path, new_path in redirects:
+                      if old_path in existing:
+                          continue
+                      new_line = f"    '{old_path}': '{new_path}',\n"
+                      docset = old_path.split('/')[0]
+                      ver = version_key(old_path.split('/', 1)[1].lstrip('v'))
+                      pos = None
+                      for m in entry_line.finditer(body):
+                          d, v = m.group(1).split('/', 1)[0], m.group(1).split('/', 1)[1]
+                          # Keep the file's order: docsets A→Z, versions newest first.
+                          if d > docset or (d == docset and version_key(v.lstrip('v')) < ver):
+                              pos = m.start()
+                              break
+                      body = (body + new_line) if pos is None else (body[:pos] + new_line + body[pos:])
+                      existing.add(old_path)
+                  pp_text = pp_text[:rv.start(1)] + body + pp_text[rv.end(1):]
+                  with open(POSTPROCESS_FILE, 'w') as f:
+                      f.write(pp_text)
+              else:
+                  print('::warning::RETIRED_VERSIONS not found; redirects not written')
+
+          if redirects:
+              with open('/tmp/drift-report.md', 'a') as f:
+                  f.write('\n### Redirects added (RETIRED_VERSIONS in '
+                          '`scripts/postprocess_site.py`)\n\n')
+                  for old_path, new_path in redirects:
+                      f.write(f"  - `/{old_path}/` → `/{new_path}/`\n")
+
           with open(MKDOCS_FILE, 'w') as f:
               f.write(fixed)
           PYEOF
@@ -1111,6 +1208,7 @@ jobs:
           GIT_COMMITTER_EMAIL: builder@pgedge.com
         run: |
           cp "$MKDOCS_FILE" /tmp/mkdocs_generated.yml
+          cp "$POSTPROCESS_FILE" /tmp/postprocess_generated.py
           git stash
           git fetch origin "$BASE_BRANCH"
           git fetch origin "$FIX_BRANCH" 2>/dev/null || true
@@ -1118,7 +1216,9 @@ jobs:
           if git rev-parse --verify "origin/$FIX_BRANCH" &>/dev/null; then
             EXISTING=$(git show "origin/$FIX_BRANCH:$MKDOCS_FILE" 2>/dev/null || echo "")
             GENERATED=$(cat /tmp/mkdocs_generated.yml)
-            if [ "$EXISTING" = "$GENERATED" ]; then
+            EXISTING_PP=$(git show "origin/$FIX_BRANCH:$POSTPROCESS_FILE" 2>/dev/null || echo "")
+            GENERATED_PP=$(cat /tmp/postprocess_generated.py)
+            if [ "$EXISTING" = "$GENERATED" ] && [ "$EXISTING_PP" = "$GENERATED_PP" ]; then
               echo "Fix branch already contains identical changes — skipping push to preserve PR approvals."
               echo "pushed=false"       >> "$GITHUB_OUTPUT"
               echo "branch_ready=true"  >> "$GITHUB_OUTPUT"
@@ -1130,7 +1230,8 @@ jobs:
 
           git checkout -B "$FIX_BRANCH" "origin/$BASE_BRANCH"
           cp /tmp/mkdocs_generated.yml "$MKDOCS_FILE"
-          git add "$MKDOCS_FILE"
+          cp /tmp/postprocess_generated.py "$POSTPROCESS_FILE"
+          git add "$MKDOCS_FILE" "$POSTPROCESS_FILE"
           git commit -m "auto: sync mkdocs.yml nav from SSOT"
           git push --force-with-lease origin "$FIX_BRANCH"
           echo "pushed=true"          >> "$GITHUB_OUTPUT"
