@@ -632,7 +632,6 @@ nav:
     - Development: '!import https://github.com/pgEdge/coldfront.git?branch=main'
 
   - Spock v6:
-    - v6.0.0-beta: '!import https://github.com/pgEdge/spock.git?branch=v6.0.0-beta.1'
     - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
 
   - Spock v5:
@@ -720,7 +719,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-cli?branch=main'
 
   - PostgreSQL:
-    - v19rc2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgresql19rc2'
+    - v20devel: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg20'
     - v18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg18'
     - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
     - v16: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg16'
@@ -742,10 +741,6 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgismaster'
 
   - pgAudit:
-    - v19rc1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit19rc1'
-    - v18.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit180'
-    - v17.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit171'
-    - v16.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit161'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgauditmaster'
 
   # AI Toolkit - Community Extensions (from 3rd-party-docs repo)
@@ -779,6 +774,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgmqmaster'
 
   - pg-stat-monitor:
+    - v2.4.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor241'
     - v2.4.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor240'
     - v2.3.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitor231'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgstatmonitormaster'
@@ -827,6 +823,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=psycopg2master'
 
   - pgBackRest:
+    - v2.60.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2601'
     - v2.60.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2600'
     - v2.59.3: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2593'
     - v2.59.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgbackrest2590'
