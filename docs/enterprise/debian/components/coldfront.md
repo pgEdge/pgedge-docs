@@ -104,7 +104,7 @@ Use the following steps to install the ColdFront packages:
     The pg_duckdb and DuckDB extension packages contain patched builds rather
     than the upstream releases; the builds include ColdFront's patches to
     duckdb-iceberg, pg_duckdb, and DuckDB. The
-    [Understanding ColdFront's DuckDB Stack](https://docs.pgedge.com/coldfront/v1-0-0-beta4/installation/#understanding-coldfronts-duckdb-stack)
+    [Understanding ColdFront's DuckDB Stack](https://docs.pgedge.com/coldfront/development/installation/#understanding-coldfronts-duckdb-stack)
     section of the ColdFront documentation describes each patch.
 
 The `pgedge-lakekeeper` package installs Lakekeeper but does not configure or
@@ -114,7 +114,7 @@ start the service; you configure and start Lakekeeper in
 ## Configuring PostgreSQL for ColdFront
 
 The ColdFront packages do not configure PostgreSQL. The
-[Configuring PostgreSQL](https://docs.pgedge.com/coldfront/v1-0-0-beta4/configuration/#configuring-postgresql)
+[Configuring PostgreSQL](https://docs.pgedge.com/coldfront/development/configuration/#configuring-postgresql)
 section of the ColdFront documentation describes each setting that the
 following steps use, along with the optional tuning settings.
 
@@ -257,21 +257,21 @@ ColdFront documentation describes it. Use the following steps to finish the
 configuration:
 
 1. Bootstrap Lakekeeper as described in
-    [Bootstrapping Lakekeeper](https://docs.pgedge.com/coldfront/v1-0-0-beta4/configure_lakekeeper/#bootstrapping-lakekeeper).
+    [Bootstrapping Lakekeeper](https://docs.pgedge.com/coldfront/development/configure_lakekeeper/#bootstrapping-lakekeeper).
     For the SeaweedFS store, the same section creates the warehouse and the
     namespace. The warehouse name must match the `coldfront.warehouse` setting.
 
 2. For any other object store, create the warehouse, the namespace, and the
     credential as described in your backend's section of
-    [Configuring your Object Store](https://docs.pgedge.com/coldfront/v1-0-0-beta4/object_store/).
+    [Configuring your Object Store](https://docs.pgedge.com/coldfront/development/object_store/).
 
 3. Store the object store credential in each database that uses ColdFront, and
     grant access to application roles, as described in
-    [Configuring PostgreSQL for Lakekeeper](https://docs.pgedge.com/coldfront/v1-0-0-beta4/configure_lakekeeper/#configuring-postgresql-for-lakekeeper).
+    [Configuring PostgreSQL for Lakekeeper](https://docs.pgedge.com/coldfront/development/configure_lakekeeper/#configuring-postgresql-for-lakekeeper).
 
 4. Write ColdFront's table configuration with the `archiver register` or
     `archiver import` command, as described in
-    [Writing ColdFront's Configuration](https://docs.pgedge.com/coldfront/v1-0-0-beta4/configuration/#writing-coldfronts-configuration).
+    [Writing ColdFront's Configuration](https://docs.pgedge.com/coldfront/development/configuration/#writing-coldfronts-configuration).
     An import also writes the object store credential from the deployment file.
     The `pgedge-coldfront` package installs an example deployment file. Use the
     following command to copy the example to the current directory:
@@ -293,4 +293,4 @@ configuration:
     file.
 
 For detailed information about using ColdFront, see
-[Using ColdFront](https://docs.pgedge.com/coldfront/v1-0-0-beta4/using_coldfront/).
+[Using ColdFront](https://docs.pgedge.com/coldfront/development/using_coldfront/).
