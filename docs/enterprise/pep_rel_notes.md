@@ -1,5 +1,18 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 11/19/2026
+
+* Postgres version update: pgEdge Enterprise Postgres 19.0 GA
+
+    * pgedge-enterprise-postgres 19.0
+    * pgedge-enterprise-all 19.0
+    * libpq 19.0
+    * pgAudit 19.0
+
+* Spock 6.0.0 beta 2
+* ColdFront 1.0.0 beta 4
+* Component updates: pg_stat_monitor 2.4.1, pgBackRest 2.60.1, pgAudit 18.1, 17.2, 16.2 (PG 18, 17, 16)
+
 ## 11/12/2026
 
 * Postgres version update: pgEdge Enterprise Postgres 16.16
