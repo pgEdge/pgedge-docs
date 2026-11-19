@@ -34,8 +34,7 @@ host already uses the `pgedge` repository, continue with the next section.
 
 ## Installing pgEdge Enterprise Postgres
 
-The ColdFront packages require the pgEdge build of PostgreSQL. If the host
-already runs pgEdge Enterprise Postgres, continue with
+If the host already runs pgEdge Enterprise Postgres, continue with
 [Installing the ColdFront Packages](#installing-the-coldfront-packages).
 
 Use the following steps to install pgEdge Enterprise Postgres and start the
