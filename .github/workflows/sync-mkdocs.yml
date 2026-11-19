@@ -1199,7 +1199,7 @@ jobs:
               pool = same_major or survivors
               if not pool:
                   continue  # nothing left in the section — needs a human decision
-              target = max(pool, key=lambda l: version_key(l.lstrip('v')))
+              target = max(pool, key=lambda l: release_key(l))  # GA above its betas
               docset = url_slug(header)
               old_path = f"{docset}/{url_slug(item['label'])}"
               new_path = f"{docset}/{url_slug(target)}"
