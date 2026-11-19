@@ -26,6 +26,7 @@ ensure you've installed the version that matches your copy of Postgres.
 | [NLA CLI Client](https://docs.pgedge.com/pgedge-postgres-mcp-server/development/guide/cli-client/) | pgedge-nla-cli | Natural Language API CLI tool |
 | [NLA Web Client](https://docs.pgedge.com/pgedge-postgres-mcp-server/development/guide/web-client/) | pgedge-nla-web | Natural Language API web interface |
 | [pgEdge Anonymizer](https://docs.pgedge.com/pgedge-anonymizer/) | pgedge-anonymizer | Data anonymization and masking |
+| [pgEdge ColdFront](coldfront.md) | pgedge-coldfront_XX; pgedge-coldfront; pgedge-lakekeeper | Tiered storage that keeps cold data in Apache Iceberg |
 | [pgEdge DocLoader](https://docs.pgedge.com/pgedge-docloader/) | pgedge-docloader | Document loading utility |
 | [pgEdge RAG Server](https://docs.pgedge.com/pgedge-rag-server/) | pgedge-rag-server | Retrieval-Augmented Generation server |
 | [pgEdge Vectorizer](https://docs.pgedge.com/pgedge-vectorizer/) | pgedge-vectorizer_XX | Vector embedding generation |
