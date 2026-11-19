@@ -632,6 +632,7 @@ nav:
     - Development: '!import https://github.com/pgEdge/coldfront.git?branch=main'
 
   - Spock v6:
+    - v6.0.0-beta: '!import https://github.com/pgEdge/spock.git?branch=v6.0.0-beta.2'
     - Development: '!import https://github.com/pgEdge/spock.git?branch=main'
 
   - Spock v5:
@@ -719,11 +720,11 @@ nav:
     - Development: '!import https://github.com/pgEdge/pgedge-cli?branch=main'
 
   - PostgreSQL:
-    - v20devel: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg20'
+    - v19: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg19'
     - v18: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg18'
     - v17: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg17'
     - v16: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg16'
-    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg19'
+    - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pg20'
 
   # Community Extensions (from 3rd-party-docs repo)
   - pgvector:
@@ -741,6 +742,10 @@ nav:
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=postgismaster'
 
   - pgAudit:
+    - v19.0: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit190'
+    - v18.1: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit181'
+    - v17.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit172'
+    - v16.2: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgaudit162'
     - Development: '!import https://github.com/pgEdge/3rd-party-docs.git?branch=pgauditmaster'
 
   # AI Toolkit - Community Extensions (from 3rd-party-docs repo)
