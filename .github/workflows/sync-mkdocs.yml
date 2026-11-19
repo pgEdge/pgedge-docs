@@ -374,8 +374,15 @@ jobs:
               return bool(STANDARD_REF_RE.match(ref or ''))
 
           def ref_version(ref):
-              """Comparable version key for a standard ref ('release/v0.10.1' → 0.10.1)."""
-              return version_key(re.sub(r'^(release/)?v?', '', ref or ''))
+              """Comparable version key for a standard ref ('release/v0.10.1' → 0.10.1).
+
+              Pre-release aware: the base version is compared first, then a GA
+              release ranks above every pre-release of the same base, so
+              v1.0.0-beta.1 < v1.0.0-beta.2 < v1.0.0-rc1 < v1.0.0 < v1.0.1-beta.1.
+              (Plain version_key ranks 1.0.0-beta.2 above 1.0.0: longer list.)"""
+              v = re.sub(r'^(release/)?v?', '', ref or '')
+              base = re.split(r'[.\-]?(?:alpha|beta|rc)', v, maxsplit=1, flags=re.I)[0]
+              return (version_key(base), 0 if is_prerelease(v) else 1, version_key(v))
 
           # ── Product identity for shared 3rd-party-docs refs ───────────────
           # Every 3rd-party-docs product shares ONE repo URL, so "is this an
@@ -427,12 +434,16 @@ jobs:
               for _lbl, r in pairs:
                   versioned_refs[nu_].add(r)
 
-          dev_updates = []
+          dev_updates   = []
+          dev_unmatched = []  # living source moved, but its Development line can't be identified
           for entry in ssot['sources']:
               if not for_pgedge_docs(entry):
                   continue
               v = entry.get('version', '')
-              if v and v != 'dev' and not is_living(v):
+              # Only 'dev' / 'NNdevel' sources are Development lines. An empty
+              # version is a living-docs source imported as plain pages
+              # (e.g. 'Ansible: !import …?branch=main'), not a Development line.
+              if not (v == 'dev' or is_living(v)):
                   continue
               git_url, ref = get_import_info(entry)
               if not git_url or not ref:
@@ -445,10 +456,25 @@ jobs:
                   # its ref is one of the product's own kb refs in SSOT.
                   own = product_kb_refs.get(entry.get('name'), set())
                   cands = [d for d in dev_lines if d[0] == nu and d[1] in own]
+                  if not cands:
+                      # No SSOT entry still owns the old ref (e.g. pg19 not yet
+                      # claimed by a release): fall back to an exact ref-stem match
+                      # (pg20 ↔ pg19), never a prefix, as for versioned lines.
+                      stem = ref_stem(ref)
+                      if stem:
+                          cands = [d for d in dev_lines
+                                   if d[0] == nu and ref_stem(d[1]) == stem]
               else:
                   cands = [d for d in dev_lines if d[0] == nu]
               if len(cands) != 1:
-                  continue  # ambiguous or no Development line — leave for a human
+                  # Ambiguous or not found: report it rather than drop it silently.
+                  dev_unmatched.append({
+                      'entry'     : entry,
+                      'ref'       : ref,
+                      'git_url'   : git_url,
+                      'candidates': [d[1] for d in cands],
+                  })
+                  continue
               d_nu, old_ref, raw_url = cands[0]
               dev_updates.append({
                   'entry'  : entry,
@@ -536,9 +562,10 @@ jobs:
                   # both collapse onto one label ('v0.10'); without this guard
                   # the older entry rewrites the label back to its own ref.
                   if is_standard_ref(existing_ref) and is_standard_ref(ref):
-                      # A pre-release never replaces a GA ref under the same label:
-                      # version_key ranks '1.0.0-beta1' above '1.0.0' (longer list),
-                      # so without this guard 'v1.0' could be bumped to a beta.
+                      # A pre-release never replaces a GA ref under the same label,
+                      # even a pre-release of a later version (v1.0 must not move from
+                      # v1.0.0 to v1.0.1-beta1). GA promotion from a pre-release ref
+                      # (v1.0.0-beta.2 → v1.0.0) is allowed: ref_version ranks GA last.
                       if is_prerelease(ref) and not is_prerelease(existing_ref):
                           newer = False
                       else:
@@ -789,7 +816,7 @@ jobs:
           clean = (not missing_entries and not new_products and not ssh_urls
                    and not ref_updates and not cp_path_update and not stale_entries
                    and not new_sections and not prune_candidates
-                   and not dev_updates)
+                   and not dev_updates and not dev_unmatched)
 
           if ssh_urls:
               lines += ['### SSH URLs detected in mkdocs.yml\n',
@@ -812,6 +839,18 @@ jobs:
                   lines.append(
                       f"  - **UPDATE** `{e['id']}` ({e['name']} {e.get('version', '')}) "
                       f"— `Development`: `{item['old_ref']}` → `{item['new_ref']}`"
+                  )
+              lines.append('')
+
+          if dev_unmatched:
+              lines += ['### Development lines needing manual update (living source moved)\n']
+              for item in dev_unmatched:
+                  e = item['entry']
+                  found = (f"candidates: {', '.join(f'`{c}`' for c in item['candidates'])}"
+                           if item['candidates'] else 'no matching Development line')
+                  lines.append(
+                      f"  - **CHECK** `{e['id']}` ({e['name']} {e.get('version', '')}) "
+                      f"— expected `{item['git_url']}?branch={item['ref']}`; {found}"
                   )
               lines.append('')
 
@@ -911,6 +950,14 @@ jobs:
           if summary_path:
               with open(summary_path, 'a') as fh:
                   fh.write(report)
+
+          if dev_unmatched:
+              print(
+                  f"::warning title=Development lines need manual update::"
+                  f"{len(dev_unmatched)} living source(s) moved but their Development "
+                  f"line could not be identified: "
+                  + ', '.join(i['entry'].get('id', '?') for i in dev_unmatched)
+              )
 
           if prune_candidates:
               labels = ', '.join(
