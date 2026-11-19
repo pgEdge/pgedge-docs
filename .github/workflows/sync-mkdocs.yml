@@ -180,6 +180,22 @@ jobs:
           def is_prerelease(v):
               return bool(re.search(r'(alpha|beta|rc)', str(v), re.I))
 
+          def release_key(v):
+              """Release-order key for a version or ref ('release/v0.10.1' → 0.10.1).
+
+              Pre-release aware: the base version is compared first, then a GA
+              release ranks above every pre-release of the same base, so
+              1.0.0-beta.1 < 1.0.0-beta2 < 1.0.0-beta.10 < 1.0.0-rc1 < 1.0.0
+              < 1.0.1-beta.1, whatever separator each tag uses before its number.
+              (Plain version_key ranks 1.0.0-beta.2 above 1.0.0 — longer list — and
+              beta2 above beta.10, since it reads 'beta' and 'beta2' as tokens.)"""
+              v = re.sub(r'^(release/)?v?', '', str(v or ''))
+              m = re.search(r'[.\-]?(alpha|beta|rc)[.\-]?(\d*)', v, flags=re.I)
+              if not m:
+                  return (version_key(v), 1, '', 0)
+              phase, num = m.group(1).lower(), int(m.group(2) or 0)
+              return (version_key(v[:m.start()]), 0, phase, num)
+
           def line_key(version, group):
               if group == 'product':
                   return '*'
@@ -297,7 +313,7 @@ jobs:
 
               # Newest pre-release only, and only until a GA supersedes it.
               if pre:
-                  newest = sorted(pre, key=version_key, reverse=True)[0]
+                  newest = sorted(pre, key=release_key, reverse=True)[0]
                   base = re.split(r'[-.]?(?:alpha|beta|rc)', newest, flags=re.I)[0]
                   if not any(version_key(v) >= version_key(base) for v in ga):
                       retained.add((name, newest))
@@ -375,20 +391,8 @@ jobs:
 
           def ref_version(ref):
               """Comparable version key for a standard ref ('release/v0.10.1' → 0.10.1).
-
-              Pre-release aware: the base version is compared first, then a GA
-              release ranks above every pre-release of the same base, so
-              v1.0.0-beta.1 < v1.0.0-beta2 < v1.0.0-beta.10 < v1.0.0-rc1 < v1.0.0
-              < v1.0.1-beta.1, whatever separator each tag uses before its number.
-              (Plain version_key ranks 1.0.0-beta.2 above 1.0.0: longer list.)"""
-              v = re.sub(r'^(release/)?v?', '', ref or '')
-              m = re.search(r'[.\-]?(alpha|beta|rc)[.\-]?(\d*)', v, flags=re.I)
-              if not m:
-                  return (version_key(v), 1, '', 0)
-              # Phase and number are parsed explicitly so separators don't matter:
-              # beta.10, beta-10 and beta10 are all (beta, 10), and beta.10 > beta2.
-              phase, num = m.group(1).lower(), int(m.group(2) or 0)
-              return (version_key(v[:m.start()]), 0, phase, num)
+              See release_key for the pre-release ordering."""
+              return release_key(ref)
 
           # ── Product identity for shared 3rd-party-docs refs ───────────────
           # Every 3rd-party-docs product shares ONE repo URL, so "is this an
@@ -579,7 +583,7 @@ jobs:
                   elif shared_url:
                       existing_ver = product_ref_version.get((name, nu, existing_ref))
                       newer = (existing_ver is not None
-                               and version_key(version) > version_key(existing_ver))
+                               and release_key(version) > release_key(existing_ver))
                   else:
                       newer = False
                   if existing_ref != ref and newer:
@@ -681,7 +685,7 @@ jobs:
           for _item in missing_entries:
               _k = (_item['nu'], _item['entry'].get('name'), _item['label'])
               if (_k not in _best
-                      or version_key(_item['version']) > version_key(_best[_k]['version'])):
+                      or release_key(_item['version']) > release_key(_best[_k]['version'])):
                   _best[_k] = _item
           missing_entries = list(_best.values())
 
@@ -1129,7 +1133,7 @@ jobs:
           for item in missing_entries:
               by_url[item['nu']].append(item)
           for nu in by_url:
-              by_url[nu].sort(key=lambda x: version_key(x['version']), reverse=True)
+              by_url[nu].sort(key=lambda x: release_key(x['version']), reverse=True)
 
           for nu, items in by_url.items():
               for item in items:
