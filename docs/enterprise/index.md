@@ -16,12 +16,11 @@ certificate after you add the repository, and before you install any packages.
 ## Obtaining and Installing a Repository Certificate
 
 A repository certificate from pgEdge provides your host access to the `pgedge`
-repository. To
-[request a certificate](https://www.postgresql.org/docs/current/ssl-tcp.html#SSL-CERTIFICATE-CREATION),
-you must first generate a key pair on the host itself. A key pair consists of
-a private key and its matching public key; the private key stays on your host,
-and you send pgEdge the public key in a certificate signing request
-(`client.csr`).
+repository. To request a certificate, the host needs a key pair: a private
+key, which stays on the host, and its matching public key, which you send to
+pgEdge in a certificate signing request (`client.csr`). The
+`pgedge-subscription-manager register-system` command in step 2 creates the
+key pair and the request for you.
 
 Each host that downloads packages from the repository needs its own
 certificate, so run the following steps once on every host. The steps are the
