@@ -130,6 +130,10 @@ Use the following steps to configure PostgreSQL and create the extensions:
     coldfront.local_pg_dsn = 'host=/var/run/postgresql dbname=<db> user=<role>'
     ```
 
+    If `shared_preload_libraries` already lists libraries, such as
+    `pg_stat_statements`, add `pg_duckdb` and `coldfront` to the existing list
+    instead of replacing it.
+
     Replace the placeholders as follows:
 
     - `<warehouse-name>` is the name of the Lakekeeper warehouse that you

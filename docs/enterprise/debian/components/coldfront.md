@@ -56,6 +56,16 @@ server:
     sudo pg_createcluster 18 main --start
     ```
 
+    !!! hint
+
+        If the host already runs another PostgreSQL cluster on port 5432,
+        `pg_createcluster` assigns the next free port to `18/main`, and a
+        `psql` command without a cluster option connects to the other
+        cluster. In that case, add `--cluster 18/main` to each `psql` command
+        in this guide, and use the port that `sudo pg_lsclusters` shows for
+        `18/main` in the Lakekeeper connection string and in the
+        `coldfront.local_pg_dsn` setting (as `port=<port>`).
+
 3. Confirm that the server is running before you continue. The following
     command displays the PostgreSQL version:
 
@@ -134,6 +144,10 @@ Use the following steps to configure PostgreSQL and create the extensions:
     coldfront.lakekeeper_endpoint = 'http://<lakekeeper-host>:8181/catalog'
     coldfront.local_pg_dsn = 'host=/var/run/postgresql dbname=<db> user=<role>'
     ```
+
+    If `shared_preload_libraries` already lists libraries, such as
+    `pg_stat_statements`, add `pg_duckdb` and `coldfront` to the existing list
+    instead of replacing it.
 
     Replace the placeholders as follows:
 
