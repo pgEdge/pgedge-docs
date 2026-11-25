@@ -1,5 +1,9 @@
 # pgEdge Enterprise Postgres Release Notes
 
+## 11/25/2026
+
+* Component updates: Spock 5.0.15, ai-kb 1.0.2
+  
 ## 11/19/2026
 
 * Postgres version update: pgEdge Enterprise Postgres 19.0 GA
