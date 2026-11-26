@@ -6,3 +6,5 @@ Test: Use this file to deploy changes to branches that do not require a change t
 
 
 11/26/2026 - Rebuild the PR 153 preview with the Exploring ColdFront and Exploring Tiered Mode titles.
+
+11/26/2026 - Rebuild the PR 153 preview with the Codespace start-up and bootstrap screenshots.
